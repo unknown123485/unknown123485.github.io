@@ -1274,6 +1274,7 @@
             height: auto;
             display: block;
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+            pointer-events: none;
         }
         .dash-arc-fill {
             transition: stroke-dashoffset 0.15s ease-out;
@@ -1292,13 +1293,14 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%); 
             backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); 
             border: 1px solid rgba(255,255,255,0.25); border-radius: 24px; 
-            padding: 2rem; width: 90vw; max-width: 500px; max-height: 70vh; 
+            padding: 1.5rem 1.5rem 1rem; width: 90vw; max-width: 500px; height: 75vh;
             display: flex; flex-direction: column; color: var(--text-primary); 
         }
         .toc-modal-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 1rem; padding-bottom: 0.8rem;
+            margin-bottom: 0.8rem; padding-bottom: 0.6rem;
             border-bottom: 1px solid rgba(255,255,255,0.15);
+            flex-shrink: 0;
         }
         .toc-modal-title {
             font-family: var(--font-display); font-size: 1.1rem;
@@ -1310,36 +1312,69 @@
             cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
         }
         .toc-list {
-            flex: 1; overflow-y: auto; margin-bottom: 1rem;
+            flex: 4; overflow-y: auto; min-height: 0;
         }
         .toc-item {
-            padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer;
+            padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;
             font-family: var(--font-display); font-size: 0.85rem;
             transition: background 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-primary);
+            color: var(--text-primary); display: flex; justify-content: space-between; align-items: center;
         }
         .toc-item:hover { background: rgba(255,255,255,0.1); }
         .toc-item.current { background: rgba(255,255,255,0.12); border-left: 3px solid var(--accent); }
+        .toc-item .toc-expand-icon {
+            font-size: 0.65rem; opacity: 0.4; transition: transform 0.2s;
+            flex-shrink: 0; margin-left: 0.5rem;
+        }
+        .toc-item.has-children .toc-expand-icon { opacity: 0.7; }
+        .toc-item.expanded .toc-expand-icon { transform: rotate(90deg); }
+        .toc-sub-list {
+            overflow: hidden; max-height: 0; transition: max-height 0.3s ease;
+        }
+        .toc-sub-list.open { max-height: 500px; }
+        .toc-sub-item {
+            padding: 0.35rem 1rem 0.35rem 2rem; border-radius: 6px; cursor: pointer;
+            font-family: var(--font-display); font-size: 0.78rem;
+            color: rgba(255,255,255,0.6); transition: background 0.2s, color 0.2s;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .toc-sub-item:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+        .toc-sub-item.current { color: var(--accent); }
         .toc-progress-section {
-            padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.15);
+            flex: 1; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.15);
+            display: flex; flex-direction: column; justify-content: center; min-height: 0;
         }
         .toc-progress-label {
-            font-size: 0.7rem; color: rgba(255,255,255,0.5);
-            letter-spacing: 1px; margin-bottom: 0.5rem;
+            font-size: 0.65rem; color: rgba(255,255,255,0.4);
+            letter-spacing: 1px; margin-bottom: 0.3rem; text-align: center;
         }
-        .toc-progress-slider {
-            -webkit-appearance: none; width: 100%; height: 4px;
-            background: rgba(255,255,255,0.15); border-radius: 2px; outline: none;
+        .toc-progress-track {
+            position: relative; width: 100%; height: 6px;
+            background: rgba(255,255,255,0.1); border-radius: 3px; cursor: pointer;
+            margin: 0.4rem 0;
         }
-        .toc-progress-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 22px; height: 22px;
-            background: var(--accent); border-radius: 50%; cursor: pointer;
-            box-shadow: 0 0 10px var(--accent);
+        .toc-progress-fill {
+            position: absolute; top: 0; left: 0; height: 100%;
+            background: linear-gradient(90deg, rgba(123,97,255,0.3), var(--accent));
+            border-radius: 3px; pointer-events: none;
+        }
+        .toc-progress-thumb {
+            position: absolute; top: 50%; width: 18px; height: 18px;
+            background: var(--accent); border-radius: 50%;
+            transform: translate(-50%, -50%); cursor: grab;
+            box-shadow: 0 0 8px rgba(123,97,255,0.5);
+            z-index: 2;
+        }
+        .toc-progress-thumb:active { cursor: grabbing; }
+        .toc-chapter-dot {
+            position: absolute; top: 50%; width: 4px; height: 4px;
+            background: rgba(255,255,255,0.35); border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none;
         }
         .toc-preview-text {
-            margin-top: 0.5rem; font-size: 0.75rem; color: rgba(255,255,255,0.6);
-            font-family: var(--font-display); line-height: 1.5;
-            max-height: 3em; overflow: hidden;
+            font-size: 0.7rem; color: rgba(255,255,255,0.5);
+            font-family: var(--font-display); line-height: 1.4;
+            max-height: 2.8em; overflow: hidden; text-align: center;
         }
 
         /* ===== 文件夹接管 ===== */
@@ -2122,6 +2157,13 @@
                 width: 50px;
                 height: 50px;
             }
+            .toc-modal-content {
+                width: 95vw;
+                height: 80vh;
+                padding: 1rem;
+            }
+            .toc-item { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+            .toc-sub-item { font-size: 0.72rem; padding: 0.3rem 0.8rem 0.3rem 1.6rem; }
         }
     </style>
 </head>
@@ -2562,7 +2604,10 @@
             <div class="toc-list" id="toc-list"></div>
             <div class="toc-progress-section">
                 <div class="toc-progress-label">进度跳转</div>
-                <input type="range" class="toc-progress-slider" id="toc-progress-slider" min="0" max="100" value="0" oninput="onTOCProgressInput(this.value)" onchange="onTOCProgressChange(this.value)">
+                <div class="toc-progress-track" id="toc-progress-track">
+                    <div class="toc-progress-fill" id="toc-progress-fill"></div>
+                    <div class="toc-progress-thumb" id="toc-progress-thumb"></div>
+                </div>
                 <div class="toc-preview-text" id="toc-preview-text"></div>
             </div>
         </div>
@@ -3391,7 +3436,15 @@
                 div.style.color = 'var(--text-primary)';
                 const currentFontDisplay = getComputedStyle(document.documentElement).getPropertyValue('--font-display');
                 if (currentFontDisplay) div.style.setProperty('font-family', currentFontDisplay, 'important');
-                if (animType === 'typewriter') {
+                if (lowPerfMode) {
+                    div.className = 'sentence-text';
+                    div.style.opacity = '1';
+                    div.style.transform = 'none';
+                    div.style.filter = 'none';
+                    div.style.transition = 'opacity 0.15s ease';
+                    standardArea.appendChild(div);
+                    isAnimationFinished = true;
+                } else if (animType === 'typewriter') {
                     div.className = 'sentence-text';
                     div.innerText = '';
                     standardArea.appendChild(div);
@@ -3896,14 +3949,24 @@
             if (lowPerfMode) {
                 document.documentElement.classList.add('low-perf-mode');
                 toggle.classList.add('active');
-                document.querySelectorAll('.liquid-glass').forEach(function(el) {
+                document.querySelectorAll('.liquid-glass, .liquid-glass-btn').forEach(function(el) {
                     el.classList.add('inactive-blur');
+                });
+                document.querySelectorAll('.sentence-text').forEach(function(el) {
+                    el.style.filter = 'none';
+                    el.style.transform = 'none';
+                    el.style.transition = 'opacity 0.15s ease';
                 });
             } else {
                 document.documentElement.classList.remove('low-perf-mode');
                 toggle.classList.remove('active');
-                document.querySelectorAll('.liquid-glass').forEach(function(el) {
+                document.querySelectorAll('.liquid-glass, .liquid-glass-btn').forEach(function(el) {
                     el.classList.remove('inactive-blur');
+                });
+                document.querySelectorAll('.sentence-text').forEach(function(el) {
+                    el.style.filter = '';
+                    el.style.transform = '';
+                    el.style.transition = '';
                 });
             }
         }
@@ -3924,6 +3987,9 @@
                 val = Math.max(0, Math.min(1, val));
                 currentOpacity = val;
                 document.documentElement.style.setProperty('--lg-opacity', val);
+                document.querySelectorAll('.liquid-glass, .liquid-glass-btn, .nav-bar-luxury').forEach(function(el) {
+                    el.style.setProperty('--lg-opacity', val);
+                });
                 if (valueLabel) valueLabel.textContent = Math.round(val * 100) + '%';
 
                 var angle = Math.PI * (1 - val);
@@ -3953,6 +4019,9 @@
                 }
                 var dx = px - cx;
                 var dy = cy - py;
+                if (dy < 0) dy = 0;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 5) return currentOpacity;
                 var angle = Math.atan2(dy, dx);
                 if (angle < 0) angle = 0;
                 if (angle > Math.PI) angle = Math.PI;
@@ -4279,6 +4348,7 @@
         (function() {
             var tocData = [];
             var fullText = '';
+            var subHeadingRegex = /^([零一二三四五六七八九十百千万\d]+[、.．]|§|§\s*\d+|[（(]\s*[零一二三四五六七八九十百千万\d]+\s*[)）]|\d+[、.．]\s*\S)/;
 
             window.generateTOC = function(text) {
                 fullText = text || '';
@@ -4289,10 +4359,25 @@
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i].trim();
                     if (chapterRegex.test(line)) {
+                        var subHeadings = [];
+                        var subCharIndex = charIndex + line.length + 1;
+                        for (var j = i + 1; j < lines.length && j < i + 200; j++) {
+                            var subLine = lines[j].trim();
+                            if (chapterRegex.test(subLine)) break;
+                            if (subLine.length > 2 && subHeadingRegex.test(subLine)) {
+                                subHeadings.push({
+                                    title: subLine,
+                                    charOffset: subCharIndex,
+                                    lineIndex: j
+                                });
+                            }
+                            subCharIndex += lines[j].length + 1;
+                        }
                         tocData.push({
                             title: line,
                             charOffset: charIndex,
-                            lineIndex: i
+                            lineIndex: i,
+                            subHeadings: subHeadings
                         });
                     }
                     charIndex += lines[i].length + 1;
@@ -4313,10 +4398,39 @@
                 }
             };
 
+            function updateProgressUI(val) {
+                var fill = document.getElementById('toc-progress-fill');
+                var thumb = document.getElementById('toc-progress-thumb');
+                var previewEl = document.getElementById('toc-preview-text');
+                if (fill) fill.style.width = (val * 100) + '%';
+                if (thumb) thumb.style.left = (val * 100) + '%';
+                if (previewEl && typeof sentences !== 'undefined') {
+                    var idx = Math.round(val * (sentences.length - 1));
+                    if (sentences[idx]) {
+                        var text = sentences[idx].text || sentences[idx];
+                        previewEl.textContent = text.length > 60 ? text.substring(0, 60) + '...' : text;
+                    }
+                }
+            }
+
+            function addChapterDots() {
+                var track = document.getElementById('toc-progress-track');
+                if (!track || tocData.length === 0 || typeof sentences === 'undefined') return;
+                track.querySelectorAll('.toc-chapter-dot').forEach(function(d) { d.remove(); });
+                var totalLen = 0;
+                sentences.forEach(function(s) { totalLen += (s.text || s || '').length; });
+                if (totalLen === 0) return;
+                tocData.forEach(function(item) {
+                    var dot = document.createElement('div');
+                    dot.className = 'toc-chapter-dot';
+                    dot.style.left = (item.charOffset / totalLen * 100) + '%';
+                    track.appendChild(dot);
+                });
+            }
+
             function openTOC() {
                 var modal = document.getElementById('toc-modal');
                 var listEl = document.getElementById('toc-list');
-                var slider = document.getElementById('toc-progress-slider');
                 if (!modal || !listEl) return;
 
                 listEl.innerHTML = '';
@@ -4325,9 +4439,13 @@
                 } else {
                     var currentIdx = -1;
                     if (typeof currentIndex !== 'undefined' && typeof sentences !== 'undefined') {
-                        for (var i = tocData.length - 1; i >= 0; i--) {
-                            if (tocData[i].charOffset <= (currentIndex || 0)) {
-                                currentIdx = i;
+                        var cumLen = 0;
+                        for (var si = 0; si < (currentIndex || 0) && si < sentences.length; si++) {
+                            cumLen += (sentences[si].text || sentences[si] || '').length;
+                        }
+                        for (var ti = tocData.length - 1; ti >= 0; ti--) {
+                            if (tocData[ti].charOffset <= cumLen) {
+                                currentIdx = ti;
                                 break;
                             }
                         }
@@ -4335,20 +4453,60 @@
                     tocData.forEach(function(item, idx) {
                         var div = document.createElement('div');
                         div.className = 'toc-item' + (idx === currentIdx ? ' current' : '');
-                        div.textContent = item.title;
+                        if (item.subHeadings && item.subHeadings.length > 0) {
+                            div.classList.add('has-children');
+                        }
+                        var titleSpan = document.createElement('span');
+                        titleSpan.textContent = item.title;
+                        div.appendChild(titleSpan);
+                        var expandIcon = document.createElement('span');
+                        expandIcon.className = 'toc-expand-icon';
+                        expandIcon.textContent = '▶';
+                        div.appendChild(expandIcon);
                         div.setAttribute('data-index', idx);
-                        div.addEventListener('click', function() {
-                            jumpToTOCItem(idx);
+                        div.addEventListener('click', function(e) {
+                            if (item.subHeadings && item.subHeadings.length > 0) {
+                                var subList = div.nextElementSibling;
+                                if (subList && subList.classList.contains('toc-sub-list')) {
+                                    var isOpen = subList.classList.contains('open');
+                                    subList.classList.toggle('open');
+                                    div.classList.toggle('expanded');
+                                }
+                            } else {
+                                jumpToTOCItem(idx);
+                            }
                         });
                         listEl.appendChild(div);
+
+                        if (item.subHeadings && item.subHeadings.length > 0) {
+                            var subList = document.createElement('div');
+                            subList.className = 'toc-sub-list';
+                            item.subHeadings.forEach(function(sub, subIdx) {
+                                var subDiv = document.createElement('div');
+                                subDiv.className = 'toc-sub-item';
+                                subDiv.textContent = sub.title;
+                                subDiv.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    jumpToOffset(sub.charOffset);
+                                });
+                                subList.appendChild(subDiv);
+                            });
+                            listEl.appendChild(subList);
+                        }
                     });
+
+                    if (currentIdx >= 0 && tocData[currentIdx].subHeadings && tocData[currentIdx].subHeadings.length > 0) {
+                        var currentDiv = listEl.querySelector('.toc-item.current');
+                        var currentSubList = currentDiv ? currentDiv.nextElementSibling : null;
+                        if (currentDiv) currentDiv.classList.add('expanded');
+                        if (currentSubList) currentSubList.classList.add('open');
+                    }
                 }
 
-                if (slider && typeof sentences !== 'undefined' && sentences.length > 0) {
-                    slider.max = sentences.length - 1;
-                    if (typeof currentIndex !== 'undefined') {
-                        slider.value = currentIndex;
-                    }
+                if (typeof sentences !== 'undefined' && sentences.length > 0) {
+                    var progressVal = typeof currentIndex !== 'undefined' ? currentIndex / (sentences.length - 1) : 0;
+                    updateProgressUI(progressVal);
+                    addChapterDots();
                 }
 
                 modal.classList.add('active');
@@ -4361,42 +4519,69 @@
 
             function jumpToTOCItem(idx) {
                 if (idx < 0 || idx >= tocData.length) return;
-                var targetOffset = tocData[idx].charOffset;
-                if (typeof sentences !== 'undefined' && typeof showSentence === 'function') {
-                    var bestIdx = 0;
-                    var cumLen = 0;
-                    for (var i = 0; i < sentences.length; i++) {
-                        cumLen += (sentences[i] || '').length;
-                        if (cumLen >= targetOffset) {
-                            bestIdx = i;
-                            break;
-                        }
-                        bestIdx = i;
-                    }
-                    currentIndex = bestIdx;
-                    showSentence(currentIndex);
-                }
+                jumpToOffset(tocData[idx].charOffset);
                 closeTOC();
             }
 
-            window.onTOCProgressInput = function(val) {
-                var previewEl = document.getElementById('toc-preview-text');
-                if (!previewEl) return;
-                val = parseInt(val);
-                if (typeof sentences !== 'undefined' && sentences[val]) {
-                    var text = sentences[val];
-                    previewEl.textContent = text.length > 80 ? text.substring(0, 80) + '...' : text;
+            function jumpToOffset(targetOffset) {
+                if (typeof sentences === 'undefined') return;
+                var bestIdx = 0;
+                var cumLen = 0;
+                for (var i = 0; i < sentences.length; i++) {
+                    if (cumLen >= targetOffset) {
+                        bestIdx = i;
+                        break;
+                    }
+                    cumLen += (sentences[i].text || sentences[i] || '').length;
+                    bestIdx = i;
                 }
-            };
+                currentIndex = bestIdx;
+                renderSentence();
+            }
 
-            window.onTOCProgressChange = function(val) {
-                val = parseInt(val);
-                if (typeof sentences !== 'undefined' && typeof showSentence === 'function') {
-                    currentIndex = val;
-                    showSentence(currentIndex);
+            (function initProgressDrag() {
+                var track = document.getElementById('toc-progress-track');
+                var thumb = document.getElementById('toc-progress-thumb');
+                if (!track || !thumb) return;
+                var dragging = false;
+
+                function getVal(e) {
+                    var rect = track.getBoundingClientRect();
+                    var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                    return Math.max(0, Math.min(1, x / rect.width));
                 }
-                closeTOC();
-            };
+
+                function onStart(e) {
+                    e.preventDefault();
+                    dragging = true;
+                    var val = getVal(e);
+                    updateProgressUI(val);
+                }
+                function onMove(e) {
+                    if (!dragging) return;
+                    e.preventDefault();
+                    updateProgressUI(getVal(e));
+                }
+                function onEnd(e) {
+                    if (!dragging) return;
+                    dragging = false;
+                    var rect = track.getBoundingClientRect();
+                    var fill = document.getElementById('toc-progress-fill');
+                    var pct = fill ? parseFloat(fill.style.width) / 100 : 0;
+                    if (typeof sentences !== 'undefined' && sentences.length > 0) {
+                        currentIndex = Math.round(pct * (sentences.length - 1));
+                        renderSentence();
+                    }
+                    closeTOC();
+                }
+
+                track.addEventListener('mousedown', onStart);
+                track.addEventListener('touchstart', onStart, { passive: false });
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('touchmove', onMove, { passive: false });
+                document.addEventListener('mouseup', onEnd);
+                document.addEventListener('touchend', onEnd);
+            })();
         })();
 
         (function() {
