@@ -577,9 +577,9 @@
         .sentence-text.anim-scale.exit { opacity: 0; transform: scale(1.2); }
 
         /* 动画方式 - 打字机效果 */
-        .sentence-text.anim-typewriter { opacity: 1; transform: none; transition: none; }
-        .sentence-text.anim-typewriter.active { opacity: 1; }
-        .sentence-text.anim-typewriter.exit { opacity: 0; transition: opacity 0.3s ease; }
+        .sentence-text.anim-typewriter { opacity: 1; transform: none; filter: none; transition: none; }
+        .sentence-text.anim-typewriter.active { opacity: 1; filter: none; }
+        .sentence-text.anim-typewriter.exit { opacity: 0; filter: none; transition: opacity 0.3s ease; }
         .typewriter-cursor { 
             display: inline-block; width: 2px; height: 1em; 
             background: var(--text-primary); margin-left: 2px; 
@@ -2464,6 +2464,14 @@
                                 <div class="font-option" data-font="Noto Serif TC">思源宋体繁</div>
                                 <div class="font-option" data-font="LXGW WenKai">霞鹜文楷</div>
                                 <div class="font-option" data-font="LXGW WenKai Mono">霞鹜文楷等宽</div>
+                                <div class="font-category">中文书法体</div>
+                                <div class="font-option" data-font="Ma Shan Zheng">马善政楷体</div>
+                                <div class="font-option" data-font="Long Cang">龙藏行书</div>
+                                <div class="font-option" data-font="Liu Jian Mao Cao">流剑毛草</div>
+                                <div class="font-category">中文美术体</div>
+                                <div class="font-option" data-font="ZCOOL XiaoWei">站酷小薇体</div>
+                                <div class="font-option" data-font="ZCOOL QingKe HuangYou">站酷庆科黄油体</div>
+                                <div class="font-option" data-font="ZCOOL KuaiLe">站酷快乐体</div>
                                 <div class="font-category">经典印刷体</div>
                                 <div class="font-option" data-font="EB Garamond">EB Garamond</div>
                                 <div class="font-option" data-font="Playfair Display">Playfair Display</div>
@@ -2485,6 +2493,16 @@
                                 <option value="Noto Serif TC">思源宋体繁</option>
                                 <option value="LXGW WenKai">霞鹜文楷</option>
                                 <option value="LXGW WenKai Mono">霞鹜文楷等宽</option>
+                            </optgroup>
+                            <optgroup label="中文书法体">
+                                <option value="Ma Shan Zheng">马善政楷体</option>
+                                <option value="Long Cang">龙藏行书</option>
+                                <option value="Liu Jian Mao Cao">流剑毛草</option>
+                            </optgroup>
+                            <optgroup label="中文美术体">
+                                <option value="ZCOOL XiaoWei">站酷小薇体</option>
+                                <option value="ZCOOL QingKe HuangYou">站酷庆科黄油体</option>
+                                <option value="ZCOOL KuaiLe">站酷快乐体</option>
                             </optgroup>
                             <optgroup label="经典印刷体">
                                 <option value="Noto Serif SC" selected>思源宋体</option>
@@ -3083,6 +3101,12 @@
             'Noto Serif TC': { type: 'serif', weights: '200;300;400;500;600;700;900' },
             'LXGW WenKai': { type: 'serif', weights: '300;400;700', cdn: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css' },
             'LXGW WenKai Mono': { type: 'mono', weights: '300;400;700', cdn: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-mono-webfont@1.7.0/style.css' },
+            'Ma Shan Zheng': { type: 'serif', weights: '400' },
+            'Long Cang': { type: 'serif', weights: '400' },
+            'Liu Jian Mao Cao': { type: 'serif', weights: '400' },
+            'ZCOOL XiaoWei': { type: 'serif', weights: '400' },
+            'ZCOOL QingKe HuangYou': { type: 'sans', weights: '400' },
+            'ZCOOL KuaiLe': { type: 'sans', weights: '400' },
             'EB Garamond': { type: 'serif', weights: '400;500;600;700;800' },
             'Playfair Display': { type: 'serif', weights: '400;500;600;700;800;900' },
             'Lora': { type: 'serif', weights: '400;500;600;700' },
@@ -3106,7 +3130,7 @@
                 url = info.cdn;
             } else {
                 const encodedName = fontName.replace(/ /g, '+');
-                const isChineseFont = ['Noto Serif SC', 'Noto Sans SC', 'Noto Serif TC'].includes(fontName);
+                const isChineseFont = ['Noto Serif SC', 'Noto Sans SC', 'Noto Serif TC', 'Ma Shan Zheng', 'Long Cang', 'Liu Jian Mao Cao', 'ZCOOL XiaoWei', 'ZCOOL QingKe HuangYou', 'ZCOOL KuaiLe'].includes(fontName);
                 url = 'https://fonts.googleapis.com/css2?family=' + encodedName + ':wght@' + info.weights + '&display=swap' + (isChineseFont ? '&subset=chinese-simplified' : '');
             }
             const link = document.createElement('link');
@@ -4675,6 +4699,9 @@
                 typewriterIndex = 0;
                 element.textContent = '';
                 element.classList.add('anim-typewriter');
+                element.style.filter = 'none';
+                element.style.transform = 'none';
+                element.style.opacity = '1';
 
                 var cursor = document.createElement('span');
                 cursor.className = 'typewriter-cursor';
