@@ -297,7 +297,7 @@
             pointer-events: none; z-index: -1; 
         }
 
-        .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; background: var(--bg-gradient); padding-top: max(env(safe-area-inset-top, 0px), 44px); }
+        .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; background: var(--bg-gradient); padding-top: env(safe-area-inset-top, 0px); }
 
         /* ===== Liquid Glass 六层渲染结构 ===== */
         .liquid-glass {
@@ -446,7 +446,7 @@
 
         /* --- 巅峰状态标签 (液态玻璃) --- */
         .status-badge-container {
-            position: fixed; top: 52px; left: 1rem; 
+            position: fixed; top: 24px; left: 1rem; 
             display: flex; align-items: center; gap: 0.6rem;
             z-index: 5000;
         }
@@ -2291,7 +2291,7 @@
                 height: 24px;
             }
             .status-badge-container {
-                top: 52px;
+                top: 24px;
                 left: 0.8rem;
                 z-index: 930;
             }
@@ -3424,8 +3424,8 @@
                 document.body.appendChild(probe);
                 var safeTop = probe.getBoundingClientRect().height;
                 document.body.removeChild(probe);
-                if (safeTop < 44) safeTop = 44;
-                container.style.top = (safeTop + 8) + 'px';
+                if (safeTop < 20) safeTop = 20;
+                container.style.top = (safeTop + 4) + 'px';
             })();
 
             document.querySelectorAll('.status-badge-setting, .status-badge').forEach(function(el) {
