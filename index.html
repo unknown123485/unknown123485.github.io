@@ -215,6 +215,40 @@
                            linear-gradient(135deg, #f4e4c1 0%, #e8d5a0 50%, #f0ddb0 100%);
             --font-display: 'Special Elite', 'Courier New', monospace;
         }
+        .theme-ink-wash {
+            --bg-base: #1a1a1a; --accent: #c23a2b; --text-primary: #e8e0d4;
+            --bg-gradient: radial-gradient(circle at 30% 20%, rgba(60, 55, 50, 0.5) 0%, transparent 50%),
+                           radial-gradient(circle at 70% 80%, rgba(40, 38, 35, 0.4) 0%, transparent 50%),
+                           linear-gradient(135deg, #1a1a1a 0%, #222019 50%, #1a1a1a 100%);
+            --font-display: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+        }
+        .theme-rose-gold {
+            --bg-base: #1a1215; --accent: #e8a0b4; --text-primary: #f5e6ea;
+            --bg-gradient: radial-gradient(circle at 40% 30%, #2d1a22 0%, #1a1215 60%),
+                           linear-gradient(135deg, #1a1215 0%, #2d1a22 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-nordic {
+            --bg-base: #0c1420; --accent: #6ee7b7; --text-primary: #d1e8f0;
+            --bg-gradient: radial-gradient(circle at 20% 40%, #142840 0%, #0c1420 55%),
+                           radial-gradient(circle at 80% 60%, rgba(110, 231, 183, 0.06) 0%, transparent 40%),
+                           linear-gradient(180deg, #0c1420 0%, #142840 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-warm-sand {
+            --bg-base: #f0e6d3; --accent: #b8651a; --text-primary: #3d2e1c;
+            --bg-gradient: radial-gradient(circle at 25% 35%, rgba(210, 190, 150, 0.4) 0%, transparent 50%),
+                           radial-gradient(circle at 75% 65%, rgba(184, 101, 26, 0.08) 0%, transparent 50%),
+                           linear-gradient(135deg, #f0e6d3 0%, #e8dbc4 50%, #f2e8d6 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-jade {
+            --bg-base: #0a1a14; --accent: #5dba8d; --text-primary: #d4e8dc;
+            --bg-gradient: radial-gradient(circle at 35% 50%, #143028 0%, #0a1a14 60%),
+                           radial-gradient(circle at 65% 30%, rgba(93, 186, 141, 0.06) 0%, transparent 40%),
+                           linear-gradient(135deg, #0a1a14 0%, #143028 100%);
+            --font-display: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
+        }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
@@ -435,6 +469,11 @@
             min-width: 2.4rem;
             height: 2.4rem;
             box-sizing: border-box;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .status-badge:active {
+            transform: translateY(2px) scale(0.96);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 3px rgba(0,0,0,0.3);
         }
         .status-badge::before {
             content: ''; position: absolute; inset: 0; border-radius: 1.2rem;
@@ -477,6 +516,7 @@
             cursor: pointer; position: relative; overflow: hidden;
         }
         .entry-card:hover { transform: translateY(-15px); background: rgba(255, 255, 255, 0.06); border-color: var(--accent); }
+        .entry-card:active { transform: translateY(-5px) scale(0.97); box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); background: rgba(255,255,255,0.03); }
         .entry-card svg { width: 60px; height: 60px; fill: var(--accent); margin-bottom: 2rem; opacity: 0.8; }
         .entry-title { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 1rem; }
         .entry-desc { font-size: 0.9rem; opacity: 0.5; line-height: 1.6; }
@@ -523,8 +563,9 @@
         .entry-card.drag-over { background: var(--accent); border-color: white; }
         .entry-card.drag-over * { color: white !important; fill: white !important; }
 
-        .btn-back { margin-top: 2rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: 0.3s; }
+        .btn-back { margin-top: 2rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: 0.3s, transform 0.15s ease, box-shadow 0.15s ease; }
         .btn-back:hover { background: rgba(255,255,255,0.1); }
+        .btn-back:active { transform: translateY(2px) scale(0.97); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); background: rgba(255,255,255,0.05); }
         .text-input { 
             width: 75vw; height: 50vh; background: transparent; border: none; 
             color: var(--text-primary); font-size: 1.6rem; line-height: 1.8; 
@@ -541,7 +582,8 @@
             color: #111;
             filter: url(#distress-filter) contrast(1.1) sepia(0.1);
         }
-        .btn-luxury { margin-top: 4rem; padding: 1.5rem 7rem; font-size: 1.5rem; background: var(--accent); color: white; border: none; border-radius: 60px; cursor: pointer; font-weight: 900; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); letter-spacing: 0.3em; text-transform: uppercase; }
+        .btn-luxury { margin-top: 4rem; padding: 1.5rem 7rem; font-size: 1.5rem; background: var(--accent); color: white; border: none; border-radius: 60px; cursor: pointer; font-weight: 900; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; letter-spacing: 0.3em; text-transform: uppercase; }
+        .btn-luxury:active { transform: translateY(3px) scale(0.97); box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 2px 6px rgba(0,0,0,0.3); }
 
         /* --- 展示屏幕 --- */
         #display-screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease; position: relative; z-index: 25; }
@@ -871,8 +913,9 @@
         }
 
         /* --- 交互控制 (可折叠) --- */
-        .luxury-fab { position: fixed; bottom: 2rem; right: 2rem; width: 65px; height: 65px; background: var(--accent); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); color: white; border: 1px solid rgba(255,255,255,0.3); font-size: 24px; }
+        .luxury-fab { position: fixed; bottom: 2rem; right: 2rem; width: 65px; height: 65px; background: var(--accent); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; color: white; border: 1px solid rgba(255,255,255,0.3); font-size: 24px; }
         .luxury-fab:hover { transform: scale(1.1) rotate(90deg); }
+        .luxury-fab:active { transform: scale(0.92) rotate(90deg); box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 2px 6px rgba(0,0,0,0.3); }
 
         .nav-bar-luxury {
             position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%) translateY(100px);
@@ -1018,13 +1061,15 @@
         .control-group { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
         .action-buttons-row { display: flex; align-items: center; gap: 1rem; justify-content: center; }
         .control-btn { 
-            background: transparent; border: none; color: white; cursor: pointer; transition: 0.4s; 
+            background: transparent; border: none; color: white; cursor: pointer; transition: 0.4s, transform 0.15s ease; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
             min-width: 60px;
         }
         .btn-label { font-size: 0.65rem; font-weight: 400; letter-spacing: 1px; opacity: 0.6; text-transform: uppercase; font-family: var(--font-display); }
         .control-btn:hover .btn-label { opacity: 1; color: var(--accent); }
         .control-btn:hover svg { transform: scale(1.1); color: var(--accent); }
+        .control-btn:active { transform: scale(0.9); }
+        .control-btn:active svg { transform: scale(0.9); }
         .control-btn svg { width: 28px; height: 28px; fill: currentColor; transition: 0.3s; }
         
         .control-btn.play-master { 
@@ -1032,6 +1077,7 @@
             border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
         .control-btn.play-master:hover { background: var(--accent); border-color: transparent; }
+        .control-btn.play-master:active { transform: scale(0.92); box-shadow: inset 0 2px 8px rgba(0,0,0,0.3); }
         .control-btn.play-master .btn-label { display: none; }
 
         .slider-wrap { display: flex; flex-direction: column; gap: 8px; }
@@ -1069,6 +1115,10 @@
         .custom-font-select-header:hover {
             background: rgba(255,255,255,0.15);
             border-color: rgba(255,255,255,0.4);
+        }
+        .custom-font-select-header:active {
+            transform: scale(0.97);
+            background: rgba(255,255,255,0.06);
         }
         
         .dropdown-icon {
@@ -1116,6 +1166,10 @@
             background: rgba(255,255,255,0.1);
             padding-left: 16px;
         }
+        .font-option:active {
+            transform: scale(0.97);
+            background: rgba(255,255,255,0.15);
+        }
         
         .font-option:last-child {
             border-bottom: none;
@@ -1141,8 +1195,9 @@
             overflow: hidden;
         }
         
-        .crystal-dot { width: 38px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: 0.4s; backdrop-filter: blur(15px); }
+        .crystal-dot { width: 38px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: 0.4s, transform 0.15s ease; backdrop-filter: blur(15px); }
         .crystal-dot:hover { transform: scale(1.2) rotate(10deg); border-color: white; }
+        .crystal-dot:active { transform: scale(0.9) rotate(10deg); }
 
         .hidden { display: none !important; }
 
@@ -1272,11 +1327,12 @@
             border-radius: 12px;
             position: relative;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.15s ease;
             border: 1px solid rgba(255,255,255,0.2);
             pointer-events: auto;
             flex-shrink: 0;
         }
+        .eink-toggle:active { transform: scale(0.93); }
         .eink-toggle.active {
             background: rgba(255,255,255,0.4);
         }
@@ -1379,7 +1435,9 @@
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
             color: var(--text-primary); width: 32px; height: 32px; border-radius: 50%;
             cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
+        .toc-close-btn:active { transform: scale(0.88); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
         .toc-list {
             flex: 4; overflow-y: auto; min-height: 0;
         }
@@ -1390,6 +1448,7 @@
             color: var(--text-primary); display: flex; justify-content: space-between; align-items: center;
         }
         .toc-item:hover { background: rgba(255,255,255,0.1); }
+        .toc-item:active { transform: scale(0.98); background: rgba(255,255,255,0.06); }
         .toc-item.current { background: rgba(255,255,255,0.12); border-left: 3px solid var(--accent); }
         .toc-item .toc-expand-icon {
             font-size: 0.65rem; opacity: 0.4; transition: transform 0.2s;
@@ -1408,6 +1467,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.03);
         }
         .toc-sub-item:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+        .toc-sub-item:active { transform: scale(0.98); background: rgba(255,255,255,0.04); }
         .toc-sub-item.current { color: var(--accent); }
         .toc-progress-section {
             flex: 1; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.15);
@@ -1502,6 +1562,10 @@
         .file-list-item:hover {
             background: rgba(255,255,255,0.12);
         }
+        .file-list-item:active {
+            transform: scale(0.97);
+            background: rgba(255,255,255,0.06);
+        }
         .file-list-item.active {
             background: rgba(255,255,255,0.15);
             border-color: var(--accent);
@@ -1533,6 +1597,10 @@
         }
         .theme-detail-item:hover {
             background: rgba(255,255,255,0.08);
+        }
+        .theme-detail-item:active {
+            transform: scale(0.97);
+            background: rgba(255,255,255,0.04);
         }
         .theme-detail-item.selected {
             background: rgba(255,255,255,0.12);
@@ -1941,6 +2009,46 @@
         }
         .theme-ocean .liquid-glass {
             backdrop-filter: blur(30px) saturate(2.5) brightness(1.2);
+        }
+
+        .theme-ink-wash .sentence-text {
+            font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+            color: #e8e0d4;
+        }
+        .theme-ink-wash .display-area {
+            background-image: radial-gradient(circle at 30% 20%, rgba(60, 55, 50, 0.3) 0%, transparent 50%),
+                              radial-gradient(circle at 70% 80%, rgba(40, 38, 35, 0.2) 0%, transparent 50%);
+        }
+        .theme-rose-gold .sentence-text {
+            font-family: 'Lora', serif;
+            color: #f5e6ea;
+        }
+        .theme-nordic .sentence-text {
+            font-family: var(--font-serif);
+            color: #d1e8f0;
+        }
+        .theme-nordic .liquid-glass {
+            backdrop-filter: blur(30px) saturate(2) brightness(1.1);
+        }
+        .theme-warm-sand .liquid-glass {
+            background: rgba(240, 230, 211, calc(0.9 * var(--lg-opacity)));
+            border: 1px solid rgba(184, 101, 26, 0.2);
+            box-shadow: 0 4px 20px rgba(61, 46, 28, 0.1);
+        }
+        .theme-warm-sand .sentence-text {
+            font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
+            color: #3d2e1c;
+        }
+        .theme-warm-sand .display-area {
+            background-image: radial-gradient(circle at 25% 35%, rgba(210, 190, 150, 0.3) 0%, transparent 50%),
+                              radial-gradient(circle at 75% 65%, rgba(184, 101, 26, 0.05) 0%, transparent 50%);
+        }
+        .theme-jade .sentence-text {
+            font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
+            color: #d4e8dc;
+        }
+        .theme-jade .liquid-glass {
+            backdrop-filter: blur(25px) saturate(1.8) brightness(1.1);
         }
 
         /* 全局移动端触摸优化 */
@@ -2634,6 +2742,26 @@
                         <div class="theme-detail-item" data-theme="retro-typewriter">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b4513, #f4e4c1)"></div>
                             <span class="theme-detail-name">RETRO TYPEWRITER - 复古打字机</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="ink-wash">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #c23a2b, #1a1a1a)"></div>
+                            <span class="theme-detail-name">INK WASH - 水墨丹青</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="rose-gold">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #e8a0b4, #1a1215)"></div>
+                            <span class="theme-detail-name">ROSE GOLD - 玫瑰金</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="nordic">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #6ee7b7, #0c1420)"></div>
+                            <span class="theme-detail-name">NORDIC - 北欧极光</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="warm-sand">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #b8651a, #f0e6d3)"></div>
+                            <span class="theme-detail-name">WARM SAND - 暖沙</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="jade">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #5dba8d, #0a1a14)"></div>
+                            <span class="theme-detail-name">JADE - 青玉</span>
                         </div>
                     </div>
                 </div>
