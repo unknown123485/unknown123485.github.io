@@ -423,19 +423,19 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%); 
             padding: 0.6rem 1.4rem; border-radius: 100px; 
             font-size: 0.8rem; font-weight: 400; letter-spacing: 0.15em; 
-            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.35), 0 10px 40px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.4);
             backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate)); 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.4);
             display: flex; align-items: center; gap: 8px;
             animation: float 4s ease-in-out infinite;
             color: var(--text-primary);
-            pointer-events: none;
+            cursor: pointer;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
             font-family: var(--font-display);
             position: relative;
             overflow: hidden;
             transform: translateZ(0);
             will-change: transform, filter;
+            border: none;
         }
         .status-badge::before {
             content: ''; position: absolute; inset: 0; border-radius: 100px;
@@ -1308,16 +1308,18 @@
         .opacity-gauge-container {
             position: relative;
             width: 160px;
-            height: 90px;
+            height: 95px;
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
             cursor: pointer;
+            padding: 5px;
         }
         .opacity-gauge-svg {
             width: 160px;
-            height: 90px;
+            height: 95px;
             overflow: visible;
+            pointer-events: all;
         }
         .opacity-gauge-bg {
             fill: none;
@@ -2203,8 +2205,8 @@
             .slider-wrap,
             .select-wrap { max-width: none; }
             .slider-label { font-size: 0.6rem; }
-            .opacity-gauge-container { width: 130px; height: 75px; }
-            .opacity-gauge-svg { width: 130px; height: 75px; }
+            .opacity-gauge-container { width: 140px; height: 85px; }
+            .opacity-gauge-svg { width: 140px; height: 85px; }
             .control-btn {
                 padding: 0.4rem;
                 min-width: 40px;
@@ -2631,17 +2633,17 @@
                 <div class="opacity-dashboard-wrap">
                     <div class="slider-label">玻璃透明度 <span id="opacity-value">100%</span></div>
                     <div class="opacity-gauge-container" id="opacity-gauge-container">
-                        <svg class="opacity-gauge-svg" viewBox="0 0 160 90">
+                        <svg class="opacity-gauge-svg" viewBox="0 0 160 95">
                             <defs>
                                 <linearGradient id="opacityGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                                     <stop offset="0%" style="stop-color:rgba(123,97,255,0.3)"/>
                                     <stop offset="100%" style="stop-color:#7b61ff"/>
                                 </linearGradient>
                             </defs>
-                            <path class="opacity-gauge-bg" id="opacity-gauge-bg" d="M 16 82 A 54 54 0 0 1 144 82"/>
-                            <path class="opacity-gauge-fill" id="opacity-gauge-fill" d="M 16 82 A 54 54 0 0 1 144 82"/>
-                            <circle class="opacity-gauge-thumb" id="opacity-gauge-thumb" cx="144" cy="82" r="8"/>
-                            <text class="opacity-gauge-value" id="opacity-gauge-text" x="80" y="75">100%</text>
+                            <path class="opacity-gauge-bg" id="opacity-gauge-bg" d=""/>
+                            <path class="opacity-gauge-fill" id="opacity-gauge-fill" d=""/>
+                            <circle class="opacity-gauge-thumb" id="opacity-gauge-thumb" cx="144" cy="82" r="10"/>
+                            <text class="opacity-gauge-value" id="opacity-gauge-text" x="80" y="78">100%</text>
                         </svg>
                     </div>
                 </div>
@@ -2724,13 +2726,20 @@
             var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
             if (isMobile) {
-                if (folderCard) folderCard.style.display = 'none';
                 if (fileInput) {
                     fileInput.setAttribute('multiple', '');
-                    fileInput.removeAttribute('webkitdirectory');
-                    fileInput.removeAttribute('directory');
                 }
-                if (fileDesc) fileDesc.textContent = '支持选中多个 .epub, .md, .txt 文件，我们将为您智能解析内容。';
+                if (folderInput) {
+                    folderInput.removeAttribute('webkitdirectory');
+                    folderInput.removeAttribute('directory');
+                    folderInput.setAttribute('multiple', '');
+                }
+                if (fileDesc) fileDesc.textContent = '支持选中多个 .epub, .md, .txt 文件，智能解析内容。';
+                if (folderDesc) folderDesc.textContent = '批量选择多个文件，自动扫描所有兼容内容。';
+                if (folderCard) {
+                    var folderTitle = folderCard.querySelector('.entry-title');
+                    if (folderTitle) folderTitle.textContent = '选择多个文件';
+                }
             }
         })();
 
@@ -4038,15 +4047,17 @@
         // ===== 圆环仪表盘：液态玻璃透明度 =====
         (function() {
             var container = document.getElementById('opacity-gauge-container');
+            var bgPath = document.getElementById('opacity-gauge-bg');
             var fillPath = document.getElementById('opacity-gauge-fill');
             var thumbCircle = document.getElementById('opacity-gauge-thumb');
             var valueLabel = document.getElementById('opacity-value');
             var gaugeText = document.getElementById('opacity-gauge-text');
-            if (!container || !fillPath || !thumbCircle) return;
+            if (!container || !fillPath || !thumbCircle || !bgPath) return;
 
-            var cx = 80, cy = 82, r = 54;
-            var startAngle = Math.PI;
-            var endAngle = 0;
+            var cx = 80, cy = 82, r = 60;
+            var arcPath = 'M ' + (cx - r) + ' ' + cy + ' A ' + r + ' ' + r + ' 0 0 1 ' + (cx + r) + ' ' + cy;
+            bgPath.setAttribute('d', arcPath);
+            fillPath.setAttribute('d', arcPath);
 
             var totalLen = fillPath.getTotalLength();
             fillPath.style.strokeDasharray = totalLen;
@@ -4077,12 +4088,7 @@
                         'background: linear-gradient(135deg, rgba(255,255,255,' + (0.15*o) + ') 0%, rgba(255,255,255,' + (0.05*o) + ') 40%, rgba(255,255,255,' + (0.02*o) + ') 60%, rgba(255,255,255,' + (0.08*o) + ') 100%) !important;' +
                         'backdrop-filter: blur(' + (40*o) + 'px) saturate(' + (100+100*o) + '%) !important;' +
                         '-webkit-backdrop-filter: blur(' + (40*o) + 'px) saturate(' + (100+100*o) + '%) !important;' +
-                        'border-color: rgba(255,255,255,' + (0.3*o) + ') !important;' +
-                        'border-top-color: rgba(255,255,255,' + (0.55*o) + ') !important;' +
-                        'border-left-color: rgba(255,255,255,' + (0.45*o) + ') !important;' +
-                        'border-right-color: rgba(255,255,255,' + (0.15*o) + ') !important;' +
-                        'border-bottom-color: rgba(255,255,255,' + (0.1*o) + ') !important;' +
-                        'box-shadow: 0 30px 60px rgba(0,0,0,0.45), 0 10px 20px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,' + (0.7*o) + '), inset 0 -1px 2px rgba(0,0,0,0.15), inset 1px 0 1px rgba(255,255,255,' + (0.3*o) + '), inset -1px 0 1px rgba(0,0,0,0.1) !important;' +
+                        'box-shadow: 0 0 0 1px rgba(255,255,255,' + (0.3*o) + '), 0 30px 60px rgba(0,0,0,0.45), 0 10px 20px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,' + (0.7*o) + '), inset 0 -1px 2px rgba(0,0,0,0.15), inset 1px 0 1px rgba(255,255,255,' + (0.3*o) + '), inset -1px 0 1px rgba(0,0,0,0.1) !important;' +
                     '}' +
                     '.liquid-glass::before {' +
                         'background: linear-gradient(135deg, rgba(255,255,255,' + (0.25*o) + ') 0%, rgba(255,255,255,' + (0.08*o) + ') 20%, transparent 50%, rgba(255,255,255,' + (0.05*o) + ') 80%, rgba(255,255,255,' + (0.12*o) + ') 100%) !important;' +
@@ -4117,12 +4123,10 @@
                 if (gaugeText) gaugeText.textContent = pct;
             }
 
-            function getValFromEvent(e) {
+            function getValFromPointer(clientX, clientY) {
                 var rect = container.getBoundingClientRect();
-                var clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                var clientY = e.touches ? e.touches[0].clientY : e.clientY;
                 var svgX = ((clientX - rect.left) / rect.width) * 160;
-                var svgY = ((clientY - rect.top) / rect.height) * 90;
+                var svgY = ((clientY - rect.top) / rect.height) * 95;
                 var dx = svgX - cx;
                 var dy = svgY - cy;
                 var angle = Math.atan2(dy, dx);
@@ -4137,13 +4141,17 @@
 
             function onStart(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 dragging = true;
-                setOpacity(getValFromEvent(e));
+                var touch = e.touches ? e.touches[0] : e;
+                setOpacity(getValFromPointer(touch.clientX, touch.clientY));
             }
             function onMove(e) {
                 if (!dragging) return;
                 e.preventDefault();
-                setOpacity(getValFromEvent(e));
+                e.stopPropagation();
+                var touch = e.touches ? e.touches[0] : e;
+                setOpacity(getValFromPointer(touch.clientX, touch.clientY));
             }
             function onEnd() {
                 if (!dragging) return;
