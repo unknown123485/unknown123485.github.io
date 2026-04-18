@@ -252,6 +252,60 @@
                            linear-gradient(135deg, #122218 0%, #1a3828 100%);
             --font-display: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
         }
+        .theme-aurora {
+            --bg-base: #0a0e1a; --accent: #00e5ff; --text-primary: #c8e6f0;
+            --bg-gradient: radial-gradient(circle at 30% 40%, #0d1f3c 0%, #0a0e1a 60%),
+                           radial-gradient(circle at 70% 60%, rgba(0, 229, 255, 0.1) 0%, transparent 40%),
+                           linear-gradient(135deg, #0a0e1a 0%, #0d1f3c 100%);
+        }
+        .theme-sakura {
+            --bg-base: #1a0f14; --accent: #ff8fa3; --text-primary: #f0d4dc;
+            --bg-gradient: radial-gradient(circle at 40% 50%, #2a1520 0%, #1a0f14 60%),
+                           radial-gradient(circle at 60% 30%, rgba(255, 143, 163, 0.1) 0%, transparent 40%),
+                           linear-gradient(135deg, #1a0f14 0%, #2a1520 100%);
+        }
+        .theme-matrix {
+            --bg-base: #000a00; --accent: #00ff41; --text-primary: #b0ffb0;
+            --bg-gradient: radial-gradient(circle at 35% 50%, #001a00 0%, #000a00 60%),
+                           radial-gradient(circle at 65% 40%, rgba(0, 255, 65, 0.06) 0%, transparent 40%),
+                           linear-gradient(135deg, #000a00 0%, #001a00 100%);
+        }
+        .theme-lavender {
+            --bg-base: #14101a; --accent: #b388ff; --text-primary: #d8c8f0;
+            --bg-gradient: radial-gradient(circle at 35% 45%, #1e1830 0%, #14101a 60%),
+                           radial-gradient(circle at 65% 55%, rgba(179, 136, 255, 0.08) 0%, transparent 40%),
+                           linear-gradient(135deg, #14101a 0%, #1e1830 100%);
+        }
+        .theme-coffee {
+            --bg-base: #1a1410; --accent: #c8a070; --text-primary: #e0d0c0;
+            --bg-gradient: radial-gradient(circle at 40% 50%, #2a2018 0%, #1a1410 60%),
+                           radial-gradient(circle at 60% 40%, rgba(200, 160, 112, 0.08) 0%, transparent 40%),
+                           linear-gradient(135deg, #1a1410 0%, #2a2018 100%);
+        }
+        .theme-glacier {
+            --bg-base: #0a1520; --accent: #80deea; --text-primary: #c0e8f0;
+            --bg-gradient: radial-gradient(circle at 30% 40%, #0d2030 0%, #0a1520 60%),
+                           radial-gradient(circle at 70% 60%, rgba(128, 222, 234, 0.1) 0%, transparent 40%),
+                           linear-gradient(135deg, #0a1520 0%, #0d2030 100%);
+        }
+        .theme-ember {
+            --bg-base: #1a0a08; --accent: #ff6e40; --text-primary: #f0c8b8;
+            --bg-gradient: radial-gradient(circle at 35% 50%, #2a1510 0%, #1a0a08 60%),
+                           radial-gradient(circle at 65% 30%, rgba(255, 110, 64, 0.1) 0%, transparent 40%),
+                           linear-gradient(135deg, #1a0a08 0%, #2a1510 100%);
+        }
+        .theme-mint {
+            --bg-base: #f0faf4; --accent: #2e7d32; --text-primary: #1a3a1e;
+            --bg-gradient: radial-gradient(circle at 35% 50%, #e0f5e8 0%, #f0faf4 60%),
+                           radial-gradient(circle at 65% 30%, rgba(46, 125, 50, 0.06) 0%, transparent 40%),
+                           linear-gradient(135deg, #f0faf4 0%, #e0f5e8 100%);
+        }
+        .theme-paper {
+            --bg-base: #faf6ee; --accent: #8b6914; --text-primary: #3a3020;
+            --bg-gradient: radial-gradient(circle at 40% 50%, #f5eed8 0%, #faf6ee 60%),
+                           radial-gradient(circle at 60% 40%, rgba(139, 105, 20, 0.04) 0%, transparent 40%),
+                           linear-gradient(135deg, #faf6ee 0%, #f5eed8 100%);
+        }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
@@ -263,7 +317,7 @@
         .immersive-status-bar { 
             position: fixed; top: 0; left: 0; right: 0; 
             background: transparent; z-index: 10000; pointer-events: none; 
-            display: flex;
+            display: none;
             align-items: flex-end;
             justify-content: space-between;
             padding: 0 20px;
@@ -302,20 +356,51 @@
         /* ===== Liquid Glass 六层渲染结构 ===== */
         .liquid-glass {
             position: relative;
-            background: linear-gradient(135deg, rgba(255,255,255,calc(0.15 * var(--lg-opacity))) 0%, rgba(255,255,255,calc(0.05 * var(--lg-opacity))) 40%, rgba(255,255,255,calc(0.02 * var(--lg-opacity))) 60%, rgba(255,255,255,calc(0.08 * var(--lg-opacity))) 100%);
-            backdrop-filter: blur(calc(var(--lg-blur) * var(--lg-opacity))) saturate(calc(var(--lg-saturate) * var(--lg-opacity) + 100% * (1 - var(--lg-opacity)))) brightness(calc(1.05 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity)))) contrast(calc(1.03 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity))));
-            -webkit-backdrop-filter: blur(calc(var(--lg-blur) * var(--lg-opacity))) saturate(calc(var(--lg-saturate) * var(--lg-opacity) + 100% * (1 - var(--lg-opacity)))) brightness(calc(1.05 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity)))) contrast(calc(1.03 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity))));
+            background: linear-gradient(135deg, rgba(255,255,255,calc(0.18 * var(--lg-opacity))) 0%, rgba(255,255,255,calc(0.06 * var(--lg-opacity))) 40%, rgba(255,255,255,calc(0.03 * var(--lg-opacity))) 60%, rgba(255,255,255,calc(0.10 * var(--lg-opacity))) 100%);
+            backdrop-filter: blur(calc(var(--lg-blur) * var(--lg-opacity))) saturate(calc(var(--lg-saturate) * var(--lg-opacity) + 100% * (1 - var(--lg-opacity)))) brightness(calc(1.08 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity)))) contrast(calc(1.05 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity))));
+            -webkit-backdrop-filter: blur(calc(var(--lg-blur) * var(--lg-opacity))) saturate(calc(var(--lg-saturate) * var(--lg-opacity) + 100% * (1 - var(--lg-opacity)))) brightness(calc(1.08 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity)))) contrast(calc(1.05 * var(--lg-opacity) + 1 * (1 - var(--lg-opacity))));
             box-shadow:
-                0 30px 60px rgba(0,0,0,0.45),
-                0 10px 20px rgba(0,0,0,0.25),
-                inset 0 1px 2px rgba(255,255,255,calc(0.7 * var(--lg-opacity))),
-                inset 0 -1px 2px rgba(0,0,0,0.15),
-                inset 1px 0 1px rgba(255,255,255,calc(0.3 * var(--lg-opacity))),
-                inset -1px 0 1px rgba(0,0,0,0.1);
+                0 30px 60px rgba(0,0,0,0.5),
+                0 10px 20px rgba(0,0,0,0.3),
+                inset 0 1px 3px rgba(255,255,255,calc(0.8 * var(--lg-opacity))),
+                inset 0 -1px 3px rgba(0,0,0,0.2),
+                inset 1px 0 2px rgba(255,255,255,calc(0.4 * var(--lg-opacity))),
+                inset -1px 0 2px rgba(0,0,0,0.15);
             transition: all var(--lg-duration) var(--lg-spring);
             transform: translateZ(0) scale(var(--lg-refraction));
             will-change: auto;
-            border: none;
+            border: 1px solid rgba(255,255,255,calc(0.15 * var(--lg-opacity)));
+            overflow: hidden;
+        }
+        .liquid-glass .lg-filter {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            backdrop-filter: blur(0px);
+            filter: url(#lg-dist);
+            isolation: isolate;
+            pointer-events: none;
+        }
+        .liquid-glass .lg-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: rgba(255,255,255,calc(0.08 * var(--lg-opacity)));
+            pointer-events: none;
+        }
+        .liquid-glass .lg-specular {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            border-radius: inherit;
+            overflow: hidden;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,calc(0.6 * var(--lg-opacity))),
+                inset 0 0 6px rgba(255,255,255,calc(0.4 * var(--lg-opacity)));
+            pointer-events: none;
+        }
+        .liquid-glass > *:not(.lg-filter):not(.lg-overlay):not(.lg-specular) {
+            position: relative;
+            z-index: 3;
         }
         .liquid-glass.inactive-blur {
             backdrop-filter: none;
@@ -347,7 +432,8 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,calc(0.2 * var(--lg-opacity)));
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,calc(0.35 * var(--lg-opacity))),
+                        inset 0 0 8px rgba(255,255,255,calc(0.08 * var(--lg-opacity)));
             pointer-events: none;
             z-index: 2;
         }
@@ -710,9 +796,21 @@
             transition: transform 0.1s linear; z-index: 10;
         }
         .theme-retro-typewriter .typewriter-paper { 
-            background: #1a1a1a; 
-            box-shadow: 0 40px 120px rgba(0,0,0,0.8), inset 0 0 150px rgba(255,255,255,0.05); 
+            background: 
+                repeating-linear-gradient(
+                    transparent,
+                    transparent 27px,
+                    rgba(120, 160, 200, 0.15) 27px,
+                    rgba(120, 160, 200, 0.15) 28px
+                ),
+                linear-gradient(135deg, #faf6ee 0%, #f5f0e0 50%, #faf6ee 100%);
+            background-color: #faf6ee;
+            box-shadow: 
+                0 40px 120px rgba(0,0,0,0.8), 
+                inset 0 0 150px rgba(139, 115, 85, 0.08),
+                inset 0 0 0 1px rgba(0,0,0,0.1); 
             display: block;
+            border: 1px solid #d4c8a8;
         }
         .theme-retro-typewriter .display-area { background: transparent; align-items: flex-start; padding-top: 5vh; overflow: visible; }
         .theme-retro-typewriter .sentence-text { 
@@ -1940,19 +2038,22 @@
         
         .theme-retro-typewriter .sentence-text {
             font-family: 'Special Elite', 'Courier New', monospace;
-            color: #2c1810;
+            color: #1a0e08;
             font-size: calc(var(--font-size-base) * 0.35);
             font-weight: var(--font-weight);
             text-align: left;
             opacity: 1;
             transform: none;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             max-width: 90%;
             white-space: pre-wrap;
-            line-height: 1.8;
+            line-height: 2.0;
             margin: 4rem 4rem 2rem;
-            text-shadow: 0.3px 0.3px 0.3px rgba(92, 61, 30, 0.4);
+            text-shadow: 0.5px 0.5px 0.5px rgba(44, 24, 16, 0.5),
+                         -0.2px -0.2px 0.1px rgba(139, 69, 19, 0.15),
+                         0 0 1px rgba(44, 24, 16, 0.2);
             -webkit-font-smoothing: none;
+            filter: url(#ink-soul) contrast(1.4) sepia(0.2);
         }
         
         .typewriter-display { display: none; grid-area: 1 / 1; }
@@ -2434,6 +2535,11 @@
 <body class="theme-mystic">
     <!-- SVG 物理滤镜库：深度还原活字印刷的油墨灵魂 -->
     <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true" focusable="false">
+        <filter id="lg-dist" x="0%" y="0%" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
+            <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+            <feDisplacementMap in="SourceGraphic" in2="blurred" scale="50" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
         <filter id="distress-filter">
             <!-- 基础噪声：产生边缘毛刺 -->
             <feTurbulence type="fractalNoise" baseFrequency="0.25" numOctaves="4" result="noise" />
@@ -2487,7 +2593,9 @@
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
-        <div id="input-screen">
+        <div id="input-screen" style="position:relative;overflow:hidden;">
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.15;"></canvas>
+            <div style="position:relative;z-index:1;">
             <img src="logo.png" alt="Mas.Reader Logo" class="mas-reader-logo" />
             <div class="mas-reader-title">Mas.Reader</div>
             <div id="entry-selection" class="entry-container">
@@ -2522,6 +2630,7 @@
                     <button class="btn-back" onclick="hideManualInput()">返回选择</button>
                     <button class="btn-luxury" onclick="startDisplay()">开启巅峰美学</button>
                 </div>
+            </div>
             </div>
         </div>
 
@@ -2678,6 +2787,16 @@
                                 <div class="font-option" data-font="Poppins">Poppins</div>
                                 <div class="font-option" data-font="Raleway">Raleway</div>
                                 <div class="font-option" data-font="Oswald">Oswald</div>
+                                <div class="font-option" data-font="Fira Code">Fira Code</div>
+                                <div class="font-option" data-font="JetBrains Mono">JetBrains Mono</div>
+                                <div class="font-option" data-font="Crimson Text">Crimson Text</div>
+                                <div class="font-option" data-font="Bitter">Bitter</div>
+                                <div class="font-option" data-font="Space Grotesk">Space Grotesk</div>
+                                <div class="font-option" data-font="DM Sans">DM Sans</div>
+                                <div class="font-option" data-font="IBM Plex Serif">IBM Plex Serif</div>
+                                <div class="font-option" data-font="Caveat">Caveat</div>
+                                <div class="font-option" data-font="Dancing Script">Dancing Script</div>
+                                <div class="font-option" data-font="Zhi Mang Xing">Zhi Mang Xing</div>
                             </div>
                         </div>
                         <select class="font-select" id="font-select" onchange="updateFont()" style="display: none;">
@@ -2711,6 +2830,20 @@
                                 <option value="Poppins">Poppins</option>
                                 <option value="Raleway">Raleway</option>
                                 <option value="Oswald">Oswald</option>
+                                <option value="Fira Code">Fira Code</option>
+                                <option value="JetBrains Mono">JetBrains Mono</option>
+                                <option value="Space Grotesk">Space Grotesk</option>
+                                <option value="DM Sans">DM Sans</option>
+                            </optgroup>
+                            <optgroup label="衬线字体">
+                                <option value="Crimson Text">Crimson Text</option>
+                                <option value="Bitter">Bitter</option>
+                                <option value="IBM Plex Serif">IBM Plex Serif</option>
+                            </optgroup>
+                            <optgroup label="手写体">
+                                <option value="Caveat">Caveat</option>
+                                <option value="Dancing Script">Dancing Script</option>
+                                <option value="Zhi Mang Xing">芝麻行书</option>
                             </optgroup>
                         </select>
                     </div>
@@ -2849,6 +2982,42 @@
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #5dba8d, #0a1a14)"></div>
                             <span class="theme-detail-name">JADE - 青玉</span>
                         </div>
+                        <div class="theme-detail-item" data-theme="aurora">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #00e5ff, #0a0e1a)"></div>
+                            <span class="theme-detail-name">AURORA - 极光</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="sakura">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #ff8fa3, #1a0f14)"></div>
+                            <span class="theme-detail-name">SAKURA - 樱花</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="matrix">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #00ff41, #000a00)"></div>
+                            <span class="theme-detail-name">MATRIX - 黑客帝国</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="lavender">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #b388ff, #14101a)"></div>
+                            <span class="theme-detail-name">LAVENDER - 薰衣草</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="coffee">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #c8a070, #1a1410)"></div>
+                            <span class="theme-detail-name">COFFEE - 咖啡</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="glacier">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #80deea, #0a1520)"></div>
+                            <span class="theme-detail-name">GLACIER - 冰川</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="ember">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #ff6e40, #1a0a08)"></div>
+                            <span class="theme-detail-name">EMBER - 余烬</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="mint">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #2e7d32, #f0faf4)"></div>
+                            <span class="theme-detail-name">MINT - 薄荷</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="paper">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b6914, #faf6ee)"></div>
+                            <span class="theme-detail-name">PAPER - 素纸</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -2860,6 +3029,18 @@
                 <div class="eink-toggle-wrap">
                     <div class="slider-label">低性能模式</div>
                     <div class="eink-toggle" id="lowperf-toggle" onclick="toggleLowPerfMode()"></div>
+                </div>
+                <div class="eink-toggle-wrap">
+                    <div class="slider-label">状态栏显示</div>
+                    <div class="eink-toggle" id="statusbar-toggle" onclick="toggleStatusBar()"></div>
+                </div>
+                <div class="eink-toggle-wrap">
+                    <div class="slider-label">篇幅智能判断</div>
+                    <div class="eink-toggle" id="smartlen-toggle" onclick="toggleSmartLen()"></div>
+                </div>
+                <div class="eink-toggle-wrap">
+                    <div class="slider-label">篇幅换行判断</div>
+                    <div class="eink-toggle" id="wordwrap-toggle" onclick="toggleWordWrap()"></div>
                 </div>
 
                 <!-- 液态玻璃透明度滑块 -->
@@ -3336,6 +3517,18 @@
             'Poppins': { type: 'sans', weights: '100;200;300;400;500;600;700;800;900' },
             'Raleway': { type: 'sans', weights: '100;200;300;400;500;600;700;800;900' },
             'Oswald': { type: 'sans', weights: '200;300;400;500;600;700' },
+            'Source Han Serif SC': { type: 'serif', weights: '400;700', cdn: 'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap' },
+            'Fira Code': { type: 'mono', weights: '300;400;500;600;700' },
+            'JetBrains Mono': { type: 'mono', weights: '100;200;300;400;500;600;700;800' },
+            'Crimson Text': { type: 'serif', weights: '400;600;700' },
+            'Bitter': { type: 'serif', weights: '100;200;300;400;500;600;700;800;900' },
+            'Space Grotesk': { type: 'sans', weights: '300;400;500;600;700' },
+            'DM Sans': { type: 'sans', weights: '100;200;300;400;500;600;700;800;900' },
+            'IBM Plex Serif': { type: 'serif', weights: '200;300;400;500;600;700' },
+            'Caveat': { type: 'serif', weights: '400;500;600;700' },
+            'Dancing Script': { type: 'serif', weights: '400;500;600;700' },
+            'Zhi Mang Xing': { type: 'serif', weights: '400' },
+            'ZCOOL KuaiLe': { type: 'sans', weights: '400' },
         };
         const loadedFonts = new Set(['Noto Serif SC', 'Noto Sans SC', 'EB Garamond', 'Montserrat', 'Lora']);
 
@@ -3718,9 +3911,73 @@
             history.pushState(null, '', location.href);
         }
 
+        function getSmartDisplayText(idx) {
+            var text = sentences[idx].text || sentences[idx];
+            if (!smartLenMode && !wordWrapMode) return text;
+            var screenH = window.innerHeight;
+            var fontSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font-size-base')) * parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dpi-scale'));
+            var lineHeight = fontSize * 1.35;
+            var maxLines = Math.floor((screenH * 4 / 7) / lineHeight);
+            var maxCharsPerLine = Math.floor((window.innerWidth * 0.85) / (fontSize * 0.55));
+            var maxChars = maxLines * maxCharsPerLine;
+            if (smartLenMode) {
+                if (text.length < maxChars * 0.5 && idx + 1 < sentences.length) {
+                    var nextText = sentences[idx + 1].text || sentences[idx + 1];
+                    if ((text.length + nextText.length + 1) <= maxChars) {
+                        text = text + '\n' + nextText;
+                    }
+                }
+                if (text.length > maxChars) {
+                    var bestBreak = -1;
+                    for (var i = maxChars; i > maxChars * 0.6; i--) {
+                        if (text[i] === ' ' || text[i] === '\u3000' || text[i] === '\uff0c' || text[i] === '\u3002' || text[i] === '\uff1b' || text[i] === '\uff01' || text[i] === '\n') {
+                            bestBreak = i + 1;
+                            break;
+                        }
+                    }
+                    if (bestBreak > 0) {
+                        text = text.substring(0, bestBreak).trim();
+                    }
+                }
+            }
+            if (wordWrapMode) {
+                var lines = text.split('\n');
+                var result = [];
+                for (var li = 0; li < lines.length; li++) {
+                    var line = lines[li];
+                    if (line.length <= maxCharsPerLine) {
+                        result.push(line);
+                        continue;
+                    }
+                    var wrapped = '';
+                    var wordStart = 0;
+                    for (var ci = 0; ci < line.length; ci++) {
+                        var ch = line[ci];
+                        var isCJK = /[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/.test(ch);
+                        if (!isCJK && ci + 1 < line.length) {
+                            var nextCh = line[ci + 1];
+                            var nextIsCJK = /[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/.test(nextCh);
+                            if (!nextIsCJK && nextCh !== ' ' && ch !== ' ' && ci + 1 <= maxCharsPerLine && (wrapped + line.substring(wordStart, ci + 1)).length > maxCharsPerLine) {
+                                var wordEnd = ci + 1;
+                                while (wordEnd < line.length && !/[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef\s]/.test(line[wordEnd])) wordEnd++;
+                                if (wordEnd - wordStart < maxCharsPerLine * 0.5) {
+                                    result.push(wrapped + line.substring(wordStart, ci));
+                                    wrapped = '';
+                                    wordStart = ci;
+                                }
+                            }
+                        }
+                    }
+                    result.push(wrapped + line.substring(wordStart));
+                }
+                text = result.join('\n');
+            }
+            return text;
+        }
+
         function renderSentence() {
             const idx = displayMode === 'random' ? randomOrder[currentIndex] : currentIndex;
-            const sentence = sentences[idx];
+            var displayText = getSmartDisplayText(idx);
             document.getElementById('progress-val').innerText = (currentIndex + 1) + ' / ' + sentences.length;
             const standardArea = document.getElementById('standard-area');
             const typewriterArea = document.getElementById('typewriter-area');
@@ -3739,13 +3996,13 @@
             });
 
             isAnimationFinished = false; accumulatedTime = 0; transitionWarningTriggered = false;
-            dwellTime = calculateDisplayDuration(sentence.text, speedFactor);
+            dwellTime = calculateDisplayDuration(displayText, speedFactor);
 
             if (einkMode) {
                 if (paper) paper.style.display = 'none';
                 const div = document.createElement('div');
                 div.className = 'sentence-text';
-                div.innerText = sentence.text;
+                div.innerText = displayText;
                 div.style.opacity = '1';
                 div.style.transform = 'none';
                 div.style.color = 'var(--text-primary)';
@@ -3762,12 +4019,12 @@
                 if (paper) paper.style.display = 'block';
                 paper.style.setProperty('--paper-y', '0px');
                 paper.style.setProperty('--paper-x', '0px');
-                runTypewriter(sentence.text);
+                runTypewriter(displayText);
             } else {
                 if (paper) paper.style.display = 'none';
                 var animType = localStorage.getItem('animType') || 'fade';
                 const div = document.createElement('div');
-                div.innerText = sentence.text;
+                div.innerText = displayText;
                 div.style.color = 'var(--text-primary)';
                 const currentFontDisplay = getComputedStyle(document.documentElement).getPropertyValue('--font-display');
                 if (currentFontDisplay) div.style.setProperty('font-family', currentFontDisplay, 'important');
@@ -3784,11 +4041,11 @@
                     div.innerText = '';
                     standardArea.appendChild(div);
                     if (typeof startTypewriterEffect === 'function') {
-                        startTypewriterEffect(div, sentence.text, function() {
+                        startTypewriterEffect(div, displayText, function() {
                             isAnimationFinished = true;
                         });
                     } else {
-                        div.innerText = sentence.text;
+                        div.innerText = displayText;
                         isAnimationFinished = true;
                     }
                 } else {
@@ -4269,7 +4526,96 @@
             void document.body.offsetHeight;
         }
 
-        // ===== 液态玻璃透明度滑块 =====
+        (function initMatrixRain() {
+            var canvas = document.getElementById('matrix-canvas');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+            var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`αβγδεζηθικλμνξοπρστυφχψω';
+            var fontSize = 14;
+            var columns, drops;
+            function resize() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                columns = Math.floor(canvas.width / fontSize);
+                drops = [];
+                for (var i = 0; i < columns; i++) {
+                    drops[i] = Math.random() * -100;
+                }
+            }
+            resize();
+            window.addEventListener('resize', resize);
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
+                ctx.fillStyle = accentColor;
+                ctx.font = fontSize + 'px monospace';
+                for (var i = 0; i < drops.length; i++) {
+                    var text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            setInterval(draw, 50);
+        })();
+
+        var statusBarVisible = false;
+        function isMobile() { return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768; }
+        function toggleStatusBar() {
+            statusBarVisible = !statusBarVisible;
+            var bar = document.querySelector('.immersive-status-bar');
+            var toggle = document.getElementById('statusbar-toggle');
+            if (statusBarVisible) {
+                bar.style.display = 'flex';
+                toggle.classList.add('active');
+            } else {
+                bar.style.display = 'none';
+                toggle.classList.remove('active');
+            }
+            localStorage.setItem('statusBarVisible', statusBarVisible ? '1' : '0');
+        }
+        (function() {
+            var saved = localStorage.getItem('statusBarVisible');
+            if (saved === '1' || (saved === null && isMobile())) {
+                statusBarVisible = false;
+                toggleStatusBar();
+            }
+        })();
+
+        var smartLenMode = false;
+        function toggleSmartLen() {
+            smartLenMode = !smartLenMode;
+            var toggle = document.getElementById('smartlen-toggle');
+            if (smartLenMode) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+            localStorage.setItem('smartLenMode', smartLenMode ? '1' : '0');
+            if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
+        }
+        (function() {
+            if (localStorage.getItem('smartLenMode') === '1') { smartLenMode = false; toggleSmartLen(); }
+        })();
+
+        var wordWrapMode = false;
+        function toggleWordWrap() {
+            wordWrapMode = !wordWrapMode;
+            var toggle = document.getElementById('wordwrap-toggle');
+            if (wordWrapMode) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+            localStorage.setItem('wordWrapMode', wordWrapMode ? '1' : '0');
+            if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
+        }
+        (function() {
+            if (localStorage.getItem('wordWrapMode') === '1') { wordWrapMode = false; toggleWordWrap(); }
+        })();
         (function() {
             var track = document.getElementById('opacity-track');
             var fill = document.getElementById('opacity-track-fill');
@@ -4910,6 +5256,11 @@
                 element.style.filter = 'none';
                 element.style.transform = 'none';
                 element.style.opacity = '1';
+                element.style.textAlign = 'left';
+                element.style.justifySelf = 'start';
+                element.style.alignSelf = 'center';
+                element.style.maxWidth = '85vw';
+                element.style.margin = '0 auto';
 
                 var cursor = document.createElement('span');
                 cursor.className = 'typewriter-cursor';
@@ -4918,6 +5269,7 @@
 
                 var dwellTime = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--dwell-time')) || 2000;
                 var charDelay = Math.max(20, Math.floor(dwellTime / Math.max(1, text.length)));
+                charDelay = Math.round(charDelay * 2.22);
 
                 typewriterTimer = setInterval(function() {
                     if (typewriterIndex < typewriterText.length) {
@@ -4931,6 +5283,8 @@
                         typewriterIndex++;
                     } else {
                         stopTypewriterEffect();
+                        element.style.textAlign = '';
+                        element.style.justifySelf = '';
                         element.classList.add('active');
                         if (typeof callback === 'function') callback();
                     }
