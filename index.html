@@ -81,6 +81,33 @@
             transform: none !important;
             pointer-events: none;
         }
+        .low-perf-mode .liquid-glass,
+        .low-perf-mode .liquid-glass-btn,
+        .low-perf-mode .nav-bar-luxury,
+        .low-perf-mode .bottom-control-btn,
+        .low-perf-mode .status-badge-setting,
+        .low-perf-mode .status-badge,
+        .low-perf-mode .entry-card,
+        .low-perf-mode .toc-modal-content {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            animation: none !important;
+            transition: none !important;
+        }
+        .low-perf-mode .liquid-glass::before,
+        .low-perf-mode .liquid-glass::after,
+        .low-perf-mode .liquid-glass-btn::before,
+        .low-perf-mode .nav-bar-luxury::before,
+        .low-perf-mode .nav-bar-luxury::after,
+        .low-perf-mode .bottom-control-btn::before,
+        .low-perf-mode .status-badge-setting::before,
+        .low-perf-mode .status-badge::before,
+        .low-perf-mode .status-badge::after {
+            display: none !important;
+        }
+        .low-perf-mode .status-badge {
+            animation: none !important;
+        }
 
         .e-ink-active {
             --eink-bg: #FFFFFF;
@@ -216,12 +243,8 @@
             background: linear-gradient(135deg, rgba(255,255,255,calc(0.15 * var(--lg-opacity))) 0%, rgba(255,255,255,calc(0.05 * var(--lg-opacity))) 40%, rgba(255,255,255,calc(0.02 * var(--lg-opacity))) 60%, rgba(255,255,255,calc(0.08 * var(--lg-opacity))) 100%);
             backdrop-filter: blur(calc(var(--lg-blur) * var(--lg-opacity))) saturate(calc(var(--lg-saturate) * var(--lg-opacity) + 100% * (1 - var(--lg-opacity))));
             -webkit-backdrop-filter: blur(calc(var(--lg-blur) * var(--lg-opacity))) saturate(calc(var(--lg-saturate) * var(--lg-opacity) + 100% * (1 - var(--lg-opacity))));
-            border: 1px solid rgba(255,255,255,calc(0.3 * var(--lg-opacity)));
-            border-top-color: rgba(255,255,255,calc(0.55 * var(--lg-opacity)));
-            border-left-color: rgba(255,255,255,calc(0.45 * var(--lg-opacity)));
-            border-right-color: rgba(255,255,255,calc(0.15 * var(--lg-opacity)));
-            border-bottom-color: rgba(255,255,255,calc(0.1 * var(--lg-opacity)));
             box-shadow:
+                0 0 0 1px rgba(255,255,255,calc(0.3 * var(--lg-opacity))),
                 0 30px 60px rgba(0,0,0,0.45),
                 0 10px 20px rgba(0,0,0,0.25),
                 inset 0 1px 2px rgba(255,255,255,calc(0.7 * var(--lg-opacity))),
@@ -231,6 +254,7 @@
             transition: all var(--lg-duration) var(--lg-spring);
             transform: translateZ(0) scale(var(--lg-refraction));
             will-change: auto;
+            border: none;
         }
         .liquid-glass.inactive-blur {
             backdrop-filter: none;
@@ -266,12 +290,12 @@
             transform: translateY(-2px) scale(1.005);
         }
         .liquid-glass:active {
-            transform: translateY(var(--lg-press-depth)) scale(0.995);
+            transform: translateY(2px) scale(0.995);
             box-shadow:
-                0 15px 30px rgba(0,0,0,0.35),
-                0 4px 8px rgba(0,0,0,0.2),
-                inset 0 2px 6px rgba(0,0,0,0.25),
-                inset 0 -1px 1px rgba(255,255,255,0.3);
+                0 10px 20px rgba(0,0,0,0.3),
+                0 3px 6px rgba(0,0,0,0.15),
+                inset 0 3px 8px rgba(0,0,0,0.3),
+                inset 0 -1px 1px rgba(255,255,255,0.2);
             background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.05) 100%);
         }
 
@@ -292,16 +316,15 @@
             background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
             backdrop-filter: blur(30px) saturate(200%);
             -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border: 1px solid rgba(255,255,255,0.25);
-            border-top-color: rgba(255,255,255,0.5);
-            border-left-color: rgba(255,255,255,0.4);
             box-shadow:
+                0 0 0 1px rgba(255,255,255,0.25),
                 0 10px 20px rgba(0,0,0,0.2),
                 inset 0 1px 2px rgba(255,255,255,0.6),
                 inset 0 -1px 1px rgba(0,0,0,0.15);
             color: white;
             cursor: pointer;
             transition: all var(--lg-duration) var(--lg-spring);
+            border: none;
         }
         .liquid-glass-btn::before {
             content: '';
@@ -313,20 +336,20 @@
         }
         .liquid-glass-btn:hover:not(:disabled) {
             background: linear-gradient(to bottom, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 100%);
-            border-color: rgba(255,255,255,0.35);
-            border-top-color: rgba(255,255,255,0.65);
             box-shadow:
+                0 0 0 1px rgba(255,255,255,0.35),
                 0 15px 25px rgba(0,0,0,0.3),
                 inset 0 2px 3px rgba(255,255,255,0.7),
                 inset 0 -1px 1px rgba(0,0,0,0.15);
             transform: translateY(-2px) scale(1.02);
         }
         .liquid-glass-btn:active:not(:disabled) {
-            transform: translateY(var(--lg-press-depth)) scale(0.98);
+            transform: translateY(2px) scale(0.97);
             box-shadow:
-                0 5px 10px rgba(0,0,0,0.2),
-                inset 0 2px 5px rgba(0,0,0,0.3);
-            background: rgba(255,255,255,0.08);
+                0 2px 6px rgba(0,0,0,0.15),
+                inset 0 3px 8px rgba(0,0,0,0.35),
+                inset 0 1px 3px rgba(0,0,0,0.25);
+            background: rgba(255,255,255,0.06);
         }
 
         /* 性能降级: 传统毛玻璃 */
@@ -353,11 +376,8 @@
         .status-badge-setting {
             background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%);
             padding: 0; border-radius: 50%; 
-            border: 1px solid rgba(255,255,255,0.25);
-            border-top-color: rgba(255,255,255,0.5);
-            border-left-color: rgba(255,255,255,0.4);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.25), 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.15);
             backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate)); 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.15);
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             transition: all var(--lg-duration) var(--lg-spring);
@@ -370,6 +390,7 @@
             max-height: 2.5rem;
             position: relative;
             overflow: hidden;
+            border: none;
         }
         .status-badge-setting::before {
             content: '';
@@ -383,11 +404,14 @@
         .status-badge-setting:hover {
             background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.12) 100%);
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.15);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 12px 40px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.15);
         }
         .status-badge-setting:active {
-            transform: translateY(1px) scale(0.98);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 2px 5px rgba(0,0,0,0.25);
+            transform: translateY(2px) scale(0.96);
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.2),
+                inset 0 3px 8px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.3);
         }
         
         .status-badge-setting svg {
@@ -427,6 +451,23 @@
 
         /* --- 输入屏幕重构 --- */
         #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 20; background: inherit; }
+        
+        .mas-reader-title {
+            font-family: 'EB Garamond', 'Noto Serif SC', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(123,97,255,0.8) 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 8px rgba(123,97,255,0.3));
+            user-select: none;
+            -webkit-user-select: none;
+        }
         
         .entry-container { display: flex; gap: 3rem; align-items: stretch; }
         .entry-card { 
@@ -838,11 +879,9 @@
             position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%) translateY(100px);
             width: auto; max-width: 90vw;
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%);
-            border: 1px solid rgba(255,255,255,0.25);
-            border-top-color: rgba(255,255,255,0.45);
-            border-left-color: rgba(255,255,255,0.35);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.2), 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 3px rgba(255,255,255,0.5), inset 0 -1px 2px rgba(0,0,0,0.1);
             border-radius: 35px; padding: 1.2rem 3rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
-            z-index: 9999; box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 3px rgba(255,255,255,0.5), inset 0 -1px 2px rgba(0,0,0,0.1); transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 9999; transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             max-height: 70vh;
             overflow-y: auto;
             contain: layout style;
@@ -852,6 +891,7 @@
             opacity: 0;
             pointer-events: none;
             visibility: hidden;
+            border: none;
         }
         .nav-bar-luxury.open { 
             transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto !important; visibility: visible; 
@@ -920,9 +960,7 @@
         
         .bottom-control-btn {
             background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%); 
-            border: 1px solid rgba(255,255,255,0.25);
-            border-top-color: rgba(255,255,255,0.5);
-            border-left-color: rgba(255,255,255,0.4);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.25), 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.15);
             backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate)); 
             border-radius: 50%;
             width: 50px;
@@ -931,9 +969,9 @@
             cursor: pointer;
             transition: all var(--lg-duration) var(--lg-spring);
             color: var(--text-primary);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
+            border: none;
         }
         .bottom-control-btn::before {
             content: '';
@@ -947,11 +985,15 @@
         .bottom-control-btn:hover {
             background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.12) 100%);
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.15);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.35), 0 12px 40px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.15);
         }
         .bottom-control-btn:active {
-            transform: translateY(1px) scale(0.98);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 2px 5px rgba(0,0,0,0.25);
+            transform: translateY(2px) scale(0.96);
+            box-shadow:
+                0 2px 6px rgba(0,0,0,0.2),
+                inset 0 3px 8px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.06);
         }
         
         .bottom-control-btn.play-master {
@@ -1259,39 +1301,52 @@
             margin-top: 0.8rem;
             pointer-events: auto;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .opacity-slider-track {
+        .opacity-gauge-container {
             position: relative;
-            width: 100%;
-            height: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            cursor: pointer;
+            width: 160px;
+            height: 90px;
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
+            cursor: pointer;
         }
-        .opacity-slider-fill {
-            position: absolute;
-            top: 0; left: 0;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(123,97,255,0.3), var(--accent));
-            border-radius: 4px;
-            pointer-events: none;
-            width: 100%;
+        .opacity-gauge-svg {
+            width: 160px;
+            height: 90px;
+            overflow: visible;
         }
-        .opacity-slider-thumb {
-            position: absolute;
-            top: 50%;
-            width: 22px;
-            height: 22px;
-            background: var(--accent);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
+        .opacity-gauge-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.1);
+            stroke-width: 10;
+            stroke-linecap: round;
+        }
+        .opacity-gauge-fill {
+            fill: none;
+            stroke: url(#opacityGaugeGrad);
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.05s ease;
+        }
+        .opacity-gauge-thumb {
+            fill: var(--accent);
+            filter: drop-shadow(0 0 6px rgba(123,97,255,0.6));
             cursor: grab;
-            box-shadow: 0 0 10px rgba(123,97,255,0.5);
-            pointer-events: none;
-            left: 100%;
+            transition: r 0.15s ease;
+        }
+        .opacity-gauge-thumb:active {
+            cursor: grabbing;
+        }
+        .opacity-gauge-value {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            fill: var(--text-primary);
+            text-anchor: middle;
+            dominant-baseline: middle;
         }
 
         .toc-modal { 
@@ -1313,7 +1368,7 @@
             flex-shrink: 0;
         }
         .toc-modal-title {
-            font-family: var(--font-display); font-size: 1.1rem;
+            font-family: var(--font-display); font-size: 1.65rem;
             font-weight: 500; letter-spacing: 0.1em;
         }
         .toc-close-btn {
@@ -1326,7 +1381,7 @@
         }
         .toc-item {
             padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;
-            font-family: var(--font-display); font-size: 0.85rem;
+            font-family: var(--font-display); font-size: 1.28rem;
             transition: background 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
             color: var(--text-primary); display: flex; justify-content: space-between; align-items: center;
         }
@@ -1344,7 +1399,7 @@
         .toc-sub-list.open { max-height: 500px; }
         .toc-sub-item {
             padding: 0.35rem 1rem 0.35rem 2rem; border-radius: 6px; cursor: pointer;
-            font-family: var(--font-display); font-size: 0.78rem;
+            font-family: var(--font-display); font-size: 1.17rem;
             color: rgba(255,255,255,0.6); transition: background 0.2s, color 0.2s;
             border-bottom: 1px solid rgba(255,255,255,0.03);
         }
@@ -1355,7 +1410,7 @@
             display: flex; flex-direction: column; justify-content: center; min-height: 0;
         }
         .toc-progress-label {
-            font-size: 0.65rem; color: rgba(255,255,255,0.4);
+            font-size: 0.98rem; color: rgba(255,255,255,0.4);
             letter-spacing: 1px; margin-bottom: 0.3rem; text-align: center;
         }
         .toc-progress-track {
@@ -1382,7 +1437,7 @@
             transform: translate(-50%, -50%); pointer-events: none;
         }
         .toc-preview-text {
-            font-size: 0.7rem; color: rgba(255,255,255,0.5);
+            font-size: 1.05rem; color: rgba(255,255,255,0.5);
             font-family: var(--font-display); line-height: 1.4;
             max-height: 2.8em; overflow: hidden; text-align: center;
         }
@@ -2061,10 +2116,14 @@
             .status-badge {
                 padding: 0.5rem 1.2rem;
                 font-size: 0.75rem;
+                height: 2.4rem;
+                border-radius: 1.2rem;
             }
             .status-badge-setting {
                 width: 2.4rem;
                 height: 2.4rem;
+                min-width: 2.4rem;
+                min-height: 2.4rem;
             }
             .status-badge-setting svg {
                 width: 1.2rem;
@@ -2119,6 +2178,10 @@
         }
 
         @media (max-width: 480px) {
+            .mas-reader-title {
+                font-size: 2.2rem;
+                margin-bottom: 1.5rem;
+            }
             .entry-card { padding: 1.2rem; }
             .entry-title { font-size: 1.2rem; }
             .entry-desc { font-size: 0.7rem; }
@@ -2140,7 +2203,8 @@
             .slider-wrap,
             .select-wrap { max-width: none; }
             .slider-label { font-size: 0.6rem; }
-            .opacity-slider-track { max-width: none; }
+            .opacity-gauge-container { width: 130px; height: 75px; }
+            .opacity-gauge-svg { width: 130px; height: 75px; }
             .control-btn {
                 padding: 0.4rem;
                 min-width: 40px;
@@ -2228,25 +2292,20 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen">
+            <div class="mas-reader-title">Mas.Reader</div>
             <div id="entry-selection" class="entry-container">
-                <div class="entry-card" onclick="showManualInput()">
-                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h4.25L17.81 9.94l-4.25-4.25L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 4.25 4.25 1.83-1.83z"/></svg>
-                    <div class="entry-title">手动输入</div>
-                    <div class="entry-desc">粘贴或直接编写您的文本内容，即刻开启巅峰美学展示。</div>
-                </div>
-
                 <div class="entry-card" id="epub-drop-zone">
                     <input type="file" id="file-input" accept=".epub,.md,.txt,text/plain,application/epub+zip,text/markdown" onchange="handleFileSelect(event)" class="entry-file-input">
                     <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                    <div class="entry-title">导入书籍/文档</div>
-                    <div class="entry-desc">支持拖拽或选中 .epub, .md, .txt 文件，我们将为您智能解析内容。</div>
+                    <div class="entry-title">选择单个文件</div>
+                    <div class="entry-desc">支持 .epub, .md, .txt 文件，智能解析内容。</div>
                 </div>
 
                 <div class="entry-card" id="folder-entry-card">
                     <input type="file" id="folder-input" webkitdirectory directory multiple accept=".txt,.md,.epub,text/plain,application/epub+zip,text/markdown" onchange="handleFolderSelect(event)" class="entry-file-input">
                     <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                    <div class="entry-title">选择文件夹</div>
-                    <div class="entry-desc" id="folder-desc">批量导入整个文件夹，自动扫描所有兼容文件，随时切换阅读。</div>
+                    <div class="entry-title">选择整个文件夹</div>
+                    <div class="entry-desc" id="folder-desc">批量导入整个文件夹，自动扫描所有兼容文件。</div>
                 </div>
             </div>
 
@@ -2373,8 +2432,8 @@
 
                 <div class="control-group">
                     <div class="slider-wrap">
-                        <div class="slider-label">切换时间: <span id="dwell-display" style="color:var(--accent)">~5 字/秒</span></div>
-                        <input type="range" class="slider-custom" id="dwell-slider" min="0.5" max="5" step="0.1" value="1.5" onchange="updateSpeed()" oninput="throttledUpdateSpeed()">
+                        <div class="slider-label">阅读速度: <span id="dwell-display" style="color:var(--accent)">×1.5</span></div>
+                        <input type="range" class="slider-custom" id="dwell-slider" min="0.3" max="5" step="0.1" value="1.5" onchange="updateSpeed()" oninput="throttledUpdateSpeed()">
                     </div>
                     <div class="slider-wrap">
                         <div class="slider-label">字体大小: <span id="size-display" style="color:var(--accent)">4.0rem</span></div>
@@ -2568,12 +2627,22 @@
                     <div class="eink-toggle" id="lowperf-toggle" onclick="toggleLowPerfMode()"></div>
                 </div>
 
-                <!-- 半圆仪表盘：液态玻璃透明度 -->
+                <!-- 圆环仪表盘：液态玻璃透明度 -->
                 <div class="opacity-dashboard-wrap">
                     <div class="slider-label">玻璃透明度 <span id="opacity-value">100%</span></div>
-                    <div class="opacity-slider-track" id="opacity-slider-track">
-                        <div class="opacity-slider-fill" id="opacity-slider-fill"></div>
-                        <div class="opacity-slider-thumb" id="opacity-slider-thumb"></div>
+                    <div class="opacity-gauge-container" id="opacity-gauge-container">
+                        <svg class="opacity-gauge-svg" viewBox="0 0 160 90">
+                            <defs>
+                                <linearGradient id="opacityGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:rgba(123,97,255,0.3)"/>
+                                    <stop offset="100%" style="stop-color:#7b61ff"/>
+                                </linearGradient>
+                            </defs>
+                            <path class="opacity-gauge-bg" id="opacity-gauge-bg" d="M 16 82 A 54 54 0 0 1 144 82"/>
+                            <path class="opacity-gauge-fill" id="opacity-gauge-fill" d="M 16 82 A 54 54 0 0 1 144 82"/>
+                            <circle class="opacity-gauge-thumb" id="opacity-gauge-thumb" cx="144" cy="82" r="8"/>
+                            <text class="opacity-gauge-value" id="opacity-gauge-text" x="80" y="75">100%</text>
+                        </svg>
                     </div>
                 </div>
                 </div>
@@ -3555,10 +3624,9 @@
 
         function updateSpeed() {
             speedFactor = parseFloat(document.getElementById('dwell-slider').value);
-            const charsPerSec = Math.round(1000 / (speedFactor * 200));
-            document.getElementById('dwell-display').innerText = '~' + charsPerSec + ' 字/秒';
+            document.getElementById('dwell-display').innerText = '×' + speedFactor.toFixed(1);
             if (sentences.length > 0 && currentIndex < sentences.length) {
-                dwellTime = calculateDisplayDuration(sentences[currentIndex], speedFactor);
+                dwellTime = calculateDisplayDuration(sentences[currentIndex].text, speedFactor);
             }
             manualDwellOverride = false;
         }
@@ -3576,7 +3644,7 @@
             document.documentElement.style.setProperty('--font-weight', '400');
             document.documentElement.style.setProperty('--dpi-scale', '1');
             speedFactor = 1.5;
-            document.getElementById('dwell-display').innerText = '~3 字/秒';
+            document.getElementById('dwell-display').innerText = '×1.5';
             document.getElementById('size-display').innerText = '4.0rem';
             document.getElementById('weight-display').innerText = '400';
             document.getElementById('dpi-display').innerText = '100%';
@@ -3940,8 +4008,10 @@
             if (lowPerfMode) {
                 document.documentElement.classList.add('low-perf-mode');
                 toggle.classList.add('active');
-                document.querySelectorAll('.liquid-glass, .liquid-glass-btn').forEach(function(el) {
-                    el.classList.add('inactive-blur');
+                document.querySelectorAll('.liquid-glass, .liquid-glass-btn, .nav-bar-luxury, .bottom-control-btn, .status-badge-setting, .status-badge, .entry-card, .toc-modal-content').forEach(function(el) {
+                    el.style.backdropFilter = 'none';
+                    el.style.webkitBackdropFilter = 'none';
+                    el.style.animation = 'none';
                 });
                 document.querySelectorAll('.sentence-text').forEach(function(el) {
                     el.style.filter = 'none';
@@ -3951,8 +4021,10 @@
             } else {
                 document.documentElement.classList.remove('low-perf-mode');
                 toggle.classList.remove('active');
-                document.querySelectorAll('.liquid-glass, .liquid-glass-btn').forEach(function(el) {
-                    el.classList.remove('inactive-blur');
+                document.querySelectorAll('.liquid-glass, .liquid-glass-btn, .nav-bar-luxury, .bottom-control-btn, .status-badge-setting, .status-badge, .entry-card, .toc-modal-content').forEach(function(el) {
+                    el.style.backdropFilter = '';
+                    el.style.webkitBackdropFilter = '';
+                    el.style.animation = '';
                 });
                 document.querySelectorAll('.sentence-text').forEach(function(el) {
                     el.style.filter = '';
@@ -3960,15 +4032,25 @@
                     el.style.transition = '';
                 });
             }
+            void document.body.offsetHeight;
         }
 
-        // ===== 滑块：液态玻璃透明度 =====
+        // ===== 圆环仪表盘：液态玻璃透明度 =====
         (function() {
-            var track = document.getElementById('opacity-slider-track');
-            var fill = document.getElementById('opacity-slider-fill');
-            var thumb = document.getElementById('opacity-slider-thumb');
+            var container = document.getElementById('opacity-gauge-container');
+            var fillPath = document.getElementById('opacity-gauge-fill');
+            var thumbCircle = document.getElementById('opacity-gauge-thumb');
             var valueLabel = document.getElementById('opacity-value');
-            if (!track || !fill || !thumb) return;
+            var gaugeText = document.getElementById('opacity-gauge-text');
+            if (!container || !fillPath || !thumbCircle) return;
+
+            var cx = 80, cy = 82, r = 54;
+            var startAngle = Math.PI;
+            var endAngle = 0;
+
+            var totalLen = fillPath.getTotalLength();
+            fillPath.style.strokeDasharray = totalLen;
+            fillPath.style.strokeDashoffset = 0;
 
             var currentOpacity = 1;
 
@@ -3977,6 +4059,13 @@
                 dynStyle = document.createElement('style');
                 dynStyle.id = 'dynamic-opacity-style';
                 document.head.appendChild(dynStyle);
+            }
+
+            function angleToXY(angle) {
+                return {
+                    x: cx + r * Math.cos(angle),
+                    y: cy + r * Math.sin(angle)
+                };
             }
 
             function setOpacity(val) {
@@ -4014,15 +4103,34 @@
                     '}';
 
                 document.documentElement.style.setProperty('--lg-opacity', val);
-                fill.style.width = (val * 100) + '%';
-                thumb.style.left = (val * 100) + '%';
-                if (valueLabel) valueLabel.textContent = Math.round(val * 100) + '%';
+
+                var offset = totalLen * (1 - val);
+                fillPath.style.strokeDashoffset = offset;
+
+                var angle = Math.PI - val * Math.PI;
+                var pos = angleToXY(angle);
+                thumbCircle.setAttribute('cx', pos.x);
+                thumbCircle.setAttribute('cy', pos.y);
+
+                var pct = Math.round(val * 100) + '%';
+                if (valueLabel) valueLabel.textContent = pct;
+                if (gaugeText) gaugeText.textContent = pct;
             }
 
-            function getVal(e) {
-                var rect = track.getBoundingClientRect();
-                var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-                return Math.max(0, Math.min(1, x / rect.width));
+            function getValFromEvent(e) {
+                var rect = container.getBoundingClientRect();
+                var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                var svgX = ((clientX - rect.left) / rect.width) * 160;
+                var svgY = ((clientY - rect.top) / rect.height) * 90;
+                var dx = svgX - cx;
+                var dy = svgY - cy;
+                var angle = Math.atan2(dy, dx);
+                if (angle > 0 && angle < Math.PI) {
+                    angle = (angle > Math.PI / 2) ? Math.PI : 0;
+                }
+                var val = (Math.PI - angle) / Math.PI;
+                return Math.max(0, Math.min(1, val));
             }
 
             var dragging = false;
@@ -4030,12 +4138,12 @@
             function onStart(e) {
                 e.preventDefault();
                 dragging = true;
-                setOpacity(getVal(e));
+                setOpacity(getValFromEvent(e));
             }
             function onMove(e) {
                 if (!dragging) return;
                 e.preventDefault();
-                setOpacity(getVal(e));
+                setOpacity(getValFromEvent(e));
             }
             function onEnd() {
                 if (!dragging) return;
@@ -4043,8 +4151,8 @@
                 localStorage.setItem('lg-opacity', currentOpacity);
             }
 
-            track.addEventListener('mousedown', onStart);
-            track.addEventListener('touchstart', onStart, { passive: false });
+            container.addEventListener('mousedown', onStart);
+            container.addEventListener('touchstart', onStart, { passive: false });
             document.addEventListener('mousemove', onMove);
             document.addEventListener('touchmove', onMove, { passive: false });
             document.addEventListener('mouseup', onEnd);
@@ -4295,10 +4403,10 @@
 
             window.handleBackNavigation = function() {
                 var navBar = document.getElementById('nav-bar-luxury');
-                var fileListModal = document.getElementById('file-list-modal');
                 var tocModal = document.getElementById('toc-modal');
-                var entryScreen = document.getElementById('entry-screen');
-                var readingScreen = document.getElementById('reading-screen');
+                var fileListModal = document.getElementById('file-list-view');
+                var inputScreen = document.getElementById('input-screen');
+                var displayScreen = document.getElementById('display-screen');
 
                 if (navBar && navBar.classList.contains('open')) {
                     toggleNav();
@@ -4308,26 +4416,35 @@
                     closeTOC();
                     return;
                 }
-                if (fileListModal && fileListModal.style.display === 'flex') {
+                if (fileListModal && fileListModal.style.display === 'block') {
                     if (typeof closeFileList === 'function') closeFileList();
                     return;
                 }
                 if (currentView === 'reading') {
+                    if (typeof exitDisplay === 'function') exitDisplay();
+                    return;
+                }
+                if (currentView === 'filelist') {
+                    if (inputScreen) inputScreen.style.display = 'flex';
+                    currentView = 'launcher';
+                    navStack.length = 0;
+                    navStack.push('launcher');
+                    return;
+                }
+                if (currentView === 'launcher') {
                     if (navigator.app && navigator.app.exitApp) {
                         navigator.app.exitApp();
-                    } else {
-                        window.close();
                     }
                     return;
                 }
                 var prev = popNavState();
                 if (prev === 'launcher') {
-                    if (readingScreen) readingScreen.style.display = 'none';
-                    if (entryScreen) entryScreen.style.display = 'flex';
+                    if (displayScreen) displayScreen.style.display = 'none';
+                    if (inputScreen) inputScreen.style.display = 'flex';
                     currentView = 'launcher';
                 } else if (prev === 'reading') {
-                    if (entryScreen) entryScreen.style.display = 'none';
-                    if (readingScreen) readingScreen.style.display = 'flex';
+                    if (inputScreen) inputScreen.style.display = 'none';
+                    if (displayScreen) displayScreen.style.display = 'flex';
                     currentView = 'reading';
                 }
             };
