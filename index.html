@@ -3705,7 +3705,6 @@
             document.getElementById('bottom-controls').classList.remove('hidden');
             if (typeof pushNavState === 'function') pushNavState('reading');
             renderSentence(); startTimer();
-            initVolumeKeyMonitor();
             history.pushState(null, '', location.href);
         }
 
@@ -4114,53 +4113,7 @@
             }
         });
 
-        // ===== 功能1: 物理音量键映射翻页 =====
-        let lastVolumeTime = 0;
-        let prevVolume = null;
-        let volumeMonitorInitialized = false;
-
-        function initVolumeKeyMonitor() {
-            if (volumeMonitorInitialized) return;
-            volumeMonitorInitialized = true;
-            if (typeof navigator.mediaDevices !== 'undefined' && typeof navigator.mediaDevices.getUserMedia === 'function') {
-                navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const source = audioCtx.createMediaStreamSource(stream);
-                    const analyser = audioCtx.createAnalyser();
-                    analyser.fftSize = 256;
-                    source.connect(analyser);
-                    
-                    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-                    
-                    function checkVolume() {
-                        analyser.getByteFrequencyData(dataArray);
-                        let sum = 0;
-                        for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-                        const avg = sum / dataArray.length;
-                        
-                        const now = Date.now();
-                        if (prevVolume !== null && now - lastVolumeTime > 300) {
-                            if (avg > prevVolume + 30 && prevVolume > 10) {
-                                lastVolumeTime = now;
-                                if (document.getElementById('display-screen').style.display === 'flex') {
-                                    nextSentence();
-                                }
-                            } else if (avg < prevVolume - 30 && prevVolume > 10) {
-                                lastVolumeTime = now;
-                                if (document.getElementById('display-screen').style.display === 'flex') {
-                                    prevSentence();
-                                }
-                            }
-                        }
-                        prevVolume = avg;
-                        requestAnimationFrame(checkVolume);
-                    }
-                    checkVolume();
-                }).catch(() => {});
-            }
-        }
-
-        // 音量键备用方案：监听键盘事件（部分移动浏览器支持）
+        // ===== 功能1: 物理音量键映射翻页（键盘事件方案） =====
         let volumeLongPressTimer = null;
         let volumeKeyPressTimer = null;
         let volumeKeyAction = null;
