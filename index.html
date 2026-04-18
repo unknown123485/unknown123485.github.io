@@ -297,7 +297,7 @@
             pointer-events: none; z-index: -1; 
         }
 
-        .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; background: var(--bg-gradient); padding-top: env(safe-area-inset-top, 0px); }
+        .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; background: var(--bg-gradient); padding-top: max(env(safe-area-inset-top, 0px), 44px); }
 
         /* ===== Liquid Glass 六层渲染结构 ===== */
         .liquid-glass {
@@ -446,7 +446,7 @@
 
         /* --- 巅峰状态标签 (液态玻璃) --- */
         .status-badge-container {
-            position: fixed; top: calc(env(safe-area-inset-top, 24px) + 8px); left: 1rem; 
+            position: fixed; top: 52px; left: 1rem; 
             display: flex; align-items: center; gap: 0.6rem;
             z-index: 5000;
             transform: scale(var(--dpi-scale));
@@ -488,11 +488,12 @@
         }
         .status-badge-setting:active,
         .status-badge-setting.pressing {
-            transform: scale(0.88);
+            transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
+            transform: scale(0.85);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.2),
-                inset 0 3px 8px rgba(0,0,0,0.4),
-                inset 0 1px 3px rgba(0,0,0,0.3);
+                0 1px 3px rgba(0,0,0,0.3),
+                inset 0 4px 10px rgba(0,0,0,0.5),
+                inset 0 2px 4px rgba(0,0,0,0.4);
         }
         
         .status-badge-setting svg {
@@ -520,8 +521,9 @@
         }
         .status-badge:active,
         .status-badge.pressing {
-            transform: scale(0.92);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 3px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.05);
+            transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
+            transform: scale(0.88);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);
         }
         .status-badge::before {
             content: ''; position: absolute; inset: 0; border-radius: 1.2rem;
@@ -1079,12 +1081,13 @@
         }
         .bottom-control-btn:active,
         .bottom-control-btn.pressing {
-            transform: scale(0.88);
+            transition: transform 0.06s ease-out, box-shadow 0.06s ease-out, background 0.06s ease-out;
+            transform: scale(0.85);
             box-shadow:
-                0 2px 6px rgba(0,0,0,0.2),
-                inset 0 3px 8px rgba(0,0,0,0.4),
-                inset 0 1px 3px rgba(0,0,0,0.3);
-            background: rgba(255,255,255,0.06);
+                0 1px 3px rgba(0,0,0,0.3),
+                inset 0 4px 10px rgba(0,0,0,0.5),
+                inset 0 2px 4px rgba(0,0,0,0.4);
+            background: rgba(255,255,255,0.04);
         }
         
         .bottom-control-btn.play-master {
@@ -2290,7 +2293,7 @@
                 height: 24px;
             }
             .status-badge-container {
-                top: calc(env(safe-area-inset-top, 24px) + 6px);
+                top: 52px;
                 left: 0.8rem;
                 transform: scale(var(--dpi-scale));
                 transform-origin: top left;
@@ -3416,6 +3419,18 @@
             }
             updateStatusTime();
             setInterval(updateStatusTime, 10000);
+
+            (function adjustBadgePosition() {
+                var container = document.querySelector('.status-badge-container');
+                if (!container) return;
+                var probe = document.createElement('div');
+                probe.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:env(safe-area-inset-top, 0px);visibility:hidden;pointer-events:none;z-index:-1';
+                document.body.appendChild(probe);
+                var safeTop = probe.getBoundingClientRect().height;
+                document.body.removeChild(probe);
+                if (safeTop < 44) safeTop = 44;
+                container.style.top = (safeTop + 8) + 'px';
+            })();
 
             document.querySelectorAll('.status-badge-setting, .status-badge').forEach(function(el) {
                 el.addEventListener('touchstart', function() { el.classList.add('pressing'); }, { passive: true });
