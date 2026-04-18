@@ -421,33 +421,32 @@
         
         .status-badge {
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%); 
-            padding: 0.6rem 1.4rem; border-radius: 100px; 
+            padding: 0.5rem 1.2rem; border-radius: 1.2rem; 
             font-size: 0.8rem; font-weight: 400; letter-spacing: 0.15em; 
             box-shadow: 0 0 0 1px rgba(255,255,255,0.35), 0 10px 40px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.4);
             backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate)); 
-            display: flex; align-items: center; gap: 8px;
-            animation: float 4s ease-in-out infinite;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             color: var(--text-primary);
             cursor: pointer;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
             font-family: var(--font-display);
             position: relative;
-            overflow: hidden;
-            transform: translateZ(0);
-            will-change: transform, filter;
             border: none;
+            min-width: 2.4rem;
+            height: 2.4rem;
+            box-sizing: border-box;
         }
         .status-badge::before {
-            content: ''; position: absolute; inset: 0; border-radius: 100px;
+            content: ''; position: absolute; inset: 0; border-radius: 1.2rem;
             background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
             pointer-events: none;
         }
         .status-badge::after {
-            content: ''; position: absolute; inset: 0; border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.12);
+            content: ''; position: absolute; inset: 0; border-radius: 1.2rem;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
             pointer-events: none;
         }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
 
         /* --- 输入屏幕重构 --- */
         #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 20; background: inherit; }
@@ -1304,51 +1303,54 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 0.4rem;
         }
-        .opacity-gauge-container {
+        .opacity-track {
             position: relative;
-            width: 160px;
-            height: 95px;
+            width: 100%;
+            max-width: 220px;
+            height: 28px;
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
             cursor: pointer;
-            padding: 5px;
         }
-        .opacity-gauge-svg {
-            width: 160px;
-            height: 95px;
-            overflow: visible;
-            pointer-events: all;
+        .opacity-track-bg {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 6px;
+            transform: translateY(-50%);
+            border-radius: 3px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
         }
-        .opacity-gauge-bg {
-            fill: none;
-            stroke: rgba(255,255,255,0.1);
-            stroke-width: 10;
-            stroke-linecap: round;
+        .opacity-track-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, rgba(123,97,255,0.3), #7b61ff);
+            transition: width 0.05s ease;
         }
-        .opacity-gauge-fill {
-            fill: none;
-            stroke: url(#opacityGaugeGrad);
-            stroke-width: 10;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.05s ease;
-        }
-        .opacity-gauge-thumb {
-            fill: var(--accent);
-            filter: drop-shadow(0 0 6px rgba(123,97,255,0.6));
+        .opacity-track-thumb {
+            position: absolute;
+            top: 50%;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent);
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 12px rgba(123,97,255,0.6), 0 0 0 3px rgba(123,97,255,0.2);
             cursor: grab;
-            transition: r 0.15s ease;
+            transition: box-shadow 0.15s ease;
+            z-index: 2;
         }
-        .opacity-gauge-thumb:active {
+        .opacity-track-thumb:active {
             cursor: grabbing;
-        }
-        .opacity-gauge-value {
-            font-family: var(--font-sans);
-            font-size: 0.85rem;
-            fill: var(--text-primary);
-            text-anchor: middle;
-            dominant-baseline: middle;
+            box-shadow: 0 0 18px rgba(123,97,255,0.8), 0 0 0 5px rgba(123,97,255,0.3);
         }
 
         .toc-modal { 
@@ -2205,8 +2207,7 @@
             .slider-wrap,
             .select-wrap { max-width: none; }
             .slider-label { font-size: 0.6rem; }
-            .opacity-gauge-container { width: 140px; height: 85px; }
-            .opacity-gauge-svg { width: 140px; height: 85px; }
+            .opacity-track { max-width: 180px; }
             .control-btn {
                 padding: 0.4rem;
                 min-width: 40px;
@@ -2629,22 +2630,14 @@
                     <div class="eink-toggle" id="lowperf-toggle" onclick="toggleLowPerfMode()"></div>
                 </div>
 
-                <!-- 圆环仪表盘：液态玻璃透明度 -->
+                <!-- 液态玻璃透明度滑块 -->
                 <div class="opacity-dashboard-wrap">
                     <div class="slider-label">玻璃透明度 <span id="opacity-value">100%</span></div>
-                    <div class="opacity-gauge-container" id="opacity-gauge-container">
-                        <svg class="opacity-gauge-svg" viewBox="0 0 160 95">
-                            <defs>
-                                <linearGradient id="opacityGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:rgba(123,97,255,0.3)"/>
-                                    <stop offset="100%" style="stop-color:#7b61ff"/>
-                                </linearGradient>
-                            </defs>
-                            <path class="opacity-gauge-bg" id="opacity-gauge-bg" d=""/>
-                            <path class="opacity-gauge-fill" id="opacity-gauge-fill" d=""/>
-                            <circle class="opacity-gauge-thumb" id="opacity-gauge-thumb" cx="144" cy="82" r="10"/>
-                            <text class="opacity-gauge-value" id="opacity-gauge-text" x="80" y="78">100%</text>
-                        </svg>
+                    <div class="opacity-track" id="opacity-track">
+                        <div class="opacity-track-bg">
+                            <div class="opacity-track-fill" id="opacity-track-fill" style="width:100%"></div>
+                        </div>
+                        <div class="opacity-track-thumb" id="opacity-track-thumb" style="left:100%"></div>
                     </div>
                 </div>
                 </div>
@@ -4044,24 +4037,13 @@
             void document.body.offsetHeight;
         }
 
-        // ===== 圆环仪表盘：液态玻璃透明度 =====
+        // ===== 液态玻璃透明度滑块 =====
         (function() {
-            var container = document.getElementById('opacity-gauge-container');
-            var bgPath = document.getElementById('opacity-gauge-bg');
-            var fillPath = document.getElementById('opacity-gauge-fill');
-            var thumbCircle = document.getElementById('opacity-gauge-thumb');
+            var track = document.getElementById('opacity-track');
+            var fill = document.getElementById('opacity-track-fill');
+            var thumb = document.getElementById('opacity-track-thumb');
             var valueLabel = document.getElementById('opacity-value');
-            var gaugeText = document.getElementById('opacity-gauge-text');
-            if (!container || !fillPath || !thumbCircle || !bgPath) return;
-
-            var cx = 80, cy = 82, r = 60;
-            var arcPath = 'M ' + (cx - r) + ' ' + cy + ' A ' + r + ' ' + r + ' 0 0 1 ' + (cx + r) + ' ' + cy;
-            bgPath.setAttribute('d', arcPath);
-            fillPath.setAttribute('d', arcPath);
-
-            var totalLen = fillPath.getTotalLength();
-            fillPath.style.strokeDasharray = totalLen;
-            fillPath.style.strokeDashoffset = 0;
+            if (!track || !fill || !thumb) return;
 
             var currentOpacity = 1;
 
@@ -4070,13 +4052,6 @@
                 dynStyle = document.createElement('style');
                 dynStyle.id = 'dynamic-opacity-style';
                 document.head.appendChild(dynStyle);
-            }
-
-            function angleToXY(angle) {
-                return {
-                    x: cx + r * Math.cos(angle),
-                    y: cy + r * Math.sin(angle)
-                };
             }
 
             function setOpacity(val) {
@@ -4109,32 +4084,15 @@
                     '}';
 
                 document.documentElement.style.setProperty('--lg-opacity', val);
-
-                var offset = totalLen * (1 - val);
-                fillPath.style.strokeDashoffset = offset;
-
-                var angle = Math.PI - val * Math.PI;
-                var pos = angleToXY(angle);
-                thumbCircle.setAttribute('cx', pos.x);
-                thumbCircle.setAttribute('cy', pos.y);
-
-                var pct = Math.round(val * 100) + '%';
-                if (valueLabel) valueLabel.textContent = pct;
-                if (gaugeText) gaugeText.textContent = pct;
+                fill.style.width = (val * 100) + '%';
+                thumb.style.left = (val * 100) + '%';
+                if (valueLabel) valueLabel.textContent = Math.round(val * 100) + '%';
             }
 
-            function getValFromPointer(clientX, clientY) {
-                var rect = container.getBoundingClientRect();
-                var svgX = ((clientX - rect.left) / rect.width) * 160;
-                var svgY = ((clientY - rect.top) / rect.height) * 95;
-                var dx = svgX - cx;
-                var dy = svgY - cy;
-                var angle = Math.atan2(dy, dx);
-                if (angle > 0 && angle < Math.PI) {
-                    angle = (angle > Math.PI / 2) ? Math.PI : 0;
-                }
-                var val = (Math.PI - angle) / Math.PI;
-                return Math.max(0, Math.min(1, val));
+            function getVal(e) {
+                var rect = track.getBoundingClientRect();
+                var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                return Math.max(0, Math.min(1, x / rect.width));
             }
 
             var dragging = false;
@@ -4143,15 +4101,13 @@
                 e.preventDefault();
                 e.stopPropagation();
                 dragging = true;
-                var touch = e.touches ? e.touches[0] : e;
-                setOpacity(getValFromPointer(touch.clientX, touch.clientY));
+                setOpacity(getVal(e));
             }
             function onMove(e) {
                 if (!dragging) return;
                 e.preventDefault();
                 e.stopPropagation();
-                var touch = e.touches ? e.touches[0] : e;
-                setOpacity(getValFromPointer(touch.clientX, touch.clientY));
+                setOpacity(getVal(e));
             }
             function onEnd() {
                 if (!dragging) return;
@@ -4159,8 +4115,8 @@
                 localStorage.setItem('lg-opacity', currentOpacity);
             }
 
-            container.addEventListener('mousedown', onStart);
-            container.addEventListener('touchstart', onStart, { passive: false });
+            track.addEventListener('mousedown', onStart);
+            track.addEventListener('touchstart', onStart, { passive: false });
             document.addEventListener('mousemove', onMove);
             document.addEventListener('touchmove', onMove, { passive: false });
             document.addEventListener('mouseup', onEnd);
