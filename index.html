@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Mas.reader</title>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Sans+SC:wght@100;300;400;500;700;900&subset=chinese-simplified&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root {
@@ -2386,12 +2386,10 @@
                                 <span class="dropdown-icon">▼</span>
                             </div>
                             <div class="custom-font-select-dropdown" id="custom-font-select-dropdown">
-                                <div class="font-category">中文书法</div>
+                                <div class="font-category">中文印刷体</div>
                                 <div class="font-option" data-font="Noto Serif SC">思源宋体</div>
-                                <div class="font-option" data-font="ZCOOL XiaoWei">站酷小薇</div>
-                                <div class="font-option" data-font="Ma Shan Zheng">马善政楷书</div>
-                                <div class="font-option" data-font="Zhi Mang Xing">志莽行书</div>
-                                <div class="font-option" data-font="Long Cang">龙藏体</div>
+                                <div class="font-option" data-font="Noto Sans SC">思源黑体</div>
+                                <div class="font-option" data-font="LXGW WenKai">霞鹜文楷</div>
                                 <div class="font-category">经典印刷体</div>
                                 <div class="font-option" data-font="EB Garamond">EB Garamond</div>
                                 <div class="font-option" data-font="Playfair Display">Playfair Display</div>
@@ -2407,12 +2405,10 @@
                             </div>
                         </div>
                         <select class="font-select" id="font-select" onchange="updateFont()" style="display: none;">
-                            <optgroup label="中文书法">
+                            <optgroup label="中文印刷体">
                                 <option value="Noto Serif SC">思源宋体</option>
-                                <option value="ZCOOL XiaoWei">站酷小薇</option>
-                                <option value="Ma Shan Zheng">马善政楷书</option>
-                                <option value="Zhi Mang Xing">志莽行书</option>
-                                <option value="Long Cang">龙藏体</option>
+                                <option value="Noto Sans SC">思源黑体</option>
+                                <option value="LXGW WenKai">霞鹜文楷</option>
                             </optgroup>
                             <optgroup label="经典印刷体">
                                 <option value="Noto Serif SC" selected>思源宋体</option>
@@ -3022,10 +3018,8 @@
 
         const FONT_MAP = {
             'Noto Serif SC': { type: 'serif', weights: '200;300;400;500;600;700;900' },
-            'ZCOOL XiaoWei': { type: 'serif', weights: '400' },
-            'Ma Shan Zheng': { type: 'serif', weights: '400' },
-            'Zhi Mang Xing': { type: 'serif', weights: '400' },
-            'Long Cang': { type: 'serif', weights: '400' },
+            'Noto Sans SC': { type: 'sans', weights: '100;300;400;500;700;900' },
+            'LXGW WenKai': { type: 'serif', weights: '400;700', cdn: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css' },
             'EB Garamond': { type: 'serif', weights: '400;500;600;700;800' },
             'Playfair Display': { type: 'serif', weights: '400;500;600;700;800;900' },
             'Lora': { type: 'serif', weights: '400;500;600;700' },
@@ -3037,16 +3031,21 @@
             'Raleway': { type: 'sans', weights: '100;200;300;400;500;600;700;800;900' },
             'Oswald': { type: 'sans', weights: '200;300;400;500;600;700' },
         };
-        const loadedFonts = new Set(['Noto Serif SC', 'EB Garamond', 'Montserrat', 'Lora']);
+        const loadedFonts = new Set(['Noto Serif SC', 'Noto Sans SC', 'EB Garamond', 'Montserrat', 'Lora']);
 
         function loadFontAsync(fontName) {
             if (loadedFonts.has(fontName)) return;
             loadedFonts.add(fontName);
             const info = FONT_MAP[fontName];
             if (!info) return;
-            const encodedName = fontName.replace(/ /g, '+');
-            const isChineseFont = ['Noto Serif SC', 'ZCOOL XiaoWei', 'Ma Shan Zheng', 'Zhi Mang Xing', 'Long Cang'].includes(fontName);
-            const url = 'https://fonts.googleapis.com/css2?family=' + encodedName + ':wght@' + info.weights + '&display=swap' + (isChineseFont ? '&subset=chinese-simplified' : '');
+            var url;
+            if (info.cdn) {
+                url = info.cdn;
+            } else {
+                const encodedName = fontName.replace(/ /g, '+');
+                const isChineseFont = ['Noto Serif SC', 'Noto Sans SC'].includes(fontName);
+                url = 'https://fonts.googleapis.com/css2?family=' + encodedName + ':wght@' + info.weights + '&display=swap' + (isChineseFont ? '&subset=chinese-simplified' : '');
+            }
             const link = document.createElement('link');
             link.rel = 'stylesheet';
             link.href = url;
@@ -3983,13 +3982,48 @@
             var arcLen = Math.PI * r;
             var currentOpacity = 1;
 
+            var dynStyle = document.getElementById('dynamic-opacity-style');
+            if (!dynStyle) {
+                dynStyle = document.createElement('style');
+                dynStyle.id = 'dynamic-opacity-style';
+                document.head.appendChild(dynStyle);
+            }
+
             function setOpacity(val) {
                 val = Math.max(0, Math.min(1, val));
                 currentOpacity = val;
+                var o = val;
+                dynStyle.textContent =
+                    '.liquid-glass {' +
+                        'background: linear-gradient(135deg, rgba(255,255,255,' + (0.15*o) + ') 0%, rgba(255,255,255,' + (0.05*o) + ') 40%, rgba(255,255,255,' + (0.02*o) + ') 60%, rgba(255,255,255,' + (0.08*o) + ') 100%) !important;' +
+                        'backdrop-filter: blur(' + (40*o) + 'px) saturate(' + (100+100*o) + '%) !important;' +
+                        '-webkit-backdrop-filter: blur(' + (40*o) + 'px) saturate(' + (100+100*o) + '%) !important;' +
+                        'border-color: rgba(255,255,255,' + (0.3*o) + ') !important;' +
+                        'border-top-color: rgba(255,255,255,' + (0.55*o) + ') !important;' +
+                        'border-left-color: rgba(255,255,255,' + (0.45*o) + ') !important;' +
+                        'border-right-color: rgba(255,255,255,' + (0.15*o) + ') !important;' +
+                        'border-bottom-color: rgba(255,255,255,' + (0.1*o) + ') !important;' +
+                        'box-shadow: 0 30px 60px rgba(0,0,0,0.45), 0 10px 20px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,' + (0.7*o) + '), inset 0 -1px 2px rgba(0,0,0,0.15), inset 1px 0 1px rgba(255,255,255,' + (0.3*o) + '), inset -1px 0 1px rgba(0,0,0,0.1) !important;' +
+                    '}' +
+                    '.liquid-glass::before {' +
+                        'background: linear-gradient(135deg, rgba(255,255,255,' + (0.25*o) + ') 0%, rgba(255,255,255,' + (0.08*o) + ') 20%, transparent 50%, rgba(255,255,255,' + (0.05*o) + ') 80%, rgba(255,255,255,' + (0.12*o) + ') 100%) !important;' +
+                    '}' +
+                    '.liquid-glass::after {' +
+                        'border-color: rgba(255,255,255,' + (0.2*o) + ') !important;' +
+                        'border-top-color: rgba(255,255,255,' + (0.35*o) + ') !important;' +
+                        'border-left-color: rgba(255,255,255,' + (0.25*o) + ') !important;' +
+                    '}' +
+                    '.liquid-glass-btn {' +
+                        'background: linear-gradient(135deg, rgba(255,255,255,' + (0.18*o) + ') 0%, rgba(255,255,255,' + (0.06*o) + ') 50%, rgba(255,255,255,' + (0.12*o) + ') 100%) !important;' +
+                        'backdrop-filter: blur(' + (30*o) + 'px) saturate(' + (100+80*o) + '%) !important;' +
+                        '-webkit-backdrop-filter: blur(' + (30*o) + 'px) saturate(' + (100+80*o) + '%) !important;' +
+                    '}' +
+                    '.nav-bar-luxury {' +
+                        'backdrop-filter: blur(' + (40*o) + 'px) saturate(' + (100+100*o) + '%) !important;' +
+                        '-webkit-backdrop-filter: blur(' + (40*o) + 'px) saturate(' + (100+100*o) + '%) !important;' +
+                    '}';
+
                 document.documentElement.style.setProperty('--lg-opacity', val);
-                document.querySelectorAll('.liquid-glass, .liquid-glass-btn, .nav-bar-luxury').forEach(function(el) {
-                    el.style.setProperty('--lg-opacity', val);
-                });
                 if (valueLabel) valueLabel.textContent = Math.round(val * 100) + '%';
 
                 var angle = Math.PI * (1 - val);
