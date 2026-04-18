@@ -262,19 +262,19 @@
 
         .immersive-status-bar { 
             position: fixed; top: 0; left: 0; right: 0; 
-            height: env(safe-area-inset-top, 0px); 
             background: transparent; z-index: 10000; pointer-events: none; 
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-between;
-            padding: 0 16px;
-            padding-top: env(safe-area-inset-top, 0px);
-            height: calc(env(safe-area-inset-top, 0px) + 24px);
+            padding: 0 20px;
+            padding-bottom: 4px;
+            height: calc(env(safe-area-inset-top, 20px) + 20px);
             font-family: var(--font-sans);
             font-size: 12px;
             font-weight: 600;
             color: var(--text-primary);
             opacity: 0.7;
+            box-sizing: border-box;
         }
         .immersive-status-bar .status-time {
             letter-spacing: 0.5px;
@@ -446,7 +446,7 @@
 
         /* --- 巅峰状态标签 (液态玻璃) --- */
         .status-badge-container {
-            position: fixed; top: calc(env(safe-area-inset-top, 0px) + 12px); left: 1rem; 
+            position: fixed; top: calc(env(safe-area-inset-top, 24px) + 8px); left: 1rem; 
             display: flex; align-items: center; gap: 0.6rem;
             z-index: 5000;
             transform: scale(var(--dpi-scale));
@@ -486,7 +486,8 @@
             transform: translateY(-2px) scale(1.05);
             box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.15);
         }
-        .status-badge-setting:active {
+        .status-badge-setting:active,
+        .status-badge-setting.pressing {
             transform: scale(0.88);
             box-shadow:
                 0 2px 8px rgba(0,0,0,0.2),
@@ -517,7 +518,8 @@
             box-sizing: border-box;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
-        .status-badge:active {
+        .status-badge:active,
+        .status-badge.pressing {
             transform: scale(0.92);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 3px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.05);
         }
@@ -1075,7 +1077,8 @@
             transform: translateY(-2px) scale(1.05);
             box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.15);
         }
-        .bottom-control-btn:active {
+        .bottom-control-btn:active,
+        .bottom-control-btn.pressing {
             transform: scale(0.88);
             box-shadow:
                 0 2px 6px rgba(0,0,0,0.2),
@@ -2287,7 +2290,7 @@
                 height: 24px;
             }
             .status-badge-container {
-                top: calc(env(safe-area-inset-top, 0px) + 8px);
+                top: calc(env(safe-area-inset-top, 24px) + 6px);
                 left: 0.8rem;
                 transform: scale(var(--dpi-scale));
                 transform-origin: top left;
@@ -3414,6 +3417,12 @@
             updateStatusTime();
             setInterval(updateStatusTime, 10000);
 
+            document.querySelectorAll('.status-badge-setting, .status-badge').forEach(function(el) {
+                el.addEventListener('touchstart', function() { el.classList.add('pressing'); }, { passive: true });
+                el.addEventListener('touchend', function() { el.classList.remove('pressing'); }, { passive: true });
+                el.addEventListener('touchcancel', function() { el.classList.remove('pressing'); }, { passive: true });
+            });
+
             const fontSelect = document.getElementById('font-select');
             const navBar = document.getElementById('nav-bar-luxury');
             if (!navBar) return;
@@ -3912,6 +3921,7 @@
                 if (!btn) return;
 
                 function startPress(e) {
+                    btn.classList.add('pressing');
                     e.preventDefault();
                     longPressTimer = setTimeout(() => {
                         onLongStart();
@@ -3920,6 +3930,7 @@
                 }
 
                 function endPress(e) {
+                    btn.classList.remove('pressing');
                     e.preventDefault();
                     if (longPressTimer) {
                         clearTimeout(longPressTimer);
@@ -3935,6 +3946,7 @@
                 }
 
                 function cancelPress() {
+                    btn.classList.remove('pressing');
                     if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
                     if (longPressInterval) { clearInterval(longPressInterval); longPressInterval = null; }
                 }
