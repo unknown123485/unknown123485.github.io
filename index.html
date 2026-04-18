@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Mas.reader</title>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Sans+SC:wght@100;300;400;500;700;900&subset=chinese-simplified&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Sans+SC:wght@100;300;400;500;700;900&family=Noto+Serif+TC:wght@200;300;400;500;600;700;900&subset=chinese-simplified&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root {
@@ -1260,28 +1260,38 @@
             pointer-events: auto;
             width: 100%;
         }
-        .opacity-dashboard {
+        .opacity-slider-track {
+            position: relative;
             width: 100%;
-            max-width: 220px;
-            margin: 0 auto;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
             cursor: pointer;
+            touch-action: none;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: none;
         }
-        .dashboard-svg {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+        .opacity-slider-fill {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(123,97,255,0.3), var(--accent));
+            border-radius: 4px;
             pointer-events: none;
+            width: 100%;
         }
-        .dash-arc-fill {
-            transition: stroke-dashoffset 0.15s ease-out;
-        }
-        .dash-needle {
-            transition: all 0.15s ease-out;
-            transform-origin: 100px 105px;
+        .opacity-slider-thumb {
+            position: absolute;
+            top: 50%;
+            width: 22px;
+            height: 22px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: grab;
+            box-shadow: 0 0 10px rgba(123,97,255,0.5);
+            pointer-events: none;
+            left: 100%;
         }
 
         .toc-modal { 
@@ -2130,7 +2140,7 @@
             .slider-wrap,
             .select-wrap { max-width: none; }
             .slider-label { font-size: 0.6rem; }
-            .opacity-dashboard { max-width: 180px; }
+            .opacity-slider-track { max-width: none; }
             .control-btn {
                 padding: 0.4rem;
                 min-width: 40px;
@@ -2389,7 +2399,9 @@
                                 <div class="font-category">中文印刷体</div>
                                 <div class="font-option" data-font="Noto Serif SC">思源宋体</div>
                                 <div class="font-option" data-font="Noto Sans SC">思源黑体</div>
+                                <div class="font-option" data-font="Noto Serif TC">思源宋体繁</div>
                                 <div class="font-option" data-font="LXGW WenKai">霞鹜文楷</div>
+                                <div class="font-option" data-font="LXGW WenKai Mono">霞鹜文楷等宽</div>
                                 <div class="font-category">经典印刷体</div>
                                 <div class="font-option" data-font="EB Garamond">EB Garamond</div>
                                 <div class="font-option" data-font="Playfair Display">Playfair Display</div>
@@ -2408,7 +2420,9 @@
                             <optgroup label="中文印刷体">
                                 <option value="Noto Serif SC">思源宋体</option>
                                 <option value="Noto Sans SC">思源黑体</option>
+                                <option value="Noto Serif TC">思源宋体繁</option>
                                 <option value="LXGW WenKai">霞鹜文楷</option>
+                                <option value="LXGW WenKai Mono">霞鹜文楷等宽</option>
                             </optgroup>
                             <optgroup label="经典印刷体">
                                 <option value="Noto Serif SC" selected>思源宋体</option>
@@ -2557,33 +2571,9 @@
                 <!-- 半圆仪表盘：液态玻璃透明度 -->
                 <div class="opacity-dashboard-wrap">
                     <div class="slider-label">玻璃透明度 <span id="opacity-value">100%</span></div>
-                    <div class="opacity-dashboard" id="opacity-dashboard">
-                        <svg viewBox="0 0 200 120" class="dashboard-svg">
-                            <defs>
-                                <linearGradient id="arc-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="rgba(255,255,255,0.08)"/>
-                                    <stop offset="50%" stop-color="rgba(123,97,255,0.4)"/>
-                                    <stop offset="100%" stop-color="rgba(123,97,255,0.9)"/>
-                                </linearGradient>
-                                <filter id="needle-glow">
-                                    <feGaussianBlur stdDeviation="3" result="blur"/>
-                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                                </filter>
-                            </defs>
-                            <path class="dash-arc-bg" d="M 20 105 A 80 80 0 0 1 180 105" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8" stroke-linecap="round"/>
-                            <path class="dash-arc-fill" id="dash-arc-fill" d="M 20 105 A 80 80 0 0 1 180 105" fill="none" stroke="url(#arc-grad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="0"/>
-                            <line class="dash-tick" x1="20" y1="105" x2="20" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-                            <line class="dash-tick" x1="60" y1="48" x2="66" y2="56" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                            <line class="dash-tick" x1="100" y1="25" x2="100" y2="35" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                            <line class="dash-tick" x1="140" y1="48" x2="134" y2="56" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                            <line class="dash-tick" x1="180" y1="105" x2="180" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-                            <text x="16" y="118" fill="rgba(255,255,255,0.35)" font-size="8" font-family="Montserrat,sans-serif">0</text>
-                            <text x="92" y="20" fill="rgba(255,255,255,0.35)" font-size="8" font-family="Montserrat,sans-serif">50</text>
-                            <text x="174" y="118" fill="rgba(255,255,255,0.35)" font-size="8" font-family="Montserrat,sans-serif">100</text>
-                            <line class="dash-needle" id="dash-needle" x1="100" y1="105" x2="180" y2="105" stroke="#7b61ff" stroke-width="2.5" stroke-linecap="round" filter="url(#needle-glow)"/>
-                            <circle cx="100" cy="105" r="5" fill="rgba(123,97,255,0.9)"/>
-                            <circle cx="100" cy="105" r="2.5" fill="#ffffff"/>
-                        </svg>
+                    <div class="opacity-slider-track" id="opacity-slider-track">
+                        <div class="opacity-slider-fill" id="opacity-slider-fill"></div>
+                        <div class="opacity-slider-thumb" id="opacity-slider-thumb"></div>
                     </div>
                 </div>
                 </div>
@@ -3019,7 +3009,9 @@
         const FONT_MAP = {
             'Noto Serif SC': { type: 'serif', weights: '200;300;400;500;600;700;900' },
             'Noto Sans SC': { type: 'sans', weights: '100;300;400;500;700;900' },
-            'LXGW WenKai': { type: 'serif', weights: '400;700', cdn: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css' },
+            'Noto Serif TC': { type: 'serif', weights: '200;300;400;500;600;700;900' },
+            'LXGW WenKai': { type: 'serif', weights: '300;400;700', cdn: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css' },
+            'LXGW WenKai Mono': { type: 'mono', weights: '300;400;700', cdn: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-mono-webfont@1.7.0/style.css' },
             'EB Garamond': { type: 'serif', weights: '400;500;600;700;800' },
             'Playfair Display': { type: 'serif', weights: '400;500;600;700;800;900' },
             'Lora': { type: 'serif', weights: '400;500;600;700' },
@@ -3043,7 +3035,7 @@
                 url = info.cdn;
             } else {
                 const encodedName = fontName.replace(/ /g, '+');
-                const isChineseFont = ['Noto Serif SC', 'Noto Sans SC'].includes(fontName);
+                const isChineseFont = ['Noto Serif SC', 'Noto Sans SC', 'Noto Serif TC'].includes(fontName);
                 url = 'https://fonts.googleapis.com/css2?family=' + encodedName + ':wght@' + info.weights + '&display=swap' + (isChineseFont ? '&subset=chinese-simplified' : '');
             }
             const link = document.createElement('link');
@@ -3970,16 +3962,14 @@
             }
         }
 
-        // ===== 半圆仪表盘：液态玻璃透明度 =====
+        // ===== 滑块：液态玻璃透明度 =====
         (function() {
-            var dashboard = document.getElementById('opacity-dashboard');
-            var needle = document.getElementById('dash-needle');
-            var arcFill = document.getElementById('dash-arc-fill');
+            var track = document.getElementById('opacity-slider-track');
+            var fill = document.getElementById('opacity-slider-fill');
+            var thumb = document.getElementById('opacity-slider-thumb');
             var valueLabel = document.getElementById('opacity-value');
-            if (!dashboard || !needle) return;
+            if (!track || !fill || !thumb) return;
 
-            var cx = 100, cy = 105, r = 80;
-            var arcLen = Math.PI * r;
             var currentOpacity = 1;
 
             var dynStyle = document.getElementById('dynamic-opacity-style');
@@ -4024,43 +4014,15 @@
                     '}';
 
                 document.documentElement.style.setProperty('--lg-opacity', val);
+                fill.style.width = (val * 100) + '%';
+                thumb.style.left = (val * 100) + '%';
                 if (valueLabel) valueLabel.textContent = Math.round(val * 100) + '%';
-
-                var angle = Math.PI * (1 - val);
-                var nx = cx + r * Math.cos(angle);
-                var ny = cy - r * Math.sin(angle);
-                needle.setAttribute('x2', nx.toFixed(1));
-                needle.setAttribute('y2', ny.toFixed(1));
-
-                if (arcFill) {
-                    var offset = arcLen * (1 - val);
-                    arcFill.setAttribute('stroke-dashoffset', offset.toFixed(1));
-                }
             }
 
-            function getValFromEvent(e) {
-                var rect = dashboard.getBoundingClientRect();
-                var svgW = 200, svgH = 120;
-                var scaleX = svgW / rect.width;
-                var scaleY = svgH / rect.height;
-                var px, py;
-                if (e.touches && e.touches.length > 0) {
-                    px = (e.touches[0].clientX - rect.left) * scaleX;
-                    py = (e.touches[0].clientY - rect.top) * scaleY;
-                } else {
-                    px = (e.clientX - rect.left) * scaleX;
-                    py = (e.clientY - rect.top) * scaleY;
-                }
-                var dx = px - cx;
-                var dy = cy - py;
-                if (dy < 0) dy = 0;
-                var dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 5) return currentOpacity;
-                var angle = Math.atan2(dy, dx);
-                if (angle < 0) angle = 0;
-                if (angle > Math.PI) angle = Math.PI;
-                var val = 1 - (angle / Math.PI);
-                return val;
+            function getVal(e) {
+                var rect = track.getBoundingClientRect();
+                var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                return Math.max(0, Math.min(1, x / rect.width));
             }
 
             var dragging = false;
@@ -4068,20 +4030,21 @@
             function onStart(e) {
                 e.preventDefault();
                 dragging = true;
-                setOpacity(getValFromEvent(e));
+                setOpacity(getVal(e));
             }
             function onMove(e) {
                 if (!dragging) return;
                 e.preventDefault();
-                setOpacity(getValFromEvent(e));
+                setOpacity(getVal(e));
             }
             function onEnd() {
+                if (!dragging) return;
                 dragging = false;
                 localStorage.setItem('lg-opacity', currentOpacity);
             }
 
-            dashboard.addEventListener('mousedown', onStart);
-            dashboard.addEventListener('touchstart', onStart, { passive: false });
+            track.addEventListener('mousedown', onStart);
+            track.addEventListener('touchstart', onStart, { passive: false });
             document.addEventListener('mousemove', onMove);
             document.addEventListener('touchmove', onMove, { passive: false });
             document.addEventListener('mouseup', onEnd);
