@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -353,7 +353,7 @@
 
         .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; background: var(--bg-gradient); padding-top: env(safe-area-inset-top, 0px); }
 
-        /* ===== Liquid Glass 六层渲染结构 ===== */
+        /* ===== Liquid Glass 鍏眰娓叉煋缁撴瀯 ===== */
         .liquid-glass {
             position: relative;
             background: linear-gradient(135deg, rgba(255,255,255,calc(0.18 * var(--lg-opacity))) 0%, rgba(255,255,255,calc(0.06 * var(--lg-opacity))) 40%, rgba(255,255,255,calc(0.03 * var(--lg-opacity))) 60%, rgba(255,255,255,calc(0.10 * var(--lg-opacity))) 100%);
@@ -456,7 +456,7 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.05) 100%);
         }
 
-        /* 降级模式：传统毛玻璃 */
+        /* 闄嶇骇妯″紡锛氫紶缁熸瘺鐜荤拑 */
         .liquid-glass.degraded,
         .liquid-glass-btn.degraded {
             backdrop-filter: blur(20px) saturate(150%);
@@ -517,7 +517,7 @@
             background: rgba(255,255,255,0.06);
         }
 
-        /* 性能降级: 传统毛玻璃 */
+        /* 鎬ц兘闄嶇骇: 浼犵粺姣涚幓鐠?*/
         .glass-degraded .liquid-glass,
         .glass-degraded .liquid-glass-btn {
             backdrop-filter: blur(20px) saturate(150%);
@@ -530,7 +530,7 @@
             display: none;
         }
 
-        /* --- 巅峰状态标签 (液态玻璃) --- */
+        /* --- 宸呭嘲鐘舵€佹爣绛?(娑叉€佺幓鐠? --- */
         .status-badge-container {
             position: fixed; top: 24px; left: 1rem; 
             display: flex; align-items: center; gap: 0.6rem;
@@ -621,7 +621,7 @@
         }
 
 
-        /* --- 输入屏幕重构 --- */
+        /* --- 杈撳叆灞忓箷閲嶆瀯 --- */
         #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 20; background: inherit; }
         
         .mas-reader-logo {
@@ -691,7 +691,7 @@
             opacity: 0;
         }
 
-        /* 文本编辑区 (初始隐藏) */
+        /* 鏂囨湰缂栬緫鍖?(鍒濆闅愯棌) */
         #manual-input-area { display: none; flex-direction: column; align-items: center; width: 100%; }
         .luxury-glass { 
             background: rgba(255, 255, 255, 0.02); 
@@ -702,7 +702,7 @@
             padding: 4rem; margin-top: 2rem;
         }
 
-        /* 拖拽激活状态 */
+        /* 鎷栨嫿婵€娲荤姸鎬?*/
         .entry-card.drag-over { background: var(--accent); border-color: white; }
         .entry-card.drag-over * { color: white !important; fill: white !important; }
 
@@ -728,7 +728,7 @@
         .btn-luxury { margin-top: 4rem; padding: 1.5rem 7rem; font-size: 1.5rem; background: var(--accent); color: white; border: none; border-radius: 60px; cursor: pointer; font-weight: 900; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; letter-spacing: 0.3em; text-transform: uppercase; }
         .btn-luxury:active { transform: translateY(3px) scale(0.97); box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 2px 6px rgba(0,0,0,0.3); }
 
-        /* --- 展示屏幕 --- */
+        /* --- 灞曠ず灞忓箷 --- */
         #display-screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease; position: relative; z-index: 25; }
         .display-area { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; position: relative; }
         #standard-area { position: relative; z-index: 5; width: 100%; height: 100%; display: grid; place-items: center; }
@@ -739,29 +739,29 @@
             font-size: calc(var(--font-size-base) * var(--dpi-scale)); 
             font-weight: var(--font-weight); line-height: 1.35; 
             opacity: 0; transform: translateY(100px) scale(0.85); 
-            filter: blur(30px); transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
+            filter: blur(30px); will-change: opacity, transform, filter; transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1), filter 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
             max-width: 85vw; word-wrap: break-word;
             white-space: pre-wrap;
         }
         .sentence-text.active { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); will-change: auto; z-index: 5; }
         .sentence-text.exit { opacity: 0 !important; filter: blur(30px) !important; transform: scale(1.1) !important; z-index: 1; pointer-events: none; }
 
-        /* 动画方式 - 渐入渐出 (默认) */
-        .sentence-text.anim-fade { opacity: 0; transform: translateY(50px) scale(0.95); filter: blur(10px); transition: all 1s cubic-bezier(0.23, 1, 0.32, 1); }
+        /* 鍔ㄧ敾鏂瑰紡 - 娓愬叆娓愬嚭 (榛樿) */
+        .sentence-text.anim-fade { opacity: 0; transform: translateY(50px) scale(0.95); filter: blur(10px); transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1), transform 1s cubic-bezier(0.23, 1, 0.32, 1), filter 1s cubic-bezier(0.23, 1, 0.32, 1); }
         .sentence-text.anim-fade.active { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         .sentence-text.anim-fade.exit { opacity: 0; transform: translateY(-50px) scale(0.95); filter: blur(10px); }
 
-        /* 动画方式 - 滑动 */
-        .sentence-text.anim-slide { opacity: 0; transform: translateX(-100px); transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+        /* 鍔ㄧ敾鏂瑰紡 - 婊戝姩 */
+        .sentence-text.anim-slide { opacity: 0; transform: translateX(-100px); transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
         .sentence-text.anim-slide.active { opacity: 1; transform: translateX(0); }
         .sentence-text.anim-slide.exit { opacity: 0; transform: translateX(100px); }
 
-        /* 动画方式 - 缩放 */
-        .sentence-text.anim-scale { opacity: 0; transform: scale(0.5); transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+        /* 鍔ㄧ敾鏂瑰紡 - 缂╂斁 */
+        .sentence-text.anim-scale { opacity: 0; transform: scale(0.5); transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
         .sentence-text.anim-scale.active { opacity: 1; transform: scale(1); }
         .sentence-text.anim-scale.exit { opacity: 0; transform: scale(1.2); }
 
-        /* 动画方式 - 打字机效果 */
+        /* 鍔ㄧ敾鏂瑰紡 - 鎵撳瓧鏈烘晥鏋?*/
         .sentence-text.anim-typewriter { opacity: 1; transform: none; filter: none; transition: none; }
         .sentence-text.anim-typewriter.active { opacity: 1; filter: none; }
         .sentence-text.anim-typewriter.exit { opacity: 0; filter: none; transition: opacity 0.3s ease; }
@@ -772,22 +772,22 @@
         }
         @keyframes cursor-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* 动画方式 - 模糊效果 */
-        .sentence-text.anim-blur { opacity: 0; filter: blur(30px); transition: all 1.2s ease; }
+        /* 鍔ㄧ敾鏂瑰紡 - 妯＄硦鏁堟灉 */
+        .sentence-text.anim-blur { opacity: 0; filter: blur(30px); transition: opacity 1.2s ease, filter 1.2s ease; }
         .sentence-text.anim-blur.active { opacity: 1; filter: blur(0); }
         .sentence-text.anim-blur.exit { opacity: 0; filter: blur(30px); }
 
-        /* 动画方式 - 弹跳效果 */
-        .sentence-text.anim-bounce { opacity: 0; transform: translateY(100px) scale(0.8); transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        /* 鍔ㄧ敾鏂瑰紡 - 寮硅烦鏁堟灉 */
+        .sentence-text.anim-bounce { opacity: 0; transform: translateY(100px) scale(0.8); transition: opacity 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         .sentence-text.anim-bounce.active { opacity: 1; transform: translateY(0) scale(1); }
         .sentence-text.anim-bounce.exit { opacity: 0; transform: translateY(-100px) scale(0.8); }
 
-        /* 动画方式 - 翻转效果 */
-        .sentence-text.anim-flip { opacity: 0; transform: rotateY(90deg); transition: all 0.8s ease; }
+        /* 鍔ㄧ敾鏂瑰紡 - 缈昏浆鏁堟灉 */
+        .sentence-text.anim-flip { opacity: 0; transform: rotateY(90deg); transition: opacity 0.8s ease, transform 0.8s ease; }
         .sentence-text.anim-flip.active { opacity: 1; transform: rotateY(0deg); }
         .sentence-text.anim-flip.exit { opacity: 0; transform: rotateY(-90deg); }
 
-        /* --- 老式打字机 巅峰拟真重塑 --- */
+        /* --- 鑰佸紡鎵撳瓧鏈?宸呭嘲鎷熺湡閲嶅 --- */
         .typewriter-paper { 
             background: #fffef8; width: 65vw; height: 90vh; padding: 6rem 8rem; 
             box-shadow: 0 40px 120px rgba(0,0,0,0.4), inset 0 0 150px rgba(0,0,0,0.05); 
@@ -826,21 +826,21 @@
             -webkit-font-smoothing: none;
         } 
 
-/* --- 巅峰打字机 机械骨架重塑 --- */
+/* --- 宸呭嘲鎵撳瓧鏈?鏈烘楠ㄦ灦閲嶅 --- */
         .vintage-machine-body { 
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%); 
             width: 800px; height: 500px; 
-            background: #94c5f8; /* 经典蓝色 */
+            background: #94c5f8; /* 缁忓吀钃濊壊 */
             display: none; flex-direction: column; align-items: center; z-index: 40;
             border-radius: 20px 20px 0 0;
             box-shadow: 0 -40px 100px rgba(0,0,0,0.3), 0 20px 50px rgba(0,0,0,0.5), inset 0 2px 15px rgba(255,255,255,0.3);
             transition: 1.2s cubic-bezier(0.19, 1, 0.22, 1);
             border: 2px solid #7bb3f0;
-            /* 添加金属质感 */
+            /* 娣诲姞閲戝睘璐ㄦ劅 */
             background: linear-gradient(135deg, #94c5f8 0%, #7bb3f0 50%, #94c5f8 100%);
         }
         
-        /* 打字机顶部结构 */
+        /* 鎵撳瓧鏈洪《閮ㄧ粨鏋?*/
         .machine-top {
             position: absolute;
             top: -100px;
@@ -852,7 +852,7 @@
             z-index: 10;
         }
         
-        /* 打字机机身细节 */
+        /* 鎵撳瓧鏈烘満韬粏鑺?*/
         .machine-detail {
             position: absolute;
             width: 1100px;
@@ -863,7 +863,7 @@
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
         }
         
-        /* 打字机品牌标志 */
+        /* 鎵撳瓧鏈哄搧鐗屾爣蹇?*/
         .machine-brand {
             position: absolute;
             top: 50px;
@@ -875,7 +875,7 @@
             letter-spacing: 4px;
         }
         
-        /* 纸张支架 */
+        /* 绾稿紶鏀灦 */
         .paper-holder {
             position: absolute;
             top: -150px;
@@ -888,7 +888,7 @@
             z-index: 15;
         }
         
-        /* 纸张 */
+        /* 绾稿紶 */
         .typewriter-paper {
             position: absolute;
             top: -200px;
@@ -901,7 +901,7 @@
             transform: rotate(-1deg);
         }
         
-        /* 纸张折角 */
+        /* 绾稿紶鎶樿 */
         .paper-corner {
             position: absolute;
             top: 0;
@@ -912,7 +912,7 @@
             border-bottom-left-radius: 10px;
         }
         
-        /* 色带盒盖 */
+        /* 鑹插甫鐩掔洊 */
         .spool-covers {
             position: absolute; top: 150px; width: 100%; display: flex; justify-content: space-between; padding: 0 150px; pointer-events: none;
         }
@@ -922,7 +922,7 @@
             border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center;
         }
         
-        /* 卷轴系统 */
+        /* 鍗疯酱绯荤粺 */
         .carriage-track {
             position: absolute; top: 200px; width: 1000px; height: 20px;
             background: linear-gradient(to bottom, #f0f0f0, #e0e0e0, #d0d0d0);
@@ -958,7 +958,7 @@
             transition: 0.3s; transform-origin: bottom; border: 1px solid #6aa2e0;
         }
         
-        /* 按键系统 */
+        /* 鎸夐敭绯荤粺 */
         .keys-staggered { 
             display: flex; flex-direction: column; gap: 8px; padding: 20px 40px; width: 100%; 
             background: #7bb3f0; border-top: 1px solid rgba(255,255,255,0.3); border-radius: 20px 20px 0 0;
@@ -987,9 +987,9 @@
             box-shadow: 0 0 0 #6aa2e0, 0 2px 5px rgba(0,0,0,0.3);
         }
         
-        .vintage-key::after { display: none; } /* 移除旧版连杆 */
+        .vintage-key::after { display: none; } /* 绉婚櫎鏃х増杩炴潌 */
         
-        /* 核心字模篮结构 */
+        /* 鏍稿績瀛楁ā绡粨鏋?*/
         .typebar-basket {
             position: absolute; top: 220px; width: 600px; height: 180px;
             background: radial-gradient(ellipse at bottom, rgba(0,0,0,0.2), transparent 80%);
@@ -1004,7 +1004,7 @@
             opacity: 0.3; border-radius: 2px;
         }
 
-        /* 联动打击系统 */
+        /* 鑱斿姩鎵撳嚮绯荤粺 */
         .hammer-system { 
             position: absolute; top: 230px; left: 0; 
             width: 100%; height: 140px; display: flex; 
@@ -1025,10 +1025,10 @@
         
         .strike-hammer.active { animation: strike 0.1s ease-out; opacity: 1; }
         
-        /* 主题显示控制 */
+        /* 涓婚鏄剧ず鎺у埗 */
         .theme-retro-typewriter .vintage-machine-body { display: flex; transform: translateX(-50%) translateY(0); }
         
-        /* 主题特定样式 */
+        /* 涓婚鐗瑰畾鏍峰紡 */
         .theme-retro-typewriter .vintage-machine-body {
             background: linear-gradient(135deg, #c43224 0%, #a1281d 50%, #c43224 100%);
             border: 2px solid #a1281d;
@@ -1040,7 +1040,7 @@
         }
         
         .theme-retro-typewriter .spool-cover::after {
-            content: '王';
+            content: '鐜?;
             font-family: serif;
             color: rgba(0,0,0,0.2);
             font-size: 2rem;
@@ -1067,7 +1067,7 @@
             box-shadow: 0 0 0 #b0aa8c, 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* --- 交互控制 (可折叠) --- */
+        /* --- 浜や簰鎺у埗 (鍙姌鍙? --- */
         .luxury-fab { position: fixed; bottom: 2rem; right: 2rem; width: 65px; height: 65px; background: var(--accent); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; color: white; border: 1px solid rgba(255,255,255,0.3); font-size: 24px; }
         .luxury-fab:hover { transform: scale(1.1) rotate(90deg); }
         .luxury-fab:active { transform: scale(0.92) rotate(90deg); box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 2px 6px rgba(0,0,0,0.3); }
@@ -1147,7 +1147,7 @@
         }
         .nav-bar-luxury > * { position: relative; z-index: 1; }
         
-        /* 底部控制按钮 */
+        /* 搴曢儴鎺у埗鎸夐挳 */
         .bottom-controls {
             position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) scale(var(--dpi-scale));
             display: flex; align-items: center; gap: 1.5rem;
@@ -1358,7 +1358,7 @@
 
         .hidden { display: none !important; }
 
-        /* ===== 墨水屏模式 ===== */
+        /* ===== 澧ㄦ按灞忔ā寮?===== */
         .e-ink-active body,
         .e-ink-active .app-container {
             background: var(--eink-bg) !important;
@@ -1469,7 +1469,7 @@
             height: 1rem !important;
         }
 
-        /* ===== E-Ink 开关 ===== */
+        /* ===== E-Ink 寮€鍏?===== */
         .eink-toggle-wrap {
             display: flex;
             align-items: center;
@@ -1663,7 +1663,7 @@
             max-height: 2.8em; overflow: hidden; text-align: center;
         }
 
-        /* ===== 文件夹接管 ===== */
+        /* ===== 鏂囦欢澶规帴绠?===== */
         .file-list-view {
             width: 100%;
             max-width: 600px;
@@ -1730,7 +1730,7 @@
             border-color: var(--accent);
         }
 
-        /* ===== 二级主题设置面板 ===== */
+        /* ===== 浜岀骇涓婚璁剧疆闈㈡澘 ===== */
         .theme-detail-panel {
             display: none;
             flex-direction: column;
@@ -1782,7 +1782,7 @@
             color: var(--accent);
         }
 
-        /* ===== 设置面板遮罩 ===== */
+        /* ===== 璁剧疆闈㈡澘閬僵 ===== */
         .settings-overlay {
             position: fixed;
             inset: 0;
@@ -1804,7 +1804,7 @@
         .p-exit { d: path("M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"); }
         .p-settings { d: path("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.21.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"); }
 
-        /* 新增主题样式 */
+        /* 鏂板涓婚鏍峰紡 */
         .atmosphere {
             position: absolute;
             top: 0;
@@ -2014,7 +2014,7 @@
             text-shadow: 0 0 10px rgba(0,255,170,0.5), 0 0 20px rgba(0,255,170,0.3);
         }
 
-        /* 复古打字机主题样式 */
+        /* 澶嶅彜鎵撳瓧鏈轰富棰樻牱寮?*/
         .theme-retro-typewriter .app-container {
             background: linear-gradient(135deg, #f4e4c1 0%, #e8d5a0 100%);
         }
@@ -2213,7 +2213,7 @@
             backdrop-filter: blur(25px) saturate(1.8) brightness(1.1);
         }
 
-        /* 全局移动端触摸优化 */
+        /* 鍏ㄥ眬绉诲姩绔Е鎽镐紭鍖?*/
         * {
             -webkit-tap-highlight-color: transparent;
         }
@@ -2225,7 +2225,7 @@
             touch-action: none;
         }
 
-        /* 媒体查询 - 手机端横屏修复 */
+        /* 濯掍綋鏌ヨ - 鎵嬫満绔í灞忎慨澶?*/
         @media (max-width: 768px) {
             .app-container {
                 padding-top: env(safe-area-inset-top);
@@ -2533,7 +2533,7 @@
     </style>
 </head>
 <body class="theme-mystic">
-    <!-- SVG 物理滤镜库：深度还原活字印刷的油墨灵魂 -->
+    <!-- SVG 鐗╃悊婊ら暅搴擄細娣卞害杩樺師娲诲瓧鍗板埛鐨勬补澧ㄧ伒榄?-->
     <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true" focusable="false">
         <filter id="lg-dist" x="0%" y="0%" width="100%" height="100%">
             <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
@@ -2541,12 +2541,12 @@
             <feDisplacementMap in="SourceGraphic" in2="blurred" scale="50" xChannelSelector="R" yChannelSelector="G" />
         </filter>
         <filter id="distress-filter">
-            <!-- 基础噪声：产生边缘毛刺 -->
+            <!-- 鍩虹鍣０锛氫骇鐢熻竟缂樻瘺鍒?-->
             <feTurbulence type="fractalNoise" baseFrequency="0.25" numOctaves="4" result="noise" />
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
         </filter>
         <filter id="ink-soul">
-            <!-- 模拟墨水在纸张纤维中的扩散与侵蚀 -->
+            <!-- 妯℃嫙澧ㄦ按鍦ㄧ焊寮犵氦缁翠腑鐨勬墿鏁ｄ笌渚佃殌 -->
             <feMorphology operator="dilate" radius="0.3" in="SourceGraphic" result="thickened" />
             <feTurbulence type="fractalNoise" baseFrequency="0.12" numOctaves="3" result="noise" />
             <feDisplacementMap in="thickened" in2="noise" scale="1.2" result="distorted" />
@@ -2567,7 +2567,7 @@
     </div>
 
     <div class="app-container">
-        <!-- 巅峰页码标签 -->
+        <!-- 宸呭嘲椤电爜鏍囩 -->
         <div class="status-badge-container">
             <div class="status-badge-setting" onclick="toggleNav()">
                 <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
@@ -2577,21 +2577,21 @@
             </div>
         </div>
         
-        <!-- 底部控制按钮 -->
+        <!-- 搴曢儴鎺у埗鎸夐挳 -->
         <div class="bottom-controls hidden" id="bottom-controls">
-            <button class="bottom-control-btn" id="prev-btn" title="上一条 (长按字体缩小)">
+            <button class="bottom-control-btn" id="prev-btn" title="涓婁竴鏉?(闀挎寜瀛椾綋缂╁皬)">
                 <svg viewBox="0 0 24 24"><path class="p-prev" fill="currentColor"/></svg>
             </button>
-            <button class="bottom-control-btn play-master" id="bottom-play-btn" title="播放/暂停 (长按恢复默认布局)">
+            <button class="bottom-control-btn play-master" id="bottom-play-btn" title="鎾斁/鏆傚仠 (闀挎寜鎭㈠榛樿甯冨眬)">
                 <svg viewBox="0 0 24 24" id="bottom-play-icon-svg"><path class="p-play" fill="currentColor"/></svg>
             </button>
-            <button class="bottom-control-btn" id="next-btn" title="下一条 (长按字体放大)">
+            <button class="bottom-control-btn" id="next-btn" title="涓嬩竴鏉?(闀挎寜瀛椾綋鏀惧ぇ)">
                 <svg viewBox="0 0 24 24"><path class="p-next" fill="currentColor"/></svg>
             </button>
         </div>
 
-        <!-- 晶体主题选择器 -->
-        <!-- 主题选择器已移动到设置面板中 -->
+        <!-- 鏅朵綋涓婚閫夋嫨鍣?-->
+        <!-- 涓婚閫夋嫨鍣ㄥ凡绉诲姩鍒拌缃潰鏉夸腑 -->
 
         <div id="input-screen" style="position:relative;overflow:hidden;">
             <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.15;"></canvas>
@@ -2602,33 +2602,29 @@
                 <div class="entry-card" id="epub-drop-zone">
                     <input type="file" id="file-input" accept=".epub,.md,.txt,text/plain,application/epub+zip,text/markdown" onchange="handleFileSelect(event)" class="entry-file-input">
                     <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                    <div class="entry-title">选择单个文件</div>
-                    <div class="entry-desc">支持 .epub, .md, .txt 文件，智能解析内容。</div>
+                    <div class="entry-title">閫夋嫨鍗曚釜鏂囦欢</div>
+                    <div class="entry-desc">鏀寔 .epub, .md, .txt 鏂囦欢锛屾櫤鑳借В鏋愬唴瀹广€?/div>
                 </div>
 
                 <div class="entry-card" id="folder-entry-card">
                     <input type="file" id="folder-input" webkitdirectory directory multiple accept=".txt,.md,.epub,text/plain,application/epub+zip,text/markdown" onchange="handleFolderSelect(event)" class="entry-file-input">
                     <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                    <div class="entry-title">选择整个文件夹</div>
-                    <div class="entry-desc" id="folder-desc">批量导入整个文件夹，自动扫描所有兼容文件。</div>
+                    <div class="entry-title">閫夋嫨鏁翠釜鏂囦欢澶?/div>
+                    <div class="entry-desc" id="folder-desc">鎵归噺瀵煎叆鏁翠釜鏂囦欢澶癸紝鑷姩鎵弿鎵€鏈夊吋瀹规枃浠躲€?/div>
                 </div>
             </div>
 
             <div id="manual-input-area">
                 <div class="luxury-glass">
-                    <textarea id="text-input" class="text-input" placeholder="在此粘贴或输入您的文本">春水初生，春林初盛，春风十里，不如你。
-
-这个版本为您带来了革命性的 EPUB 导入功能：您可以直接将电子书拖入，系统将自动解析。
-
-键盘已重塑为数学级对称的 QWERTY 布局。
-
-中英文字体已通过 SVG 物理滤镜实现了质感的极致统一。
-
-开启这场巅峰美学之旅。</textarea>
+                    <textarea id="text-input" class="text-input" placeholder="鍦ㄦ绮樿创鎴栬緭鍏ユ偍鐨勬枃鏈?>鏄ユ按鍒濈敓锛屾槬鏋楀垵鐩涳紝鏄ラ鍗侀噷锛屼笉濡備綘銆?
+杩欎釜鐗堟湰涓烘偍甯︽潵浜嗛潻鍛芥€х殑 EPUB 瀵煎叆鍔熻兘锛氭偍鍙互鐩存帴灏嗙數瀛愪功鎷栧叆锛岀郴缁熷皢鑷姩瑙ｆ瀽銆?
+閿洏宸查噸濉戜负鏁板绾у绉扮殑 QWERTY 甯冨眬銆?
+涓嫳鏂囧瓧浣撳凡閫氳繃 SVG 鐗╃悊婊ら暅瀹炵幇浜嗚川鎰熺殑鏋佽嚧缁熶竴銆?
+寮€鍚繖鍦哄穮宄扮編瀛︿箣鏃呫€?/textarea>
                 </div>
                 <div style="display: flex; gap: 2rem;">
-                    <button class="btn-back" onclick="hideManualInput()">返回选择</button>
-                    <button class="btn-luxury" onclick="startDisplay()">开启巅峰美学</button>
+                    <button class="btn-back" onclick="hideManualInput()">杩斿洖閫夋嫨</button>
+                    <button class="btn-luxury" onclick="startDisplay()">寮€鍚穮宄扮編瀛?/button>
                 </div>
             </div>
             </div>
@@ -2669,12 +2665,12 @@
                 </div>
             </div>
 
-            <!-- 巅峰拟真打字机 (Valentine Red 版) -->
+            <!-- 宸呭嘲鎷熺湡鎵撳瓧鏈?(Valentine Red 鐗? -->
             <div class="vintage-machine-body">
-                <!-- 纸张支架 -->
+                <!-- 绾稿紶鏀灦 -->
                 <div class="paper-holder"></div>
                 
-                <!-- 纸张 -->
+                <!-- 绾稿紶 -->
                 <div class="typewriter-paper">
                     <div class="paper-corner"></div>
                 </div>
@@ -2695,12 +2691,12 @@
                     <div id="carriage-lever" class="carriage-lever"></div>
                 </div>
 
-                <!-- 核心字模篮结构 -->
+                <!-- 鏍稿績瀛楁ā绡粨鏋?-->
                 <div class="typebar-basket" id="typebar-basket">
-                    <!-- JS 动态生成 -->
+                    <!-- JS 鍔ㄦ€佺敓鎴?-->
                 </div>
 
-                <!-- 联动打击系统 -->
+                <!-- 鑱斿姩鎵撳嚮绯荤粺 -->
                 <div class="hammer-system">
                     <div id="hammer" class="strike-hammer"></div>
                 </div>
@@ -2708,14 +2704,14 @@
                 <div style="color: rgba(0,0,0,0.3); font-size: 10px; margin: 15px 0; font-weight: 900; letter-spacing: 12px; text-transform: uppercase;">Valentine Mechanical</div>
                 
                 <div class="keys-staggered" id="keys-container">
-                    <!-- JS 动态生成 -->
+                    <!-- JS 鍔ㄦ€佺敓鎴?-->
                 </div>
             </div>
 
 
 
-            <!-- 旗舰控制条 -->
-            <!-- 设置面板遮罩 -->
+            <!-- 鏃楄埌鎺у埗鏉?-->
+            <!-- 璁剧疆闈㈡澘閬僵 -->
             <div class="settings-overlay" id="settings-overlay" onclick="closeSettingsFromOverlay()"></div>
             <script>
                 (function() {
@@ -2738,51 +2734,51 @@
 
                 <div class="control-group">
                     <div class="slider-wrap">
-                        <div class="slider-label">阅读速度: <span id="dwell-display" style="color:var(--accent)">×1.5</span></div>
+                        <div class="slider-label">闃呰閫熷害: <span id="dwell-display" style="color:var(--accent)">脳1.5</span></div>
                         <input type="range" class="slider-custom" id="dwell-slider" min="0.3" max="5" step="0.1" value="1.5" onchange="updateSpeed()" oninput="throttledUpdateSpeed()">
                     </div>
                     <div class="slider-wrap">
-                        <div class="slider-label">字体大小: <span id="size-display" style="color:var(--accent)">4.0rem</span></div>
+                        <div class="slider-label">瀛椾綋澶у皬: <span id="size-display" style="color:var(--accent)">4.0rem</span></div>
                         <input type="range" class="slider-custom" id="size-slider" min="1.5" max="8" step="0.1" value="4" oninput="throttledUpdateSize()">
                     </div>
                     <div class="slider-wrap">
-                        <div class="slider-label">字体粗度：<span id="weight-display" style="color:var(--accent)">400</span></div>
+                        <div class="slider-label">瀛椾綋绮楀害锛?span id="weight-display" style="color:var(--accent)">400</span></div>
                         <input type="range" class="slider-custom" id="weight-slider" min="100" max="900" step="1" value="400" oninput="throttledUpdateWeight()">
                     </div>
                     <div class="slider-wrap">
-                        <div class="slider-label">DPI 缩放：<span id="dpi-display" style="color:var(--accent)">100%</span></div>
+                        <div class="slider-label">DPI 缂╂斁锛?span id="dpi-display" style="color:var(--accent)">100%</span></div>
                         <input type="range" class="slider-custom" id="dpi-slider" min="50" max="200" step="5" value="100" oninput="throttledUpdateDpi()">
                     </div>
                     <div class="select-wrap">
-                        <div class="slider-label">选择字体</div>
+                        <div class="slider-label">閫夋嫨瀛椾綋</div>
                         <div class="custom-font-select" id="custom-font-select">
                             <div class="custom-font-select-header" id="custom-font-select-header">
-                                <span id="selected-font">思源宋体</span>
-                                <span class="dropdown-icon">▼</span>
+                                <span id="selected-font">鎬濇簮瀹嬩綋</span>
+                                <span class="dropdown-icon">鈻?/span>
                             </div>
                             <div class="custom-font-select-dropdown" id="custom-font-select-dropdown">
-                                <div class="font-category">中文印刷体</div>
-                                <div class="font-option" data-font="Noto Serif SC">思源宋体</div>
-                                <div class="font-option" data-font="Noto Sans SC">思源黑体</div>
-                                <div class="font-option" data-font="Noto Serif TC">思源宋体繁</div>
-                                <div class="font-option" data-font="LXGW WenKai">霞鹜文楷</div>
-                                <div class="font-option" data-font="LXGW WenKai Mono">霞鹜文楷等宽</div>
-                                <div class="font-category">中文书法体</div>
-                                <div class="font-option" data-font="Ma Shan Zheng">马善政楷体</div>
-                                <div class="font-option" data-font="Long Cang">龙藏行书</div>
-                                <div class="font-option" data-font="Liu Jian Mao Cao">流剑毛草</div>
-                                <div class="font-category">中文美术体</div>
-                                <div class="font-option" data-font="ZCOOL XiaoWei">站酷小薇体</div>
-                                <div class="font-option" data-font="ZCOOL QingKe HuangYou">站酷庆科黄油体</div>
-                                <div class="font-option" data-font="ZCOOL KuaiLe">站酷快乐体</div>
-                                <div class="font-category">经典印刷体</div>
+                                <div class="font-category">涓枃鍗板埛浣?/div>
+                                <div class="font-option" data-font="Noto Serif SC">鎬濇簮瀹嬩綋</div>
+                                <div class="font-option" data-font="Noto Sans SC">鎬濇簮榛戜綋</div>
+                                <div class="font-option" data-font="Noto Serif TC">鎬濇簮瀹嬩綋绻?/div>
+                                <div class="font-option" data-font="LXGW WenKai">闇為箿鏂囨シ</div>
+                                <div class="font-option" data-font="LXGW WenKai Mono">闇為箿鏂囨シ绛夊</div>
+                                <div class="font-category">涓枃涔︽硶浣?/div>
+                                <div class="font-option" data-font="Ma Shan Zheng">椹杽鏀挎シ浣?/div>
+                                <div class="font-option" data-font="Long Cang">榫欒棌琛屼功</div>
+                                <div class="font-option" data-font="Liu Jian Mao Cao">娴佸墤姣涜崏</div>
+                                <div class="font-category">涓枃缇庢湳浣?/div>
+                                <div class="font-option" data-font="ZCOOL XiaoWei">绔欓叿灏忚枃浣?/div>
+                                <div class="font-option" data-font="ZCOOL QingKe HuangYou">绔欓叿搴嗙榛勬补浣?/div>
+                                <div class="font-option" data-font="ZCOOL KuaiLe">绔欓叿蹇箰浣?/div>
+                                <div class="font-category">缁忓吀鍗板埛浣?/div>
                                 <div class="font-option" data-font="EB Garamond">EB Garamond</div>
                                 <div class="font-option" data-font="Playfair Display">Playfair Display</div>
                                 <div class="font-option" data-font="Lora">Lora</div>
                                 <div class="font-option" data-font="Merriweather">Merriweather</div>
                                 <div class="font-option" data-font="Cormorant Garamond">Cormorant Garamond</div>
                                 <div class="font-option" data-font="Special Elite">Special Elite</div>
-                                <div class="font-category">无衬线字体</div>
+                                <div class="font-category">鏃犺‖绾垮瓧浣?/div>
                                 <div class="font-option" data-font="Montserrat">Montserrat</div>
                                 <div class="font-option" data-font="Poppins">Poppins</div>
                                 <div class="font-option" data-font="Raleway">Raleway</div>
@@ -2800,32 +2796,32 @@
                             </div>
                         </div>
                         <select class="font-select" id="font-select" onchange="updateFont()" style="display: none;">
-                            <optgroup label="中文印刷体">
-                                <option value="Noto Serif SC">思源宋体</option>
-                                <option value="Noto Sans SC">思源黑体</option>
-                                <option value="Noto Serif TC">思源宋体繁</option>
-                                <option value="LXGW WenKai">霞鹜文楷</option>
-                                <option value="LXGW WenKai Mono">霞鹜文楷等宽</option>
+                            <optgroup label="涓枃鍗板埛浣?>
+                                <option value="Noto Serif SC">鎬濇簮瀹嬩綋</option>
+                                <option value="Noto Sans SC">鎬濇簮榛戜綋</option>
+                                <option value="Noto Serif TC">鎬濇簮瀹嬩綋绻?/option>
+                                <option value="LXGW WenKai">闇為箿鏂囨シ</option>
+                                <option value="LXGW WenKai Mono">闇為箿鏂囨シ绛夊</option>
                             </optgroup>
-                            <optgroup label="中文书法体">
-                                <option value="Ma Shan Zheng">马善政楷体</option>
-                                <option value="Long Cang">龙藏行书</option>
-                                <option value="Liu Jian Mao Cao">流剑毛草</option>
+                            <optgroup label="涓枃涔︽硶浣?>
+                                <option value="Ma Shan Zheng">椹杽鏀挎シ浣?/option>
+                                <option value="Long Cang">榫欒棌琛屼功</option>
+                                <option value="Liu Jian Mao Cao">娴佸墤姣涜崏</option>
                             </optgroup>
-                            <optgroup label="中文美术体">
-                                <option value="ZCOOL XiaoWei">站酷小薇体</option>
-                                <option value="ZCOOL QingKe HuangYou">站酷庆科黄油体</option>
-                                <option value="ZCOOL KuaiLe">站酷快乐体</option>
+                            <optgroup label="涓枃缇庢湳浣?>
+                                <option value="ZCOOL XiaoWei">绔欓叿灏忚枃浣?/option>
+                                <option value="ZCOOL QingKe HuangYou">绔欓叿搴嗙榛勬补浣?/option>
+                                <option value="ZCOOL KuaiLe">绔欓叿蹇箰浣?/option>
                             </optgroup>
-                            <optgroup label="经典印刷体">
-                                <option value="Noto Serif SC" selected>思源宋体</option>
+                            <optgroup label="缁忓吀鍗板埛浣?>
+                                <option value="Noto Serif SC" selected>鎬濇簮瀹嬩綋</option>
                                 <option value="Playfair Display">Playfair Display</option>
                                 <option value="Lora">Lora</option>
                                 <option value="Merriweather">Merriweather</option>
                                 <option value="Cormorant Garamond">Cormorant Garamond</option>
                                 <option value="Special Elite">Special Elite</option>
                             </optgroup>
-                            <optgroup label="无衬线字体">
+                            <optgroup label="鏃犺‖绾垮瓧浣?>
                                 <option value="Montserrat">Montserrat</option>
                                 <option value="Poppins">Poppins</option>
                                 <option value="Raleway">Raleway</option>
@@ -2835,217 +2831,217 @@
                                 <option value="Space Grotesk">Space Grotesk</option>
                                 <option value="DM Sans">DM Sans</option>
                             </optgroup>
-                            <optgroup label="衬线字体">
+                            <optgroup label="琛嚎瀛椾綋">
                                 <option value="Crimson Text">Crimson Text</option>
                                 <option value="Bitter">Bitter</option>
                                 <option value="IBM Plex Serif">IBM Plex Serif</option>
                             </optgroup>
-                            <optgroup label="手写体">
+                            <optgroup label="鎵嬪啓浣?>
                                 <option value="Caveat">Caveat</option>
                                 <option value="Dancing Script">Dancing Script</option>
-                                <option value="Zhi Mang Xing">芝麻行书</option>
+                                <option value="Zhi Mang Xing">鑺濋夯琛屼功</option>
                             </optgroup>
                         </select>
                     </div>
                     <div class="select-wrap">
-                        <div class="slider-label">动画方式: <span id="anim-display" style="color:var(--accent)">渐入渐出</span></div>
+                        <div class="slider-label">鍔ㄧ敾鏂瑰紡: <span id="anim-display" style="color:var(--accent)">娓愬叆娓愬嚭</span></div>
                         <div class="custom-font-select" id="custom-anim-select">
                             <div class="custom-font-select-header" id="custom-anim-select-header">
-                                <span id="selected-anim">渐入渐出</span>
-                                <span class="dropdown-icon">▼</span>
+                                <span id="selected-anim">娓愬叆娓愬嚭</span>
+                                <span class="dropdown-icon">鈻?/span>
                             </div>
                             <div class="custom-font-select-dropdown" id="custom-anim-select-dropdown">
-                                <div class="font-option" data-anim="fade">渐入渐出</div>
-                                <div class="font-option" data-anim="slide">滑动</div>
-                                <div class="font-option" data-anim="scale">缩放</div>
-                                <div class="font-option" data-anim="typewriter">打字机</div>
-                                <div class="font-option" data-anim="blur">模糊</div>
-                                <div class="font-option" data-anim="bounce">弹跳</div>
-                                <div class="font-option" data-anim="flip">翻转</div>
+                                <div class="font-option" data-anim="fade">娓愬叆娓愬嚭</div>
+                                <div class="font-option" data-anim="slide">婊戝姩</div>
+                                <div class="font-option" data-anim="scale">缂╂斁</div>
+                                <div class="font-option" data-anim="typewriter">鎵撳瓧鏈?/div>
+                                <div class="font-option" data-anim="blur">妯＄硦</div>
+                                <div class="font-option" data-anim="bounce">寮硅烦</div>
+                                <div class="font-option" data-anim="flip">缈昏浆</div>
                             </div>
                         </div>
                         <select class="anim-select" id="anim-select" onchange="updateAnim()" style="display: none;">
-                            <option value="fade">渐入渐出</option>
-                            <option value="slide">滑动</option>
-                            <option value="scale">缩放</option>
-                            <option value="typewriter">打字机</option>
-                            <option value="blur">模糊</option>
-                            <option value="bounce">弹跳</option>
-                            <option value="flip">翻转</option>
+                            <option value="fade">娓愬叆娓愬嚭</option>
+                            <option value="slide">婊戝姩</option>
+                            <option value="scale">缂╂斁</option>
+                            <option value="typewriter">鎵撳瓧鏈?/option>
+                            <option value="blur">妯＄硦</option>
+                            <option value="bounce">寮硅烦</option>
+                            <option value="flip">缈昏浆</option>
                         </select>
                     </div>
                     <div class="action-buttons-row">
                     <button class="control-btn" onclick="toggleMode()" id="mode-btn">
                         <svg viewBox="0 0 24 24" id="mode-icon-svg"><path class="p-random"/></svg>
-                        <span class="btn-label" id="mode-label">随机播放</span>
+                        <span class="btn-label" id="mode-label">闅忔満鎾斁</span>
                     </button>
                     <button class="control-btn" onclick="toggleFullscreen()" id="fullscreen-btn">
                         <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                        <span class="btn-label">全屏</span>
+                        <span class="btn-label">鍏ㄥ睆</span>
                     </button>
                     <button class="control-btn" onclick="exitDisplay()" style="opacity: 0.6;">
                         <svg viewBox="0 0 24 24"><path class="p-exit"/></svg>
-                        <span class="btn-label">退出</span>
+                        <span class="btn-label">閫€鍑?/span>
                     </button>
                     </div>
                 </div>
                 
-                <!-- 主题选择区域 -->
+                <!-- 涓婚閫夋嫨鍖哄煙 -->
                 <div class="themes-section">
                     <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                        <div class="slider-label">选择主题</div>
+                        <div class="slider-label">閫夋嫨涓婚</div>
                         <button class="control-btn" onclick="openThemePanel()" style="min-width: auto; flex-direction: row; gap: 4px; opacity: 0.8;">
                             <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                            <span class="btn-label" style="font-size: 0.6rem;">主题详情</span>
+                            <span class="btn-label" style="font-size: 0.6rem;">涓婚璇︽儏</span>
                         </button>
                     </div>
                     
-                    <!-- 主题详情面板（二级） -->
+                    <!-- 涓婚璇︽儏闈㈡澘锛堜簩绾э級 -->
                     <div class="theme-detail-panel" id="theme-detail-panel">
                         <div class="theme-detail-item" data-theme="dark">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #1a1a2e, #050508)"></div>
-                            <span class="theme-detail-name">DEEP DARK - 深邃暗夜</span>
+                            <span class="theme-detail-name">DEEP DARK - 娣遍們鏆楀</span>
                         </div>
                         <div class="theme-detail-item" data-theme="cyber">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #ff00ff, #020205)"></div>
-                            <span class="theme-detail-name">CYBERPUNK - 赛博霓虹</span>
+                            <span class="theme-detail-name">CYBERPUNK - 璧涘崥闇撹櫣</span>
                         </div>
                         <div class="theme-detail-item" data-theme="zen">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #f5f5f0, #e8e8e1)"></div>
-                            <span class="theme-detail-name">ZEN SPACE - 禅意空间</span>
+                            <span class="theme-detail-name">ZEN SPACE - 绂呮剰绌洪棿</span>
                         </div>
                         <div class="theme-detail-item" data-theme="sunset">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #ff6b35, #2d1810)"></div>
-                            <span class="theme-detail-name">SUNSET - 日落余晖</span>
+                            <span class="theme-detail-name">SUNSET - 鏃ヨ惤浣欐櫀</span>
                         </div>
                         <div class="theme-detail-item" data-theme="forest">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #4a7c4a, #0d1a0d)"></div>
-                            <span class="theme-detail-name">FOREST - 森林秘境</span>
+                            <span class="theme-detail-name">FOREST - 妫灄绉樺</span>
                         </div>
                         <div class="theme-detail-item" data-theme="cream">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b7355, #f5f0e6)"></div>
-                            <span class="theme-detail-name">CREAM - 奶油暖调</span>
+                            <span class="theme-detail-name">CREAM - 濂舵补鏆栬皟</span>
                         </div>
                         <div class="theme-detail-item" data-theme="midnight">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #6b5b95, #0a0a14)"></div>
-                            <span class="theme-detail-name">MIDNIGHT - 午夜深紫</span>
+                            <span class="theme-detail-name">MIDNIGHT - 鍗堝娣辩传</span>
                         </div>
                         <div class="theme-detail-item" data-theme="coral">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #ff7f7f, #1a0f0f)"></div>
-                            <span class="theme-detail-name">CORAL - 珊瑚暖色</span>
+                            <span class="theme-detail-name">CORAL - 鐝婄憵鏆栬壊</span>
                         </div>
                         <div class="theme-detail-item" data-theme="parchment">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #5c3d1e, #f4e8c1)"></div>
-                            <span class="theme-detail-name">VINTAGE PARCHMENT - 复古羊皮纸</span>
+                            <span class="theme-detail-name">VINTAGE PARCHMENT - 澶嶅彜缇婄毊绾?/span>
                         </div>
                         <div class="theme-detail-item" data-theme="claude-day">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #7a7568, #f5f3ef)"></div>
-                            <span class="theme-detail-name">CLAUDE DAY - 克劳德日间</span>
+                            <span class="theme-detail-name">CLAUDE DAY - 鍏嬪姵寰锋棩闂?/span>
                         </div>
                         <div class="theme-detail-item" data-theme="claude-night">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b9a6b, #1a1c16)"></div>
-                            <span class="theme-detail-name">CLAUDE NIGHT - 克劳德夜间</span>
+                            <span class="theme-detail-name">CLAUDE NIGHT - 鍏嬪姵寰峰闂?/span>
                         </div>
                         <div class="theme-detail-item" data-theme="mystic">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #a855f7, #1a0a2e)"></div>
-                            <span class="theme-detail-name">MYSTIC PURPLE - 深紫卡片</span>
+                            <span class="theme-detail-name">MYSTIC PURPLE - 娣辩传鍗＄墖</span>
                         </div>
                         <div class="theme-detail-item" data-theme="ocean">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #4a90d9, #0a1628)"></div>
-                            <span class="theme-detail-name">OCEAN BLUE - 静谧深海</span>
+                            <span class="theme-detail-name">OCEAN BLUE - 闈欒哀娣辨捣</span>
                         </div>
                         <div class="theme-detail-item" data-theme="studio">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #000000, #ffffff)"></div>
-                            <span class="theme-detail-name">STUDIO WHITE - 工作室纯白</span>
+                            <span class="theme-detail-name">STUDIO WHITE - 宸ヤ綔瀹ょ函鐧?/span>
                         </div>
                         <div class="theme-detail-item" data-theme="retro-typewriter">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b4513, #f4e4c1)"></div>
-                            <span class="theme-detail-name">RETRO TYPEWRITER - 复古打字机</span>
+                            <span class="theme-detail-name">RETRO TYPEWRITER - 澶嶅彜鎵撳瓧鏈?/span>
                         </div>
                         <div class="theme-detail-item" data-theme="ink-wash">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #c23a2b, #1a1a1a)"></div>
-                            <span class="theme-detail-name">INK WASH - 水墨丹青</span>
+                            <span class="theme-detail-name">INK WASH - 姘村ⅷ涓归潚</span>
                         </div>
                         <div class="theme-detail-item" data-theme="rose-gold">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #e8a0b4, #1a1215)"></div>
-                            <span class="theme-detail-name">ROSE GOLD - 玫瑰金</span>
+                            <span class="theme-detail-name">ROSE GOLD - 鐜懓閲?/span>
                         </div>
                         <div class="theme-detail-item" data-theme="nordic">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #6ee7b7, #0c1420)"></div>
-                            <span class="theme-detail-name">NORDIC - 北欧极光</span>
+                            <span class="theme-detail-name">NORDIC - 鍖楁鏋佸厜</span>
                         </div>
                         <div class="theme-detail-item" data-theme="warm-sand">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #b8651a, #f0e6d3)"></div>
-                            <span class="theme-detail-name">WARM SAND - 暖沙</span>
+                            <span class="theme-detail-name">WARM SAND - 鏆栨矙</span>
                         </div>
                         <div class="theme-detail-item" data-theme="jade">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #5dba8d, #0a1a14)"></div>
-                            <span class="theme-detail-name">JADE - 青玉</span>
+                            <span class="theme-detail-name">JADE - 闈掔帀</span>
                         </div>
                         <div class="theme-detail-item" data-theme="aurora">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #00e5ff, #0a0e1a)"></div>
-                            <span class="theme-detail-name">AURORA - 极光</span>
+                            <span class="theme-detail-name">AURORA - 鏋佸厜</span>
                         </div>
                         <div class="theme-detail-item" data-theme="sakura">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #ff8fa3, #1a0f14)"></div>
-                            <span class="theme-detail-name">SAKURA - 樱花</span>
+                            <span class="theme-detail-name">SAKURA - 妯辫姳</span>
                         </div>
                         <div class="theme-detail-item" data-theme="matrix">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #00ff41, #000a00)"></div>
-                            <span class="theme-detail-name">MATRIX - 黑客帝国</span>
+                            <span class="theme-detail-name">MATRIX - 榛戝甯濆浗</span>
                         </div>
                         <div class="theme-detail-item" data-theme="lavender">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #b388ff, #14101a)"></div>
-                            <span class="theme-detail-name">LAVENDER - 薰衣草</span>
+                            <span class="theme-detail-name">LAVENDER - 钖拌。鑽?/span>
                         </div>
                         <div class="theme-detail-item" data-theme="coffee">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #c8a070, #1a1410)"></div>
-                            <span class="theme-detail-name">COFFEE - 咖啡</span>
+                            <span class="theme-detail-name">COFFEE - 鍜栧暋</span>
                         </div>
                         <div class="theme-detail-item" data-theme="glacier">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #80deea, #0a1520)"></div>
-                            <span class="theme-detail-name">GLACIER - 冰川</span>
+                            <span class="theme-detail-name">GLACIER - 鍐板窛</span>
                         </div>
                         <div class="theme-detail-item" data-theme="ember">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #ff6e40, #1a0a08)"></div>
-                            <span class="theme-detail-name">EMBER - 余烬</span>
+                            <span class="theme-detail-name">EMBER - 浣欑儸</span>
                         </div>
                         <div class="theme-detail-item" data-theme="mint">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #2e7d32, #f0faf4)"></div>
-                            <span class="theme-detail-name">MINT - 薄荷</span>
+                            <span class="theme-detail-name">MINT - 钖勮嵎</span>
                         </div>
                         <div class="theme-detail-item" data-theme="paper">
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b6914, #faf6ee)"></div>
-                            <span class="theme-detail-name">PAPER - 素纸</span>
+                            <span class="theme-detail-name">PAPER - 绱犵焊</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 墨水屏模式开关 -->
+                <!-- 澧ㄦ按灞忔ā寮忓紑鍏?-->
                 <div class="eink-toggle-wrap">
-                    <div class="slider-label">墨水屏模式</div>
+                    <div class="slider-label">澧ㄦ按灞忔ā寮?/div>
                     <div class="eink-toggle" id="eink-toggle" onclick="toggleEinkMode()"></div>
                 </div>
                 <div class="eink-toggle-wrap">
-                    <div class="slider-label">低性能模式</div>
+                    <div class="slider-label">浣庢€ц兘妯″紡</div>
                     <div class="eink-toggle" id="lowperf-toggle" onclick="toggleLowPerfMode()"></div>
                 </div>
                 <div class="eink-toggle-wrap">
-                    <div class="slider-label">状态栏显示</div>
+                    <div class="slider-label">鐘舵€佹爮鏄剧ず</div>
                     <div class="eink-toggle" id="statusbar-toggle" onclick="toggleStatusBar()"></div>
                 </div>
                 <div class="eink-toggle-wrap">
-                    <div class="slider-label">篇幅智能判断</div>
+                    <div class="slider-label">绡囧箙鏅鸿兘鍒ゆ柇</div>
                     <div class="eink-toggle" id="smartlen-toggle" onclick="toggleSmartLen()"></div>
                 </div>
                 <div class="eink-toggle-wrap">
-                    <div class="slider-label">篇幅换行判断</div>
+                    <div class="slider-label">绡囧箙鎹㈣鍒ゆ柇</div>
                     <div class="eink-toggle" id="wordwrap-toggle" onclick="toggleWordWrap()"></div>
                 </div>
 
-                <!-- 液态玻璃透明度滑块 -->
+                <!-- 娑叉€佺幓鐠冮€忔槑搴︽粦鍧?-->
                 <div class="opacity-dashboard-wrap">
-                    <div class="slider-label">玻璃透明度 <span id="opacity-value">100%</span></div>
+                    <div class="slider-label">鐜荤拑閫忔槑搴?<span id="opacity-value">100%</span></div>
                     <div class="opacity-track" id="opacity-track">
                         <div class="opacity-track-bg">
                             <div class="opacity-track-fill" id="opacity-track-fill" style="width:100%"></div>
@@ -3061,12 +3057,12 @@
     <div class="toc-modal" id="toc-modal">
         <div class="toc-modal-content">
             <div class="toc-modal-header">
-                <div class="toc-modal-title">目录与书摘</div>
-                <button class="toc-close-btn" onclick="closeTOC()">✕</button>
+                <div class="toc-modal-title">鐩綍涓庝功鎽?/div>
+                <button class="toc-close-btn" onclick="closeTOC()">鉁?/button>
             </div>
             <div class="toc-list" id="toc-list"></div>
             <div class="toc-progress-section">
-                <div class="toc-progress-label">进度跳转</div>
+                <div class="toc-progress-label">杩涘害璺宠浆</div>
                 <div class="toc-progress-track" id="toc-progress-track">
                     <div class="toc-progress-fill" id="toc-progress-fill"></div>
                     <div class="toc-progress-thumb" id="toc-progress-thumb"></div>
@@ -3099,7 +3095,7 @@
             }
         }, true);
 
-        // --- 输入界面交互 ---
+        // --- 杈撳叆鐣岄潰浜や簰 ---
         function triggerFileInput() {
             var el = document.getElementById('file-input');
             if (el) el.click();
@@ -3140,43 +3136,42 @@
                     folderInput.removeAttribute('directory');
                     folderInput.setAttribute('multiple', '');
                 }
-                if (fileDesc) fileDesc.textContent = '支持选中多个 .epub, .md, .txt 文件，智能解析内容。';
-                if (folderDesc) folderDesc.textContent = '批量选择多个文件，自动扫描所有兼容内容。';
+                if (fileDesc) fileDesc.textContent = '鏀寔閫変腑澶氫釜 .epub, .md, .txt 鏂囦欢锛屾櫤鑳借В鏋愬唴瀹广€?;
+                if (folderDesc) folderDesc.textContent = '鎵归噺閫夋嫨澶氫釜鏂囦欢锛岃嚜鍔ㄦ壂鎻忔墍鏈夊吋瀹瑰唴瀹广€?;
                 if (folderCard) {
                     var folderTitle = folderCard.querySelector('.entry-title');
-                    if (folderTitle) folderTitle.textContent = '选择多个文件';
+                    if (folderTitle) folderTitle.textContent = '閫夋嫨澶氫釜鏂囦欢';
                 }
             }
         })();
 
-        // --- Markdown 解析逻辑 (纯文本提取) ---
+        // --- Markdown 瑙ｆ瀽閫昏緫 (绾枃鏈彁鍙? ---
         function parseMarkdown(md) {
             return md
-                .replace(/^#+\s+/gm, '') // 移除标题 #
-                .replace(/\*\*(.*?)\*\*/g, '$1') // 移除粗体 **
-                .replace(/\*(.*?)\*/g, '$1') // 移除斜体 *
-                .replace(/__(.*?)__/g, '$1') // 移除粗体 __
-                .replace(/_(.*?)_/g, '$1') // 移除斜体 _
-                .replace(/\[(.*?)\]\(.*?\)/g, '$1') // 移除链接 [text](url)
-                .replace(/!\[(.*?)\]\(.*?\)/g, '') // 移除图片
-                .replace(/`{3,}[\s\S]*?`{3,}/g, '') // 移除代码块
-                .replace(/`(.*?)`/g, '$1') // 移除行内代码
-                .replace(/^\s*[-*+]\s+/gm, '') // 移除列表符号
-                .replace(/^\s*\d+\.\s+/gm, '') // 移除数字列表符号
-                .replace(/^\s*>\s+/gm, '') // 移除引用符号 >
-                .replace(/\n{3,}/g, '\n\n'); // 压缩多余换行
+                .replace(/^#+\s+/gm, '') // 绉婚櫎鏍囬 #
+                .replace(/\*\*(.*?)\*\*/g, '$1') // 绉婚櫎绮椾綋 **
+                .replace(/\*(.*?)\*/g, '$1') // 绉婚櫎鏂滀綋 *
+                .replace(/__(.*?)__/g, '$1') // 绉婚櫎绮椾綋 __
+                .replace(/_(.*?)_/g, '$1') // 绉婚櫎鏂滀綋 _
+                .replace(/\[(.*?)\]\(.*?\)/g, '$1') // 绉婚櫎閾炬帴 [text](url)
+                .replace(/!\[(.*?)\]\(.*?\)/g, '') // 绉婚櫎鍥剧墖
+                .replace(/`{3,}[\s\S]*?`{3,}/g, '') // 绉婚櫎浠ｇ爜鍧?                .replace(/`(.*?)`/g, '$1') // 绉婚櫎琛屽唴浠ｇ爜
+                .replace(/^\s*[-*+]\s+/gm, '') // 绉婚櫎鍒楄〃绗﹀彿
+                .replace(/^\s*\d+\.\s+/gm, '') // 绉婚櫎鏁板瓧鍒楄〃绗﹀彿
+                .replace(/^\s*>\s+/gm, '') // 绉婚櫎寮曠敤绗﹀彿 >
+                .replace(/\n{3,}/g, '\n\n'); // 鍘嬬缉澶氫綑鎹㈣
         }
 
-        // --- EPUB 解析核心逻辑 ---
+        // --- EPUB 瑙ｆ瀽鏍稿績閫昏緫 ---
         async function parseEpub(file) {
             try {
                 const zip = await JSZip.loadAsync(file);
-                // 1. 查找 container.xml 获取 opf 路径
+                // 1. 鏌ユ壘 container.xml 鑾峰彇 opf 璺緞
                 const containerXml = await zip.file("META-INF/container.xml").async("string");
                 const opfPath = containerXml.match(/full-path="([^"]+)"/)[1];
                 const opfDir = opfPath.substring(0, opfPath.lastIndexOf('/')) + (opfPath.includes('/') ? '/' : '');
                 
-                // 2. 解析 opf 获取阅读顺序 (spine)
+                // 2. 瑙ｆ瀽 opf 鑾峰彇闃呰椤哄簭 (spine)
                 const opfXml = await zip.file(opfPath).async("string");
                 const parser = new DOMParser();
                 const opfDoc = parser.parseFromString(opfXml, "text/xml");
@@ -3188,16 +3183,14 @@
                 
                 const spineIds = Array.from(opfDoc.querySelectorAll('spine > itemref')).map(el => el.getAttribute('idref'));
                 
-                // 3. 提取所有文本内容
-                let fullText = "";
+                // 3. 鎻愬彇鎵€鏈夋枃鏈唴瀹?                let fullText = "";
                 for (const id of spineIds) {
                     const href = manifest[id];
                     const contentFile = zip.file(opfDir + href);
                     if (contentFile) {
                         const html = await contentFile.async("string");
                         const doc = parser.parseFromString(html, "text/html");
-                        // 移除脚本和样式
-                        doc.querySelectorAll('script, style').forEach(s => s.remove());
+                        // 绉婚櫎鑴氭湰鍜屾牱寮?                        doc.querySelectorAll('script, style').forEach(s => s.remove());
                         fullText += doc.body.innerText + "\n\n";
                     }
                 }
@@ -3206,11 +3199,11 @@
                     document.getElementById('text-input').value = fullText;
                     startDisplay();
                 } else {
-                    alert("无法从该 EPUB 中提取文本内容。");
+                    alert("鏃犳硶浠庤 EPUB 涓彁鍙栨枃鏈唴瀹广€?);
                 }
             } catch (e) {
                 console.error(e);
-                alert("解析 EPUB 出错，请确保文件格式正确。");
+                alert("瑙ｆ瀽 EPUB 鍑洪敊锛岃纭繚鏂囦欢鏍煎紡姝ｇ‘銆?);
             }
         }
 
@@ -3236,7 +3229,7 @@
             setTimeout(function() { e.target.value = ''; }, 1000);
         }
 
-        // --- 拖拽逻辑 (仅桌面端) ---
+        // --- 鎷栨嫿閫昏緫 (浠呮闈㈢) ---
         (function() {
             var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
             if (isMobile) return;
@@ -3272,12 +3265,12 @@
                     };
                     reader.readAsText(file);
                 } else {
-                    alert("请拖入有效的 .epub, .md 或 .txt 文件");
+                    alert("璇锋嫋鍏ユ湁鏁堢殑 .epub, .md 鎴?.txt 鏂囦欢");
                 }
             });
         })();
 
-        // 键盘布局初始化 (严格 QWERTY 布局与居中偏移算法)
+        // 閿洏甯冨眬鍒濆鍖?(涓ユ牸 QWERTY 甯冨眬涓庡眳涓亸绉荤畻娉?
         const keysContainer = document.getElementById('keys-container');
         const keyboardLayout = [
             { chars: ["Q","W","E","R","T","Y","U","I","O","P"], offset: 0 },
@@ -3325,7 +3318,7 @@
             try {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             } catch(e) {
-                console.warn('[AudioContext] 创建失败:', e);
+                console.warn('[AudioContext] 鍒涘缓澶辫触:', e);
                 return;
             }
             if (audioCtx.state === 'suspended') {
@@ -3351,7 +3344,7 @@
                         pool[i].nGain.connect(audioCtx.destination);
                     }
                 } catch(e) {
-                    console.warn('[AudioContext] 音频池初始化失败:', e);
+                    console.warn('[AudioContext] 闊抽姹犲垵濮嬪寲澶辫触:', e);
                 }
             }
             
@@ -3376,6 +3369,7 @@
                     slot.oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
                     osc.start(now);
                     osc.stop(now + 0.1);
+                    osc.onended = () => osc.disconnect();
                     
                     const noise = audioCtx.createBufferSource();
                     noise.buffer = slot.noiseBuffer;
@@ -3383,6 +3377,7 @@
                     slot.nGain.gain.setValueAtTime(0.05, now);
                     slot.nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
                     noise.start(now);
+                    noise.onended = () => noise.disconnect();
                 }
             };
         }
@@ -3455,7 +3450,7 @@
             });
             document.body.className = 'theme-' + theme;
             currentTheme = theme;
-            localStorage.setItem('currentTheme', theme);
+            try { localStorage.setItem('currentTheme', theme); } catch(e) {}
             var themeColorMeta = document.getElementById('theme-color-meta');
             if (themeColorMeta) {
                 var bgBase = getComputedStyle(document.documentElement).getPropertyValue('--bg-base').trim();
@@ -3463,12 +3458,13 @@
             }
             const savedFont = localStorage.getItem('selectedFont');
             if (savedFont) {
-                document.getElementById('font-select').value = savedFont;
+                var fontSelectEl = document.getElementById('font-select');
+                if (fontSelectEl) fontSelectEl.value = savedFont;
                 var selectedFontEl = document.getElementById('selected-font');
                 if (selectedFontEl) selectedFontEl.textContent = savedFont;
-                updateFont();
+                if (fontSelectEl) updateFont();
             }
-            if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
+            if (document.getElementById('display-screen') && document.getElementById('display-screen').style.display === 'flex') renderSentence();
         }
 
         function updateSize() {
@@ -3528,7 +3524,6 @@
             'Caveat': { type: 'serif', weights: '400;500;600;700' },
             'Dancing Script': { type: 'serif', weights: '400;500;600;700' },
             'Zhi Mang Xing': { type: 'serif', weights: '400' },
-            'ZCOOL KuaiLe': { type: 'sans', weights: '400' },
         };
         const loadedFonts = new Set(['Noto Serif SC', 'Noto Sans SC', 'EB Garamond', 'Montserrat', 'Lora']);
 
@@ -3549,10 +3544,10 @@
             link.rel = 'stylesheet';
             link.href = url;
             link.onload = function() {
-                console.log('%c[字体异步加载] ' + fontName + ' ✅ 已加载', 'color:#0f0');
+                console.log('%c[瀛椾綋寮傛鍔犺浇] ' + fontName + ' 鉁?宸插姞杞?, 'color:#0f0');
             };
             link.onerror = function() {
-                console.warn('[字体异步加载] ' + fontName + ' ❌ 加载失败');
+                console.warn('[瀛椾綋寮傛鍔犺浇] ' + fontName + ' 鉂?鍔犺浇澶辫触');
                 loadedFonts.delete(fontName);
             };
             document.head.appendChild(link);
@@ -3560,7 +3555,7 @@
 
         function updateFont() {
             const font = document.getElementById('font-select').value;
-            if (!font) { console.warn('[字体切换] font-select 值为空，跳过'); return; }
+            if (!font) { console.warn('[瀛椾綋鍒囨崲] font-select 鍊间负绌猴紝璺宠繃'); return; }
             
             loadFontAsync(font);
             
@@ -3599,14 +3594,14 @@
             
             document.fonts.ready.then(function() {
                 const hasFont = document.fonts.check('16px ' + font);
-                console.log('%c[字体加载] ' + font + ' → ' + (hasFont ? '✅ 已就绪' : '⏳ 加载中/未找到'), 'color:' + (hasFont ? '#0f0' : '#f80'));
+                console.log('%c[瀛椾綋鍔犺浇] ' + font + ' 鈫?' + (hasFont ? '鉁?宸插氨缁? : '鈴?鍔犺浇涓?鏈壘鍒?), 'color:' + (hasFont ? '#0f0' : '#f80'));
             });
             
-            localStorage.setItem('selectedFont', font);
-            console.log('%c[字体切换] → ' + font + ' | display: ' + fontDisplay, 'color:#7b61ff');
+            try { localStorage.setItem('selectedFont', font) } catch(e) {};
+            console.log('%c[瀛椾綋鍒囨崲] 鈫?' + font + ' | display: ' + fontDisplay, 'color:#7b61ff');
         }
         
-        // 字体选择时的界面优化
+        // 瀛椾綋閫夋嫨鏃剁殑鐣岄潰浼樺寲
         document.addEventListener('DOMContentLoaded', function() {
             const statusTimeEl = document.getElementById('status-time');
             function updateStatusTime() {
@@ -3617,7 +3612,7 @@
                 statusTimeEl.textContent = h + ':' + m;
             }
             updateStatusTime();
-            setInterval(updateStatusTime, 10000);
+            setInterval(updateStatusTime, 60000);
 
             (function adjustBadgePosition() {
                 var container = document.querySelector('.status-badge-container');
@@ -3677,7 +3672,7 @@
                 customFontSelectDropdown.style.width = rect.width + 'px';
             }
             
-            // 选择字体
+            // 閫夋嫨瀛椾綋
             fontOptions.forEach(option => {
                 option.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -3696,7 +3691,7 @@
             });
             }
             
-            // 点击页面其他地方关闭下拉菜单
+            // 鐐瑰嚮椤甸潰鍏朵粬鍦版柟鍏抽棴涓嬫媺鑿滃崟
             document.addEventListener('click', function(event) {
                 if (customFontSelect && !customFontSelect.contains(event.target) && customFontSelectDropdown && !customFontSelectDropdown.contains(event.target)) {
                     customFontSelect.classList.remove('open');
@@ -3706,7 +3701,7 @@
                 }
             });
             
-            // 透明预览：通过CSS类切换，不使用hover事件
+            // 閫忔槑棰勮锛氶€氳繃CSS绫诲垏鎹紝涓嶄娇鐢╤over浜嬩欢
             function enableDimmed() {
                 navBar.classList.add('dimmed');
                 if (themePanelOpen) closeThemePanel();
@@ -3715,8 +3710,7 @@
                 navBar.classList.remove('dimmed');
             }
             
-            // 初始化选中的字体
-            const savedFont = localStorage.getItem('selectedFont');
+            // 鍒濆鍖栭€変腑鐨勫瓧浣?            const savedFont = localStorage.getItem('selectedFont');
             if (savedFont) {
                 selectedFontElement.textContent = savedFont;
             }
@@ -3769,7 +3763,7 @@
 
             const savedAnim = localStorage.getItem('animType');
             if (savedAnim && selectedAnimElement) {
-                const animNames = { fade: '渐入渐出', slide: '滑动', scale: '缩放', typewriter: '打字机', blur: '模糊', bounce: '弹跳', flip: '翻转' };
+                const animNames = { fade: '娓愬叆娓愬嚭', slide: '婊戝姩', scale: '缂╂斁', typewriter: '鎵撳瓧鏈?, blur: '妯＄硦', bounce: '寮硅烦', flip: '缈昏浆' };
                 selectedAnimElement.textContent = animNames[savedAnim] || savedAnim;
             }
 
@@ -3782,29 +3776,29 @@
             document.documentElement.style.setProperty('--dpi-scale', scale, 'important');
             document.body.style.setProperty('--dpi-scale', scale, 'important');
             document.getElementById('dpi-display').innerText = dpi + '%';
-            localStorage.setItem('dpiScale', scale);
+            try { localStorage.setItem('dpiScale', scale) } catch(e) {};
         }
 
         function updateAnim() {
             const anim = document.getElementById('anim-select').value;
             document.documentElement.style.setProperty('--anim-type', anim);
-            localStorage.setItem('animType', anim);
-            const animNames = { fade: '渐入渐出', slide: '滑动', scale: '缩放', typewriter: '打字机', blur: '模糊', bounce: '弹跳', flip: '翻转' };
+            try { localStorage.setItem('animType', anim) } catch(e) {};
+            const animNames = { fade: '娓愬叆娓愬嚭', slide: '婊戝姩', scale: '缂╂斁', typewriter: '鎵撳瓧鏈?, blur: '妯＄硦', bounce: '寮硅烦', flip: '缈昏浆' };
             const animDisplay = document.getElementById('anim-display');
             if (animDisplay) animDisplay.textContent = animNames[anim] || anim;
         }
 
-        // 筛选无效字段的函数
+        // 绛涢€夋棤鏁堝瓧娈电殑鍑芥暟
         function filterInvalidSentences(sentences) {
             return sentences.filter(sentence => {
                 const text = sentence.text.trim();
                 
-                // 过滤少于3个字符的文本
+                // 杩囨护灏戜簬3涓瓧绗︾殑鏂囨湰
                 if (text.length < 3) {
                     return false;
                 }
                 
-                // 过滤全重复字符的文本
+                // 杩囨护鍏ㄩ噸澶嶅瓧绗︾殑鏂囨湰
                 const firstChar = text[0];
                 const isAllSame = text.split('').every(char => char === firstChar);
                 if (isAllSame) {
@@ -3816,7 +3810,7 @@
         }
 
         function startDisplay() {
-            // 初始化 DPI 设置
+            // 鍒濆鍖?DPI 璁剧疆
             const savedDpi = localStorage.getItem('dpiScale');
             if (savedDpi) {
                 document.getElementById('dpi-slider').value = savedDpi * 100;
@@ -3824,8 +3818,7 @@
                 document.getElementById('dpi-display').innerText = Math.round(savedDpi * 100) + '%';
             }
             
-            // 初始化字体设置
-            const savedFont = localStorage.getItem('selectedFont');
+            // 鍒濆鍖栧瓧浣撹缃?            const savedFont = localStorage.getItem('selectedFont');
             if (savedFont) {
                 document.getElementById('font-select').value = savedFont;
                 updateFont();
@@ -3834,11 +3827,10 @@
                 updateFont();
             }
             
-            // 初始化动画设置
-            const savedAnim = localStorage.getItem('animType');
+            // 鍒濆鍖栧姩鐢昏缃?            const savedAnim = localStorage.getItem('animType');
             if (savedAnim) {
                 document.getElementById('anim-select').value = savedAnim;
-                const animNames = { fade: '渐入渐出', slide: '滑动', scale: '缩放', typewriter: '打字机', blur: '模糊', bounce: '弹跳', flip: '翻转' };
+                const animNames = { fade: '娓愬叆娓愬嚭', slide: '婊戝姩', scale: '缂╂斁', typewriter: '鎵撳瓧鏈?, blur: '妯＄硦', bounce: '寮硅烦', flip: '缈昏浆' };
                 const animDisplay = document.getElementById('anim-display');
                 if (animDisplay) animDisplay.textContent = animNames[savedAnim] || savedAnim;
             }
@@ -3847,6 +3839,13 @@
             if (savedTheme) {
                 if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && savedTheme === 'retro-typewriter') {
                     setTheme('mystic');
+                    setTimeout(function() {
+                        var toast = document.createElement('div');
+                        toast.textContent = '打字机主题在移动端暂不可用，已切换至 Mystic 主题';
+                        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:10px 20px;border-radius:8px;z-index:99999;font-size:14px;white-space:nowrap;transition:opacity 0.5s;';
+                        document.body.appendChild(toast);
+                        setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 500); }, 3000);
+                    }, 500);
                 } else {
                     setTheme(savedTheme);
                 }
@@ -3863,7 +3862,7 @@
                     let end = -1;
                     for (let i = cursor + 1; i < para.length; i++) {
                         const ch = para[i];
-                        if (ch === '。' || ch === '！' || ch === '？' || ch === '?' || ch === '!') {
+                        if (ch === '銆? || ch === '锛? || ch === '锛? || ch === '?' || ch === '!') {
                             end = i;
                             break;
                         }
@@ -3888,15 +3887,18 @@
                 return result.length > 0 ? result : [para.trim()];
             }).filter(s => s).map(text => ({ text }));
             
-            // 筛选无效字段
-            sentences = filterInvalidSentences(sentences);
+            // 绛涢€夋棤鏁堝瓧娈?            sentences = filterInvalidSentences(sentences);
             
             if (!sentences.length) return;
             if (typeof generateTOC === 'function') {
                 var fullRaw = text;
                 generateTOC(fullRaw);
             }
-            randomOrder = Array.from({length: sentences.length}, (_, i) => i).sort(() => Math.random() - 0.5);
+            randomOrder = Array.from({length: sentences.length}, (_, i) => i);
+            for (let i = randomOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [randomOrder[i], randomOrder[j]] = [randomOrder[j], randomOrder[i]];
+            }
             currentIndex = 0; isPlaying = true;
             const bottomPlayIcon = document.getElementById('bottom-play-icon-svg');
             if (bottomPlayIcon) bottomPlayIcon.innerHTML = '<path class="p-pause" fill="currentColor"/>';
@@ -4075,6 +4077,7 @@
             typewriterCharIndex = 0;
             let currentTextCache = '';
             const keys = document.querySelectorAll('.vintage-key');
+            const arms = document.querySelectorAll('.typebar-arm');
             
             paper.style.setProperty('--paper-x', '0px');
 
@@ -4100,7 +4103,6 @@
                     void hammer.offsetWidth; 
                     hammer.classList.add('active');
 
-                    const arms = document.querySelectorAll('.typebar-arm');
                     const randomArm = arms[Math.floor(Math.random() * arms.length)];
                     randomArm.style.opacity = '1';
                     randomArm.style.transition = '0.1s';
@@ -4158,7 +4160,7 @@
 
         function updateSpeed() {
             speedFactor = parseFloat(document.getElementById('dwell-slider').value);
-            document.getElementById('dwell-display').innerText = '×' + speedFactor.toFixed(1);
+            document.getElementById('dwell-display').innerText = '脳' + speedFactor.toFixed(1);
             if (sentences.length > 0 && currentIndex < sentences.length) {
                 dwellTime = calculateDisplayDuration(sentences[currentIndex].text, speedFactor);
             }
@@ -4178,7 +4180,7 @@
             document.documentElement.style.setProperty('--font-weight', '400');
             document.documentElement.style.setProperty('--dpi-scale', '1');
             speedFactor = 1.5;
-            document.getElementById('dwell-display').innerText = '×1.5';
+            document.getElementById('dwell-display').innerText = '脳1.5';
             document.getElementById('size-display').innerText = '4.0rem';
             document.getElementById('weight-display').innerText = '400';
             document.getElementById('dpi-display').innerText = '100%';
@@ -4186,7 +4188,7 @@
             manualDwellOverride = false;
         }
 
-        // 长按功能
+        // 闀挎寜鍔熻兘
         (function() {
             let longPressTimer = null;
             let longPressInterval = null;
@@ -4236,8 +4238,7 @@
                 btn.addEventListener('touchcancel', cancelPress);
             }
 
-            // 上一条：短按切换，长按字体平滑缩小
-            setupLongPress('prev-btn', prevSentence, function() {
+            // 涓婁竴鏉★細鐭寜鍒囨崲锛岄暱鎸夊瓧浣撳钩婊戠缉灏?            setupLongPress('prev-btn', prevSentence, function() {
                 const slider = document.getElementById('size-slider');
                 let val = parseFloat(slider.value) - 0.2;
                 val = Math.max(1.5, val);
@@ -4245,8 +4246,7 @@
                 updateSize();
             });
 
-            // 下一条：短按切换，长按字体平滑放大
-            setupLongPress('next-btn', nextSentence, function() {
+            // 涓嬩竴鏉★細鐭寜鍒囨崲锛岄暱鎸夊瓧浣撳钩婊戞斁澶?            setupLongPress('next-btn', nextSentence, function() {
                 const slider = document.getElementById('size-slider');
                 let val = parseFloat(slider.value) + 0.2;
                 val = Math.min(8, val);
@@ -4254,7 +4254,7 @@
                 updateSize();
             });
 
-            // 播放键：短按播放/暂停，长按恢复默认布局
+            // 鎾斁閿細鐭寜鎾斁/鏆傚仠锛岄暱鎸夋仮澶嶉粯璁ゅ竷灞€
             setupLongPress('bottom-play-btn', togglePlay, function() {
                 const btn = document.getElementById('bottom-play-btn');
                 if (btn) btn.style.opacity = '0.5';
@@ -4268,7 +4268,7 @@
         function toggleMode() {
             displayMode = displayMode === 'random' ? 'sequential' : 'random';
             document.getElementById('mode-icon-svg').innerHTML = displayMode === 'random' ? '<path class="p-random"/>' : '<path class="p-loop"/>';
-            document.getElementById('mode-label').innerText = displayMode === 'random' ? '随机播放' : '循环播放';
+            document.getElementById('mode-label').innerText = displayMode === 'random' ? '闅忔満鎾斁' : '寰幆鎾斁';
         }
 
         function exitDisplay() {
@@ -4312,7 +4312,7 @@
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {
-                    console.error(`全屏错误: ${err.message}`);
+                    console.error(`鍏ㄥ睆閿欒: ${err.message}`);
                 });
             } else {
                 if (document.exitFullscreen) {
@@ -4321,15 +4321,14 @@
             }
         }
 
-        // 监听全屏状态变化
-        document.addEventListener('fullscreenchange', function() {
+        // 鐩戝惉鍏ㄥ睆鐘舵€佸彉鍖?        document.addEventListener('fullscreenchange', function() {
             const fullscreenBtn = document.getElementById('fullscreen-btn');
             if (fullscreenBtn) {
                 const fullscreenLabel = fullscreenBtn.querySelector('.btn-label');
                 if (document.fullscreenElement) {
-                    fullscreenLabel.textContent = '退出全屏';
+                    fullscreenLabel.textContent = '閫€鍑哄叏灞?;
                 } else {
-                    fullscreenLabel.textContent = '全屏';
+                    fullscreenLabel.textContent = '鍏ㄥ睆';
                 }
             }
         });
@@ -4380,7 +4379,7 @@
             }
         });
 
-        // ===== 功能1: 物理音量键映射翻页（键盘事件方案） =====
+        // ===== 鍔熻兘1: 鐗╃悊闊抽噺閿槧灏勭炕椤碉紙閿洏浜嬩欢鏂规锛?=====
         let volumeLongPressTimer = null;
         let volumeKeyPressTimer = null;
         let volumeKeyAction = null;
@@ -4432,10 +4431,11 @@
                     clearInterval(volumeLongPressTimer);
                     volumeLongPressTimer = null;
                 }
+                volumeKeyAction = null;
             }
         });
 
-        // ===== 功能2: 墨水屏模式 =====
+        // ===== 鍔熻兘2: 澧ㄦ按灞忔ā寮?=====
         let einkMode = false;
         let savedThemeBeforeEink = 'mystic';
         let savedAnimBeforeEink = 'fade';
@@ -4453,7 +4453,7 @@
                 document.documentElement.classList.add('e-ink-active');
                 document.body.className = 'theme-dark';
                 currentTheme = 'dark';
-                localStorage.setItem('animType', 'none');
+                try { localStorage.setItem('animType', 'none') } catch(e) {};
                 toggle.classList.add('active');
                 
                 if (timer) {
@@ -4476,8 +4476,9 @@
                 const paper = document.getElementById('paper');
                 if (paper) paper.style.display = '';
                 setTheme(savedThemeBeforeEink);
-                localStorage.setItem('animType', savedAnimBeforeEink);
-                document.getElementById('anim-select').value = savedAnimBeforeEink;
+                try { localStorage.setItem('animType', savedAnimBeforeEink) } catch(e) {};
+                var animSelectEl = document.getElementById('anim-select');
+                if (animSelectEl) animSelectEl.value = savedAnimBeforeEink;
                 toggle.classList.remove('active');
                 
                 if (savedPlayStateBeforeEink) {
@@ -4530,7 +4531,7 @@
             var canvas = document.getElementById('matrix-canvas');
             if (!canvas) return;
             var ctx = canvas.getContext('2d');
-            var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`αβγδεζηθικλμνξοπρστυφχψω';
+            var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`伪尾纬未蔚味畏胃喂魏位渭谓尉慰蟺蟻蟽蟿蠀蠁蠂蠄蠅';
             var fontSize = 14;
             var columns, drops;
             function resize() {
@@ -4575,7 +4576,7 @@
                 bar.style.display = 'none';
                 toggle.classList.remove('active');
             }
-            localStorage.setItem('statusBarVisible', statusBarVisible ? '1' : '0');
+            try { localStorage.setItem('statusBarVisible', statusBarVisible ? '1' : '0') } catch(e) {};
         }
         (function() {
             var saved = localStorage.getItem('statusBarVisible');
@@ -4594,7 +4595,7 @@
             } else {
                 toggle.classList.remove('active');
             }
-            localStorage.setItem('smartLenMode', smartLenMode ? '1' : '0');
+            try { localStorage.setItem('smartLenMode', smartLenMode ? '1' : '0') } catch(e) {};
             if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
         }
         (function() {
@@ -4610,7 +4611,7 @@
             } else {
                 toggle.classList.remove('active');
             }
-            localStorage.setItem('wordWrapMode', wordWrapMode ? '1' : '0');
+            try { localStorage.setItem('wordWrapMode', wordWrapMode ? '1' : '0') } catch(e) {};
             if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
         }
         (function() {
@@ -4690,7 +4691,7 @@
             function onEnd() {
                 if (!dragging) return;
                 dragging = false;
-                localStorage.setItem('lg-opacity', currentOpacity);
+                try { localStorage.setItem('lg-opacity', currentOpacity) } catch(e) {};
             }
 
             track.addEventListener('mousedown', onStart);
@@ -4708,7 +4709,7 @@
             }
         })();
 
-        // ===== 功能3: 文件夹接管 =====
+        // ===== 鍔熻兘3: 鏂囦欢澶规帴绠?=====
         let folderFiles = [];
         let currentFileIndex = 0;
 
@@ -4721,7 +4722,7 @@
             }).sort((a, b) => a.name.localeCompare(b.name));
 
             if (!folderFiles.length) {
-                alert('没有找到兼容文件（.txt, .md, .epub），请重新选择。');
+                alert('娌℃湁鎵惧埌鍏煎鏂囦欢锛?txt, .md, .epub锛夛紝璇烽噸鏂伴€夋嫨銆?);
                 return;
             }
 
@@ -4738,7 +4739,7 @@
                 document.getElementById('entry-selection').parentNode.insertBefore(fileListEl, document.getElementById('entry-selection'));
             }
 
-            fileListEl.innerHTML = '<div class="file-list-header"><h3>文件夹内容</h3><button class="file-list-close">✕</button></div><div class="file-list-items"></div>';
+            fileListEl.innerHTML = '<div class="file-list-header"><h3>鏂囦欢澶瑰唴瀹?/h3><button class="file-list-close">鉁?/button></div><div class="file-list-items"></div>';
             fileListEl.style.display = 'block';
             document.getElementById('entry-selection').style.display = 'none';
             if (typeof pushNavState === 'function') pushNavState('filelist');
@@ -4753,7 +4754,7 @@
                 for (let i = renderIndex; i < end; i++) {
                     const file = folderFiles[i];
                     const ext = file.name.split('.').pop().toLowerCase();
-                    const icon = ext === 'epub' ? '📖' : ext === 'md' ? '📝' : '📄';
+                    const icon = ext === 'epub' ? '馃摉' : ext === 'md' ? '馃摑' : '馃搫';
                     const item = document.createElement('div');
                     item.className = 'file-list-item' + (i === currentFileIndex ? ' active' : '');
                     item.setAttribute('data-index', i);
@@ -4797,7 +4798,7 @@
             }
         }
 
-        // ===== 功能4: 二级主题设置面板 =====
+        // ===== 鍔熻兘4: 浜岀骇涓婚璁剧疆闈㈡澘 =====
         let themePanelOpen = false;
         let previewingTheme = null;
         let confirmedTheme = null;
@@ -4852,7 +4853,7 @@
             });
         }
 
-        // ===== 功能5: 点击面板外部关闭设置 =====
+        // ===== 鍔熻兘5: 鐐瑰嚮闈㈡澘澶栭儴鍏抽棴璁剧疆 =====
         document.addEventListener('click', function(e) {
             const navBar = document.getElementById('nav-bar-luxury');
             const settingBtn = document.querySelector('.status-badge-setting');
@@ -4872,7 +4873,7 @@
             }
         });
 
-        // ===== 性能降级检测 =====
+        // ===== 鎬ц兘闄嶇骇妫€娴?=====
         (function detectPerformance() {
             let lowFrameCount = 0;
             let perfIntervalId = null;
@@ -4887,7 +4888,7 @@
                         const fps = Math.round((frameCount * 1000) / (now - sampleStart));
                         if (fps < 30) {
                             lowFrameCount++;
-                            console.log('%c[性能] FPS: ' + fps + ' (低性能检测 #' + lowFrameCount + ')', 'color:#f80');
+                            console.log('%c[鎬ц兘] FPS: ' + fps + ' (浣庢€ц兘妫€娴?#' + lowFrameCount + ')', 'color:#f80');
                         } else {
                             lowFrameCount = Math.max(0, lowFrameCount - 1);
                         }
@@ -4918,7 +4919,7 @@
                 document.querySelectorAll('.liquid-glass, .liquid-glass-btn').forEach(el => {
                     el.classList.add('degraded');
                 });
-                console.log('%c[性能降级] Liquid Glass → 传统毛玻璃 (设备性能不足)', 'color:#f44;font-size:14px');
+                console.log('%c[鎬ц兘闄嶇骇] Liquid Glass 鈫?浼犵粺姣涚幓鐠?(璁惧鎬ц兘涓嶈冻)', 'color:#f44;font-size:14px');
             }
         })();
 
@@ -5004,14 +5005,14 @@
         (function() {
             var tocData = [];
             var fullText = '';
-            var subHeadingRegex = /^([零一二三四五六七八九十百千万\d]+[、.．]|§|§\s*\d+|[（(]\s*[零一二三四五六七八九十百千万\d]+\s*[)）]|\d+[、.．]\s*\S)/;
+            var subHeadingRegex = /^([闆朵竴浜屼笁鍥涗簲鍏竷鍏節鍗佺櫨鍗冧竾\d]+[銆?锛嶿|搂|搂\s*\d+|[锛?]\s*[闆朵竴浜屼笁鍥涗簲鍏竷鍏節鍗佺櫨鍗冧竾\d]+\s*[)锛塢|\d+[銆?锛嶿\s*\S)/;
 
             window.generateTOC = function(text) {
                 fullText = text || '';
                 tocData = [];
                 var lines = fullText.split('\n');
                 var charIndex = 0;
-                var chapterRegex = /^(第[零一二三四五六七八九十百千万\d]+[章节回卷篇部集幕]|Chapter\s+\d+|CHAPTER\s+\d+|Part\s+\d+|PART\s+\d+|卷[零一二三四五六七八九十百千万\d]+|序[章言幕]|引[子言]|尾声|后记|附录|番外)/;
+                var chapterRegex = /^(绗琜闆朵竴浜屼笁鍥涗簲鍏竷鍏節鍗佺櫨鍗冧竾\d]+[绔犺妭鍥炲嵎绡囬儴闆嗗箷]|Chapter\s+\d+|CHAPTER\s+\d+|Part\s+\d+|PART\s+\d+|鍗穂闆朵竴浜屼笁鍥涗簲鍏竷鍏節鍗佺櫨鍗冧竾\d]+|搴廩绔犺█骞昡|寮昜瀛愯█]|灏惧０|鍚庤|闄勫綍|鐣)/;
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i].trim();
                     if (chapterRegex.test(line)) {
@@ -5091,7 +5092,7 @@
 
                 listEl.innerHTML = '';
                 if (tocData.length === 0) {
-                    listEl.innerHTML = '<div style="color:rgba(255,255,255,0.4);text-align:center;padding:2rem;font-size:0.85rem;">未检测到章节标题<br><span style="font-size:0.7rem;">支持格式：第X章/节/回/卷</span></div>';
+                    listEl.innerHTML = '<div style="color:rgba(255,255,255,0.4);text-align:center;padding:2rem;font-size:0.85rem;">鏈娴嬪埌绔犺妭鏍囬<br><span style="font-size:0.7rem;">鏀寔鏍煎紡锛氱X绔?鑺?鍥?鍗?/span></div>';
                 } else {
                     var currentIdx = -1;
                     if (typeof currentIndex !== 'undefined' && typeof sentences !== 'undefined') {
@@ -5117,7 +5118,7 @@
                         div.appendChild(titleSpan);
                         var expandIcon = document.createElement('span');
                         expandIcon.className = 'toc-expand-icon';
-                        expandIcon.textContent = '▶';
+                        expandIcon.textContent = '鈻?;
                         div.appendChild(expandIcon);
                         div.setAttribute('data-index', idx);
                         div.addEventListener('click', function(e) {
@@ -5228,7 +5229,6 @@
                         currentIndex = Math.round(pct * (sentences.length - 1));
                         renderSentence();
                     }
-                    closeTOC();
                 }
 
                 track.addEventListener('mousedown', onStart);
