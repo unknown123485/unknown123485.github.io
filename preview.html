@@ -306,6 +306,54 @@
                            radial-gradient(circle at 60% 40%, rgba(139, 105, 20, 0.04) 0%, transparent 40%),
                            linear-gradient(135deg, #faf6ee 0%, #f5eed8 100%);
         }
+        .theme-cyber-black {
+            --bg-base: #000000; --accent: #00ff88; --text-primary: #00ffcc;
+            --bg-gradient: radial-gradient(circle at 30% 40%, rgba(0,255,136,0.03) 0%, transparent 50%),
+                           linear-gradient(180deg, #000000 0%, #050a05 100%);
+            --font-display: 'Courier New', monospace;
+        }
+        .theme-industrial-steel {
+            --bg-base: #2F3437; --accent: #FF922B; --text-primary: #E0DCD5;
+            --bg-gradient: radial-gradient(circle at 50% 30%, #3a3f42 0%, #2F3437 60%),
+                           linear-gradient(135deg, #2F3437 0%, #252a2d 100%);
+            --font-display: var(--font-sans);
+        }
+        .theme-deep-moss {
+            --bg-base: #1B262C; --accent: #8AC926; --text-primary: #C8E6C9;
+            --bg-gradient: radial-gradient(circle at 40% 50%, #243035 0%, #1B262C 60%),
+                           linear-gradient(180deg, #1B262C 0%, #1a2a20 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-nordic-mist {
+            --bg-base: #3B4252; --accent: #88C0D0; --text-primary: #ECEFF4;
+            --bg-gradient: radial-gradient(circle at 60% 30%, #434C5E 0%, #3B4252 60%),
+                           linear-gradient(135deg, #3B4252 0%, #434C5E 100%);
+            --font-display: var(--font-sans);
+        }
+        .theme-solarized-dark {
+            --bg-base: #002B36; --accent: #268BD2; --text-primary: #839496;
+            --bg-gradient: radial-gradient(circle at 40% 40%, #073642 0%, #002B36 60%),
+                           linear-gradient(135deg, #002B36 0%, #073642 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-gruvbox-soft {
+            --bg-base: #32302F; --accent: #D65D0E; --text-primary: #D5C4A1;
+            --bg-gradient: radial-gradient(circle at 50% 40%, #3C3836 0%, #32302F 60%),
+                           linear-gradient(135deg, #32302F 0%, #3C3836 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-nordic-frost {
+            --bg-base: #2E3440; --accent: #81A1C1; --text-primary: #D8DEE9;
+            --bg-gradient: radial-gradient(circle at 45% 35%, #3B4252 0%, #2E3440 60%),
+                           linear-gradient(135deg, #2E3440 0%, #3B4252 100%);
+            --font-display: var(--font-sans);
+        }
+        .theme-old-parchment {
+            --bg-base: #FDF6E3; --accent: #B58900; --text-primary: #586E75;
+            --bg-gradient: radial-gradient(circle at 40% 50%, #F5EDD8 0%, #FDF6E3 60%),
+                           linear-gradient(135deg, #FDF6E3 0%, #F5EDD8 100%);
+            --font-display: var(--font-serif);
+        }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
@@ -649,6 +697,98 @@
             user-select: none;
             -webkit-user-select: none;
         }
+
+        .home-settings-panel {
+            position: fixed; top: 0; right: -420px; z-index: 200;
+            width: 400px; max-width: 90vw; height: 100vh;
+            background: rgba(10,10,20,0.95); border-left: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(40px); padding: 2rem;
+            transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow-y: auto; overflow-x: hidden;
+        }
+        .home-settings-panel.open { right: 0; }
+        .home-settings-panel h3 {
+            font-family: 'EB Garamond', serif; font-size: 1.5rem;
+            margin-bottom: 1.5rem; color: var(--text-primary);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .home-settings-panel h3 button {
+            background: none; border: none; color: var(--text-primary);
+            font-size: 1.5rem; cursor: pointer; opacity: 0.6;
+        }
+        .home-settings-panel h3 button:hover { opacity: 1; }
+
+        .home-theme-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem;
+        }
+        .home-theme-card {
+            padding: 12px; border-radius: 12px; cursor: pointer;
+            border: 2px solid transparent; transition: all 0.3s ease;
+            text-align: center; font-size: 0.8rem;
+        }
+        .home-theme-card:hover { transform: translateY(-2px); }
+        .home-theme-card.active { border-color: var(--accent); box-shadow: 0 0 15px rgba(123,97,255,0.3); }
+        .home-theme-card .theme-preview {
+            width: 100%; height: 40px; border-radius: 8px; margin-bottom: 6px;
+        }
+        .home-theme-card .theme-label { color: var(--text-primary); opacity: 0.8; }
+
+        .home-settings-section {
+            margin-bottom: 1.5rem; padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .home-settings-section label {
+            display: block; font-size: 0.85rem; color: var(--text-primary);
+            opacity: 0.7; margin-bottom: 8px;
+        }
+        .home-settings-section textarea {
+            width: 100%; height: 80px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+            color: var(--text-primary); padding: 10px; font-size: 0.85rem;
+            resize: vertical; font-family: inherit;
+        }
+        .home-settings-section textarea:focus {
+            outline: none; border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(123,97,255,0.15);
+        }
+
+        .glow-toggle-wrap {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 0;
+        }
+        .glow-toggle-wrap .slider-label { margin: 0; }
+        .glow-toggle {
+            width: 44px; height: 24px; border-radius: 12px;
+            background: rgba(255,255,255,0.1); cursor: pointer;
+            position: relative; transition: background 0.3s ease;
+        }
+        .glow-toggle.active { background: var(--accent); }
+        .glow-toggle::after {
+            content: ''; position: absolute; top: 2px; left: 2px;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #fff; transition: transform 0.3s ease;
+        }
+        .glow-toggle.active::after { transform: translateX(20px); }
+
+        .slider-glow .slider-custom::-webkit-slider-thumb {
+            box-shadow: 0 0 12px var(--accent), 0 0 4px var(--accent);
+        }
+        .slider-glow .slider-custom::-moz-range-thumb {
+            box-shadow: 0 0 12px var(--accent), 0 0 4px var(--accent);
+        }
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(123,97,255,0.3), 0 0 5px rgba(123,97,255,0.2);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(123,97,255,0.5), 0 0 10px rgba(123,97,255,0.3);
+        }
+
+        .home-settings-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 199;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .home-settings-overlay.active { opacity: 1; pointer-events: auto; }
         
         .entry-container { display: flex; gap: 3rem; align-items: stretch; }
         .entry-card { 
@@ -1149,10 +1289,9 @@
         
         /* 底部控制按钮 */
         .bottom-controls {
-            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) scale(var(--dpi-scale));
-            display: flex; align-items: center; gap: 1.5rem;
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: calc(1.5rem * var(--dpi-scale));
             z-index: 900;
-            transform-origin: bottom center;
         }
         
         .bottom-control-btn {
@@ -1518,52 +1657,51 @@
             align-items: center;
             gap: 0.4rem;
         }
-        .opacity-track {
+        .opacity-gauge {
             position: relative;
-            width: 100%;
-            max-width: 220px;
-            height: 28px;
+            width: 120px;
+            height: 120px;
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
             cursor: pointer;
         }
-        .opacity-track-bg {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 6px;
-            transform: translateY(-50%);
-            border-radius: 3px;
-            background: rgba(255,255,255,0.1);
-            overflow: hidden;
-        }
-        .opacity-track-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .opacity-gauge svg {
+            width: 100%;
             height: 100%;
-            border-radius: 3px;
-            background: linear-gradient(90deg, rgba(123,97,255,0.3), #7b61ff);
-            transition: width 0.05s ease;
+            transform: rotate(-90deg);
         }
-        .opacity-track-thumb {
+        .opacity-gauge-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.1);
+            stroke-width: 8;
+        }
+        .opacity-gauge-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.05s ease;
+            filter: drop-shadow(0 0 6px rgba(123,97,255,0.4));
+        }
+        .opacity-gauge-center {
             position: absolute;
             top: 50%;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--accent);
+            left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 12px rgba(123,97,255,0.6), 0 0 0 3px rgba(123,97,255,0.2);
-            cursor: grab;
-            transition: box-shadow 0.15s ease;
-            z-index: 2;
+            text-align: center;
         }
-        .opacity-track-thumb:active {
-            cursor: grabbing;
-            box-shadow: 0 0 18px rgba(123,97,255,0.8), 0 0 0 5px rgba(123,97,255,0.3);
+        .opacity-gauge-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+        .opacity-gauge-label {
+            font-size: 0.6rem;
+            color: var(--text-primary);
+            opacity: 0.5;
+            margin-top: 2px;
         }
 
         .toc-modal { 
@@ -2384,8 +2522,8 @@
             .themes-section { width: 100%; }
             .themes-grid { max-width: 100%; }
             .bottom-controls {
-                gap: 1.2rem;
-                transform: translateX(-50%) scale(var(--dpi-scale));
+                gap: calc(1.2rem * var(--dpi-scale));
+                transform: translateX(-50%);
                 z-index: 930;
             }
             .bottom-control-btn {
@@ -2495,7 +2633,7 @@
             .slider-wrap,
             .select-wrap { max-width: none; }
             .slider-label { font-size: 0.6rem; }
-            .opacity-track { max-width: 180px; }
+            .opacity-gauge { width: 100px; height: 100px; }
             .control-btn {
                 padding: 0.4rem;
                 min-width: 40px;
@@ -2569,7 +2707,7 @@
     <div class="app-container">
         <!-- 巅峰页码标签 -->
         <div class="status-badge-container">
-            <div class="status-badge-setting" onclick="toggleNav()">
+            <div class="status-badge-setting" onclick="handleSettingsGear()">
                 <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
             </div>
             <div id="status-badge" class="status-badge hidden" onclick="toggleTOC()">
@@ -2596,21 +2734,67 @@
         <div id="input-screen" style="position:relative;overflow:hidden;">
             <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.15;"></canvas>
             <div style="position:relative;z-index:1;">
+
+            <div class="home-settings-overlay" id="home-settings-overlay" onclick="toggleHomeSettings()"></div>
+            <div class="home-settings-panel" id="home-settings-panel">
+                <h3>主界面设置 <button onclick="toggleHomeSettings()">✕</button></h3>
+                <div class="home-settings-section">
+                    <label>配色方案</label>
+                    <div class="home-theme-grid">
+                        <div class="home-theme-card" data-home-theme="dark" onclick="setHomeTheme('dark')">
+                            <div class="theme-preview" style="background:linear-gradient(135deg,#1a1a2e,#050508)"></div>
+                            <div class="theme-label">Original Purple</div>
+                        </div>
+                        <div class="home-theme-card" data-home-theme="cyber-black" onclick="setHomeTheme('cyber-black')">
+                            <div class="theme-preview" style="background:linear-gradient(135deg,#000000,#050a05)"></div>
+                            <div class="theme-label">Cyber Black</div>
+                        </div>
+                        <div class="home-theme-card" data-home-theme="industrial-steel" onclick="setHomeTheme('industrial-steel')">
+                            <div class="theme-preview" style="background:linear-gradient(135deg,#2F3437,#252a2d)"></div>
+                            <div class="theme-label">Industrial Steel</div>
+                        </div>
+                        <div class="home-theme-card" data-home-theme="deep-moss" onclick="setHomeTheme('deep-moss')">
+                            <div class="theme-preview" style="background:linear-gradient(135deg,#1B262C,#1a2a20)"></div>
+                            <div class="theme-label">Deep Moss</div>
+                        </div>
+                        <div class="home-theme-card" data-home-theme="nordic-mist" onclick="setHomeTheme('nordic-mist')">
+                            <div class="theme-preview" style="background:linear-gradient(135deg,#3B4252,#434C5E)"></div>
+                            <div class="theme-label">Nordic Mist</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="home-settings-section">
+                    <label>Matrix 文字流自定义内容</label>
+                    <textarea id="matrix-custom-text" placeholder="输入自定义文字（如名言、诗词），将注入背景文字流..."></textarea>
+                </div>
+                <div class="home-settings-section">
+                    <div class="glow-toggle-wrap">
+                        <div class="slider-label">Glow 发光效果</div>
+                        <div class="glow-toggle" id="glow-toggle" onclick="toggleGlow()"></div>
+                    </div>
+                </div>
+            </div>
             <img src="logo.png" alt="Mas.Reader Logo" class="mas-reader-logo" />
             <div class="mas-reader-title">Mas.Reader</div>
             <div id="entry-selection" class="entry-container">
-                <div class="entry-card" id="epub-drop-zone">
+                <div class="entry-card" id="epub-drop-zone" onclick="triggerFileInput()">
                     <input type="file" id="file-input" accept=".epub,.md,.txt,text/plain,application/epub+zip,text/markdown" onchange="handleFileSelect(event)" class="entry-file-input">
                     <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                     <div class="entry-title">选择单个文件</div>
                     <div class="entry-desc">支持 .epub, .md, .txt 文件，智能解析内容。</div>
                 </div>
 
-                <div class="entry-card" id="folder-entry-card">
+                <div class="entry-card" id="folder-entry-card" onclick="triggerFolderInput()">
                     <input type="file" id="folder-input" webkitdirectory directory multiple accept=".txt,.md,.epub,text/plain,application/epub+zip,text/markdown" onchange="handleFolderSelect(event)" class="entry-file-input">
                     <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
                     <div class="entry-title">选择整个文件夹</div>
                     <div class="entry-desc" id="folder-desc">批量导入整个文件夹，自动扫描所有兼容文件。</div>
+                </div>
+
+                <div class="entry-card" onclick="showManualInput()">
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    <div class="entry-title">手动输入</div>
+                    <div class="entry-desc">直接粘贴或输入文本内容。</div>
                 </div>
             </div>
 
@@ -3018,6 +3202,22 @@
                             <div class="theme-color-dot" style="background: linear-gradient(135deg, #8b6914, #faf6ee)"></div>
                             <span class="theme-detail-name">PAPER - 素纸</span>
                         </div>
+                        <div class="theme-detail-item" data-theme="solarized-dark">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #268BD2, #002B36)"></div>
+                            <span class="theme-detail-name">SOLARIZED DARK - 经典护眼暗色</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="gruvbox-soft">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #D65D0E, #32302F)"></div>
+                            <span class="theme-detail-name">GRUVBOX SOFT - 复古书卷感</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="nordic-frost">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #81A1C1, #2E3440)"></div>
+                            <span class="theme-detail-name">NORDIC FROST - 冷调护眼</span>
+                        </div>
+                        <div class="theme-detail-item" data-theme="old-parchment">
+                            <div class="theme-color-dot" style="background: linear-gradient(135deg, #B58900, #FDF6E3)"></div>
+                            <span class="theme-detail-name">OLD PARCHMENT - 陈年羊皮纸</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -3045,12 +3245,17 @@
 
                 <!-- 液态玻璃透明度滑块 -->
                 <div class="opacity-dashboard-wrap">
-                    <div class="slider-label">玻璃透明度 <span id="opacity-value">100%</span></div>
-                    <div class="opacity-track" id="opacity-track">
-                        <div class="opacity-track-bg">
-                            <div class="opacity-track-fill" id="opacity-track-fill" style="width:100%"></div>
+                    <div class="slider-label">玻璃透明度</div>
+                    <div class="opacity-gauge" id="opacity-gauge">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="opacity-gauge-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="opacity-gauge-fill" id="opacity-gauge-fill" cx="60" cy="60" r="50"
+                                stroke-dasharray="314.16" stroke-dashoffset="0"></circle>
+                        </svg>
+                        <div class="opacity-gauge-center">
+                            <div class="opacity-gauge-value" id="opacity-gauge-value">100%</div>
+                            <div class="opacity-gauge-label">OPACITY</div>
                         </div>
-                        <div class="opacity-track-thumb" id="opacity-track-thumb" style="left:100%"></div>
                     </div>
                 </div>
                 </div>
@@ -3470,6 +3675,68 @@
             }
             if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
         }
+
+        function handleSettingsGear() {
+            var inputScreen = document.getElementById('input-screen');
+            if (inputScreen && inputScreen.style.display !== 'none') {
+                toggleHomeSettings();
+            } else {
+                toggleNav();
+            }
+        }
+
+        function toggleHomeSettings() {
+            var panel = document.getElementById('home-settings-panel');
+            var overlay = document.getElementById('home-settings-overlay');
+            if (panel.classList.contains('open')) {
+                panel.classList.remove('open');
+                overlay.classList.remove('active');
+                var customText = document.getElementById('matrix-custom-text');
+                if (customText && matrixEngine) {
+                    matrixEngine.setCustomText(customText.value);
+                    localStorage.setItem('matrixCustomText', customText.value);
+                }
+            } else {
+                panel.classList.add('open');
+                overlay.classList.add('active');
+                var savedHomeTheme = localStorage.getItem('homeTheme') || 'dark';
+                document.querySelectorAll('.home-theme-card').forEach(function(card) {
+                    card.classList.toggle('active', card.getAttribute('data-home-theme') === savedHomeTheme);
+                });
+            }
+        }
+
+        function setHomeTheme(theme) {
+            setTheme(theme);
+            localStorage.setItem('homeTheme', theme);
+            document.querySelectorAll('.home-theme-card').forEach(function(card) {
+                card.classList.toggle('active', card.getAttribute('data-home-theme') === theme);
+            });
+        }
+
+        var glowEnabled = false;
+        function toggleGlow() {
+            glowEnabled = !glowEnabled;
+            var toggle = document.getElementById('glow-toggle');
+            toggle.classList.toggle('active', glowEnabled);
+            localStorage.setItem('glowEnabled', glowEnabled ? '1' : '0');
+            document.body.classList.toggle('glow-active', glowEnabled);
+            var navBar = document.getElementById('nav-bar-luxury');
+            if (navBar) navBar.classList.toggle('slider-glow', glowEnabled);
+            document.querySelectorAll('.control-btn, .bottom-control-btn').forEach(function(btn) {
+                btn.classList.toggle('btn-glow', glowEnabled);
+            });
+        }
+
+        (function initGlow() {
+            var saved = localStorage.getItem('glowEnabled');
+            if (saved === '1') {
+                glowEnabled = true;
+                var toggle = document.getElementById('glow-toggle');
+                if (toggle) toggle.classList.add('active');
+                document.body.classList.add('glow-active');
+            }
+        })();
 
         function updateSize() {
             const size = document.getElementById('size-slider').value;
@@ -4526,40 +4793,118 @@
             void document.body.offsetHeight;
         }
 
-        (function initMatrixRain() {
-            var canvas = document.getElementById('matrix-canvas');
-            if (!canvas) return;
-            var ctx = canvas.getContext('2d');
-            var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`αβγδεζηθικλμνξοπρστυφχψω';
-            var fontSize = 14;
-            var columns, drops;
-            function resize() {
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-                columns = Math.floor(canvas.width / fontSize);
-                drops = [];
-                for (var i = 0; i < columns; i++) {
-                    drops[i] = Math.random() * -100;
-                }
+        var MatrixEngine = (function() {
+            function MatrixEngine(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                if (!this.canvas) return;
+                this.ctx = this.canvas.getContext('2d');
+                this.defaultChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`αβγδεζηθικλμνξοπρστυφχψω天地玄黄宇宙洪荒日月盈昃辰宿列张寒来暑往秋收冬藏';
+                this.customText = '';
+                this.fontSize = 14;
+                this.columns = 0;
+                this.drops = [];
+                this.accentColor = '#00ff88';
+                this.running = false;
+                this.intervalId = null;
+                this.resize();
+                var self = this;
+                window.addEventListener('resize', function() { self.resize(); });
             }
-            resize();
-            window.addEventListener('resize', resize);
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
-                ctx.fillStyle = accentColor;
-                ctx.font = fontSize + 'px monospace';
-                for (var i = 0; i < drops.length; i++) {
+            MatrixEngine.prototype.getChars = function() {
+                if (this.customText && this.customText.trim()) {
+                    return this.customText.trim();
+                }
+                return this.defaultChars;
+            };
+            MatrixEngine.prototype.setCustomText = function(text) {
+                this.customText = text || '';
+            };
+            MatrixEngine.prototype.resize = function() {
+                this.canvas.width = this.canvas.offsetWidth;
+                this.canvas.height = this.canvas.offsetHeight;
+                this.columns = Math.floor(this.canvas.width / this.fontSize);
+                this.drops = [];
+                for (var i = 0; i < this.columns; i++) {
+                    this.drops[i] = Math.random() * -100;
+                }
+            };
+            MatrixEngine.prototype.updateAccentColor = function() {
+                this.accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
+            };
+            MatrixEngine.prototype.draw = function() {
+                var ctx = this.ctx;
+                var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-base').trim() || '#000000';
+                ctx.fillStyle = this.hexToRgba(bgColor, 0.05);
+                ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                var chars = this.getChars();
+                for (var i = 0; i < this.drops.length; i++) {
                     var text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
+                    var y = this.drops[i] * this.fontSize;
+                    var brightness = Math.random();
+                    if (brightness > 0.95) {
+                        ctx.fillStyle = this.lightenColor(this.accentColor, 0.6);
+                    } else if (brightness > 0.7) {
+                        ctx.fillStyle = this.hexToRgba(this.accentColor, 0.5);
+                    } else {
+                        ctx.fillStyle = this.hexToRgba(this.accentColor, 0.2);
                     }
-                    drops[i]++;
+                    ctx.font = this.fontSize + 'px monospace';
+                    ctx.fillText(text, i * this.fontSize, y);
+                    if (this.drops[i] * this.fontSize > this.canvas.height && Math.random() > 0.975) {
+                        this.drops[i] = 0;
+                    }
+                    this.drops[i]++;
+                }
+            };
+            MatrixEngine.prototype.hexToRgba = function(hex, alpha) {
+                if (!hex || hex.charAt(0) !== '#') return 'rgba(0,255,136,' + alpha + ')';
+                hex = hex.replace('#', '');
+                if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+                var r = parseInt(hex.substring(0, 2), 16);
+                var g = parseInt(hex.substring(2, 4), 16);
+                var b = parseInt(hex.substring(4, 6), 16);
+                return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+            };
+            MatrixEngine.prototype.lightenColor = function(hex, amount) {
+                if (!hex || hex.charAt(0) !== '#') return '#ffffff';
+                hex = hex.replace('#', '');
+                if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+                var r = Math.min(255, parseInt(hex.substring(0, 2), 16) + Math.round(255 * amount));
+                var g = Math.min(255, parseInt(hex.substring(2, 4), 16) + Math.round(255 * amount));
+                var b = Math.min(255, parseInt(hex.substring(4, 6), 16) + Math.round(255 * amount));
+                return 'rgba(' + r + ',' + g + ',' + b + ',0.9)';
+            };
+            MatrixEngine.prototype.start = function() {
+                if (this.running) return;
+                this.running = true;
+                var self = this;
+                this.intervalId = setInterval(function() {
+                    self.updateAccentColor();
+                    self.draw();
+                }, 50);
+            };
+            MatrixEngine.prototype.stop = function() {
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                this.running = false;
+            };
+            return MatrixEngine;
+        })();
+
+        var matrixEngine = null;
+        (function initMatrixRain() {
+            matrixEngine = new MatrixEngine('matrix-canvas');
+            if (matrixEngine.canvas) {
+                matrixEngine.start();
+                var savedText = localStorage.getItem('matrixCustomText');
+                if (savedText) {
+                    matrixEngine.setCustomText(savedText);
+                    var textarea = document.getElementById('matrix-custom-text');
+                    if (textarea) textarea.value = savedText;
                 }
             }
-            setInterval(draw, 50);
         })();
 
         var statusBarVisible = false;
@@ -4617,11 +4962,13 @@
             if (localStorage.getItem('wordWrapMode') === '1') { wordWrapMode = false; toggleWordWrap(); }
         })();
         (function() {
-            var track = document.getElementById('opacity-track');
-            var fill = document.getElementById('opacity-track-fill');
-            var thumb = document.getElementById('opacity-track-thumb');
-            var valueLabel = document.getElementById('opacity-value');
-            if (!track || !fill || !thumb) return;
+            var gauge = document.getElementById('opacity-gauge');
+            var gaugeFill = document.getElementById('opacity-gauge-fill');
+            var gaugeValue = document.getElementById('opacity-gauge-value');
+            if (!gauge || !gaugeFill || !gaugeValue) return;
+
+            var circumference = 2 * Math.PI * 50;
+            gaugeFill.setAttribute('stroke-dasharray', circumference.toFixed(2));
 
             var currentOpacity = 1;
 
@@ -4662,15 +5009,22 @@
                     '}';
 
                 document.documentElement.style.setProperty('--lg-opacity', val);
-                fill.style.width = (val * 100) + '%';
-                thumb.style.left = (val * 100) + '%';
-                if (valueLabel) valueLabel.textContent = Math.round(val * 100) + '%';
+                var offset = circumference * (1 - val);
+                gaugeFill.setAttribute('stroke-dashoffset', offset.toFixed(2));
+                gaugeValue.textContent = Math.round(val * 100) + '%';
             }
 
-            function getVal(e) {
-                var rect = track.getBoundingClientRect();
-                var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-                return Math.max(0, Math.min(1, x / rect.width));
+            function getValFromEvent(e) {
+                var rect = gauge.getBoundingClientRect();
+                var cx = rect.left + rect.width / 2;
+                var cy = rect.top + rect.height / 2;
+                var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                var dx = clientX - cx;
+                var dy = clientY - cy;
+                var angle = Math.atan2(dx, -dy);
+                if (angle < 0) angle += 2 * Math.PI;
+                return Math.max(0, Math.min(1, angle / (2 * Math.PI)));
             }
 
             var dragging = false;
@@ -4679,13 +5033,13 @@
                 e.preventDefault();
                 e.stopPropagation();
                 dragging = true;
-                setOpacity(getVal(e));
+                setOpacity(getValFromEvent(e));
             }
             function onMove(e) {
                 if (!dragging) return;
                 e.preventDefault();
                 e.stopPropagation();
-                setOpacity(getVal(e));
+                setOpacity(getValFromEvent(e));
             }
             function onEnd() {
                 if (!dragging) return;
@@ -4693,8 +5047,8 @@
                 localStorage.setItem('lg-opacity', currentOpacity);
             }
 
-            track.addEventListener('mousedown', onStart);
-            track.addEventListener('touchstart', onStart, { passive: false });
+            gauge.addEventListener('mousedown', onStart);
+            gauge.addEventListener('touchstart', onStart, { passive: false });
             document.addEventListener('mousemove', onMove);
             document.addEventListener('touchmove', onMove, { passive: false });
             document.addEventListener('mouseup', onEnd);
