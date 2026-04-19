@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0e0e18" id="theme-color-meta">
+    <meta name="theme-color" content="#0c0f1a" id="theme-color-meta">
     <title>Mas.reader</title>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Sans+SC:wght@100;300;400;500;700;900&family=Noto+Serif+TC:wght@200;300;400;500;600;700;900&subset=chinese-simplified&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -195,9 +195,12 @@
             --font-display: var(--font-serif);
         }
         .theme-mystic {
-            --bg-base: #221240; --accent: #a855f7; --text-primary: #f0e6ff;
-            --bg-gradient: radial-gradient(circle at 50% 30%, #3a2060 0%, #221240 60%),
-                          linear-gradient(135deg, #221240 0%, #3a2060 100%);
+            --bg-base: #0c0f1a; --accent: #c9a96e; --text-primary: #e8e0d4;
+            --bg-gradient: 
+                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(30, 35, 60, 0.8) 0%, transparent 70%),
+                radial-gradient(circle at 20% 80%, rgba(20, 25, 45, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(25, 30, 50, 0.4) 0%, transparent 50%),
+                linear-gradient(180deg, #0c0f1a 0%, #111528 40%, #0e1220 100%);
             --font-display: var(--font-serif);
         }
         .theme-ocean {
@@ -352,6 +355,12 @@
         }
 
         .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; background: var(--bg-gradient); padding-top: env(safe-area-inset-top, 0px); }
+        .app-container::before {
+            content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            background-repeat: repeat; background-size: 256px 256px;
+            opacity: 0.5;
+        }
 
         /* ===== Liquid Glass 鍏眰娓叉煋缁撴瀯 ===== */
         .liquid-glass {
@@ -622,47 +631,63 @@
 
 
         /* --- 杈撳叆灞忓箷閲嶆瀯 --- */
-        #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 20; background: inherit; }
+        #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100%; z-index: 20; background: inherit; padding-top: 8vh; }
         
         .mas-reader-logo {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 4px 12px rgba(123,97,255,0.3));
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 2px 8px rgba(201,169,110,0.3));
             animation: float 4s ease-in-out infinite;
         }
 
         .mas-reader-title {
             font-family: 'EB Garamond', 'Noto Serif SC', serif;
-            font-size: 3.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.25em;
             color: var(--text-primary);
             text-align: center;
-            margin-bottom: 2.5rem;
-            background: linear-gradient(135deg, #ffffff 0%, rgba(123,97,255,0.8) 50%, #ffffff 100%);
+            margin-bottom: 2rem;
+            background: linear-gradient(
+                135deg, 
+                #d4a853 0%, 
+                #f5e6b8 20%, 
+                #c9a040 35%, 
+                #f0d78c 50%, 
+                #b8922e 65%, 
+                #e8c96a 80%, 
+                #d4a853 100%
+            );
+            background-size: 200% 200%;
+            animation: goldShimmer 6s ease-in-out infinite;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 2px 8px rgba(123,97,255,0.3));
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)) drop-shadow(0 0 8px rgba(201,169,110,0.2));
             user-select: none;
             -webkit-user-select: none;
         }
+
+        @keyframes goldShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
         
-        .entry-container { display: flex; gap: 3rem; align-items: stretch; }
+        .entry-container { display: flex; gap: 2.5rem; align-items: stretch; }
         .entry-card { 
-            width: 400px; padding: 3rem; background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px;
+            width: 360px; padding: 2.5rem; background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 24px;
             backdrop-filter: blur(40px); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             display: flex; flex-direction: column; align-items: center; text-align: center;
             cursor: pointer; position: relative; overflow: hidden;
         }
-        .entry-card:hover { transform: translateY(-15px); background: rgba(255, 255, 255, 0.06); border-color: var(--accent); }
-        .entry-card:active { transform: translateY(-5px) scale(0.97); box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); background: rgba(255,255,255,0.03); }
-        .entry-card svg { width: 60px; height: 60px; fill: var(--accent); margin-bottom: 2rem; opacity: 0.8; }
-        .entry-title { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 1rem; }
-        .entry-desc { font-size: 0.9rem; opacity: 0.5; line-height: 1.6; }
+        .entry-card:hover { transform: translateY(-8px); background: rgba(255, 255, 255, 0.05); border-color: rgba(201,169,110,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .entry-card:active { transform: translateY(-2px) scale(0.98); box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); background: rgba(255,255,255,0.02); }
+        .entry-card svg { width: 48px; height: 48px; fill: var(--accent); margin-bottom: 1.5rem; opacity: 0.7; }
+        .entry-title { font-size: 1.4rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 0.8rem; }
+        .entry-desc { font-size: 0.85rem; opacity: 0.4; line-height: 1.6; }
 
         .entry-file-input {
             position: absolute;
@@ -695,19 +720,19 @@
         #manual-input-area { display: none; flex-direction: column; align-items: center; width: 100%; }
         .luxury-glass { 
             background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(40px) saturate(150%); 
-            border-radius: 40px; 
-            box-shadow: 0 50px 100px rgba(0,0,0,0.4), inset 0 0 80px rgba(255,255,255,0.02); 
-            padding: 4rem; margin-top: 2rem;
+            border-radius: 24px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3), inset 0 0 60px rgba(255,255,255,0.01); 
+            padding: 3rem; margin-top: 2rem;
         }
 
         /* 鎷栨嫿婵€娲荤姸鎬?*/
-        .entry-card.drag-over { background: var(--accent); border-color: white; }
-        .entry-card.drag-over * { color: white !important; fill: white !important; }
+        .entry-card.drag-over { background: rgba(201,169,110,0.15); border-color: rgba(201,169,110,0.5); }
+        .entry-card.drag-over * { color: var(--accent) !important; fill: var(--accent) !important; }
 
-        .btn-back { margin-top: 2rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: 0.3s, transform 0.15s ease, box-shadow 0.15s ease; }
-        .btn-back:hover { background: rgba(255,255,255,0.1); }
+        .btn-back { margin-top: 2rem; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); padding: 0.8rem 2.5rem; border-radius: 20px; cursor: pointer; transition: 0.3s, transform 0.15s ease, box-shadow 0.15s ease; font-size: 0.9rem; letter-spacing: 0.1em; }
+        .btn-back:hover { background: rgba(255,255,255,0.05); border-color: rgba(201,169,110,0.3); }
         .btn-back:active { transform: translateY(2px) scale(0.97); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); background: rgba(255,255,255,0.05); }
         .text-input { 
             width: 75vw; height: 50vh; background: transparent; border: none; 
@@ -725,8 +750,8 @@
             color: #111;
             filter: url(#distress-filter) contrast(1.1) sepia(0.1);
         }
-        .btn-luxury { margin-top: 4rem; padding: 1.5rem 7rem; font-size: 1.5rem; background: var(--accent); color: white; border: none; border-radius: 60px; cursor: pointer; font-weight: 900; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; letter-spacing: 0.3em; text-transform: uppercase; }
-        .btn-luxury:active { transform: translateY(3px) scale(0.97); box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 2px 6px rgba(0,0,0,0.3); }
+        .btn-luxury { margin-top: 3rem; padding: 1.2rem 5rem; font-size: 1.2rem; background: linear-gradient(135deg, #c9a040 0%, #d4a853 50%, #b8922e 100%); color: #0c0f1a; border: none; border-radius: 30px; cursor: pointer; font-weight: 700; box-shadow: 0 12px 30px rgba(201,169,110,0.25); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; letter-spacing: 0.2em; text-transform: uppercase; }
+        .btn-luxury:active { transform: translateY(2px) scale(0.98); box-shadow: 0 6px 15px rgba(201,169,110,0.2), inset 0 2px 4px rgba(0,0,0,0.2); }
 
         /* --- 灞曠ず灞忓箷 --- */
         #display-screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease; position: relative; z-index: 25; }
@@ -2137,10 +2162,10 @@
         }
 
         .theme-mystic .liquid-glass {
-            border-radius: 40px 40px 20px 20px;
+            border-radius: 24px 24px 16px 16px;
         }
         .theme-mystic .display-area {
-            border-radius: 40px 40px 0 0;
+            border-radius: 24px 24px 0 0;
         }
         .theme-studio .liquid-glass {
             background: rgba(255,255,255,calc(0.95 * var(--lg-opacity)));
@@ -2471,8 +2496,9 @@
 
         @media (max-width: 480px) {
             .mas-reader-title {
-                font-size: 2.2rem;
-                margin-bottom: 1.5rem;
+                font-size: 1.8rem;
+                margin-bottom: 1.2rem;
+                letter-spacing: 0.15em;
             }
             .entry-card { padding: 1.2rem; }
             .entry-title { font-size: 1.2rem; }
@@ -2594,7 +2620,7 @@
         <!-- 涓婚閫夋嫨鍣ㄥ凡绉诲姩鍒拌缃潰鏉夸腑 -->
 
         <div id="input-screen" style="position:relative;overflow:hidden;">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.15;"></canvas>
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.08;"></canvas>
             <div style="position:relative;z-index:1;">
             <img src="logo.png" alt="Mas.Reader Logo" class="mas-reader-logo" />
             <div class="mas-reader-title">Mas.Reader</div>
@@ -4546,9 +4572,9 @@
             resize();
             window.addEventListener('resize', resize);
             function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillStyle = 'rgba(12, 15, 26, 0.06)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
+                var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#c9a96e';
                 ctx.fillStyle = accentColor;
                 ctx.font = fontSize + 'px monospace';
                 for (var i = 0; i < drops.length; i++) {
