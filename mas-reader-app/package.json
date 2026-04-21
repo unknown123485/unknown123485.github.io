@@ -1,0 +1,18 @@
+{
+  "name": "mas-reader-app",
+  "version": "1.0.0",
+  "description": "MAS Reader - Text Display App",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx cap sync android && npx cap run android",
+    "build:apk": "npx cap sync android && cd android && .\\gradlew assembleDebug"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/cli": "^6.2.1",
+    "@capacitor/core": "^6.2.1"
+  }
+}

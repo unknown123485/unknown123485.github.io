@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.mas.reader" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Mas.reader</name>
+    <description>
+        Mas.reader - Immersive Text Display Application
+    </description>
+    <author email="dev@mas.reader" href="https://mas.reader">
+        Mas.reader Team
+    </author>
+    <content src="index.html" />
+    <allow-navigation href="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <access origin="*" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="StatusBarBackgroundColor" value="#00000000" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" />
+    <preference name="loadUrlTimeoutValue" value="60000" />
+</widget>
