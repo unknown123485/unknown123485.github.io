@@ -61,27 +61,37 @@ async function main() {
         {
             local: 'c:\\冬\\项目\\文本展示\\preview.html',
             repo: 'index.html',
-            msg: 'Update v5.5: matrix engine refactor, theme carousel, font hub refactor, 5 new themes, film grain, cinematic focus, darkroom exposure'
+            msg: 'v6.0beta: ABOUT pill shape, theme carousel refactor, scroll throttle, lazy init, splash screen, lifecycle management'
         },
         {
             local: 'c:\\冬\\项目\\文本展示\\fonts\\hyzhengyuan\\HYZhengYuan-subset.woff2',
             repo: 'assets/fonts/hyzhengyuan/HYZhengYuan-subset.woff2',
-            msg: 'Add HYZhengYuan subset font (woff2)'
+            msg: 'Update HYZhengYuan subset font (woff2)'
         },
         {
             local: 'c:\\冬\\项目\\文本展示\\fonts\\hyzhengyuan\\result.css',
             repo: 'assets/fonts/hyzhengyuan/result.css',
-            msg: 'Add HYZhengYuan font CSS'
+            msg: 'Update HYZhengYuan font CSS'
+        },
+        {
+            local: 'c:\\冬\\项目\\文本展示\\fonts\\jinghuaoldsong\\JingHuaOldSong-subset.woff2',
+            repo: 'assets/fonts/jinghuaoldsong/JingHuaOldSong-subset.woff2',
+            msg: 'Update JingHuaOldSong subset font (woff2)'
+        },
+        {
+            local: 'c:\\冬\\项目\\文本展示\\fonts\\jinghuaoldsong\\result.css',
+            repo: 'assets/fonts/jinghuaoldsong/result.css',
+            msg: 'Update JingHuaOldSong font CSS'
         },
         {
             local: 'c:\\冬\\项目\\文本展示\\fonts\\huiwenmingchao\\HuiWenMingChao-subset.woff2',
             repo: 'assets/fonts/huiwenmingchao/HuiWenMingChao-subset.woff2',
-            msg: 'Add HuiWenMingChao subset font (woff2)'
+            msg: 'Update HuiWenMingChao subset font (woff2)'
         },
         {
             local: 'c:\\冬\\项目\\文本展示\\fonts\\huiwenmingchao\\result.css',
             repo: 'assets/fonts/huiwenmingchao/result.css',
-            msg: 'Add HuiWenMingChao font CSS'
+            msg: 'Update HuiWenMingChao font CSS'
         }
     ];
 

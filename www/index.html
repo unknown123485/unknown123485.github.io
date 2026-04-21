@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -7,9 +7,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0e0e18" id="theme-color-meta">
     <title>Mas.reader</title>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Sans+SC:wght@100;300;400;500;700;900&family=Noto+Serif+SC:wght@200;300;400;500;600;700;900&family=Noto+Serif+TC:wght@200;300;400;500;600;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&family=Liu+Jian+Mao+Cao&family=Long+Cang&family=Zhi+Mang+Xing&family=Playfair+Display:wght@400;700;900&family=LXGW+WenKai&family=LXGW+WenKai+Mono&family=Zhi+Mang+Xing&family=Huang+You&family=Merriweather:wght@300;400;700;900&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Oswald:wght@200;300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&subset=chinese-simplified&display=swap" rel="stylesheet">
-    <link href="https://unknown123485.github.io/assets/fonts/jinghua/result.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Montserrat:wght@400;700&family=Lora:ital,wght@0,400;1,400&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@200;300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;700&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&family=Liu+Jian+Mao+Cao&family=Long+Cang&family=Zhi+Mang+Xing&family=Playfair+Display:wght@400;700;900&family=LXGW+WenKai&family=LXGW+WenKai+Mono&family=Merriweather:wght@300;400;700;900&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Oswald:wght@200;300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&subset=chinese-simplified&display=swap" rel="stylesheet">
+    <link href="fonts/hyzhengyuan/result.css" rel="stylesheet">
+    <link href="fonts/jinghuaoldsong/result.css" rel="stylesheet">
+    <link href="fonts/huiwenmingchao/result.css" rel="stylesheet">
+    <link rel="preload" href="fonts/hyzhengyuan/HYZhengYuan-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/huiwenmingchao/HuiWenMingChao-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
     <style>
         :root {
             --bg-base: #050508;
@@ -17,15 +21,15 @@
             --text-primary: #ffffff;
             --glass-blur: 50px;
             --dwell-time: 2000;
-            --font-size-base: 4rem;
+            --font-size-base: 5rem;
             --font-weight: 400;
             --font-sans: 'Montserrat', sans-serif;
             --font-serif: 'Noto Serif SC', 'EB Garamond', serif;
             --line-height: 1.35;
             --letter-spacing: 0em;
             --dpi-scale: 1;
-            --lg-blur: 60px;
-            --lg-saturate: 220%;
+            --lg-blur: 28px;
+            --lg-saturate: 180%;
             --lg-opacity: 1;
             --lg-refraction: 1.05;
             --lg-chromatic-r: 0.5px;
@@ -417,6 +421,232 @@
             letter-spacing: 0.15em;
             text-shadow: 0 0 8px rgba(0,0,0,0.06);
         }
+        .theme-depth-field {
+            --bg-base: #f2f0ec; --accent: #4a4a4a; --text-primary: #1a1a1a;
+            --bg-gradient: radial-gradient(circle at 50% 50%, #f5f3ef 0%, #e8e6e0 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-depth-field .display-area {
+            background: transparent !important;
+        }
+        .theme-depth-field .display-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .theme-depth-field .sentence-text {
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .theme-gallery-spotlight {
+            --bg-base: #1a1a1a; --accent: #e8dcc8; --text-primary: #f0e8d8;
+            --bg-gradient: radial-gradient(circle at 50% 40%, rgba(232,220,200,0.06) 0%, transparent 50%),
+                           linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-gallery-spotlight .display-area {
+            background: transparent !important;
+        }
+        .theme-gallery-spotlight .display-area::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 60%;
+            background: radial-gradient(ellipse, rgba(232,220,200,0.1) 0%, rgba(232,220,200,0.03) 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: spotlightBreath 4s ease-in-out infinite;
+        }
+        @keyframes spotlightBreath {
+            0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+        }
+        .theme-fluid-ink {
+            --bg-base: #f5f0e8; --accent: #0a0a0a; --text-primary: #0a0a0a;
+            --bg-gradient: linear-gradient(135deg, #f5f0e8 0%, #efe8dc 50%, #f2ede4 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-fluid-ink .display-area {
+            background: transparent !important;
+        }
+        .theme-fluid-ink .sentence-text {
+            font-weight: 900;
+            letter-spacing: 0.02em;
+        }
+        .theme-fluid-ink .display-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+        .theme-fluid-ink .nav-bar-luxury {
+            background: rgba(245, 240, 232, 0.95) !important;
+            border-top: 0.5px solid rgba(10, 10, 10, 0.1) !important;
+        }
+        .theme-fluid-ink .control-btn,
+        .theme-fluid-ink .bottom-control-btn {
+            color: #0a0a0a !important;
+        }
+        .theme-analog-hifi {
+            --bg-base: #1C1C1E; --accent: #D95C14; --text-primary: #A1A1A6;
+            --bg-gradient: linear-gradient(180deg, #1C1C1E 0%, #161618 100%);
+            --font-display: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        .theme-analog-hifi .display-area {
+            background: transparent !important;
+        }
+        .theme-analog-hifi .sentence-text {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: calc(var(--font-size-base) * 0.38 * var(--dpi-scale));
+        }
+        .theme-analog-hifi .control-btn,
+        .theme-analog-hifi .bottom-control-btn {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+        .theme-analog-hifi .nav-bar-luxury {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            border-top: 0.5px solid rgba(217, 92, 20, 0.3) !important;
+        }
+        .theme-analog-hifi .status-badge {
+            border-radius: 0 !important;
+        }
+        .theme-silver-halide {
+            --bg-base: #F5F5F0; --accent: #2C2C2B; --text-primary: #2C2C2B;
+            --bg-gradient: linear-gradient(135deg, #F5F5F0 0%, #EDEDE8 50%, #F0F0EB 100%);
+            --font-display: var(--font-serif);
+        }
+        .theme-silver-halide .display-area {
+            background: transparent !important;
+        }
+        .theme-silver-halide .display-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.7;
+        }
+        .theme-silver-halide .sentence-text {
+            font-weight: 400;
+            letter-spacing: 0.03em;
+        }
+        .film-grain-overlay {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.035;
+            mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+        .film-grain-overlay.animated {
+            animation: grainShift 0.12s steps(3) infinite;
+        }
+        @keyframes grainShift {
+            0% { transform: translate(0, 0); }
+            33% { transform: translate(-2px, 1px); }
+            66% { transform: translate(1px, -2px); }
+            100% { transform: translate(-1px, 2px); }
+        }
+        .sentence-text.anim-cine-focus {
+            opacity: 0;
+            filter: blur(20px);
+            transform: scale(0.97);
+            transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sentence-text.anim-cine-focus.active {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1);
+        }
+        .sentence-text.anim-cine-focus.exit {
+            opacity: 0;
+            filter: blur(16px);
+            transform: scale(1.02);
+            transition: opacity 400ms cubic-bezier(0.7, 0, 0.84, 0),
+                        transform 400ms cubic-bezier(0.7, 0, 0.84, 0);
+        }
+        .sentence-text.anim-ink-spread {
+            opacity: 0;
+            clip-path: inset(50% 50% 50% 50%);
+            filter: blur(4px);
+            transition: opacity 600ms cubic-bezier(0.23, 1, 0.32, 1),
+                        clip-path 800ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .sentence-text.anim-ink-spread.active {
+            opacity: 1;
+            clip-path: inset(0% 0% 0% 0%);
+            filter: blur(0);
+        }
+        .sentence-text.anim-ink-spread.exit {
+            opacity: 0;
+            clip-path: inset(0% 0% 100% 0%);
+            filter: blur(2px);
+            transition: opacity 400ms ease, clip-path 500ms ease, filter 400ms ease;
+        }
+        .darkroom-exposure .sentence-text {
+            transition: filter 400ms ease, opacity 400ms ease;
+        }
+        .darkroom-exposure .sentence-text:hover {
+            filter: brightness(1.3) contrast(1.2);
+        }
+        .darkroom-exposure .sentence-text:active {
+            filter: brightness(1.6) contrast(1.4);
+            transition: filter 800ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .theme-silver-halide .sentence-text:hover {
+            filter: brightness(0.85) contrast(1.3) !important;
+            transition: filter 400ms ease !important;
+        }
+        .theme-silver-halide .sentence-text:active {
+            filter: brightness(0.7) contrast(1.5) !important;
+            transition: filter 800ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .theme-gallery-spotlight .sentence-text:hover {
+            filter: brightness(1.4) contrast(1.15) !important;
+        }
+        .theme-gallery-spotlight .sentence-text:active {
+            filter: brightness(1.8) contrast(1.3) !important;
+            transition: filter 600ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .depth-field-active .sentence-text {
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .gallery-spotlight-active .display-area::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 50%;
+            background: radial-gradient(ellipse, rgba(232,220,200,0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .analog-hifi-divider {
+            width: 100%;
+            height: 0.5px;
+            background: rgba(161,161,166,0.15);
+        }
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
@@ -452,6 +682,9 @@
         }
 
         .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; background: var(--bg-gradient); padding-top: env(safe-area-inset-top, 0px); }
+
+        .liquid-glass, .liquid-glass-btn, .nav-bar-luxury, .bottom-control-btn, .status-badge-setting, .status-badge, .entry-card, .toc-modal-content, .about-detail, .home-settings-panel, .theme-detail-panel, .crystal-dot, .glass-panel, .luxury-fab { will-change: transform; transform: translateZ(0); }
+        .display-area, #bg-layer, .film-grain-overlay, #display-screen, .app-container { will-change: transform; }
 
         /* ===== Liquid Glass 六层渲染结构 ===== */
         .liquid-glass {
@@ -872,10 +1105,6 @@
         .glow-active .status-badge-setting {
             box-shadow: 0 0 12px rgba(123,97,255,0.4);
         }
-        .glow-active .entry-card {
-            box-shadow: 0 0 20px rgba(123,97,255,0.2), 0 20px 60px rgba(0,0,0,0.3);
-        }
-
         .home-settings-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.5); z-index: 199;
@@ -883,26 +1112,26 @@
         }
         .home-settings-overlay.active { opacity: 1; pointer-events: auto; }
         
-        .about-module { margin-top: 2rem; text-align: center; position: relative; }
+        .about-module { margin-top: 0; text-align: center; position: relative; }
         .about-content { 
-            display: inline-flex; align-items: center; gap: 0.5rem; 
-            padding: 0.5rem 1.4rem; border-radius: 30px; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.3rem; 
+            padding: 0.19rem 0.8rem; border-radius: 999px; cursor: pointer;
             background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%);
             border: 1px solid rgba(255,255,255,0.15);
             backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.35);
             transition: all 0.3s ease;
             margin-top: 0.8rem;
         }
         .about-content:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); }
-        .about-content:active { transform: scale(0.96); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+        .about-content:active { transform: scale(0.96); box-shadow: inset 0 1px 4px rgba(0,0,0,0.3); }
         .about-icon { 
-            width: 14px; height: 14px; border-radius: 50%; 
+            width: 8px; height: 8px; border-radius: 50%; 
             border: 1.5px solid var(--accent); display: flex; align-items: center; justify-content: center;
-            font-family: 'EB Garamond', serif; font-size: 0.55rem; font-style: italic; 
+            font-family: 'EB Garamond', serif; font-size: 0.35rem; font-style: italic; 
             color: var(--accent); line-height: 1; font-weight: 700;
         }
-        .about-label { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; color: var(--text-primary); opacity: 0.5; letter-spacing: 0.15em; text-transform: uppercase; }
+        .about-label { font-family: 'Montserrat', sans-serif; font-size: 0.4rem; color: var(--text-primary); opacity: 0.5; letter-spacing: 0.15em; text-transform: uppercase; }
         .about-detail { 
             display: none; position: fixed;
             left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -910,7 +1139,16 @@
             background: rgba(20,20,30,0.95); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.2rem;
             z-index: 10000; scrollbar-width: none;
+            font-family: 'Noto Serif SC', serif !important;
+            font-size: 1.04rem;
         }
+        .about-detail * { font-family: 'Noto Serif SC', serif !important; }
+        .about-detail .about-detail-header { font-size: 1.28rem; }
+        .about-detail .about-author-name { font-size: 1.44rem; }
+        .about-detail .about-author-role { font-size: 1.04rem; }
+        .about-detail .av-num { font-size: 1.2rem; }
+        .about-detail .av-date { font-size: 0.96rem; }
+        .about-detail .av-desc { font-size: 1.04rem; line-height: 1.6; }
         .about-detail.open { display: block; }
         .about-detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; color: var(--text-primary); opacity: 0.8; }
         .about-close { cursor: pointer; opacity: 0.7; font-size: 1rem; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s ease; }
@@ -928,21 +1166,22 @@
 
         .entry-container { display: flex; flex-direction: column; gap: 0.8rem; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
         .entry-card { 
-            width: 100%; max-width: 280px; padding: 0.8rem 1.2rem; background: rgba(255, 255, 255, 0.04); 
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
-            backdrop-filter: blur(20px); transition: 0.3s ease;
+            width: 100%; max-width: 280px; padding: 0.8rem 1.2rem; 
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%); 
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px;
+            backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             display: flex; flex-direction: row; align-items: center; text-align: left;
             cursor: pointer; position: relative; overflow: hidden; gap: 0.8rem;
         }
-        .entry-card:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--accent); }
-        .entry-card:active { transform: scale(0.97); background: rgba(255,255,255,0.03); }
-        .entry-card svg { width: 24px; height: 24px; fill: var(--accent); margin: 0; opacity: 0.7; flex-shrink: 0; }
+        .entry-card:hover { background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.14) 100%); border-color: rgba(255,255,255,0.25); box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 1px 2px rgba(255,255,255,0.5); }
+        .entry-card:active { transform: scale(0.97); background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.04) 100%); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2); }
+        .entry-card svg { width: 24px; height: 24px; fill: var(--text-primary); margin: 0; opacity: 0.9; flex-shrink: 0; }
         .entry-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0; }
         .entry-desc { font-size: 0.65rem; opacity: 0.4; line-height: 1.4; }
-        .liquid-upload-card { padding: 0.8rem 1.2rem !important; border-radius: 30px !important; background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%) !important; backdrop-filter: blur(20px) saturate(150%) !important; -webkit-backdrop-filter: blur(20px) saturate(150%) !important; border: 1px solid rgba(255,255,255,0.15) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4) !important; }
-        .liquid-upload-card:hover { background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.14) 100%) !important; border-color: rgba(255,255,255,0.25) !important; box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 1px 2px rgba(255,255,255,0.5) !important; }
-        .liquid-upload-card:active { transform: scale(0.97) !important; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2) !important; }
-        .liquid-upload-icon { width: 24px; height: 24px; margin: 0; color: var(--accent); opacity: 1; flex-shrink: 0; }
+        .liquid-upload-card { border-radius: 20px !important; }
+        .liquid-upload-icon { width: 24px; height: 24px; margin: 0; color: var(--text-primary); opacity: 1; flex-shrink: 0; }
         .liquid-upload-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2.8; margin: 0; }
         .liquid-upload-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 0; }
         .liquid-upload-desc { font-size: 0.6rem; opacity: 0.35; letter-spacing: 0.03em; color: var(--text-primary); }
@@ -1038,10 +1277,11 @@
             font-weight: var(--font-weight); line-height: var(--line-height, 1.35); 
             letter-spacing: var(--letter-spacing, 0em);
             opacity: 0; transform: translateY(100px) scale(0.85); 
-            filter: blur(30px); transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
+            filter: blur(30px); transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
             max-width: 85vw; word-wrap: break-word;
             white-space: pre-wrap;
             word-break: normal; line-break: strict; hyphens: none;
+            will-change: opacity, transform;
         }
         .sentence-text.smart-break {
             word-break: keep-all; line-break: strict; overflow-wrap: break-word;
@@ -1053,17 +1293,17 @@
         .sentence-text.exit { opacity: 0 !important; filter: blur(30px) !important; transform: scale(1.1) !important; z-index: 1; pointer-events: none; }
 
         /* 动画方式 - 渐入渐出 (默认) */
-        .sentence-text.anim-fade { opacity: 0; transform: translateY(50px) scale(0.95); filter: blur(10px); transition: all 1s cubic-bezier(0.23, 1, 0.32, 1); }
+        .sentence-text.anim-fade { opacity: 0; transform: translateY(50px) scale(0.95); filter: blur(10px); transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1), transform 1s cubic-bezier(0.23, 1, 0.32, 1); }
         .sentence-text.anim-fade.active { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         .sentence-text.anim-fade.exit { opacity: 0; transform: translateY(-50px) scale(0.95); filter: blur(10px); }
 
         /* 动画方式 - 滑动 */
-        .sentence-text.anim-slide { opacity: 0; transform: translateX(-100px); transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+        .sentence-text.anim-slide { opacity: 0; transform: translateX(-100px); transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
         .sentence-text.anim-slide.active { opacity: 1; transform: translateX(0); }
         .sentence-text.anim-slide.exit { opacity: 0; transform: translateX(100px); }
 
         /* 动画方式 - 缩放 */
-        .sentence-text.anim-scale { opacity: 0; transform: scale(0.5); transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+        .sentence-text.anim-scale { opacity: 0; transform: scale(0.5); transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
         .sentence-text.anim-scale.active { opacity: 1; transform: scale(1); }
         .sentence-text.anim-scale.exit { opacity: 0; transform: scale(1.2); }
 
@@ -1078,18 +1318,46 @@
         }
         @keyframes cursor-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
+        @keyframes float {
+            0%, 100% { transform: translateZ(0) translateY(0); }
+            50% { transform: translateZ(0) translateY(-6px); }
+        }
+
+        .reading-active { --eink-animation: none !important; }
+        .reading-active .entry-card,
+        .reading-active .liquid-glass,
+        .reading-active .liquid-glass-btn,
+        .reading-active .nav-bar-luxury,
+        .reading-active .bottom-control-btn,
+        .reading-active .status-badge,
+        .reading-active .status-badge-setting,
+        .reading-active .glass-panel,
+        .reading-active .luxury-fab { animation: none !important; }
+
+        @keyframes pulsate {
+            0%, 100% { box-shadow: 0 0 15px rgba(123,97,255,0.15), 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4); }
+            50% { box-shadow: 0 0 25px rgba(123,97,255,0.3), 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4); }
+        }
+        .glow-active .entry-card {
+            animation: pulsate 3s ease-in-out infinite;
+        }
+        .glow-active .about-content {
+            animation: pulsate 3s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+
         /* 动画方式 - 模糊效果 */
-        .sentence-text.anim-blur { opacity: 0; filter: blur(30px); transition: all 1.2s ease; }
+        .sentence-text.anim-blur { opacity: 0; filter: blur(30px); transition: opacity 1.2s ease, transform 1.2s ease; }
         .sentence-text.anim-blur.active { opacity: 1; filter: blur(0); }
         .sentence-text.anim-blur.exit { opacity: 0; filter: blur(30px); }
 
         /* 动画方式 - 弹跳效果 */
-        .sentence-text.anim-bounce { opacity: 0; transform: translateY(100px) scale(0.8); transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .sentence-text.anim-bounce { opacity: 0; transform: translateY(100px) scale(0.8); transition: opacity 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         .sentence-text.anim-bounce.active { opacity: 1; transform: translateY(0) scale(1); }
         .sentence-text.anim-bounce.exit { opacity: 0; transform: translateY(-100px) scale(0.8); }
 
         /* 动画方式 - 翻转效果 */
-        .sentence-text.anim-flip { opacity: 0; transform: rotateY(90deg); transition: all 0.8s ease; }
+        .sentence-text.anim-flip { opacity: 0; transform: rotateY(90deg); transition: opacity 0.8s ease, transform 0.8s ease; }
         .sentence-text.anim-flip.active { opacity: 1; transform: rotateY(0deg); }
         .sentence-text.anim-flip.exit { opacity: 0; transform: rotateY(-90deg); }
 
@@ -1122,6 +1390,9 @@
             height: 100vh;
             padding: 3rem 4rem;
             border-radius: 0;
+            position: relative;
+            top: auto;
+            transform: rotate(-0.1deg) translateX(var(--paper-x, 0)) translateY(var(--paper-y, 0));
         }
         .theme-retro-typewriter .display-area { background: transparent; align-items: flex-start; padding-top: 5vh; overflow: visible; text-align: left; }
         .theme-retro-typewriter .sentence-text { 
@@ -1209,18 +1480,6 @@
             z-index: 20;
             transform: rotate(-1deg);
             pointer-events: none;
-        }
-        
-        .typewriter-paper {
-            position: absolute;
-            top: min(-200px, -25vh);
-            width: min(500px, 60%);
-            height: min(180px, 22vh);
-            background: white;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 20;
-            transform: rotate(-1deg);
         }
         
         /* 纸张折角 */
@@ -2171,6 +2430,11 @@
             font-family: var(--font-display);
             font-size: 0.9rem;
             transition: background 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .file-list-item:hover {
             background: rgba(255,255,255,0.12);
@@ -2196,6 +2460,160 @@
             position: relative;
             z-index: 10;
             pointer-events: auto;
+        }
+        .theme-carousel-wrap {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0.5rem 0;
+            margin-top: 0.4rem;
+            scroll-snap-type: x mandatory;
+            position: relative;
+            scroll-behavior: smooth;
+            will-change: transform;
+        }
+        .theme-carousel-wrap::-webkit-scrollbar { display: none; }
+        .theme-carousel {
+            display: flex;
+            gap: 0.7rem;
+            padding: 0 calc(50% - 30px);
+            width: max-content;
+        }
+        .theme-carousel-item {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            scroll-snap-align: center;
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.25);
+            will-change: transform;
+        }
+        .theme-carousel-item.active {
+            border-color: var(--accent);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -1px 0 rgba(0,0,0,0.1), 0 0 20px rgba(123, 97, 255, 0.5), 0 6px 16px rgba(0,0,0,0.35);
+            transform: scale(1.18);
+        }
+        .theme-carousel-item:active {
+            transform: scale(0.92);
+        }
+        .theme-carousel-item .carousel-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size: 0.38rem;
+            color: white;
+            text-align: center;
+            padding: 2px 0;
+            background: rgba(0,0,0,0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+        .theme-carousel-indicator {
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid var(--accent);
+            margin: 5px auto 0;
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 0 4px var(--accent));
+        }
+        .theme-carousel-indicator.bounce {
+            transform: translateY(3px);
+        }
+        .theme-carousel-current-label {
+            text-align: center;
+            font-size: 0.65rem;
+            color: var(--text-primary);
+            opacity: 0.7;
+            margin-top: 4px;
+            min-height: 1em;
+            transition: opacity 0.3s ease;
+        }
+        .theme-select-expanded .theme-select-section ~ *:not(.theme-select-section) {
+            opacity: 0.1;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .theme-select-expanded .theme-select-section {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .mode-theme-preview .home-settings-section:not(.theme-select-section) {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .mode-theme-preview .theme-select-section {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .theme-current-capsule {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            margin-bottom: 0.3rem;
+            user-select: none;
+        }
+        .theme-current-capsule:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.14) 100%);
+            border-color: rgba(255,255,255,0.25);
+        }
+        .theme-current-capsule:active {
+            transform: scale(0.97);
+        }
+        .theme-current-capsule .capsule-color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.3);
+            flex-shrink: 0;
+        }
+        .theme-current-capsule .capsule-name {
+            font-size: 0.7rem;
+            color: var(--text-primary);
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+        }
+        .theme-current-capsule .capsule-arrow {
+            font-size: 0.5rem;
+            color: var(--text-primary);
+            opacity: 0.4;
+            transition: transform 0.3s ease;
+        }
+        .theme-current-capsule.expanded .capsule-arrow {
+            transform: rotate(180deg);
+        }
+        .theme-carousel-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+        .theme-carousel-panel.open {
+            max-height: 200px;
+            opacity: 1;
         }
         .theme-detail-item {
             display: flex;
@@ -2956,9 +3374,9 @@
                 margin-bottom: 1.5rem;
             }
             .entry-container {
-                max-width: 90vw;
+                max-width: 95vw;
                 gap: 0.5rem;
-                padding: 0 1rem;
+                padding: 0 0.5rem;
             }
             .entry-card {
                 width: 100%;
@@ -2966,8 +3384,10 @@
                 padding: 0.7rem 1rem;
                 border-radius: 10px;
             }
+            .liquid-upload-card { padding: 0.9rem 1.2rem !important; }
             .entry-card svg { width: 20px; height: 20px; }
-            .entry-title { font-size: 0.85rem; }
+            .entry-title { font-size: 1.06rem; }
+            .liquid-upload-title { font-size: 1.06rem; }
             .entry-desc { display: none; }
             .luxury-glass { padding: 1.2rem; }
             .text-input { font-size: 1rem; }
@@ -2981,12 +3401,16 @@
                 max-height: 80vh;
                 border-radius: 20px;
             }
+            .theme-detail-panel {
+                max-height: 200px;
+                position: relative;
+            }
             .control-group {
                 gap: 0.6rem;
             }
             .slider-wrap,
             .select-wrap { max-width: none; }
-            .slider-label { font-size: 0.6rem; }
+            .slider-label { font-size: 0.75rem; }
             .opacity-gauge { width: 100px; height: 100px; }
             .control-btn {
                 padding: 0.4rem;
@@ -3021,6 +3445,7 @@
             }
             .toc-item { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
             .toc-sub-item { font-size: 0.72rem; padding: 0.3rem 0.8rem 0.3rem 1.6rem; }
+            .about-module { margin-top: 0.3rem; }
         }
         @media (min-width: 1200px) and (min-height: 800px) {
             .entry-container {
@@ -3209,7 +3634,9 @@
                             <div class="font-option" data-font="'Noto Serif SC', serif" onclick="setHomeFont(this)">思源宋体</div>
                             <div class="font-option" data-font="'Noto Sans SC', sans-serif" onclick="setHomeFont(this)">思源黑体</div>
                             <div class="font-option" data-font="'LXGW WenKai', serif" onclick="setHomeFont(this)">霞鹜文楷</div>
-                            <div class="font-option" data-font="'Jinghua Old Song', serif" onclick="setHomeFont(this)">昌黎宋刻本</div>
+                            <div class="font-option" data-font="'HYZhengYuan', sans-serif" onclick="setHomeFont(this)">汉仪正圆</div>
+                            <div class="font-option" data-font="'JingHuaOldSong', serif" onclick="setHomeFont(this)">京华老宋体</div>
+                            <div class="font-option" data-font="'HuiWenMingChao', serif" onclick="setHomeFont(this)">汇文明朝体</div>
                             <div class="font-option" data-font="system-ui, sans-serif" onclick="setHomeFont(this)">系统默认</div>
                         </div>
                     </div>
@@ -3231,6 +3658,15 @@
                     <div class="slider-wrap" style="max-width:100%;">
                         <div class="slider-label">文字流颜色</div>
                         <input type="color" id="matrix-color-picker" value="#00ff88" onchange="updateMatrixColor(this.value)" style="width:36px;height:28px;border:none;background:none;cursor:pointer;border-radius:4px;">
+                    </div>
+                </div>
+                <div class="home-settings-section">
+                    <button id="preload-themes-btn" onclick="preloadAllThemesAndFonts()" style="width:100%;padding:0.6rem 1rem;border:1px solid rgba(255,255,255,0.12);border-radius:12px;background:rgba(255,255,255,0.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text-primary);font-size:0.8rem;cursor:pointer;transition:all 0.3s ease;font-family:inherit;">预载全部主题与字体</button>
+                    <div id="preload-progress-wrap" style="display:none;margin-top:0.5rem;">
+                        <div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+                            <div id="preload-progress-bar" style="width:0%;height:100%;background:var(--accent);border-radius:2px;transition:width 0.3s ease;"></div>
+                        </div>
+                        <div id="preload-progress-text" style="font-size:0.65rem;opacity:0.5;margin-top:0.3rem;text-align:center;"></div>
                     </div>
                 </div>
             </div>
@@ -3302,12 +3738,27 @@
                     </div>
                     <div class="about-version-list">
                         <div class="about-version-item">
-                            <div class="av-num">v5.2 <span class="about-current-badge">CURRENT</span></div>
+                            <div class="av-num">v6.0 <span class="about-current-badge">BETA</span></div>
                             <div class="av-date">04月21日</div>
-                            <div class="av-desc">修复Chrome选书后不跳转：重写文件选择逻辑支持多文件：修复书影矩阵底部像素堆积与重影（随机发射+非线性渐变+分层视差+强制回收）：修复About面板居中与图标缩小：修复手机全屏强制横屏：修复设置/页码按钮与状态栏重叠：修复设置面板侧滑条：Glow发光效果增加强度滑块：修复首页字体选择按钮无法点击：修复主题切换手机端无响应：添加文字流颜色选择面板：Matrix文件选择器支持EPUB：图标色深与粗细对齐：星空/极光/矩阵主题交互增强</div>
+                            <div class="av-desc">底层性能优化大更新：字体按需加载精简Google Fonts权重：主题CSS按需动态注入+预载全部主题与字体按钮+进度条：液态玻璃blur值优化(60→28px)+saturate优化(220→180%)+will-change加速：句子过渡动画升级(transition: all→opacity/transform)+去除blur过渡保留静态值：float动画阅读态自动暂停：打字机效果setInterval→requestAnimationFrame：强制GPU硬件加速(translateZ(0)+will-change)：事件节流防抖(scroll/mousemove/touch→rAF)：EPUB解析移至Web Worker后台线程：虚拟列表/DOM节点复用技术</div>
                         </div>
                         <div class="about-version-item">
-                            <div class="av-num">v5.1</div>
+                            <div class="av-num">v5.5 <span class="about-current-badge">STABLE</span></div>
+                            <div class="av-date">04月21日</div>
+                            <div class="av-desc">书影矩阵全面重构：更密集纵向通道+全屏随机发射+三层景深视差+领航字符高发光Bloom+平滑拖尾消除底部像素堆积+鼠标磁力避让与局部点亮+触屏交互：主题选择器线性拨盘重构：胶囊式当前主题+横向滚动拨盘+三角形实时定位+展开时其他UI透明化+主题色随滑动瞬间渲染：字体库重构：移除汉仪昌黎宋刻本+新增汉仪正圆/京华老宋体/汇文明朝体+Web端切片化WOFF2部署：背景调节零延迟跟手优化：Glow按钮呼吸波动动画修复：滑块交互修复：移动端状态栏沉浸式主题色联动：按钮液态玻璃凸起质感统一</div>
+                        </div>
+                        <div class="about-version-item">
+                            <div class="av-num">v5.4</div>
+                            <div class="av-date">04月21日</div>
+                            <div class="av-desc">新增5套摄影级主题：物理景深/画廊光影/动态墨迹/模拟无损/银盐暗房：动态银盐颗粒(Film Grain)滤镜：电影级焦段转场动画：墨迹洇开转场动画：暗房显影式交互效果</div>
+                        </div>
+                        <div class="about-version-item">
+                            <div class="av-num">v5.3</div>
+                            <div class="av-date">04月21日</div>
+                            <div class="av-desc">修复复古打字机主题显示：首页字体选择同步到黑客帝国文字流：修复手机网页版选文件后不跳转：手机app沉浸式状态栏适配：修复手机主题选择列表位置：修复手机文件列表右侧溢出：手机按钮长度增加25%：内部字体等比放大25%：About缩小50%+思源宋体+文本放大60%：新增主题滑轮切换：文件夹记忆功能</div>
+                        </div>
+                        <div class="about-version-item">
+                            <div class="av-num">v5.2</div>
                             <div class="av-date">04月20日</div>
                             <div class="av-desc">重构书影矩阵文字流：实现语义化句子提取：优化代码流动态光影与发光算法</div>
                         </div>
@@ -3512,7 +3963,7 @@
                 <div class="paper-holder"></div>
                 
                 <!-- 纸张 -->
-                <div class="typewriter-paper machine-paper">
+                <div class="machine-paper">
                     <div class="paper-corner"></div>
                 </div>
                 
@@ -3599,7 +4050,9 @@
                             </div>
                             <div class="custom-font-select-dropdown" id="custom-font-select-dropdown">
                                 <div class="font-category">中文印刷体</div>
-                                <div class="font-option" data-font="Jinghua Old Song">汉仪昌黎宋刻本</div>
+                                <div class="font-option" data-font="HYZhengYuan">汉仪正圆</div>
+                                <div class="font-option" data-font="JingHuaOldSong">京华老宋体</div>
+                                <div class="font-option" data-font="HuiWenMingChao">汇文明朝体</div>
                                 <div class="font-option" data-font="Noto Serif SC">思源宋体</div>
                                 <div class="font-option" data-font="Noto Sans SC">思源黑体</div>
                                 <div class="font-option" data-font="Noto Serif TC">思源宋体繁</div>
@@ -3640,7 +4093,9 @@
                         </div>
                         <select class="font-select" id="font-select" onchange="updateFont()" style="display: none;">
                             <optgroup label="中文印刷体">
-                                <option value="Jinghua Old Song">汉仪昌黎宋刻本</option>
+                                <option value="HYZhengYuan">汉仪正圆</option>
+                                <option value="JingHuaOldSong">京华老宋体</option>
+                                <option value="HuiWenMingChao">汇文明朝体</option>
                                 <option value="Noto Serif SC">思源宋体</option>
                                 <option value="Noto Sans SC">思源黑体</option>
                                 <option value="Noto Serif TC">思源宋体繁</option>
@@ -3702,6 +4157,8 @@
                                 <div class="font-option" data-anim="blur">模糊</div>
                                 <div class="font-option" data-anim="bounce">弹跳</div>
                                 <div class="font-option" data-anim="flip">翻转</div>
+                                <div class="font-option" data-anim="cine-focus">焦段转场</div>
+                                <div class="font-option" data-anim="ink-spread">墨迹洇开</div>
                             </div>
                         </div>
                         <select class="anim-select" id="anim-select" onchange="updateAnim()" style="display: none;">
@@ -3712,6 +4169,8 @@
                             <option value="blur">模糊</option>
                             <option value="bounce">弹跳</option>
                             <option value="flip">翻转</option>
+                            <option value="cine-focus">焦段转场</option>
+                            <option value="ink-spread">墨迹洇开</option>
                         </select>
                     </div>
                     <div class="action-buttons-row">
@@ -3731,15 +4190,17 @@
                 </div>
                 
                 <div class="themes-section theme-select-section">
-                    <div class="custom-font-select" id="custom-theme-select">
-                        <div class="custom-font-select-header" id="custom-theme-select-header">
-                            <span id="selected-theme-name">深邃暗夜</span>
-                            <span class="dropdown-icon">▼</span>
-                        </div>
-                        <div class="custom-font-select-dropdown" id="custom-theme-select-dropdown">
-                        </div>
+                    <div class="theme-current-capsule" id="theme-current-capsule" onclick="toggleThemeCarousel()">
+                        <span class="capsule-color-dot" id="capsule-color-dot"></span>
+                        <span class="capsule-name" id="capsule-theme-name">当前主题</span>
+                        <span class="capsule-arrow">▼</span>
                     </div>
-                    <div class="theme-detail-panel" id="theme-detail-panel" style="display:none;">
+                    <div class="theme-carousel-panel" id="theme-carousel-panel">
+                        <div class="theme-carousel-wrap" id="theme-carousel-wrap">
+                            <div class="theme-carousel" id="theme-carousel"></div>
+                        </div>
+                        <div class="theme-carousel-indicator" id="theme-carousel-indicator"></div>
+                        <div class="theme-carousel-current-label" id="theme-carousel-current-label"></div>
                     </div>
                 </div>
                 
@@ -3915,7 +4376,22 @@
             }
         })();
 
-        // --- Markdown 解析逻辑 (纯文本提取) ---
+        (function() {
+            try {
+                var saved = localStorage.getItem('lastFolderFiles');
+                var savedTime = localStorage.getItem('lastFolderTime');
+                if (saved && savedTime) {
+                    var names = JSON.parse(saved);
+                    var timeDiff = Date.now() - parseInt(savedTime);
+                    var daysAgo = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    var folderDesc = document.getElementById('folder-desc');
+                    if (folderDesc && names.length > 0) {
+                        var timeLabel = daysAgo === 0 ? '今天' : daysAgo + '天前';
+                        folderDesc.textContent = names.length + '个文件 (' + timeLabel + ')';
+                    }
+                }
+            } catch(e) {}
+        })();
         function parseMarkdown(md) {
             return md
                 .replace(/^#+\s+/gm, '') // 移除标题 #
@@ -3934,54 +4410,73 @@
         }
 
         // --- EPUB 解析核心逻辑 ---
+        var epubWorkerCode = `
+            importScripts('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+            self.onmessage = async function(e) {
+                try {
+                    var fileData = e.data;
+                    var zip = await JSZip.loadAsync(fileData);
+                    var containerXml = await zip.file('META-INF/container.xml').async('string');
+                    var opfPathMatch = containerXml.match(/full-path="([^"]+)"/);
+                    if (!opfPathMatch) { self.postMessage({error: 'Invalid EPUB: no container.xml'}); return; }
+                    var opfPath = opfPathMatch[1];
+                    var opfDir = opfPath.substring(0, opfPath.lastIndexOf('/')) + (opfPath.includes('/') ? '/' : '');
+                    var opfXml = await zip.file(opfPath).async('string');
+                    var parser = new DOMParser();
+                    var opfDoc = parser.parseFromString(opfXml, 'text/xml');
+                    var manifest = {};
+                    opfDoc.querySelectorAll('manifest > item').forEach(function(el) {
+                        manifest[el.getAttribute('id')] = el.getAttribute('href');
+                    });
+                    var spineIds = Array.from(opfDoc.querySelectorAll('spine > itemref')).map(function(el) { return el.getAttribute('idref'); });
+                    var fullText = '';
+                    for (var i = 0; i < spineIds.length; i++) {
+                        var href = manifest[spineIds[i]];
+                        var contentFile = zip.file(opfDir + href);
+                        if (contentFile) {
+                            var html = await contentFile.async('string');
+                            var doc = parser.parseFromString(html, 'text/html');
+                            doc.querySelectorAll('script, style').forEach(function(s) { s.remove(); });
+                            fullText += doc.body.innerText + '\\n\\n';
+                        }
+                    }
+                    self.postMessage({text: fullText});
+                } catch(err) {
+                    self.postMessage({error: err.message || String(err)});
+                }
+            };
+        `;
+        var epubWorkerBlob = new Blob([epubWorkerCode], {type: 'application/javascript'});
+        var epubWorkerUrl = URL.createObjectURL(epubWorkerBlob);
+
         async function parseEpub(file) {
             try {
-                const zip = await JSZip.loadAsync(file);
-                // 1. 查找 container.xml 获取 opf 路径
-                const containerXml = await zip.file("META-INF/container.xml").async("string");
-                const opfPath = containerXml.match(/full-path="([^"]+)"/)[1];
-                const opfDir = opfPath.substring(0, opfPath.lastIndexOf('/')) + (opfPath.includes('/') ? '/' : '');
-                
-                // 2. 解析 opf 获取阅读顺序 (spine)
-                const opfXml = await zip.file(opfPath).async("string");
-                const parser = new DOMParser();
-                const opfDoc = parser.parseFromString(opfXml, "text/xml");
-                
-                const manifest = {};
-                opfDoc.querySelectorAll('manifest > item').forEach(el => {
-                    manifest[el.getAttribute('id')] = el.getAttribute('href');
-                });
-                
-                const spineIds = Array.from(opfDoc.querySelectorAll('spine > itemref')).map(el => el.getAttribute('idref'));
-                
-                // 3. 提取所有文本内容
-                let fullText = "";
-                for (const id of spineIds) {
-                    const href = manifest[id];
-                    const contentFile = zip.file(opfDir + href);
-                    if (contentFile) {
-                        const html = await contentFile.async("string");
-                        const doc = parser.parseFromString(html, "text/html");
-                        // 移除脚本和样式
-                        doc.querySelectorAll('script, style').forEach(s => s.remove());
-                        fullText += doc.body.innerText + "\n\n";
+                var fileBuffer = await file.arrayBuffer();
+                var worker = new Worker(epubWorkerUrl);
+                worker.onmessage = function(e) {
+                    if (e.data.error) {
+                        alert('解析 EPUB 出错：' + e.data.error);
+                    } else if (e.data.text && e.data.text.trim()) {
+                        document.getElementById('text-input').value = e.data.text;
+                        startDisplay();
+                    } else {
+                        alert('无法从该 EPUB 中提取文本内容。');
                     }
-                }
-                
-                if (fullText.trim()) {
-                    document.getElementById('text-input').value = fullText;
-                    startDisplay();
-                } else {
-                    alert("无法从该 EPUB 中提取文本内容。");
-                }
+                    worker.terminate();
+                };
+                worker.onerror = function(err) {
+                    console.error('EPUB Worker error:', err);
+                    alert('解析 EPUB 出错，请确保文件格式正确。');
+                    worker.terminate();
+                };
+                worker.postMessage(fileBuffer, [fileBuffer]);
             } catch (e) {
                 console.error(e);
-                alert("解析 EPUB 出错，请确保文件格式正确。");
+                alert('解析 EPUB 出错，请确保文件格式正确。');
             }
         }
 
         function handleFileSelect(e) {
-            e.stopPropagation();
             var files = e.target.files;
             if (!files || files.length === 0) return;
             var fileInput = e.target;
@@ -3990,8 +4485,8 @@
                 var fileName = f.name.toLowerCase();
                 if (fileName.endsWith('.epub')) {
                     parseEpub(f);
-                    fileInput.value = '';
-                } else if (fileName.endsWith('.md') || fileName.endsWith('.txt')) {
+                    setTimeout(function() { fileInput.value = ''; }, 500);
+                } else if (fileName.endsWith('.md') || fileName.endsWith('.txt') || fileName.endsWith('.text') || f.type === 'text/plain') {
                     var reader = new FileReader();
                     reader.onload = function(event) {
                         var text = event.target.result;
@@ -3999,7 +4494,20 @@
                             text = parseMarkdown(text);
                         }
                         document.getElementById('text-input').value = text;
+                        setTimeout(function() { fileInput.value = ''; }, 500);
+                        startDisplay();
+                    };
+                    reader.onerror = function() {
+                        alert('文件读取失败，请重试。');
                         fileInput.value = '';
+                    };
+                    reader.readAsText(f);
+                } else {
+                    var reader = new FileReader();
+                    reader.onload = function(event) {
+                        var text = event.target.result;
+                        document.getElementById('text-input').value = text;
+                        setTimeout(function() { fileInput.value = ''; }, 500);
                         startDisplay();
                     };
                     reader.readAsText(f);
@@ -4201,6 +4709,58 @@
             if (clickSoundPool) clickSoundPool.play();
         }
 
+        function rafThrottle(fn) {
+            var rafId = null;
+            var lastArgs = null;
+            return function() {
+                var args = arguments;
+                var ctx = this;
+                if (rafId) {
+                    lastArgs = args;
+                    return;
+                }
+                rafId = requestAnimationFrame(function() {
+                    rafId = null;
+                    fn.apply(ctx, lastArgs || args);
+                    lastArgs = null;
+                });
+            };
+        }
+
+        function throttle(fn, delay) {
+            var lastCall = 0;
+            var rafId = null;
+            return function() {
+                var now = Date.now();
+                var ctx = this;
+                var args = arguments;
+                if (now - lastCall >= delay) {
+                    lastCall = now;
+                    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+                    fn.apply(ctx, args);
+                } else if (!rafId) {
+                    rafId = requestAnimationFrame(function() {
+                        lastCall = Date.now();
+                        rafId = null;
+                        fn.apply(ctx, args);
+                    });
+                }
+            };
+        }
+
+        function debounce(fn, delay) {
+            var timerId = null;
+            return function() {
+                var ctx = this;
+                var args = arguments;
+                if (timerId) clearTimeout(timerId);
+                timerId = setTimeout(function() {
+                    timerId = null;
+                    fn.apply(ctx, args);
+                }, delay);
+            };
+        }
+
         let sentences = [], currentIndex = 0, isPlaying = false, displayMode = 'random', randomOrder = [];
         let timer = null, lastTime = 0, accumulatedTime = 0, dwellTime = 3000, currentTheme = 'mystic';
         let typewriterCharIndex = 0, typewriterInterval = null, isAnimationFinished = false;
@@ -4267,6 +4827,18 @@
                 var bgBase = getComputedStyle(document.documentElement).getPropertyValue('--bg-base').trim();
                 if (bgBase) themeColorMeta.setAttribute('content', bgBase);
             }
+            if (!allThemeCssInjected && themeFontsMap[theme]) {
+                themeFontsMap[theme].forEach(function(fontStr) {
+                    var url = 'https://fonts.googleapis.com/css2?family=' + fontStr + '&display=swap';
+                    var exists = document.querySelector('link[href*="' + fontStr + '"]');
+                    if (!exists) {
+                        var link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = url;
+                        document.head.appendChild(link);
+                    }
+                });
+            }
             const savedFont = localStorage.getItem('selectedFont');
             if (savedFont) {
                 document.getElementById('font-select').value = savedFont;
@@ -4274,7 +4846,97 @@
                 if (selectedFontEl) selectedFontEl.textContent = savedFont;
                 updateFont();
             }
+            document.body.classList.remove('depth-field-active', 'gallery-spotlight-active', 'darkroom-exposure');
+            var grainOverlay = document.getElementById('film-grain-overlay');
+            if (grainOverlay) grainOverlay.remove();
+            if (theme === 'depth-field') {
+                document.body.classList.add('depth-field-active');
+            } else if (theme === 'gallery-spotlight') {
+                document.body.classList.add('gallery-spotlight-active');
+                document.body.classList.add('darkroom-exposure');
+                initFilmGrain();
+            } else if (theme === 'fluid-ink') {
+                document.body.classList.add('darkroom-exposure');
+            } else if (theme === 'analog-hifi') {
+                initFilmGrain();
+            } else if (theme === 'silver-halide') {
+                document.body.classList.add('darkroom-exposure');
+                initFilmGrain();
+            }
             if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
+        }
+
+        function initFilmGrain() {
+            if (document.getElementById('film-grain-overlay')) return;
+            var canvas = document.createElement('canvas');
+            canvas.id = 'film-grain-overlay';
+            canvas.className = 'film-grain-overlay';
+            canvas.width = 256;
+            canvas.height = 256;
+            canvas.style.cssText = 'position:fixed;top:-50%;left:-50%;width:200%;height:200%;pointer-events:none;z-index:9999;opacity:0.035;mix-blend-mode:multiply;';
+            document.body.appendChild(canvas);
+            var ctx = canvas.getContext('2d');
+            var frame = 0;
+            function renderGrain() {
+                frame++;
+                if (frame % 4 !== 0) {
+                    requestAnimationFrame(renderGrain);
+                    return;
+                }
+                var imageData = ctx.createImageData(256, 256);
+                var data = imageData.data;
+                for (var i = 0; i < data.length; i += 4) {
+                    var v = Math.random() * 255;
+                    data[i] = v;
+                    data[i + 1] = v;
+                    data[i + 2] = v;
+                    data[i + 3] = 255;
+                }
+                ctx.putImageData(imageData, 0, 0);
+                var offsetX = (Math.random() - 0.5) * 4;
+                var offsetY = (Math.random() - 0.5) * 4;
+                canvas.style.transform = 'translate(' + offsetX + 'px,' + offsetY + 'px)';
+                requestAnimationFrame(renderGrain);
+            }
+            renderGrain();
+        }
+
+        function applyDepthFieldEffect(activeEl) {
+            var area = document.getElementById('standard-area');
+            if (!area || !activeEl) return;
+            var allTexts = area.querySelectorAll('.sentence-text');
+            var centerY = window.innerHeight / 2;
+            allTexts.forEach(function(el) {
+                if (el === activeEl) {
+                    el.style.filter = 'blur(0)';
+                    el.style.opacity = '1';
+                    el.style.transform = 'scale(1)';
+                } else {
+                    var rect = el.getBoundingClientRect();
+                    var dist = Math.abs(rect.top + rect.height / 2 - centerY);
+                    var blurVal = Math.min(dist / 80, 8);
+                    var opacityVal = Math.max(1 - dist / 500, 0.1);
+                    var scaleVal = 1 - Math.min(dist / 2000, 0.05);
+                    el.style.filter = 'blur(' + blurVal + 'px)';
+                    el.style.opacity = String(opacityVal);
+                    el.style.transform = 'scale(' + scaleVal + ')';
+                }
+            });
+        }
+
+        function applyGallerySpotlightEffect(activeEl) {
+            var area = document.getElementById('standard-area');
+            if (!area || !activeEl) return;
+            var allTexts = area.querySelectorAll('.sentence-text');
+            allTexts.forEach(function(el) {
+                if (el === activeEl) {
+                    el.style.filter = 'brightness(1.1)';
+                    el.style.opacity = '1';
+                } else {
+                    el.style.filter = 'brightness(0.4)';
+                    el.style.opacity = '0.3';
+                }
+            });
         }
 
         function handleSettingsGear() {
@@ -4296,6 +4958,9 @@
             document.querySelectorAll('.mas-reader-title, .entry-card, .about-label, .about-detail').forEach(function(e) {
                 e.style.fontFamily = fontStack;
             });
+            if (typeof matrixEngine !== 'undefined' && matrixEngine) {
+                matrixEngine.fontFamily = fontStack;
+            }
         }
 
         (function() {
@@ -4339,6 +5004,72 @@
                     card.classList.toggle('active', card.getAttribute('data-home-theme') === savedHomeTheme);
                 });
             }
+        }
+
+        var themeFontsMap = {
+            'parchment': ['Cormorant+Garamond:wght@400;700'],
+            'retro-typewriter': ['Special+Elite:wght@400'],
+            'ink-wash': ['Ma+Shan+Zheng:wght@400'],
+            'jade': ['ZCOOL+XiaoWei:wght@400'],
+            'analog-hifi': ['JetBrains+Mono:wght@400;700', 'Fira+Code:wght@400'],
+            'celadon': ['Ma+Shan+Zheng:wght@400'],
+            'pine-ink': ['Ma+Shan+Zheng:wght@400'],
+            'cinnabar': ['Ma+Shan+Zheng:wght@400'],
+            'studio': ['Montserrat:wght@400;700']
+        };
+
+        var allFontUrls = [
+            'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap',
+            'https://fonts.googleapis.com/css2?family=Special+Elite:wght@400&display=swap',
+            'https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng:wght@400&display=swap',
+            'https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei:wght@400&display=swap',
+            'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap',
+            'https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap',
+            'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap',
+            'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap',
+            'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap',
+            'https://fonts.googleapis.com/css2?family=LXGW+WenKai:wght@400&display=swap'
+        ];
+
+        var allThemeCssInjected = false;
+
+        function preloadAllThemesAndFonts() {
+            var btn = document.getElementById('preload-themes-btn');
+            var progressWrap = document.getElementById('preload-progress-wrap');
+            var progressBar = document.getElementById('preload-progress-bar');
+            var progressText = document.getElementById('preload-progress-text');
+
+            if (btn.disabled) return;
+            btn.disabled = true;
+            btn.textContent = '加载中...';
+            btn.style.opacity = '0.6';
+            progressWrap.style.display = '';
+
+            var total = allFontUrls.length;
+            var loaded = 0;
+
+            function updateProgress() {
+                loaded++;
+                var pct = Math.round((loaded / total) * 100);
+                progressBar.style.width = pct + '%';
+                progressText.textContent = '正在加载 ' + loaded + '/' + total;
+                if (loaded >= total) {
+                    btn.textContent = '已就绪';
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'default';
+                    progressText.textContent = '全部加载完成';
+                    allThemeCssInjected = true;
+                }
+            }
+
+            allFontUrls.forEach(function(url) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = url;
+                link.onload = updateProgress;
+                link.onerror = updateProgress;
+                document.head.appendChild(link);
+            });
         }
 
         function setHomeTheme(theme) {
@@ -4396,11 +5127,15 @@
             if (matrixEngine) matrixEngine.setSpeed(parseInt(val));
             localStorage.setItem('matrixSpeed', val);
         }
+        var _opacityRaf = null;
         function updateMatrixOpacity(val) {
             document.getElementById('matrix-opacity-val').textContent = val + '%';
-            var canvas = document.getElementById('matrix-canvas');
-            if (canvas) canvas.style.opacity = val / 100;
             localStorage.setItem('matrixOpacity', val);
+            if (_opacityRaf) cancelAnimationFrame(_opacityRaf);
+            _opacityRaf = requestAnimationFrame(function() {
+                var canvas = document.getElementById('matrix-canvas');
+                if (canvas) canvas.style.opacity = val / 100;
+            });
         }
         var matrixUploadedFiles = [];
         function handleMatrixFileUpload(event) {
@@ -4511,6 +5246,8 @@
                     if (savedGlow === '1') matrixEngine.setGlow(true);
                     var savedText = localStorage.getItem('matrixCustomText');
                     if (savedText) matrixEngine.setCustomText(savedText);
+                    var savedHomeFont = localStorage.getItem('homeFont');
+                    if (savedHomeFont) matrixEngine.fontFamily = savedHomeFont;
                     matrixEngine.start();
                 }
             } else if (effect === 'bubbles') {
@@ -4548,7 +5285,7 @@
                 this.intervalId = null;
                 this.resize();
                 var self = this;
-                window.addEventListener('resize', function() { self.resize(); });
+                window.addEventListener('resize', debounce(function() { self.resize(); }, 150));
             }
             BubblesEngine.prototype.resize = function() {
                 this.canvas.width = this.canvas.offsetWidth;
@@ -4615,14 +5352,14 @@
                 this.smoothCY = 0.5;
                 this.resize();
                 var self = this;
-                window.addEventListener('resize', function() { self.resize(); });
-                this.canvas.addEventListener('mousemove', function(e) {
+                window.addEventListener('resize', debounce(function() { self.resize(); }, 150));
+                this.canvas.addEventListener('mousemove', rafThrottle(function(e) {
                     var rect = self.canvas.getBoundingClientRect();
                     self.targetCX = (e.clientX - rect.left) / rect.width;
                     self.targetCY = (e.clientY - rect.top) / rect.height;
                     self.mouseX = self.targetCX;
                     self.mouseY = self.targetCY;
-                });
+                }));
                 this.canvas.addEventListener('mouseleave', function() {
                     self.targetCX = 0.5;
                     self.targetCY = 0.5;
@@ -4734,12 +5471,12 @@
                 for (var i = 0; i < 512; i++) this.perm[i] = Math.floor(Math.random() * 256);
                 this.resize();
                 var self = this;
-                window.addEventListener('resize', function() { self.resize(); });
-                this.canvas.addEventListener('mousemove', function(e) {
+                window.addEventListener('resize', debounce(function() { self.resize(); }, 150));
+                this.canvas.addEventListener('mousemove', rafThrottle(function(e) {
                     var rect = self.canvas.getBoundingClientRect();
                     self.mouseX = (e.clientX - rect.left) / rect.width;
                     self.mouseY = (e.clientY - rect.top) / rect.height;
-                });
+                }));
                 this.canvas.addEventListener('click', function(e) {
                     var rect = self.canvas.getBoundingClientRect();
                     self.ripples.push({
@@ -4962,7 +5699,9 @@
         document.addEventListener('touchend', stopAdjusting);
 
         const FONT_MAP = {
-            'Jinghua Old Song': { type: 'serif', weights: '400', cdn: 'https://unknown123485.github.io/assets/fonts/jinghua/result.css' },
+            'HYZhengYuan': { type: 'sans', weights: '400;700', cdn: 'fonts/hyzhengyuan/result.css' },
+            'JingHuaOldSong': { type: 'serif', weights: '400;700', cdn: 'fonts/jinghuaoldsong/result.css' },
+            'HuiWenMingChao': { type: 'serif', weights: '400;700', cdn: 'fonts/huiwenmingchao/result.css' },
             'Noto Serif SC': { type: 'serif', weights: '200;300;400;500;600;700;900' },
             'Noto Sans SC': { type: 'sans', weights: '100;300;400;500;700;900' },
             'Noto Serif TC': { type: 'serif', weights: '200;300;400;500;600;700;900' },
@@ -5050,12 +5789,24 @@
             let lineHeight = '1.35';
             let letterSpacing = '0em';
             
-            if (font === 'Jinghua Old Song') {
-                fontDisplay = "'Jinghua Old Song', 'Noto Serif SC', 'Songti SC', serif";
-                fontSans = "'Jinghua Old Song', 'Noto Serif SC', 'Songti SC', serif";
-                fontSerif = "'Jinghua Old Song', 'Noto Serif SC', 'Songti SC', serif";
+            if (font === 'HYZhengYuan') {
+                fontDisplay = "'HYZhengYuan', 'Noto Sans SC', sans-serif";
+                fontSans = "'HYZhengYuan', 'Noto Sans SC', sans-serif";
+                fontSerif = "'HYZhengYuan', 'Noto Serif SC', serif";
+                lineHeight = '1.6';
+                letterSpacing = '0.04em';
+            } else if (font === 'JingHuaOldSong') {
+                fontDisplay = "'JingHuaOldSong', 'Noto Serif SC', 'Songti SC', serif";
+                fontSans = "'JingHuaOldSong', 'Noto Serif SC', 'Songti SC', serif";
+                fontSerif = "'JingHuaOldSong', 'Noto Serif SC', 'Songti SC', serif";
                 lineHeight = '1.75';
                 letterSpacing = '0.08em';
+            } else if (font === 'HuiWenMingChao') {
+                fontDisplay = "'HuiWenMingChao', 'Noto Serif SC', 'Songti SC', serif";
+                fontSans = "'HuiWenMingChao', 'Noto Serif SC', 'Songti SC', serif";
+                fontSerif = "'HuiWenMingChao', 'Noto Serif SC', 'Songti SC', serif";
+                lineHeight = '1.7';
+                letterSpacing = '0.06em';
             } else if (type === 'serif') {
                 fontDisplay = "'" + font + "', 'Noto Serif SC', 'EB Garamond', serif";
                 fontSans = "'" + font + "', 'Noto Serif SC', 'EB Garamond', serif";
@@ -5435,6 +6186,7 @@
                 applyBgAdjust();
             }
             if (typeof pushNavState === 'function') pushNavState('reading');
+            document.body.classList.add('reading-active');
             renderSentence(); startTimer();
             history.pushState(null, '', location.href);
         }
@@ -5547,12 +6299,19 @@
                         isAnimationFinished = true;
                     }
                 } else {
-                    div.className = 'sentence-text anim-' + animType;
+                    var effectiveAnim = animType;
+                    if (currentTheme === 'depth-field') effectiveAnim = 'cine-focus';
+                    if (currentTheme === 'fluid-ink') effectiveAnim = 'ink-spread';
+                    if (currentTheme === 'gallery-spotlight' && animType !== 'cine-focus' && animType !== 'ink-spread') effectiveAnim = 'cine-focus';
+                    if (currentTheme === 'silver-halide' && animType !== 'cine-focus' && animType !== 'ink-spread') effectiveAnim = 'cine-focus';
+                    div.className = 'sentence-text anim-' + effectiveAnim;
                     standardArea.appendChild(div);
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {
                             div.classList.add('active');
                             isAnimationFinished = true;
+                            if (currentTheme === 'depth-field') applyDepthFieldEffect(div);
+                            if (currentTheme === 'gallery-spotlight') applyGallerySpotlightEffect(div);
                         });
                     });
                 }
@@ -5784,6 +6543,7 @@
             if (typeof stopTypewriterEffect === 'function') stopTypewriterEffect();
             isPlaying = false;
             accumulatedTime = 0;
+            document.body.classList.remove('reading-active');
             const ds = document.getElementById('display-screen');
             ds.style.opacity = '0'; ds.classList.remove('active');
             setTimeout(() => {
@@ -6027,6 +6787,7 @@
         }
 
         var lowPerfMode = false;
+        var bgAdjustRaf = null;
         function applyBgAdjust() {
             var brightness = parseInt(document.getElementById('bg-brightness').value);
             var saturation = parseInt(document.getElementById('bg-saturation').value);
@@ -6034,15 +6795,27 @@
             document.getElementById('bg-brightness-val').textContent = brightness + '%';
             document.getElementById('bg-saturation-val').textContent = saturation + '%';
             document.getElementById('bg-lightness-val').textContent = lightness + '%';
-            var bgLayer = document.getElementById('bg-layer');
-            var canvas = bgLayer ? bgLayer.querySelector('canvas') : null;
-            if (canvas) {
-                canvas.style.filter = 'saturate(' + (saturation / 100) + ')';
+            document.documentElement.style.setProperty('--bg-brightness', (brightness / 100));
+            document.documentElement.style.setProperty('--bg-saturation', (saturation / 100));
+            document.documentElement.style.setProperty('--bg-lightness', (lightness / 100));
+            if (!bgAdjustRaf) {
+                bgAdjustRaf = requestAnimationFrame(function() {
+                    var bVal = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bg-brightness')) || 1;
+                    var sVal = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bg-saturation')) || 1;
+                    var lVal = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bg-lightness')) || 1;
+                    var bgLayer = document.getElementById('bg-layer');
+                    var canvas = bgLayer ? bgLayer.querySelector('canvas') : null;
+                    if (canvas) {
+                        canvas.style.filter = 'saturate(' + sVal + ')';
+                        canvas.style.opacity = Math.max(0.2, Math.min(1.5, lVal));
+                    }
+                    document.querySelectorAll('.sentence-text, .typewriter-text').forEach(function(el) {
+                        el.style.filter = 'brightness(' + bVal + ') contrast(' + lVal + ')';
+                    });
+                    localStorage.setItem('bgAdjust', JSON.stringify({ brightness: brightness, saturation: saturation, lightness: lightness }));
+                    bgAdjustRaf = null;
+                });
             }
-            document.querySelectorAll('.sentence-text, .typewriter-text').forEach(function(el) {
-                el.style.filter = 'brightness(' + (brightness / 100) + ') contrast(' + (lightness / 100) + ')';
-            });
-            localStorage.setItem('bgAdjust', JSON.stringify({ brightness: brightness, saturation: saturation, lightness: lightness }));
         }
 
         function toggleLowPerfMode() {
@@ -6098,24 +6871,31 @@
                 this.columnMaxHeight = [];
                 this.columnFadeSpeed = [];
                 this.columnStartY = [];
+                this.columnTrailLen = [];
                 this.accentColor = '#00ff88';
+                this.fontFamily = 'monospace';
                 this.running = false;
-                this.intervalId = null;
+                this.rafId = null;
                 this.breathPhase = 0;
                 this.mouseX = 0.5;
                 this.mouseY = 0.5;
+                this.mouseActive = false;
                 this.clickTrails = [];
+                this.lastTime = 0;
+                this.accumulator = 0;
                 this.resize();
                 var self = this;
-                window.addEventListener('resize', function() { self.resize(); });
-                this.canvas.addEventListener('mousemove', function(e) {
+                window.addEventListener('resize', debounce(function() { self.resize(); }, 150));
+                this.canvas.addEventListener('mousemove', rafThrottle(function(e) {
                     var rect = self.canvas.getBoundingClientRect();
                     self.mouseX = (e.clientX - rect.left) / rect.width;
                     self.mouseY = (e.clientY - rect.top) / rect.height;
-                });
+                    self.mouseActive = true;
+                }));
                 this.canvas.addEventListener('mouseleave', function() {
                     self.mouseX = 0.5;
                     self.mouseY = 0.5;
+                    self.mouseActive = false;
                 });
                 this.canvas.addEventListener('click', function(e) {
                     var rect = self.canvas.getBoundingClientRect();
@@ -6125,6 +6905,19 @@
                         life: 1.0,
                         size: 6 + Math.random() * 6
                     });
+                });
+                this.canvas.addEventListener('touchmove', rafThrottle(function(e) {
+                    if (e.touches.length > 0) {
+                        var rect = self.canvas.getBoundingClientRect();
+                        self.mouseX = (e.touches[0].clientX - rect.left) / rect.width;
+                        self.mouseY = (e.touches[0].clientY - rect.top) / rect.height;
+                        self.mouseActive = true;
+                    }
+                }), { passive: true });
+                this.canvas.addEventListener('touchend', function() {
+                    self.mouseX = 0.5;
+                    self.mouseY = 0.5;
+                    self.mouseActive = false;
                 });
             }
             MatrixEngine.prototype.extractSentences = function(text) {
@@ -6173,10 +6966,6 @@
             };
             MatrixEngine.prototype.setSpeed = function(speed) {
                 this.speed = Math.max(20, Math.min(200, speed));
-                if (this.running) {
-                    this.stop();
-                    this.start();
-                }
             };
             MatrixEngine.prototype.setGlow = function(enabled) {
                 this.glowEnabled = enabled;
@@ -6187,7 +6976,8 @@
             MatrixEngine.prototype.resize = function() {
                 this.canvas.width = this.canvas.offsetWidth;
                 this.canvas.height = this.canvas.offsetHeight;
-                this.columns = Math.floor(this.canvas.width / this.fontSize);
+                var colWidth = this.fontSize * 0.7;
+                this.columns = Math.floor(this.canvas.width / colWidth);
                 this.drops = [];
                 this.columnSentences = [];
                 this.columnCharIndex = [];
@@ -6195,20 +6985,28 @@
                 this.columnMaxHeight = [];
                 this.columnFadeSpeed = [];
                 this.columnStartY = [];
+                this.columnTrailLen = [];
+                this.columnSpeedMul = [];
                 for (var i = 0; i < this.columns; i++) {
                     this.initColumn(i, true);
                 }
             };
             MatrixEngine.prototype.initColumn = function(i, initial) {
-                var layer = Math.random();
-                if (layer < 0.3) layer = 0;
-                else if (layer < 0.75) layer = 1;
+                var rnd = Math.random();
+                var layer;
+                if (rnd < 0.3) layer = 0;
+                else if (rnd < 0.75) layer = 1;
                 else layer = 2;
                 this.columnLayers[i] = layer;
-                this.drops[i] = initial ? (Math.random() * -this.canvas.height / this.fontSize) : (Math.random() * -30 - 5);
+                var startYRange = this.canvas.height / this.fontSize;
+                this.drops[i] = initial
+                    ? -(Math.random() * startYRange + Math.random() * startYRange)
+                    : -(Math.random() * startYRange * 0.5 + Math.random() * 20);
                 this.columnStartY[i] = this.drops[i];
                 this.columnMaxHeight[i] = 0.6 + Math.random() * 0.4;
                 this.columnFadeSpeed[i] = 0.3 + Math.random() * 0.7;
+                this.columnTrailLen[i] = 10 + Math.floor(Math.random() * 22);
+                this.columnSpeedMul[i] = 0.7 + Math.random() * 0.6;
                 this.assignSentence(i);
             };
             MatrixEngine.prototype.updateAccentColor = function() {
@@ -6216,100 +7014,128 @@
             };
             MatrixEngine.prototype.draw = function() {
                 var ctx = this.ctx;
-                ctx.fillStyle = 'rgba(0,0,0,0.15)';
+                ctx.fillStyle = 'rgba(0,0,0,0.12)';
                 ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                this.breathPhase += 0.02;
+                this.breathPhase += 0.015;
                 var breathFactor = 0.85 + 0.15 * Math.sin(this.breathPhase);
                 var useSentences = this.sentences.length > 0;
                 var mx = this.mouseX * this.canvas.width;
                 var my = this.mouseY * this.canvas.height;
                 var glowMul = this.glowIntensity;
-                for (var i = 0; i < this.drops.length; i++) {
-                    var layer = this.columnLayers[i] || 1;
-                    var layerFontSize = layer === 0 ? this.fontSize * 0.7 : (layer === 2 ? this.fontSize * 1.15 : this.fontSize);
-                    var layerSpeed = layer === 0 ? 0.6 : (layer === 2 ? 1.5 : 1.0);
-                    var layerAlphaBase = layer === 0 ? 0.3 : (layer === 2 ? 1.0 : 0.65);
-                    var y = this.drops[i] * layerFontSize;
-                    var progress = Math.max(0, Math.min(1, y / (this.canvas.height * this.columnMaxHeight[i])));
-                    var headGlow = Math.max(0, 1 - progress * 1.8);
-                    var fadeOut = progress > 0.6 ? Math.max(0, 1 - (progress - 0.6) / 0.4) : 1.0;
-                    var text, charAlpha;
-                    if (useSentences && this.columnSentences[i]) {
-                        var sent = this.columnSentences[i];
-                        var ci = this.columnCharIndex[i] % sent.length;
-                        text = sent[ci];
+                var accentParsed = this.parseColor(this.accentColor);
+                var colWidth = this.fontSize * 0.7;
+                var layers = [
+                    { fontMul: 0.6, speedMul: 0.4, alphaBase: 0.2, darkMul: 0.2 },
+                    { fontMul: 1.0, speedMul: 1.0, alphaBase: 0.55, darkMul: 0.6 },
+                    { fontMul: 1.25, speedMul: 1.7, alphaBase: 1.0, darkMul: 1.0 }
+                ];
+                for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
+                    for (var i = 0; i < this.drops.length; i++) {
+                        var layer = this.columnLayers[i] || 1;
+                        if (layer !== layerIdx) continue;
+                        var cfg = layers[layer];
+                        var layerFontSize = this.fontSize * cfg.fontMul;
+                        var layerSpeed = cfg.speedMul * (this.columnSpeedMul[i] || 1);
+                        var layerAlphaBase = cfg.alphaBase;
+                        var y = this.drops[i] * layerFontSize;
+                        var progress = Math.max(0, Math.min(1, y / (this.canvas.height * this.columnMaxHeight[i])));
+                        var headGlow = Math.max(0, 1 - progress * 2.0);
+                        var fadeOut = progress > 0.5 ? Math.max(0, 1 - (progress - 0.5) / 0.5) : 1.0;
+                        var drawX = i * colWidth;
+                        var distToMouse = Math.sqrt(Math.pow(drawX - mx, 2) + Math.pow(y - my, 2));
+                        var repelX = 0;
+                        if (distToMouse < 150 && distToMouse > 0) {
+                            var force = (150 - distToMouse) / 150 * 18;
+                            repelX = (drawX - mx) / distToMouse * force;
+                        }
+                        drawX += repelX;
+                        var mouseBrightBoost = 0;
+                        if (distToMouse < 150) {
+                            mouseBrightBoost = (1 - distToMouse / 150) * 0.6;
+                        }
+                        var trailLen = this.columnTrailLen[i] || 14;
+                        for (var t = 0; t < trailLen; t++) {
+                            var trailY = y - t * layerFontSize;
+                            if (trailY < -layerFontSize || trailY > this.canvas.height + layerFontSize) continue;
+                            var trailFade = Math.pow(1 - (t / trailLen), 1.3);
+                            var text;
+                            if (useSentences && this.columnSentences[i]) {
+                                var sent = this.columnSentences[i];
+                                var ci = (this.columnCharIndex[i] - t);
+                                if (ci < 0) ci += sent.length;
+                                ci = ci % sent.length;
+                                text = sent[ci];
+                            } else {
+                                var chars = this.getChars();
+                                text = chars[Math.floor(Math.random() * chars.length)];
+                            }
+                            var r, g, b, charAlpha;
+                            if (t === 0) {
+                                r = 255; g = 255; b = 255;
+                                charAlpha = Math.min(1, 0.95 * breathFactor * layerAlphaBase * fadeOut + mouseBrightBoost);
+                                if (this.glowEnabled || layer === 2) {
+                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.9 * glowMul * cfg.darkMul) + ')';
+                                    ctx.shadowBlur = 22 * glowMul * cfg.darkMul;
+                                }
+                            } else if (t <= 4) {
+                                var mix = 1 - (t / 4);
+                                r = Math.round(accentParsed.r + (255 - accentParsed.r) * mix * 0.7);
+                                g = Math.round(accentParsed.g + (255 - accentParsed.g) * mix * 0.7);
+                                b = Math.round(accentParsed.b + (255 - accentParsed.b) * mix * 0.7);
+                                charAlpha = Math.min(1, (0.35 + mix * 0.55) * breathFactor * layerAlphaBase * fadeOut * trailFade + mouseBrightBoost * 0.5);
+                                if (this.glowEnabled && t <= 2 && layer >= 1) {
+                                    ctx.shadowColor = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (0.6 * glowMul * cfg.darkMul) + ')';
+                                    ctx.shadowBlur = 14 * glowMul * cfg.darkMul;
+                                }
+                            } else {
+                                if (layer === 0) {
+                                    r = Math.round(accentParsed.r * 0.2);
+                                    g = Math.round(accentParsed.g * 0.2);
+                                    b = Math.round(accentParsed.b * 0.2 + 25);
+                                } else if (layer === 2) {
+                                    r = accentParsed.r;
+                                    g = accentParsed.g;
+                                    b = accentParsed.b;
+                                } else {
+                                    r = Math.round(accentParsed.r * 0.7);
+                                    g = Math.round(accentParsed.g * 0.7);
+                                    b = Math.round(accentParsed.b * 0.7);
+                                }
+                                charAlpha = Math.max(0.015, (0.08 + headGlow * 0.3) * breathFactor * layerAlphaBase * fadeOut * trailFade);
+                                charAlpha = Math.min(1, charAlpha + mouseBrightBoost * 0.3);
+                                if (this.glowEnabled && layer === 2 && t <= 6) {
+                                    ctx.shadowColor = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (0.12 * glowMul) + ')';
+                                    ctx.shadowBlur = 4 * glowMul;
+                                }
+                            }
+                            ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + charAlpha + ')';
+                            ctx.font = layerFontSize + 'px ' + this.fontFamily;
+                            ctx.fillText(text, drawX, trailY);
+                            if (ctx.shadowBlur > 0) {
+                                ctx.shadowColor = 'transparent';
+                                ctx.shadowBlur = 0;
+                            }
+                        }
                         this.columnCharIndex[i]++;
-                        if (this.columnCharIndex[i] >= sent.length) {
+                        if (useSentences && this.columnSentences[i] && this.columnCharIndex[i] >= this.columnSentences[i].length) {
                             this.assignSentence(i);
                         }
-                    } else {
-                        var chars = this.getChars();
-                        text = chars[Math.floor(Math.random() * chars.length)];
-                    }
-                    var drawX = i * this.fontSize;
-                    var distToMouse = Math.sqrt(Math.pow(drawX - mx, 2) + Math.pow(y - my, 2));
-                    var repelX = 0;
-                    if (distToMouse < 80 && distToMouse > 0) {
-                        var force = (80 - distToMouse) / 80 * 8;
-                        repelX = (drawX - mx) / distToMouse * force;
-                    }
-                    drawX += repelX;
-                    var accentParsed = this.parseColor(this.accentColor);
-                    var r, g, b;
-                    if (headGlow > 0.7) {
-                        r = 255; g = 255; b = 255;
-                        charAlpha = 0.95 * breathFactor * layerAlphaBase * fadeOut;
-                        if (this.glowEnabled) {
-                            ctx.shadowColor = 'rgba(255,255,255,' + (0.6 * glowMul) + ')';
-                            ctx.shadowBlur = 12 * glowMul;
+                        this.drops[i] += layerSpeed;
+                        if (this.drops[i] * layerFontSize > this.canvas.height * this.columnMaxHeight[i] + 30) {
+                            this.initColumn(i, false);
                         }
-                    } else if (headGlow > 0.3) {
-                        var mix = (headGlow - 0.3) / 0.4;
-                        r = Math.round(accentParsed.r + (255 - accentParsed.r) * mix * 0.5);
-                        g = Math.round(accentParsed.g + (255 - accentParsed.g) * mix * 0.5);
-                        b = Math.round(accentParsed.b + (255 - accentParsed.b) * mix * 0.5);
-                        charAlpha = (0.5 + headGlow * 0.4) * breathFactor * layerAlphaBase * fadeOut;
-                        if (this.glowEnabled) {
-                            ctx.shadowColor = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (0.4 * glowMul) + ')';
-                            ctx.shadowBlur = 6 * glowMul;
-                        }
-                    } else {
-                        if (layer === 0) {
-                            r = Math.round(accentParsed.r * 0.3);
-                            g = Math.round(accentParsed.g * 0.3);
-                            b = Math.round(accentParsed.b * 0.3 + 40);
-                        } else {
-                            r = accentParsed.r;
-                            g = accentParsed.g;
-                            b = accentParsed.b;
-                        }
-                        charAlpha = Math.max(0.02, (0.15 + headGlow * 0.35) * breathFactor * layerAlphaBase * fadeOut);
-                        if (this.glowEnabled && layer === 2) {
-                            ctx.shadowColor = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (0.2 * glowMul) + ')';
-                            ctx.shadowBlur = 3 * glowMul;
-                        }
-                    }
-                    ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + charAlpha + ')';
-                    ctx.font = layerFontSize + 'px monospace';
-                    ctx.fillText(text, drawX, y);
-                    if (this.glowEnabled) {
-                        ctx.shadowColor = 'transparent';
-                        ctx.shadowBlur = 0;
-                    }
-                    this.drops[i] += layerSpeed;
-                    if (this.drops[i] * layerFontSize > this.canvas.height * this.columnMaxHeight[i] + 20) {
-                        this.initColumn(i, false);
                     }
                 }
-                for (var t = this.clickTrails.length - 1; t >= 0; t--) {
-                    var trail = this.clickTrails[t];
-                    trail.life -= 0.05;
+                for (var ct = this.clickTrails.length - 1; ct >= 0; ct--) {
+                    var trail = this.clickTrails[ct];
+                    trail.life -= 0.04;
                     if (trail.life <= 0) {
-                        this.clickTrails.splice(t, 1);
+                        this.clickTrails.splice(ct, 1);
                         continue;
                     }
-                    ctx.fillStyle = 'rgba(' + this.parseColor(this.accentColor).r + ',' + this.parseColor(this.accentColor).g + ',' + this.parseColor(this.accentColor).b + ',' + (trail.life * 0.6) + ')';
-                    ctx.fillRect(trail.x - trail.size / 2, trail.y - trail.size / 2, trail.size, trail.size);
+                    var tSize = trail.size * (1 + (1 - trail.life) * 0.5);
+                    ctx.fillStyle = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (trail.life * 0.5) + ')';
+                    ctx.fillRect(trail.x - tSize / 2, trail.y - tSize / 2, tSize, tSize);
                 }
             };
             MatrixEngine.prototype.parseColor = function(hex) {
@@ -6330,15 +7156,26 @@
                 if (this.running) return;
                 this.running = true;
                 var self = this;
-                this.intervalId = setInterval(function() {
-                    self.updateAccentColor();
-                    self.draw();
-                }, this.speed);
+                this.lastTime = performance.now();
+                function loop(now) {
+                    if (!self.running) return;
+                    var delta = now - self.lastTime;
+                    self.lastTime = now;
+                    self.accumulator += delta;
+                    var interval = self.speed;
+                    while (self.accumulator >= interval) {
+                        self.updateAccentColor();
+                        self.draw();
+                        self.accumulator -= interval;
+                    }
+                    self.rafId = requestAnimationFrame(loop);
+                }
+                self.rafId = requestAnimationFrame(loop);
             };
             MatrixEngine.prototype.stop = function() {
-                if (this.intervalId) {
-                    clearInterval(this.intervalId);
-                    this.intervalId = null;
+                if (this.rafId) {
+                    cancelAnimationFrame(this.rafId);
+                    this.rafId = null;
                 }
                 this.running = false;
             };
@@ -6361,7 +7198,7 @@
                 this.accentColor = '#3a3a3a';
                 this.resize();
                 var self = this;
-                window.addEventListener('resize', function() { self.resize(); });
+                window.addEventListener('resize', debounce(function() { self.resize(); }, 150));
             }
             InkWashEngine.prototype.resize = function() {
                 this.canvas.width = this.canvas.offsetWidth;
@@ -6442,12 +7279,12 @@
                 this.bgPhase = 0;
                 this.resize();
                 var self = this;
-                window.addEventListener('resize', function() { self.resize(); });
-                this.canvas.addEventListener('mousemove', function(e) {
+                window.addEventListener('resize', debounce(function() { self.resize(); }, 150));
+                this.canvas.addEventListener('mousemove', rafThrottle(function(e) {
                     var rect = self.canvas.getBoundingClientRect();
                     self.mouseX = (e.clientX - rect.left) / rect.width;
                     self.mouseY = (e.clientY - rect.top) / rect.height;
-                });
+                }));
                 this.canvas.addEventListener('mouseleave', function() {
                     self.mouseX = 0.5;
                     self.mouseY = 0.5;
@@ -6560,7 +7397,7 @@
                         charG = Math.min(255, charG + Math.round(mouseGlow * 40));
                         charB = Math.min(255, charB + Math.round(mouseGlow * 30));
                     }
-                    ctx.font = col.fontSize + 'px monospace';
+                    ctx.font = col.fontSize + 'px ' + this.fontFamily;
                     ctx.fillStyle = 'rgba(' + charR + ',' + charG + ',' + charB + ',' + charAlpha + ')';
                     ctx.fillText(ch, drawX, drawY);
                     ctx.shadowBlur = 0;
@@ -6590,7 +7427,10 @@
         })();
 
         var matrixEngine = null;
-        (function initMatrixRain() {
+        var matrixRainInitialized = false;
+        function initMatrixRain() {
+            if (matrixRainInitialized) return;
+            matrixRainInitialized = true;
             var savedEffect = localStorage.getItem('bgEffect') || 'matrix';
             currentBgEffect = savedEffect;
             document.querySelectorAll('[data-bg-effect]').forEach(function(el) {
@@ -6630,7 +7470,22 @@
             } else if (savedEffect !== 'none') {
                 setBgEffect(savedEffect);
             }
-        })();
+        }
+        if (window.requestIdleCallback) {
+            requestIdleCallback(initMatrixRain, { timeout: 800 });
+        } else {
+            setTimeout(initMatrixRain, 600);
+        }
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (matrixEngine && matrixEngine.stop) matrixEngine.stop();
+                if (bgEffectEngine && bgEffectEngine.stop) bgEffectEngine.stop();
+            } else {
+                if (matrixEngine && matrixEngine.start) matrixEngine.start();
+                if (bgEffectEngine && bgEffectEngine.start) bgEffectEngine.start();
+            }
+        });
 
         var statusBarVisible = false;
         function isMobile() { return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768; }
@@ -6646,12 +7501,27 @@
                 toggle.classList.remove('active');
             }
             localStorage.setItem('statusBarVisible', statusBarVisible ? '1' : '0');
+            updateStatusBarTheme();
+        }
+        function updateStatusBarTheme() {
+            var accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#7b61ff';
+            var meta = document.getElementById('theme-color-meta');
+            if (meta) meta.setAttribute('content', accent);
+            var bar = document.querySelector('.immersive-status-bar');
+            if (bar) bar.style.setProperty('--status-accent', accent);
         }
         (function() {
             var saved = localStorage.getItem('statusBarVisible');
             if (saved === '1' || (saved === null && isMobile())) {
                 statusBarVisible = false;
                 toggleStatusBar();
+            }
+            if (isMobile() && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar) {
+                try {
+                    window.Capacitor.Plugins.StatusBar.setStyle({ style: 'DARK' });
+                    window.Capacitor.Plugins.StatusBar.setBackgroundColor({ color: '#00000000' });
+                    window.Capacitor.Plugins.StatusBar.setOverlaysWebView({ overlay: true });
+                } catch(e) {}
             }
         })();
 
@@ -6857,7 +7727,6 @@
         async function handleFolderSelect(event) {
             event.stopPropagation();
             const files = Array.from(event.target.files);
-            event.target.value = '';
             const compatibleExts = ['.txt', '.md', '.epub'];
             folderFiles = files.filter(f => {
                 const name = f.name.toLowerCase();
@@ -6868,6 +7737,12 @@
                 alert('没有找到兼容文件（.txt, .md, .epub），请重新选择。');
                 return;
             }
+
+            var savedFileNames = folderFiles.map(function(f) { return f.name; });
+            try {
+                localStorage.setItem('lastFolderFiles', JSON.stringify(savedFileNames));
+                localStorage.setItem('lastFolderTime', Date.now().toString());
+            } catch(e) {}
 
             showFileList();
         }
@@ -6981,34 +7856,131 @@
             { id: 'old-parchment', name: 'OLD PARCHMENT - 陈年羊皮纸', grad: '#B58900,#FDF6E3' },
             { id: 'celadon', name: 'CELADON - 青瓷', grad: '#5dba8d,#e8e0d0' },
             { id: 'pine-ink', name: 'PINE INK - 松墨', grad: '#3a3a3a,#d8d0c0' },
-            { id: 'cinnabar', name: 'CINNABAR - 朱砂', grad: '#c23a2b,#e8ddd0' }
+            { id: 'cinnabar', name: 'CINNABAR - 朱砂', grad: '#c23a2b,#e8ddd0' },
+            { id: 'depth-field', name: 'DEPTH FIELD - 物理景深', grad: '#4a4a4a,#f2f0ec' },
+            { id: 'gallery-spotlight', name: 'GALLERY SPOTLIGHT - 画廊光影', grad: '#e8dcc8,#1a1a1a' },
+            { id: 'fluid-ink', name: 'FLUID INK - 动态墨迹', grad: '#0a0a0a,#f5f0e8' },
+            { id: 'analog-hifi', name: 'ANALOG HI-FI - 模拟无损', grad: '#D95C14,#1C1C1E' },
+            { id: 'silver-halide', name: 'SILVER HALIDE - 银盐暗房', grad: '#2C2C2B,#F5F5F0' }
         ];
 
+        var themeCarouselOpen = false;
+
+        function toggleThemeCarousel() {
+            themeCarouselOpen = !themeCarouselOpen;
+            var panel = document.getElementById('theme-carousel-panel');
+            var capsule = document.getElementById('theme-current-capsule');
+            var settingsPanel = document.querySelector('.home-settings-panel');
+            if (themeCarouselOpen) {
+                panel.classList.add('open');
+                capsule.classList.add('expanded');
+                if (settingsPanel) settingsPanel.classList.add('theme-select-expanded');
+                document.body.classList.add('mode-theme-preview');
+            } else {
+                panel.classList.remove('open');
+                capsule.classList.remove('expanded');
+                if (settingsPanel) settingsPanel.classList.remove('theme-select-expanded');
+                document.body.classList.remove('mode-theme-preview');
+            }
+        }
+
         function initThemeSelect() {
-            var dropdown = document.getElementById('custom-theme-select-dropdown');
-            if (!dropdown) return;
-            dropdown.innerHTML = '';
+            initThemeCarousel();
+        }
+
+        function initThemeCarousel() {
+            var carousel = document.getElementById('theme-carousel');
+            var wrap = document.getElementById('theme-carousel-wrap');
+            if (!carousel || !wrap) return;
+            carousel.innerHTML = '';
             themeList.forEach(function(t) {
-                var opt = document.createElement('div');
-                opt.className = 'font-option';
-                opt.setAttribute('data-theme', t.id);
-                opt.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,' + t.grad + ');margin-right:8px;vertical-align:middle;border:1px solid rgba(255,255,255,0.2);"></span>' + t.name;
-                opt.addEventListener('click', function() {
+                var item = document.createElement('div');
+                item.className = 'theme-carousel-item';
+                item.setAttribute('data-theme', t.id);
+                item.style.background = 'linear-gradient(135deg,' + t.grad + ')';
+                var shortName = t.name.split(' - ')[1] || t.name;
+                item.innerHTML = '<span class="carousel-label">' + shortName + '</span>';
+                item.addEventListener('click', function() {
                     var themeId = this.getAttribute('data-theme');
-                    document.getElementById('selected-theme-name').textContent = t.name.split(' - ')[1] || t.name;
-                    dropdown.style.display = 'none';
                     setTheme(themeId);
-                    showThemeDetail(themeId);
+                    updateCapsuleTheme(themeId);
+                    updateCarouselActive(themeId);
+                    bounceIndicator();
                 });
-                dropdown.appendChild(opt);
+                carousel.appendChild(item);
             });
-            var header = document.getElementById('custom-theme-select-header');
-            if (header) {
-                header.addEventListener('click', function() {
-                    var isOpen = dropdown.style.display === 'block';
-                    dropdown.style.display = isOpen ? 'none' : 'block';
+            var scrollRaf = null;
+            var lastActiveTheme = null;
+            var scrollThrottleTime = 0;
+            function onScroll() {
+                if (scrollRaf) cancelAnimationFrame(scrollRaf);
+                scrollRaf = requestAnimationFrame(function() {
+                    var now = Date.now();
+                    if (now - scrollThrottleTime < 80) return;
+                    scrollThrottleTime = now;
+                    var items = carousel.querySelectorAll('.theme-carousel-item');
+                    var wrapRect = wrap.getBoundingClientRect();
+                    var centerX = wrapRect.left + wrapRect.width / 2;
+                    var closestItem = null;
+                    var closestDist = Infinity;
+                    items.forEach(function(item) {
+                        var rect = item.getBoundingClientRect();
+                        var itemCenter = rect.left + rect.width / 2;
+                        var dist = Math.abs(itemCenter - centerX);
+                        if (dist < closestDist) {
+                            closestDist = dist;
+                            closestItem = item;
+                        }
+                    });
+                    if (closestItem && closestDist < 60) {
+                        var themeId = closestItem.getAttribute('data-theme');
+                        if (themeId !== lastActiveTheme) {
+                            lastActiveTheme = themeId;
+                            setTheme(themeId);
+                            updateCapsuleTheme(themeId);
+                            updateCarouselActive(themeId);
+                            bounceIndicator();
+                        }
+                    }
                 });
             }
+            wrap.addEventListener('scroll', onScroll, { passive: true });
+            var saved = localStorage.getItem('theme') || localStorage.getItem('currentTheme') || 'mystic';
+            updateCarouselActive(saved);
+            updateCapsuleTheme(saved);
+        }
+
+        function bounceIndicator() {
+            var indicator = document.querySelector('.theme-carousel-indicator');
+            if (!indicator) return;
+            indicator.classList.remove('bounce');
+            void indicator.offsetWidth;
+            indicator.classList.add('bounce');
+            setTimeout(function() { indicator.classList.remove('bounce'); }, 300);
+        }
+
+        function updateCapsuleTheme(themeId) {
+            var t = themeList.find(function(x) { return x.id === themeId; });
+            if (!t) return;
+            var shortName = t.name.split(' - ')[1] || t.name;
+            var capsuleName = document.getElementById('capsule-theme-name');
+            var capsuleDot = document.getElementById('capsule-color-dot');
+            var currentLabel = document.getElementById('theme-carousel-current-label');
+            if (capsuleName) capsuleName.textContent = shortName;
+            if (capsuleDot) capsuleDot.style.background = 'linear-gradient(135deg,' + t.grad + ')';
+            if (currentLabel) currentLabel.textContent = t.name;
+        }
+
+        function updateCarouselActive(themeId) {
+            var items = document.querySelectorAll('.theme-carousel-item');
+            items.forEach(function(item) {
+                if (item.getAttribute('data-theme') === themeId) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
         }
 
         function showThemeDetail(themeId) {
@@ -7391,55 +8363,103 @@
                             }
                         }
                     }
-                    tocData.forEach(function(item, idx) {
-                        var div = document.createElement('div');
-                        div.className = 'toc-item' + (idx === currentIdx ? ' current' : '');
-                        if (item.subHeadings && item.subHeadings.length > 0) {
-                            div.classList.add('has-children');
-                        }
-                        var titleSpan = document.createElement('span');
-                        titleSpan.textContent = item.title;
-                        div.appendChild(titleSpan);
-                        var expandIcon = document.createElement('span');
-                        expandIcon.className = 'toc-expand-icon';
-                        expandIcon.textContent = '▶';
-                        div.appendChild(expandIcon);
-                        div.setAttribute('data-index', idx);
-                        div.addEventListener('click', function(e) {
-                            if (item.subHeadings && item.subHeadings.length > 0) {
-                                var subList = div.nextElementSibling;
-                                if (subList && subList.classList.contains('toc-sub-list')) {
-                                    var isOpen = subList.classList.contains('open');
-                                    subList.classList.toggle('open');
-                                    div.classList.toggle('expanded');
-                                }
+                    if (tocData.length > 100) {
+                        var ITEM_HEIGHT = 44;
+                        var CONTAINER_HEIGHT = Math.min(400, window.innerHeight * 0.6);
+                        listEl.style.height = CONTAINER_HEIGHT + 'px';
+                        listEl.style.overflow = 'auto';
+                        listEl.style.position = 'relative';
+                        var totalHeight = tocData.length * ITEM_HEIGHT;
+                        var spacer = document.createElement('div');
+                        spacer.style.height = totalHeight + 'px';
+                        spacer.style.position = 'relative';
+                        listEl.appendChild(spacer);
+                        var visibleCount = Math.ceil(CONTAINER_HEIGHT / ITEM_HEIGHT) + 4;
+                        var renderedItems = [];
+                        function renderVirtualTOC(scrollTop) {
+                            var startIdx = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - 2);
+                            var endIdx = Math.min(tocData.length, startIdx + visibleCount);
+                            renderedItems.forEach(function(el) { el.remove(); });
+                            renderedItems = [];
+                            for (var idx = startIdx; idx < endIdx; idx++) {
+                                var item = tocData[idx];
+                                var div = document.createElement('div');
+                                div.className = 'toc-item' + (idx === currentIdx ? ' current' : '');
+                                div.style.position = 'absolute';
+                                div.style.top = (idx * ITEM_HEIGHT) + 'px';
+                                div.style.left = '0';
+                                div.style.right = '0';
+                                div.style.height = ITEM_HEIGHT + 'px';
+                                var titleSpan = document.createElement('span');
+                                titleSpan.textContent = item.title;
+                                div.appendChild(titleSpan);
+                                div.setAttribute('data-index', idx);
+                                (function(i) {
+                                    div.addEventListener('click', function() { jumpToTOCItem(i); });
+                                })(idx);
+                                spacer.appendChild(div);
+                                renderedItems.push(div);
                             }
-                            jumpToTOCItem(idx);
-                        });
-                        listEl.appendChild(div);
-
-                        if (item.subHeadings && item.subHeadings.length > 0) {
-                            var subList = document.createElement('div');
-                            subList.className = 'toc-sub-list';
-                            item.subHeadings.forEach(function(sub, subIdx) {
-                                var subDiv = document.createElement('div');
-                                subDiv.className = 'toc-sub-item';
-                                subDiv.textContent = sub.title;
-                                subDiv.addEventListener('click', function(e) {
-                                    e.stopPropagation();
-                                    jumpToOffset(sub.charOffset);
-                                });
-                                subList.appendChild(subDiv);
-                            });
-                            listEl.appendChild(subList);
                         }
-                    });
+                        listEl.addEventListener('scroll', rafThrottle(function() {
+                            renderVirtualTOC(listEl.scrollTop);
+                        }));
+                        renderVirtualTOC(0);
+                        if (currentIdx >= 0) {
+                            listEl.scrollTop = currentIdx * ITEM_HEIGHT - CONTAINER_HEIGHT / 2;
+                            renderVirtualTOC(listEl.scrollTop);
+                        }
+                    } else {
+                        tocData.forEach(function(item, idx) {
+                            var div = document.createElement('div');
+                            div.className = 'toc-item' + (idx === currentIdx ? ' current' : '');
+                            if (item.subHeadings && item.subHeadings.length > 0) {
+                                div.classList.add('has-children');
+                            }
+                            var titleSpan = document.createElement('span');
+                            titleSpan.textContent = item.title;
+                            div.appendChild(titleSpan);
+                            var expandIcon = document.createElement('span');
+                            expandIcon.className = 'toc-expand-icon';
+                            expandIcon.textContent = '▶';
+                            div.appendChild(expandIcon);
+                            div.setAttribute('data-index', idx);
+                            div.addEventListener('click', function(e) {
+                                if (item.subHeadings && item.subHeadings.length > 0) {
+                                    var subList = div.nextElementSibling;
+                                    if (subList && subList.classList.contains('toc-sub-list')) {
+                                        var isOpen = subList.classList.contains('open');
+                                        subList.classList.toggle('open');
+                                        div.classList.toggle('expanded');
+                                    }
+                                }
+                                jumpToTOCItem(idx);
+                            });
+                            listEl.appendChild(div);
 
-                    if (currentIdx >= 0 && tocData[currentIdx].subHeadings && tocData[currentIdx].subHeadings.length > 0) {
-                        var currentDiv = listEl.querySelector('.toc-item.current');
-                        var currentSubList = currentDiv ? currentDiv.nextElementSibling : null;
-                        if (currentDiv) currentDiv.classList.add('expanded');
-                        if (currentSubList) currentSubList.classList.add('open');
+                            if (item.subHeadings && item.subHeadings.length > 0) {
+                                var subList = document.createElement('div');
+                                subList.className = 'toc-sub-list';
+                                item.subHeadings.forEach(function(sub, subIdx) {
+                                    var subDiv = document.createElement('div');
+                                    subDiv.className = 'toc-sub-item';
+                                    subDiv.textContent = sub.title;
+                                    subDiv.addEventListener('click', function(e) {
+                                        e.stopPropagation();
+                                        jumpToOffset(sub.charOffset);
+                                    });
+                                    subList.appendChild(subDiv);
+                                });
+                                listEl.appendChild(subList);
+                            }
+                        });
+
+                        if (currentIdx >= 0 && tocData[currentIdx].subHeadings && tocData[currentIdx].subHeadings.length > 0) {
+                            var currentDiv = listEl.querySelector('.toc-item.current');
+                            var currentSubList = currentDiv ? currentDiv.nextElementSibling : null;
+                            if (currentDiv) currentDiv.classList.add('expanded');
+                            if (currentSubList) currentSubList.classList.add('open');
+                        }
                     }
                 }
 
@@ -7525,16 +8545,19 @@
         })();
 
         (function() {
-            var typewriterTimer = null;
+            var typewriterRafId = null;
             var typewriterEl = null;
             var typewriterText = '';
             var typewriterIndex = 0;
+            var typewriterLastTime = 0;
+            var typewriterCharDelay = 50;
 
             window.startTypewriterEffect = function(element, text, callback) {
                 stopTypewriterEffect();
                 typewriterEl = element;
                 typewriterText = text;
                 typewriterIndex = 0;
+                typewriterLastTime = 0;
                 element.textContent = '';
                 element.classList.add('anim-typewriter');
                 element.style.filter = 'none';
@@ -7552,40 +8575,49 @@
                 element.appendChild(cursor);
 
                 var dwellTime = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--dwell-time')) || 2000;
-                var charDelay = Math.max(20, Math.floor(dwellTime / Math.max(1, text.length)));
-                charDelay = Math.round(charDelay * 2.22);
+                typewriterCharDelay = Math.max(20, Math.floor(dwellTime / Math.max(1, text.length)));
+                typewriterCharDelay = Math.round(typewriterCharDelay * 2.22);
 
-                typewriterTimer = setInterval(function() {
-                    if (typewriterIndex < typewriterText.length) {
-                        var charNode = document.createTextNode(typewriterText[typewriterIndex]);
-                        var cursorEl = document.getElementById('typewriter-cursor-active');
-                        if (cursorEl) {
-                            element.insertBefore(charNode, cursorEl);
+                function tick(now) {
+                    if (!typewriterLastTime) typewriterLastTime = now;
+                    var elapsed = now - typewriterLastTime;
+                    if (elapsed >= typewriterCharDelay) {
+                        typewriterLastTime = now - (elapsed % typewriterCharDelay);
+                        if (typewriterIndex < typewriterText.length) {
+                            var charNode = document.createTextNode(typewriterText[typewriterIndex]);
+                            var cursorEl = document.getElementById('typewriter-cursor-active');
+                            if (cursorEl) {
+                                element.insertBefore(charNode, cursorEl);
+                            } else {
+                                element.appendChild(charNode);
+                            }
+                            typewriterIndex++;
                         } else {
-                            element.appendChild(charNode);
+                            stopTypewriterEffect();
+                            element.style.textAlign = '';
+                            element.style.justifySelf = '';
+                            element.classList.add('active');
+                            if (typeof callback === 'function') callback();
+                            return;
                         }
-                        typewriterIndex++;
-                    } else {
-                        stopTypewriterEffect();
-                        element.style.textAlign = '';
-                        element.style.justifySelf = '';
-                        element.classList.add('active');
-                        if (typeof callback === 'function') callback();
                     }
-                }, charDelay);
+                    typewriterRafId = requestAnimationFrame(tick);
+                }
+                typewriterRafId = requestAnimationFrame(tick);
             };
 
             window.stopTypewriterEffect = function() {
-                if (typewriterTimer) {
-                    clearInterval(typewriterTimer);
-                    typewriterTimer = null;
+                if (typewriterRafId) {
+                    cancelAnimationFrame(typewriterRafId);
+                    typewriterRafId = null;
                 }
+                typewriterLastTime = 0;
                 var cursor = document.getElementById('typewriter-cursor-active');
                 if (cursor) cursor.remove();
             };
 
             window.isTypewriterRunning = function() {
-                return typewriterTimer !== null;
+                return typewriterRafId !== null;
             };
         })();
 
