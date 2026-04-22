@@ -1328,7 +1328,7 @@
             z-index: 1;
         }
         .entry-card .entry-file-input {
-            z-index: 10;
+            z-index: -1;
         }
         .entry-card:hover { background: rgba(128, 128, 128, 0.12); border-color: rgba(255,255,255,0.25); box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 2px 0 3px rgba(255,255,255,0.35); }
         .entry-card:active { transform: scale(0.98) translateY(2px); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2); }
@@ -1350,7 +1350,7 @@
             height: 100%;
             opacity: 0;
             cursor: pointer;
-            z-index: 10;
+            z-index: -1;
             -webkit-user-select: auto;
             user-select: auto;
             -webkit-appearance: none;
@@ -1361,7 +1361,7 @@
             margin: 0;
             min-height: 48px;
             font-size: 16px;
-            pointer-events: auto !important;
+            pointer-events: none;
         }
         .entry-card.drag-over .entry-file-input {
             pointer-events: none;
