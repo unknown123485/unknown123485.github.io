@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
  <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -1074,45 +1074,45 @@
 
 
         /* --- 输入屏幕重构 --- */
-        #input-screen { display: flex; display: -webkit-box; -webkit-box-orient: vertical; -webkit-box-align: center; -webkit-box-pack: center; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; min-height: 100dvh; z-index: 20; background: inherit; position: fixed; top: 0; left: 0; box-sizing: border-box; padding-top: 50px; }
+        #input-screen { display: flex; display: -webkit-box; -webkit-box-orient: vertical; -webkit-box-align: center; -webkit-box-pack: center; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; min-height: 100dvh; z-index: 20; background: inherit; position: fixed; top: 0; left: 0; box-sizing: border-box; }
         
         .hero-glass-base {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: env(safe-area-inset-top, 20px);
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 20px;
-            padding-top: calc(env(safe-area-inset-top, 10px) + 10px);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 999px;
+            padding: 8px 20px;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 10001;
+            margin-bottom: 0;
         }
         .mas-reader-logo {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             margin: 0;
             display: block;
-            flex-shrink: 0;
             filter: drop-shadow(0 2px 6px rgba(205, 133, 115, 0.45));
         }
         .mas-reader-logo svg { width: 100%; height: 100%; }
 
         .mas-reader-title {
             font-family: 'Noto Serif SC', 'Noto Serif TC', serif;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             font-weight: 600;
             letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.9);
             text-align: center;
-            margin: 0;
+            margin-bottom: 0;
             background: linear-gradient(135deg, #ffffff 0%, rgba(200,200,220,0.9) 50%, #ffffff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -1120,7 +1120,6 @@
             filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
             user-select: none;
             -webkit-user-select: none;
-            white-space: nowrap;
         }
 
         .home-settings-panel {
@@ -1227,14 +1226,10 @@
             box-shadow: 0 0 12px var(--accent), 0 0 4px var(--accent);
         }
         .btn-glow {
-            animation: btnPulsate 3s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(123,97,255,0.3), 0 0 5px rgba(123,97,255,0.2);
         }
         .btn-glow:hover {
-            animation: btnPulsate 1.5s ease-in-out infinite;
-        }
-        @keyframes btnPulsate {
-            0%, 100% { box-shadow: 0 0 10px rgba(123,97,255,0.2), 0 0 4px rgba(123,97,255,0.1); }
-            50% { box-shadow: 0 0 22px rgba(123,97,255,0.45), 0 0 8px rgba(123,97,255,0.3); }
+            box-shadow: 0 0 25px rgba(123,97,255,0.5), 0 0 10px rgba(123,97,255,0.3);
         }
         .glow-active .sentence-text {
             text-shadow: 0 0 20px var(--accent), 0 0 8px var(--accent);
@@ -1437,9 +1432,9 @@
 
         /* --- 展示屏幕 --- */
         #bg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        #bg-layer canvas { width: 100%; height: 100%; display: block; object-fit: cover; filter: saturate(var(--bg-saturation, 1)); opacity: var(--bg-lightness, 1); }
+        #bg-layer canvas { width: 100%; height: 100%; display: block; transition: filter 0.3s ease; object-fit: cover; }
         #display-screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 25; overflow: hidden; padding-top: 0 !important; box-sizing: border-box; }
-        .display-area { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; filter: brightness(var(--bg-brightness, 1)) contrast(var(--bg-lightness, 1)); }
+        .display-area { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; }
         #standard-area { position: relative; z-index: 5; width: 100%; height: 100%; display: grid; place-items: center; }
 
         .sentence-text { 
@@ -3614,9 +3609,9 @@
 
         @media (max-width: 480px) {
             .mas-reader-title {
-                font-size: 0.75rem;
+                font-size: 0.6rem;
                 letter-spacing: 1px;
-                margin: 0;
+                margin-bottom: 0;
             }
             .entry-container {
                 max-width: 95vw;
@@ -3781,11 +3776,20 @@
             <button class="bottom-control-btn" id="prev-btn">
                 <svg viewBox="0 0 24 24"><path class="p-prev" fill="currentColor"/></svg>
             </button>
+            <button class="bottom-control-btn" onclick="toggleMode()" id="mode-btn" title="随机/循环">
+                <svg viewBox="0 0 24 24" id="mode-icon-svg"><path class="p-random" fill="currentColor"/></svg>
+            </button>
             <button class="bottom-control-btn play-master" id="bottom-play-btn">
                 <svg viewBox="0 0 24 24" id="bottom-play-icon-svg"><path class="p-play" fill="currentColor"/></svg>
             </button>
+            <button class="bottom-control-btn" onclick="toggleFullscreen()" id="fullscreen-btn" title="全屏">
+                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="currentColor"/></svg>
+            </button>
             <button class="bottom-control-btn" id="next-btn">
                 <svg viewBox="0 0 24 24"><path class="p-next" fill="currentColor"/></svg>
+            </button>
+            <button class="bottom-control-btn control-btn-exit" onclick="exitDisplay()" title="退出">
+                <svg viewBox="0 0 24 24"><path class="p-exit" fill="currentColor"/></svg>
             </button>
         </div>
 
@@ -3793,7 +3797,7 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen" style="overflow:hidden;">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.15;"></canvas>
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.35;"></canvas>
             <canvas id="liquid-glass-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div style="position:relative;z-index:2;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
@@ -4472,20 +4476,6 @@
                             <option value="ink-spread">墨迹洇开</option>
                         </select>
                     </div>
-                    <div class="action-buttons-row">
-                    <button class="control-btn" onclick="toggleMode()" id="mode-btn">
-                        <svg viewBox="0 0 24 24" id="mode-icon-svg"><path class="p-random"/></svg>
-                        <span class="btn-label" id="mode-label">随机播放</span>
-                    </button>
-                    <button class="control-btn" onclick="toggleFullscreen()" id="fullscreen-btn">
-                        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                        <span class="btn-label">全屏</span>
-                    </button>
-                    <button class="control-btn control-btn-exit" onclick="exitDisplay()">
-                        <svg viewBox="0 0 24 24"><path class="p-exit"/></svg>
-                        <span class="btn-label">退出</span>
-                    </button>
-                    </div>
                 </div>
                 
                 <div class="themes-section theme-select-section">
@@ -4731,7 +4721,55 @@
                         containerFile = zip.file(metaInfFiles[0]);
                     }
                 }
-                if (!containerFile) { alert('解析 EPUB 出错：缺少 META-INF/container.xml\n文件列表: ' + allPaths.slice(0, 10).join(', ')); return; }
+                if (!containerFile) {
+                    var opfFallback = allPaths.filter(function(p) { return p.toLowerCase().endsWith('.opf'); });
+                    if (opfFallback.length > 0) {
+                        containerFile = null;
+                        var opfPath = opfFallback[0];
+                        var opfDir = opfPath.substring(0, opfPath.lastIndexOf('/')) + (opfPath.includes('/') ? '/' : '');
+                        var opfFile = zip.file(opfPath);
+                        if (opfFile) {
+                            var opfXml = await opfFile.async('string');
+                            var parser = new DOMParser();
+                            var opfDoc = parser.parseFromString(opfXml, 'text/xml');
+                            var parseError = opfDoc.querySelector('parsererror');
+                            if (!parseError) {
+                                var manifest = {};
+                                opfDoc.querySelectorAll('manifest > item').forEach(function(el) {
+                                    manifest[el.getAttribute('id')] = el.getAttribute('href');
+                                });
+                                var spineIds = Array.from(opfDoc.querySelectorAll('spine > itemref')).map(function(el) { return el.getAttribute('idref'); });
+                                if (spineIds.length > 0) {
+                                    var fullText = '';
+                                    for (var idx = 0; idx < spineIds.length; idx++) {
+                                        var href = manifest[spineIds[idx]];
+                                        if (!href) continue;
+                                        var decodedHref = decodeURIComponent(href);
+                                        var contentFile = zip.file(opfDir + decodedHref) || zip.file(opfDir + href) || zip.file(decodedHref) || zip.file(href);
+                                        if (!contentFile) {
+                                            var hrefBase = decodedHref.split('/').pop();
+                                            var matches = allPaths.filter(function(p) { return p.indexOf(hrefBase) !== -1; });
+                                            if (matches.length > 0) contentFile = zip.file(matches[0]);
+                                        }
+                                        if (contentFile) {
+                                            var html = await contentFile.async('string');
+                                            var doc = parser.parseFromString(html, 'text/html');
+                                            doc.querySelectorAll('script, style').forEach(function(s) { s.remove(); });
+                                            fullText += doc.body.innerText + '\n\n';
+                                        }
+                                    }
+                                    if (fullText.trim()) {
+                                        document.getElementById('text-input').value = fullText.trim();
+                                        startDisplay();
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    alert('解析 EPUB 出错：缺少 META-INF/container.xml\n文件列表: ' + allPaths.slice(0, 10).join(', '));
+                    return;
+                }
                 var containerXml = await containerFile.async('string');
                 var opfPathMatch = containerXml.match(/full-path="([^"]+)"/);
                 if (!opfPathMatch) { alert('解析 EPUB 出错：container.xml格式无效\n内容: ' + containerXml.substring(0, 200)); return; }
@@ -6983,8 +7021,10 @@
 
         function toggleMode() {
             displayMode = displayMode === 'random' ? 'sequential' : 'random';
-            document.getElementById('mode-icon-svg').innerHTML = displayMode === 'random' ? '<path class="p-random"/>' : '<path class="p-loop"/>';
-            document.getElementById('mode-label').innerText = displayMode === 'random' ? '随机播放' : '循环播放';
+            var modeIcon = document.getElementById('mode-icon-svg');
+            if (modeIcon) modeIcon.innerHTML = displayMode === 'random' ? '<path class="p-random"/>' : '<path class="p-loop"/>';
+            var modeLabel = document.getElementById('mode-label');
+            if (modeLabel) modeLabel.innerText = displayMode === 'random' ? '随机播放' : '循环播放';
         }
 
         function exitDisplay() {
@@ -7066,14 +7106,9 @@
 
         // 监听全屏状态变化
         document.addEventListener('fullscreenchange', function() {
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            var fullscreenBtn = document.getElementById('fullscreen-btn');
             if (fullscreenBtn) {
-                const fullscreenLabel = fullscreenBtn.querySelector('.btn-label');
-                if (document.fullscreenElement) {
-                    fullscreenLabel.textContent = '退出全屏';
-                } else {
-                    fullscreenLabel.textContent = '全屏';
-                }
+                fullscreenBtn.title = document.fullscreenElement ? '退出全屏' : '全屏';
             }
         });
 
@@ -7250,11 +7285,23 @@
             document.getElementById('bg-brightness-val').textContent = brightness + '%';
             document.getElementById('bg-saturation-val').textContent = saturation + '%';
             document.getElementById('bg-lightness-val').textContent = lightness + '%';
+            document.documentElement.style.setProperty('--bg-brightness', (brightness / 100));
+            document.documentElement.style.setProperty('--bg-saturation', (saturation / 100));
+            document.documentElement.style.setProperty('--bg-lightness', (lightness / 100));
             if (!bgAdjustRaf) {
                 bgAdjustRaf = requestAnimationFrame(function() {
-                    document.documentElement.style.setProperty('--bg-brightness', (brightness / 100));
-                    document.documentElement.style.setProperty('--bg-saturation', (saturation / 100));
-                    document.documentElement.style.setProperty('--bg-lightness', (lightness / 100));
+                    var bVal = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bg-brightness')) || 1;
+                    var sVal = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bg-saturation')) || 1;
+                    var lVal = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bg-lightness')) || 1;
+                    var bgLayer = document.getElementById('bg-layer');
+                    var canvas = bgLayer ? bgLayer.querySelector('canvas') : null;
+                    if (canvas) {
+                        canvas.style.filter = 'saturate(' + sVal + ')';
+                        canvas.style.opacity = Math.max(0.2, Math.min(1.5, lVal));
+                    }
+                    document.querySelectorAll('.sentence-text, .typewriter-text').forEach(function(el) {
+                        el.style.filter = 'brightness(' + bVal + ') contrast(' + lVal + ')';
+                    });
                     localStorage.setItem('bgAdjust', JSON.stringify({ brightness: brightness, saturation: saturation, lightness: lightness }));
                     bgAdjustRaf = null;
                 });
@@ -7434,10 +7481,17 @@
                 this.brightness = Math.max(0, Math.min(2, val));
             };
             MatrixEngine.prototype.resize = function() {
-                this.canvas.width = this.canvas.offsetWidth;
-                this.canvas.height = this.canvas.offsetHeight;
+                var dpr = Math.min(window.devicePixelRatio || 1, 2);
+                var w = this.canvas.offsetWidth;
+                var h = this.canvas.offsetHeight;
+                if (w <= 0 || h <= 0) return;
+                this.canvas.width = Math.floor(w * dpr);
+                this.canvas.height = Math.floor(h * dpr);
+                this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                this.displayWidth = w;
+                this.displayHeight = h;
                 var colWidth = this.fontSize * 0.7;
-                this.columns = Math.floor(this.canvas.width / colWidth);
+                this.columns = Math.floor(w / colWidth);
                 this.drops = [];
                 this.columnSentences = [];
                 this.columnCharIndex = [];
@@ -7458,7 +7512,7 @@
                 else if (rnd < 0.75) layer = 1;
                 else layer = 2;
                 this.columnLayers[i] = layer;
-                var startYRange = this.canvas.height / this.fontSize;
+                var startYRange = this.displayHeight / this.fontSize;
                 this.drops[i] = initial
                     ? -(Math.random() * startYRange + Math.random() * startYRange)
                     : -(Math.random() * startYRange * 0.5 + Math.random() * 20);
@@ -7475,13 +7529,15 @@
             MatrixEngine.prototype.draw = function(step) {
                 if (!step) step = 1;
                 var ctx = this.ctx;
+                var dw = this.displayWidth || this.canvas.offsetWidth;
+                var dh = this.displayHeight || this.canvas.offsetHeight;
                 ctx.fillStyle = 'rgba(0,0,0,0.1)';
-                ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                ctx.fillRect(0, 0, dw, dh);
                 this.breathPhase += 0.015;
                 var breathFactor = 0.85 + 0.15 * Math.sin(this.breathPhase);
                 var useSentences = this.sentences.length > 0;
-                var mx = this.mouseX * this.canvas.width;
-                var my = this.mouseY * this.canvas.height;
+                var mx = this.mouseX * dw;
+                var my = this.mouseY * dh;
                 var glowMul = this.glowIntensity;
                 var accentParsed = this.parseColor(this.accentColor);
                 var colWidth = this.fontSize * 0.7;
@@ -7499,7 +7555,7 @@
                         var layerSpeed = cfg.speedMul * (this.columnSpeedMul[i] || 1);
                         var layerAlphaBase = cfg.alphaBase;
                         var y = this.drops[i] * layerFontSize;
-                        var progress = Math.max(0, Math.min(1, y / (this.canvas.height * this.columnMaxHeight[i])));
+                        var progress = Math.max(0, Math.min(1, y / (dh * this.columnMaxHeight[i])));
                         var headGlow = Math.max(0, 1 - progress * 2.0);
                         var fadeOut = progress > 0.5 ? Math.max(0, 1 - (progress - 0.5) / 0.5) : 1.0;
                         var drawX = i * colWidth;
@@ -7517,7 +7573,7 @@
                         var trailLen = this.columnTrailLen[i] || 14;
                         for (var t = 0; t < trailLen; t++) {
                             var trailY = y - t * layerFontSize;
-                            if (trailY < -layerFontSize || trailY > this.canvas.height + layerFontSize) continue;
+                            if (trailY < -layerFontSize || trailY > dh + layerFontSize) continue;
                             var trailFade = Math.pow(1 - (t / trailLen), 1.3);
                             var text;
                             if (useSentences && this.columnSentences[i]) {
@@ -7570,7 +7626,7 @@
                                 }
                             }
                             if (this.gradientTopColor && this.gradientBottomColor) {
-                                var gradRatio = Math.max(0, Math.min(1, trailY / this.canvas.height));
+                                var gradRatio = Math.max(0, Math.min(1, trailY / dh));
                                 var topC = this.parseColor(this.gradientTopColor);
                                 var botC = this.parseColor(this.gradientBottomColor);
                                 var gr = Math.round(topC.r + (botC.r - topC.r) * gradRatio);
@@ -7599,7 +7655,7 @@
                             this.assignSentence(i);
                         }
                         this.drops[i] += layerSpeed * step;
-                        if (this.drops[i] * layerFontSize > this.canvas.height * this.columnMaxHeight[i] + 30) {
+                        if (this.drops[i] * layerFontSize > dh * this.columnMaxHeight[i] + 30) {
                             this.initColumn(i, false);
                         }
                     }
