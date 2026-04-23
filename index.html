@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0e0e18" id="theme-color-meta">
     <title>Mas.reader</title>
+    <style>#app-splash{position:fixed;inset:0;z-index:99999;background:#0e0e18;display:flex;align-items:center;justify-content:center;transition:opacity 0.5s ease}#app-splash.hide{opacity:0;pointer-events:none}#app-splash-logo{font-family:system-ui,sans-serif;font-size:28px;font-weight:700;color:#7b61ff;letter-spacing:2px;opacity:0;animation:splashFade 0.6s 0.2s ease forwards}@keyframes splashFade{to{opacity:1}}</style>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Montserrat:wght@400;700&family=Lora:ital,wght@0,400;1,400&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@200;300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;700&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&family=Liu+Jian+Mao+Cao&family=Long+Cang&family=Zhi+Mang+Xing&family=Playfair+Display:wght@400;700;900&family=LXGW+WenKai&family=LXGW+WenKai+Mono&family=Merriweather:wght@300;400;700;900&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Oswald:wght@200;300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&subset=chinese-simplified&display=swap" rel="stylesheet">
     <link href="https://unknown123485.github.io/assets/fonts/hyzhengyuan/result.css" rel="stylesheet">
     <link href="https://unknown123485.github.io/assets/fonts/jinghuaoldsong/result.css" rel="stylesheet">
@@ -26,7 +27,7 @@
             --font-weight: 400;
             --font-sans: 'Montserrat', sans-serif;
             --font-serif: 'Noto Serif SC', 'EB Garamond', serif;
-            --line-height: 1.35;
+            --line-height: 1.6;
             --letter-spacing: 0em;
             --dpi-scale: 1;
             --lg-blur: 25px;
@@ -792,6 +793,7 @@
             border-right: 1px solid rgba(255,255,255,calc(0.08 * var(--lg-opacity)));
             border-bottom: 1px solid rgba(0,0,0,calc(0.15 * var(--lg-opacity)));
             overflow: hidden;
+            isolation: isolate;
         }
         .liquid-glass .lg-filter {
             position: absolute;
@@ -1060,12 +1062,17 @@
         .bg-adjust-btn svg { width: 1rem; height: 1rem; }
         .bg-adjust-panel {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
-            z-index: 1000; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+            z-index: 1000; background: rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-left: 1px solid rgba(255,255,255,0.12);
+            border-right: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(0,0,0,0.12);
             border-radius: 20px; padding: 1.5rem; width: 280px; opacity: 0; pointer-events: none;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.15);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.15);
+            isolation: isolate;
         }
         .bg-adjust-panel.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
         .bg-adjust-panel .panel-title { color: var(--text-primary); font-size: 0.9rem; margin-bottom: 1rem; text-align: center; opacity: 0.8; }
@@ -1080,25 +1087,30 @@
         
         .hero-glass-base {
             position: fixed;
-            top: env(safe-area-inset-top, 20px);
+            top: max(env(safe-area-inset-top), 12px);
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
             -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.45);
+            border-top: 1px solid rgba(255, 255, 255, 0.35);
             border-left: 1px solid rgba(255, 255, 255, 0.2);
             border-right: 1px solid rgba(255, 255, 255, 0.08);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             border-radius: 999px;
             padding: 8px 20px;
             box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 60px rgba(0, 255, 136, 0.03);
             display: flex;
             flex-direction: row;
+            flex-wrap: nowrap;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             z-index: 10001;
             margin-bottom: 0;
+            isolation: isolate;
+            white-space: nowrap;
+            overflow: visible;
         }
         .mas-reader-logo {
             width: 24px;
@@ -1138,6 +1150,7 @@
             padding: 2rem;
             transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
             overflow-y: auto; overflow-x: hidden;
+            isolation: isolate;
             scrollbar-width: none; -ms-overflow-style: none;
         }
         .home-settings-panel::before {
@@ -1268,18 +1281,19 @@
         }
         .home-settings-overlay.active { opacity: 1; pointer-events: auto; }
         
-        .about-module { margin-top: 16px; text-align: center; position: relative; }
+        .about-module { margin-top: 24px; text-align: center; position: relative; }
         .about-content { 
             display: inline-flex; align-items: center; gap: 0.3rem; 
             padding: 0.4rem 0.8rem; border-radius: 999px; cursor: pointer;
-            background: rgba(128, 128, 128, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(18px) saturate(200%) contrast(95%); -webkit-backdrop-filter: blur(18px) saturate(200%) contrast(95%);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.3), inset 0 -2px 10px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.15);
             transition: all 0.15s ease;
             margin-top: 0.8rem;
+            isolation: isolate;
         }
-        .about-content:hover { background: rgba(128, 128, 128, 0.12); border-color: rgba(255,255,255,0.18); }
+        .about-content:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255,255,255,0.25); }
         .about-content:active { transform: scale(0.98) translateY(2px); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2); }
         .about-icon { 
             width: 8px; height: 8px; border-radius: 50%; 
@@ -1293,12 +1307,17 @@
             left: 50%; top: 50%; transform: translate(-50%, -50%);
             width: 340px; max-width: 90vw; max-height: 70vh; overflow-y: auto;
             background: rgba(255,255,255,0.08); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 1.2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-left: 1px solid rgba(255,255,255,0.12);
+            border-right: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(0,0,0,0.12);
+            border-radius: 20px; padding: 1.2rem;
             z-index: 10000; scrollbar-width: none;
             font-family: 'Noto Serif SC', serif !important;
             font-size: 1.04rem;
             position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.15);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.15);
+            isolation: isolate;
         }
         .about-detail::before {
             content: '';
@@ -1338,22 +1357,23 @@
         .av-date { font-size: 0.6rem; color: var(--text-primary); opacity: 0.4; margin-top: 2px; }
         .av-desc { font-size: 0.65rem; color: var(--text-primary); opacity: 0.6; margin-top: 4px; line-height: 1.5; }
 
-        .entry-container { display: flex; flex-direction: column; gap: 16px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
+        .entry-container { display: flex; flex-direction: column; gap: 14px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
         .entry-card { 
-            width: 85%; max-width: 320px; padding: 18px 24px; 
-            background: rgba(255, 255, 255, 0.05); 
-            border-top: 1px solid rgba(255, 255, 255, 0.25);
-            border-left: 1px solid rgba(255, 255, 255, 0.15);
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            width: 85%; max-width: 320px; padding: 22px 28px; 
+            background: rgba(255, 255, 255, 0.08); 
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.18);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.18);
             border-radius: 16px;
             backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.15), inset 0 -1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.2);
             transition: all 0.15s ease;
-            display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; gap: 12px !important;
+            display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: flex-start !important; gap: 14px !important;
             cursor: pointer; position: relative; overflow: hidden;
             margin: 0 auto !important;
             transform: translateZ(0);
+            isolation: isolate;
         }
         .entry-card::before {
             content: '';
@@ -1367,14 +1387,14 @@
         .entry-card .entry-file-input {
             z-index: -1;
         }
-        .entry-card:hover { background: rgba(128, 128, 128, 0.12); border-color: rgba(255,255,255,0.25); box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 2px 0 3px rgba(255,255,255,0.35); }
+        .entry-card:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255,255,255,0.25); box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 2px 0 3px rgba(255,255,255,0.35); }
         .entry-card:active { transform: scale(0.98) translateY(2px); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2); }
-        .entry-card svg { width: 24px; height: 24px; fill: var(--text-primary); margin: 0; opacity: 0.9; flex-shrink: 0; }
+        .entry-card svg { width: 26px; height: 26px; fill: var(--text-primary); margin: 0; opacity: 1; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
         .entry-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
         .entry-desc { font-size: 0.65rem; opacity: 0.4; line-height: 1.4; margin: 0; }
         .liquid-upload-card { border-radius: 20px !important; }
-        .liquid-upload-icon { width: 24px; height: 24px; margin: 0; color: var(--text-primary); opacity: 1; flex-shrink: 0; }
-        .liquid-upload-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2.8; margin: 0; }
+        .liquid-upload-icon { width: 26px; height: 26px; margin: 0; color: var(--text-primary); opacity: 1; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+        .liquid-upload-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 3; margin: 0; }
         .liquid-upload-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary); margin: 0; }
         .liquid-upload-desc { font-size: 0.6rem; opacity: 0.35; letter-spacing: 0.03em; color: var(--text-primary); margin: 0; }
         .entry-text-wrap { display: flex; flex-direction: column; min-width: 0; }
@@ -1460,7 +1480,7 @@
         #bg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         #bg-layer canvas { width: 100%; height: 100%; display: block; transition: filter 0.3s ease; object-fit: cover; }
         #display-screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 25; overflow: hidden; padding-top: env(safe-area-inset-top, 0px) !important; padding-bottom: env(safe-area-inset-bottom, 0px) !important; box-sizing: border-box; }
-        .display-area { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; padding-bottom: env(safe-area-inset-bottom, 0px); }
+        .display-area { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
         #standard-area { position: relative; z-index: 5; width: 100%; height: 100%; display: grid; place-items: center; }
 
         .sentence-text { 
@@ -1471,7 +1491,7 @@
             letter-spacing: var(--letter-spacing, 0em);
             opacity: 0; transform: translateY(100px) scale(0.85); 
             filter: blur(30px); transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
-            max-width: 85vw; word-wrap: break-word;
+            max-width: 85vw; word-wrap: break-word; padding: 0 3vw;
             white-space: pre-wrap;
             word-break: normal; line-break: strict; hyphens: none;
             text-align: justify;
@@ -2063,9 +2083,9 @@
         .slider-custom::-webkit-slider-thumb:active { transform: scale(1.2); box-shadow: 0 2px 10px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.15), 0 0 20px rgba(123,97,255,0.35); }
         .slider-custom::-moz-range-track { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; border: none; }
         .slider-custom::-moz-range-thumb { height: 22px; width: 22px; background: radial-gradient(circle at 35% 35%, #fff 0%, rgba(255,255,255,0.85) 60%, rgba(200,200,220,0.7) 100%); border-radius: 50%; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1), 0 0 12px rgba(123,97,255,0.2); cursor: pointer; }
-        .font-select, .anim-select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 14px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; outline: none; min-width: 160px; font-family: var(--font-display); backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); }
+        .font-select, .anim-select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 10px 14px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; outline: none; min-width: 160px; font-family: var(--font-display); backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%); -webkit-appearance: none; appearance: none; }
         .font-select optgroup { background: rgba(20,20,35,0.95); color: rgba(255,255,255,0.7); }
-        .font-select option { background: rgba(20,20,35,0.95); color: white; padding: 5px; }
+        .font-select option { background: rgba(20,20,35,0.95); color: white; padding: 8px; }
         
         .custom-font-select {
             position: relative;
@@ -2505,13 +2525,18 @@
         .toc-modal-content { 
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%); 
             backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); 
-            border: 1px solid rgba(255,255,255,0.12); border-radius: 24px 24px 0 0; 
+            border-top: 1px solid rgba(255,255,255,0.25);
+            border-left: 1px solid rgba(255,255,255,0.12);
+            border-right: 1px solid rgba(255,255,255,0.06);
+            border-bottom: none;
+            border-radius: 24px 24px 0 0; 
             padding: 1.5rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px)); width: 100%; max-width: 100%; height: 75vh;
             display: flex; flex-direction: column; color: #fff; 
             transform: translateY(100%); opacity: 0;
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
             position: relative;
-            box-shadow: 0 -10px 60px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.1);
+            box-shadow: 0 -10px 60px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.15), inset 0 -1px 2px rgba(0,0,0,0.1);
+            isolation: isolate;
         }
         .toc-modal-content::before {
             content: '';
@@ -2674,22 +2699,29 @@
             overflow-y: auto;
         }
         .file-list-item {
-            padding: 14px 16px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            border-radius: 14px;
             color: rgba(255,255,255,0.95);
             cursor: pointer;
             font-family: var(--font-display);
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.15s;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
+            backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.1);
+            min-height: 60px;
+            isolation: isolate;
         }
         .file-list-item .item-title {
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             color: rgba(255,255,255,0.95);
             overflow: hidden;
             text-overflow: ellipsis;
@@ -2697,7 +2729,8 @@
         }
         .file-list-item .item-meta {
             font-size: 12px;
-            color: rgba(255,255,255,0.45);
+            color: rgba(255,255,255,0.4);
+            font-weight: 400;
         }
         .file-list-item:hover {
             background: rgba(255,255,255,0.12);
@@ -3585,10 +3618,9 @@
                 height: 24px;
             }
             .status-badge-container {
-                top: 0;
+                top: max(env(safe-area-inset-top), 12px);
                 left: 0.8rem;
                 z-index: 930;
-                padding-top: max(env(safe-area-inset-top), 16px);
             }
             .status-badge {
                 padding: 0.5rem 1.2rem;
@@ -3769,6 +3801,7 @@
     </style>
 </head>
 <body class="theme-mystic">
+    <div id="app-splash"><div id="app-splash-logo">MR</div></div>
     <!-- SVG 物理滤镜库：深度还原活字印刷的油墨灵魂 -->
     <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true" focusable="false">
         <filter id="lg-dist" x="0%" y="0%" width="100%" height="100%">
@@ -4039,7 +4072,7 @@
 
             <div id="entry-selection" class="entry-container">
                 <div class="entry-card liquid-upload-card" id="epub-drop-zone">
-                    <input type="file" id="file-input" accept=".epub,.md,.txt,text/plain,application/epub+zip,text/markdown" onchange="handleFileSelect(event)" class="entry-file-input" style="opacity:0;width:0.1px;height:0.1px;position:absolute;overflow:hidden;">
+                    <input type="file" id="file-input" accept=".epub,.md,.txt,text/plain,application/epub+zip,text/markdown" onchange="handleFileSelect(event)" class="entry-file-input" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
                     <label for="file-input" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;cursor:pointer;width:100%;position:relative;z-index:2;">
                     <div class="liquid-upload-icon">
                         <svg viewBox="0 0 48 48" fill="none"><path d="M24 12v24M12 24h24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
@@ -4052,7 +4085,7 @@
                 </div>
 
                 <div class="entry-card liquid-upload-card" id="folder-entry-card">
-                    <input type="file" id="folder-input" webkitdirectory directory multiple accept=".txt,.md,.epub,text/plain,application/epub+zip,text/markdown" onchange="handleFolderSelect(event)" class="entry-file-input" style="opacity:0;width:0.1px;height:0.1px;position:absolute;overflow:hidden;">
+                    <input type="file" id="folder-input" webkitdirectory directory multiple accept=".txt,.md,.epub,text/plain,application/epub+zip,text/markdown" onchange="handleFolderSelect(event)" class="entry-file-input" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
                     <label for="folder-input" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;cursor:pointer;width:100%;position:relative;z-index:2;">
                     <div class="liquid-upload-icon">
                         <svg viewBox="0 0 48 48" fill="none"><path d="M8 16l6-6h12l4 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="6" y="16" width="36" height="22" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M20 24v8M16 28h8" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
@@ -6404,6 +6437,13 @@
         
         // 字体选择时的界面优化
         document.addEventListener('DOMContentLoaded', function() {
+            var splash = document.getElementById('app-splash');
+            if (splash) {
+                setTimeout(function() {
+                    splash.classList.add('hide');
+                    setTimeout(function() { splash.remove(); }, 600);
+                }, 300);
+            }
             const statusTimeEl = document.getElementById('status-time');
             function updateStatusTime() {
                 if (!statusTimeEl) return;
@@ -7592,14 +7632,22 @@
                 this.assignSentence(i);
             };
             MatrixEngine.prototype.updateAccentColor = function() {
-                this.accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
+                var now = performance.now();
+                if (!this._lastAccentUpdate || now - this._lastAccentUpdate > 1000) {
+                    var newColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
+                    if (newColor !== this.accentColor) {
+                        this.accentColor = newColor;
+                        this._accentParsed = this.parseColor(newColor);
+                    }
+                    this._lastAccentUpdate = now;
+                }
             };
             MatrixEngine.prototype.draw = function(step) {
                 if (!step) step = 1;
                 var ctx = this.ctx;
                 var dw = this.displayWidth || this.canvas.offsetWidth;
                 var dh = this.displayHeight || this.canvas.offsetHeight;
-                ctx.fillStyle = 'rgba(0,0,0,0.06)';
+                ctx.fillStyle = 'rgba(0,0,0,0.04)';
                 ctx.fillRect(0, 0, dw, dh);
                 this.breathPhase += 0.012;
                 var breathFactor = 0.88 + 0.12 * Math.sin(this.breathPhase);
@@ -7607,12 +7655,12 @@
                 var mx = this.mouseX * dw;
                 var my = this.mouseY * dh;
                 var glowMul = this.glowIntensity;
-                var accentParsed = this.parseColor(this.accentColor);
+                var accentParsed = this._accentParsed || this.parseColor(this.accentColor);
                 var colWidth = this.fontSize * 0.7;
                 var layers = [
-                    { fontMul: 0.5, speedMul: 0.3, alphaBase: 0.15, darkMul: 0.15, blur: 1.5 },
-                    { fontMul: 0.85, speedMul: 0.7, alphaBase: 0.45, darkMul: 0.5, blur: 0 },
-                    { fontMul: 1.3, speedMul: 1.6, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
+                    { fontMul: 0.45, speedMul: 0.25, alphaBase: 0.08, darkMul: 0.08, blur: 0 },
+                    { fontMul: 0.8, speedMul: 0.65, alphaBase: 0.4, darkMul: 0.45, blur: 0 },
+                    { fontMul: 1.4, speedMul: 1.8, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
                 ];
                 for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
                     for (var i = 0; i < this.drops.length; i++) {
@@ -7642,7 +7690,7 @@
                         for (var t = 0; t < trailLen; t++) {
                             var trailY = y - t * layerFontSize;
                             if (trailY < -layerFontSize * 2 || trailY > dh + layerFontSize) continue;
-                            var trailFade = Math.pow(1 - (t / trailLen), 1.8);
+                            var trailFade = Math.pow(1 - (t / trailLen), 2.2);
                             var text;
                             if (useSentences && this.columnSentences[i]) {
                                 var sent = this.columnSentences[i];
@@ -7660,13 +7708,16 @@
                             ctx.filter = 'none';
                             if (t === 0) {
                                 r = 255; g = 255; b = 255;
-                                charAlpha = Math.min(1, 0.98 * breathFactor * layerAlphaBase * fadeOut + mouseBrightBoost);
+                                charAlpha = Math.min(1, 1.0 * breathFactor * layerAlphaBase * fadeOut + mouseBrightBoost);
                                 if (layer === 2) {
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.95 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 28 * glowMul * cfg.darkMul;
+                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.98 * glowMul * cfg.darkMul) + ')';
+                                    ctx.shadowBlur = 36 * glowMul * cfg.darkMul;
                                 } else if (layer === 1) {
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.5 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 12 * glowMul * cfg.darkMul;
+                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.6 * glowMul * cfg.darkMul) + ')';
+                                    ctx.shadowBlur = 16 * glowMul * cfg.darkMul;
+                                } else {
+                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.3 * glowMul * cfg.darkMul) + ')';
+                                    ctx.shadowBlur = 8 * glowMul * cfg.darkMul;
                                 }
                             } else if (t <= 3) {
                                 var mix = 1 - (t / 3);
@@ -7692,13 +7743,21 @@
                                     g = Math.round(accentParsed.g * 0.6);
                                     b = Math.round(accentParsed.b * 0.6);
                                 }
-                                charAlpha = Math.max(0.01, (0.06 + headGlow * 0.25) * breathFactor * layerAlphaBase * fadeOut * trailFade);
+                                charAlpha = Math.max(0.03, (0.06 + headGlow * 0.25) * breathFactor * layerAlphaBase * fadeOut * trailFade);
                                 charAlpha = Math.min(1, charAlpha + mouseBrightBoost * 0.4);
                             }
                             if (this.gradientTopColor && this.gradientBottomColor) {
                                 var gradRatio = Math.max(0, Math.min(1, trailY / dh));
-                                var topC = this.parseColor(this.gradientTopColor);
-                                var botC = this.parseColor(this.gradientBottomColor);
+                                if (!this._gradTopC || this._gradTopKey !== this.gradientTopColor) {
+                                    this._gradTopC = this.parseColor(this.gradientTopColor);
+                                    this._gradTopKey = this.gradientTopColor;
+                                }
+                                if (!this._gradBotC || this._gradBotKey !== this.gradientBottomColor) {
+                                    this._gradBotC = this.parseColor(this.gradientBottomColor);
+                                    this._gradBotKey = this.gradientBottomColor;
+                                }
+                                var topC = this._gradTopC;
+                                var botC = this._gradBotC;
                                 var gr = Math.round(topC.r + (botC.r - topC.r) * gradRatio);
                                 var gg = Math.round(topC.g + (botC.g - topC.g) * gradRatio);
                                 var gb = Math.round(topC.b + (botC.b - topC.b) * gradRatio);
@@ -7826,7 +7885,11 @@
                 }
             };
             InkWashEngine.prototype.updateAccentColor = function() {
-                this.accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3a3a3a';
+                var now = performance.now();
+                if (!this._lastAccentUpdate || now - this._lastAccentUpdate > 1000) {
+                    this.accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3a3a3a';
+                    this._lastAccentUpdate = now;
+                }
             };
             InkWashEngine.prototype.draw = function() {
                 var ctx = this.ctx;
@@ -8253,9 +8316,12 @@
 
             LiquidGlassEngine.prototype.resize = function() {
                 var dpr = 0.75;
-                this.glCanvas.width = window.innerWidth * dpr;
-                this.glCanvas.height = window.innerHeight * dpr;
-                this.gl.viewport(0, 0, this.glCanvas.width, this.glCanvas.height);
+                var newW = Math.floor(window.innerWidth * dpr);
+                var newH = Math.floor(window.innerHeight * dpr);
+                if (this.glCanvas.width === newW && this.glCanvas.height === newH) return;
+                this.glCanvas.width = newW;
+                this.glCanvas.height = newH;
+                this.gl.viewport(0, 0, newW, newH);
             };
 
             LiquidGlassEngine.prototype.render = function() {
@@ -8266,22 +8332,26 @@
                     return;
                 }
 
-                this.resize();
+                var now = performance.now();
+                if (!this._lastFrame || now - this._lastFrame >= 33) {
+                    this._lastFrame = now;
+                    this.resize();
 
-                this.gl.clearColor(0, 0, 0, 0);
-                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-                this.gl.enable(this.gl.BLEND);
-                this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+                    this.gl.clearColor(0, 0, 0, 0);
+                    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+                    this.gl.enable(this.gl.BLEND);
+                    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
-                this.gl.bindTexture(this.gl.TEXTURE_2D, this.backgroundTexture);
-                this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA,
-                    this.gl.UNSIGNED_BYTE, this.matrixCanvas);
+                    this.gl.bindTexture(this.gl.TEXTURE_2D, this.backgroundTexture);
+                    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA,
+                        this.gl.UNSIGNED_BYTE, this.matrixCanvas);
 
-                this.gl.uniform1i(this.uBackground, 0);
-                this.gl.uniform1f(this.uTime, (performance.now() - this.startTime) / 1000.0);
-                this.gl.uniform1f(this.uFbmLayers, this.fbmLayers);
+                    this.gl.uniform1i(this.uBackground, 0);
+                    this.gl.uniform1f(this.uTime, (now - this.startTime) / 1000.0);
+                    this.gl.uniform1f(this.uFbmLayers, this.fbmLayers);
 
-                this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+                    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+                }
 
                 this.animFrameId = requestAnimationFrame(this.render.bind(this));
             };
