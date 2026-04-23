@@ -1060,16 +1060,18 @@
         .bg-adjust-btn svg { width: 1rem; height: 1rem; }
         .bg-adjust-panel {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
-            z-index: 1000; background: rgba(15,15,25,0.95); border: 1px solid rgba(255,255,255,0.15);
+            z-index: 1000; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
             border-radius: 20px; padding: 1.5rem; width: 280px; opacity: 0; pointer-events: none;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            backdrop-filter: blur(40px);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.15);
         }
         .bg-adjust-panel.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
         .bg-adjust-panel .panel-title { color: var(--text-primary); font-size: 0.9rem; margin-bottom: 1rem; text-align: center; opacity: 0.8; }
         .bg-adjust-panel .slider-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; }
         .bg-adjust-panel .slider-row label { color: var(--text-primary); font-size: 0.75rem; opacity: 0.6; min-width: 50px; }
-        .bg-adjust-panel .slider-row input[type="range"] { flex: 1; accent-color: var(--accent); height: 4px; }
+        .bg-adjust-panel .slider-row input[type="range"] { flex: 1; }
         .bg-adjust-panel .slider-row .val { color: var(--text-primary); font-size: 0.7rem; opacity: 0.5; min-width: 30px; text-align: right; }
 
 
@@ -1271,13 +1273,13 @@
             display: inline-flex; align-items: center; gap: 0.3rem; 
             padding: 0.4rem 0.8rem; border-radius: 999px; cursor: pointer;
             background: rgba(128, 128, 128, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(18px) saturate(200%) contrast(95%); -webkit-backdrop-filter: blur(18px) saturate(200%) contrast(95%);
             box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.3), inset 0 -2px 10px rgba(0,0,0,0.08);
             transition: all 0.15s ease;
             margin-top: 0.8rem;
         }
-        .about-content:hover { background: rgba(128, 128, 128, 0.12); border-color: rgba(255,255,255,0.25); }
+        .about-content:hover { background: rgba(128, 128, 128, 0.12); border-color: rgba(255,255,255,0.18); }
         .about-content:active { transform: scale(0.98) translateY(2px); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2); }
         .about-icon { 
             width: 8px; height: 8px; border-radius: 50%; 
@@ -1290,12 +1292,13 @@
             display: none; position: fixed;
             left: 50%; top: 50%; transform: translate(-50%, -50%);
             width: 340px; max-width: 90vw; max-height: 70vh; overflow-y: auto;
-            background: rgba(20,20,30,0.95); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.2rem;
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 1.2rem;
             z-index: 10000; scrollbar-width: none;
             font-family: 'Noto Serif SC', serif !important;
             font-size: 1.04rem;
             position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.15);
         }
         .about-detail::before {
             content: '';
@@ -1419,7 +1422,7 @@
         .entry-card.drag-over { background: var(--accent); border-color: white; }
         .entry-card.drag-over * { color: white !important; fill: white !important; }
 
-        .btn-back { margin-top: 2rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: 0.3s, transform 0.15s ease, box-shadow 0.15s ease; }
+        .btn-back { margin-top: 2rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: 0.3s, transform 0.15s ease, box-shadow 0.15s ease; backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); }
         .btn-back:hover { background: rgba(255,255,255,0.1); }
         .btn-back:active { transform: translateY(2px) scale(0.97); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); background: rgba(255,255,255,0.05); }
         .text-input { 
@@ -1841,7 +1844,7 @@
         }
 
         /* --- 交互控制 (可折叠) --- */
-        .luxury-fab { position: fixed; bottom: 2rem; right: 2rem; width: 65px; height: 65px; background: var(--accent); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; color: white; border: 1px solid rgba(255,255,255,0.3); font-size: 24px; }
+        .luxury-fab { position: fixed; bottom: 2rem; right: 2rem; width: 65px; height: 65px; background: var(--accent); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.3); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.15s ease, box-shadow 0.15s ease; color: white; border: none; font-size: 24px; }
         .luxury-fab:hover { transform: scale(1.1) rotate(90deg); }
         .luxury-fab:active { transform: scale(0.92) rotate(90deg); box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 2px 6px rgba(0,0,0,0.3); }
 
@@ -1865,10 +1868,10 @@
             opacity: 0;
             pointer-events: none;
             visibility: hidden;
-            border-top: 1px solid rgba(255,255,255,0.25);
-            border-left: 1px solid rgba(255,255,255,0.15);
-            border-right: 1px solid rgba(255,255,255,0.06);
-            border-bottom: 1px solid rgba(0,0,0,0.15);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
             isolation: isolate;
             padding-bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px));
         }
@@ -1883,8 +1886,8 @@
         .nav-bar-luxury.open { 
             transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto !important; visibility: visible; 
             overflow-y: auto; overflow-x: hidden; 
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
         }
         .nav-bar-luxury::-webkit-scrollbar { display: none; }
         .nav-bar-luxury.open.is-adjusting,
@@ -1918,9 +1921,9 @@
             opacity: 1 !important;
         }
         .nav-bar-luxury.dimmed {
-            background: rgba(10, 10, 15, 0.01) !important;
-            backdrop-filter: blur(10px) saturate(120%) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(120%) !important;
+            background: rgba(255,255,255,0.02) !important;
+            backdrop-filter: blur(15px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
             box-shadow: none !important;
             transition: background 0.2s ease, backdrop-filter 0.2s ease, box-shadow 0.2s ease;
         }
@@ -2060,9 +2063,9 @@
         .slider-custom::-webkit-slider-thumb:active { transform: scale(1.2); box-shadow: 0 2px 10px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.15), 0 0 20px rgba(123,97,255,0.35); }
         .slider-custom::-moz-range-track { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; border: none; }
         .slider-custom::-moz-range-thumb { height: 22px; width: 22px; background: radial-gradient(circle at 35% 35%, #fff 0%, rgba(255,255,255,0.85) 60%, rgba(200,200,220,0.7) 100%); border-radius: 50%; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1), 0 0 12px rgba(123,97,255,0.2); cursor: pointer; }
-        .font-select, .anim-select { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; outline: none; min-width: 160px; font-family: var(--font-display); }
-        .font-select optgroup { background: #1a1a2e; color: white; }
-        .font-select option { background: #1a1a2e; color: white; padding: 5px; }
+        .font-select, .anim-select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 14px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; outline: none; min-width: 160px; font-family: var(--font-display); backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); }
+        .font-select optgroup { background: rgba(20,20,35,0.95); color: rgba(255,255,255,0.7); }
+        .font-select option { background: rgba(20,20,35,0.95); color: white; padding: 5px; }
         
         .custom-font-select {
             position: relative;
@@ -2076,20 +2079,22 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.12);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 0.75rem;
             transition: all 0.3s ease;
             z-index: 2001;
             position: relative;
+            backdrop-filter: blur(10px) saturate(150%);
+            -webkit-backdrop-filter: blur(10px) saturate(150%);
         }
         
         .custom-font-select-header:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.2);
         }
         .custom-font-select-header:active {
             transform: scale(0.97);
@@ -2107,43 +2112,51 @@
         
         .custom-font-select-dropdown {
             position: fixed;
-            background: rgba(10, 10, 15, 0.95);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
             max-height: 300px;
             overflow-y: auto;
             z-index: 9999;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.15);
             display: none;
+            padding: 8px;
         }
         
         .font-category {
-            padding: 8px 12px;
+            padding: 10px 14px;
             font-size: 0.6rem;
             font-weight: 600;
             color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         
         .font-option {
-            padding: 8px 12px;
-            color: white;
+            padding: 12px 14px;
+            color: rgba(255,255,255,0.85);
             cursor: pointer;
             font-size: 0.75rem;
             transition: all 0.2s ease;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-radius: 8px;
         }
         
         .font-option:hover {
             background: rgba(255,255,255,0.1);
-            padding-left: 16px;
+            padding-left: 18px;
         }
         .font-option:active {
             transform: scale(0.97);
             background: rgba(255,255,255,0.15);
+        }
+        .font-option.selected {
+            background: rgba(123,97,255,0.2);
+            color: var(--accent);
+            border-left: 2px solid var(--accent);
         }
         
         .font-option:last-child {
@@ -2170,9 +2183,9 @@
             overflow: hidden;
         }
         
-        .crystal-dot { width: 38px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: 0.4s, transform 0.15s ease; backdrop-filter: blur(15px); position: relative; overflow: hidden; }
+        .crystal-dot { width: 38px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.4s, transform 0.15s ease; backdrop-filter: blur(15px) saturate(180%); -webkit-backdrop-filter: blur(15px) saturate(180%); position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.2); }
         .crystal-dot::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 25%, transparent 50%); pointer-events: none; }
-        .crystal-dot:hover { transform: scale(1.2) rotate(10deg); border-color: white; }
+        .crystal-dot:hover { transform: scale(1.2) rotate(10deg); border-color: rgba(255,255,255,0.3); }
         .crystal-dot:active { transform: scale(0.9) rotate(10deg); }
 
         .hidden { display: none !important; }
@@ -2398,7 +2411,7 @@
             position: relative;
             cursor: pointer;
             transition: background 0.3s, transform 0.15s ease;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: none;
             pointer-events: auto;
             flex-shrink: 0;
         }
@@ -2492,12 +2505,13 @@
         .toc-modal-content { 
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%); 
             backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); 
-            border: 1px solid rgba(255,255,255,0.25); border-radius: 24px 24px 0 0; 
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 24px 24px 0 0; 
             padding: 1.5rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px)); width: 100%; max-width: 100%; height: 75vh;
             display: flex; flex-direction: column; color: #fff; 
             transform: translateY(100%); opacity: 0;
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
             position: relative;
+            box-shadow: 0 -10px 60px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.1);
         }
         .toc-modal-content::before {
             content: '';
@@ -2529,15 +2543,15 @@
             font-weight: 500; letter-spacing: 0.1em;
         }
         .toc-close-btn {
-            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.1);
+            border: none;
             backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.3);
-            color: var(--text-primary); width: 32px; height: 32px; border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.2);
+            color: #fff; width: 36px; height: 36px; border-radius: 50%;
             cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease, background 0.15s ease;
         }
-        .toc-close-btn:active { transform: scale(0.88); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+        .toc-close-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.2); }
         .toc-list {
             flex: 4; overflow-y: auto; min-height: 0;
         }
@@ -2609,10 +2623,10 @@
 
         /* ===== 文件夹接管 ===== */
         .file-list-view {
-            width: 100%;
+            width: calc(100% - 40px);
             max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
+            margin: 12px 20px;
+            padding: 20px;
             max-height: 80vh;
             overflow-y: auto;
             background: rgba(255, 255, 255, 0.05);
@@ -2620,7 +2634,7 @@
             -webkit-backdrop-filter: blur(15px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            margin: 12px 20px;
+            box-sizing: border-box;
         }
         .file-list-header {
             display: flex;
@@ -2667,14 +2681,23 @@
             color: rgba(255,255,255,0.95);
             cursor: pointer;
             font-family: var(--font-display);
+            transition: background 0.2s;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .file-list-item .item-title {
             font-size: 16px;
             font-weight: 500;
-            transition: background 0.2s;
+            color: rgba(255,255,255,0.95);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            max-width: 100%;
-            box-sizing: border-box;
+        }
+        .file-list-item .item-meta {
+            font-size: 12px;
+            color: rgba(255,255,255,0.45);
         }
         .file-list-item:hover {
             background: rgba(255,255,255,0.12);
@@ -2705,6 +2728,7 @@
             -webkit-backdrop-filter: blur(15px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
+            margin-top: 0.5rem;
         }
         .theme-carousel-wrap {
             width: 100%;
@@ -3459,11 +3483,12 @@
                 opacity: 0;
                 pointer-events: none;
                 visibility: hidden;
-                border-radius: 24px;
+                border-radius: 28px;
                 z-index: 960;
-                background: rgba(255,255,255,0.08) !important;
-                backdrop-filter: blur(25px) saturate(200%) !important;
-                -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+                background: rgba(255,255,255,0.06) !important;
+                backdrop-filter: blur(30px) saturate(200%) !important;
+                -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+                padding-bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px)) !important;
             }
             .nav-bar-luxury .dpi-content-wrap {
                 transform: none;
@@ -3679,7 +3704,8 @@
                 padding: 0.8rem;
                 bottom: 0.5rem;
                 max-height: 92vh;
-                border-radius: 20px;
+                border-radius: 24px;
+                padding-bottom: calc(0.8rem + env(safe-area-inset-bottom, 0px)) !important;
             }
             .theme-detail-panel {
                 max-height: 200px;
@@ -4581,17 +4607,17 @@
                     <div class="slider-label" style="margin-bottom: 0.5rem;">背景调节</div>
                     <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
                         <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;">亮度</label>
-                        <input type="range" id="bg-brightness" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;accent-color:var(--accent);height:4px;">
+                        <input type="range" class="slider-custom" id="bg-brightness" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;">
                         <span class="val" id="bg-brightness-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">100%</span>
                     </div>
                     <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
                         <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;">饱和度</label>
-                        <input type="range" id="bg-saturation" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;accent-color:var(--accent);height:4px;">
+                        <input type="range" class="slider-custom" id="bg-saturation" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;">
                         <span class="val" id="bg-saturation-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">100%</span>
                     </div>
                     <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
                         <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;">深浅度</label>
-                        <input type="range" id="bg-lightness" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;accent-color:var(--accent);height:4px;">
+                        <input type="range" class="slider-custom" id="bg-lightness" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;">
                         <span class="val" id="bg-lightness-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">100%</span>
                     </div>
                 </div>
@@ -6462,6 +6488,8 @@
                     selectedFontElement.textContent = font;
                     fontSelect.value = font;
                     updateFont();
+                    fontOptions.forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
                     customFontSelect.classList.remove('open');
                     customFontSelectDropdown.style.display = 'none';
                     disableDimmed();
@@ -8594,7 +8622,15 @@
                     const item = document.createElement('div');
                     item.className = 'file-list-item' + (i === currentFileIndex ? ' active' : '');
                     item.setAttribute('data-index', i);
-                    item.textContent = icon + ' ' + file.name;
+                    const titleEl = document.createElement('div');
+                    titleEl.className = 'item-title';
+                    titleEl.textContent = file.name;
+                    const metaEl = document.createElement('div');
+                    metaEl.className = 'item-meta';
+                    const sizeStr = file.size ? (file.size < 1024*1024 ? (file.size/1024).toFixed(1) + ' KB' : (file.size/1024/1024).toFixed(1) + ' MB') : '';
+                    metaEl.textContent = icon + ' ' + ext.toUpperCase() + (sizeStr ? ' · ' + sizeStr : '');
+                    item.appendChild(titleEl);
+                    item.appendChild(metaEl);
                     fragment.appendChild(item);
                 }
                 itemsContainer.appendChild(fragment);
