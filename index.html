@@ -90,18 +90,8 @@
             border-radius: revert !important;
         }
 
-        button,
-        .btn,
-        [class*="button"]:not(.slider-label):not(.slider-wrap):not(.entry-card):not(.about-content),
-        [class*="btn"]:not(.slider-wrap):not(.entry-card):not(.control-btn):not(.bottom-control-btn):not(.about-content),
-        [role="button"]:not(.entry-card):not(.about-content),
         .liquid-glass,
         .liquid-glass-btn,
-        .status-badge,
-        .status-badge-setting,
-        .theme-carousel-item,
-        .theme-current-capsule,
-        .crystal-dot,
         .glass-panel {
             backdrop-filter: blur(18px) saturate(200%) contrast(95%);
             -webkit-backdrop-filter: blur(18px) saturate(200%) contrast(95%);
@@ -118,26 +108,26 @@
             transition: all 0.15s ease;
         }
 
-        button:active,
-        .btn:active,
-        [class*="button"]:active:not(.entry-card):not(.about-content),
-        [class*="btn"]:active:not(.entry-card):not(.about-content),
-        [role="button"]:active:not(.entry-card):not(.about-content) {
-            transform: scale(0.98) translateY(2px);
-            backdrop-filter: blur(25px) saturate(200%) contrast(95%);
-            -webkit-backdrop-filter: blur(25px) saturate(200%) contrast(95%);
-            box-shadow:
-                inset 0 4px 8px rgba(0, 0, 0, 0.15),
-                0 4px 10px rgba(0, 0, 0, 0.2);
+        .status-badge,
+        .status-badge-setting,
+        .theme-carousel-item,
+        .theme-current-capsule,
+        .crystal-dot {
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            transition: all 0.15s ease;
         }
 
-        button svg,
-        [class*="button"] svg,
-        [role="button"] svg,
+        button:active,
+        .btn:active {
+            transform: scale(0.98) translateY(2px);
+        }
+
         .entry-card svg,
-        .liquid-upload-icon svg {
+        .liquid-upload-icon svg,
+        .bottom-control-btn svg {
             stroke-width: 2.5px;
-            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
         }
 
         .low-perf-mode {
@@ -1083,7 +1073,7 @@
 
 
         /* --- 输入屏幕重构 --- */
-        #input-screen { display: flex; display: -webkit-box; -webkit-box-orient: vertical; -webkit-box-align: center; -webkit-box-pack: center; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; min-height: 100dvh; z-index: 20; background: inherit; position: fixed; top: 0; left: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 56px); }
+        #input-screen { display: flex; display: -webkit-box; -webkit-box-orient: vertical; -webkit-box-align: center; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; min-height: 100vh; min-height: 100dvh; z-index: 20; background: inherit; position: fixed; top: 0; left: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 52px); padding-bottom: max(env(safe-area-inset-bottom), 12px); }
         
         .hero-glass-base {
             position: fixed;
@@ -1359,9 +1349,9 @@
         .av-date { font-size: 0.6rem; color: var(--text-primary); opacity: 0.4; margin-top: 2px; }
         .av-desc { font-size: 0.65rem; color: var(--text-primary); opacity: 0.6; margin-top: 4px; line-height: 1.5; }
 
-        .entry-container { display: flex; flex-direction: column; gap: 14px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
+        .entry-container { display: flex; flex-direction: column; gap: 12px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; margin-top: auto; margin-bottom: auto; }
         .entry-card { 
-            width: 100%; max-width: 320px; padding: 16px 22px; 
+            width: 100%; max-width: 320px; padding: 14px 20px; 
             background: rgba(255, 255, 255, 0.08); 
             border-top: 1px solid rgba(255, 255, 255, 0.3);
             border-left: 1px solid rgba(255, 255, 255, 0.18);
@@ -1391,14 +1381,14 @@
         }
         .entry-card:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255,255,255,0.25); box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 2px 0 3px rgba(255,255,255,0.35); }
         .entry-card:active { transform: scale(0.98) translateY(2px); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2); }
-        .entry-card svg { width: 26px; height: 26px; fill: var(--text-primary); margin: 0; opacity: 1; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
-        .entry-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
-        .entry-desc { font-size: 0.65rem; opacity: 0.4; line-height: 1.4; margin: 0; }
-        .liquid-upload-card { border-radius: 20px !important; }
-        .liquid-upload-icon { width: 26px; height: 26px; margin: 0; color: var(--text-primary); opacity: 1; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+        .entry-card svg { width: 24px; height: 24px; fill: var(--text-primary); margin: 0; opacity: 1; flex-shrink: 0; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5)); }
+        .entry-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
+        .entry-desc { font-size: 0.6rem; opacity: 0.45; line-height: 1.4; margin: 0; }
+        .liquid-upload-card { border-radius: 16px !important; }
+        .liquid-upload-icon { width: 24px; height: 24px; margin: 0; color: var(--text-primary); opacity: 1; flex-shrink: 0; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5)); }
         .liquid-upload-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 3; margin: 0; }
-        .liquid-upload-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary); margin: 0; }
-        .liquid-upload-desc { font-size: 0.65rem; opacity: 0.5; letter-spacing: 0.03em; color: var(--text-primary); margin: 0; }
+        .liquid-upload-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary); margin: 0; }
+        .liquid-upload-desc { font-size: 0.6rem; opacity: 0.45; letter-spacing: 0.03em; color: var(--text-primary); margin: 0; }
         .entry-text-wrap { display: flex; flex-direction: column; min-width: 0; }
 
         .entry-file-input {
@@ -1493,7 +1483,7 @@
             letter-spacing: var(--letter-spacing, 0em);
             opacity: 0; transform: translateY(100px) scale(0.85); 
             filter: blur(30px); transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
-            max-width: min(85vw, 720px); word-wrap: break-word; padding: 0 5vw;
+            max-width: min(85vw, 720px); word-wrap: break-word; padding: 0 max(5vw, 20px);
             white-space: pre-wrap;
             word-break: normal; line-break: strict; hyphens: none;
             text-align: left;
@@ -3904,7 +3894,7 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen" style="overflow:hidden;">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.55;"></canvas>
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.5;"></canvas>
             <canvas id="liquid-glass-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div style="position:relative;z-index:2;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
@@ -7633,7 +7623,7 @@
                 this.brightness = Math.max(0, Math.min(2, val));
             };
             MatrixEngine.prototype.resize = function() {
-                var dpr = Math.min(window.devicePixelRatio || 1, 2);
+                var dpr = Math.min(window.devicePixelRatio || 1, 1);
                 var w = this.canvas.offsetWidth;
                 var h = this.canvas.offsetHeight;
                 if (w <= 0 || h <= 0) return;
@@ -7702,8 +7692,8 @@
                 var accentParsed = this._accentParsed || this.parseColor(this.accentColor);
                 var colWidth = this.fontSize * 0.7;
                 var layers = [
-                    { fontMul: 0.4, speedMul: 0.2, alphaBase: 0.12, darkMul: 0.1, blur: 1.5 },
-                    { fontMul: 0.75, speedMul: 0.6, alphaBase: 0.5, darkMul: 0.5, blur: 0.5 },
+                    { fontMul: 0.4, speedMul: 0.2, alphaBase: 0.12, darkMul: 0.1, blur: 0 },
+                    { fontMul: 0.75, speedMul: 0.6, alphaBase: 0.5, darkMul: 0.5, blur: 0 },
                     { fontMul: 1.4, speedMul: 1.8, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
                 ];
                 for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
@@ -7754,14 +7744,11 @@
                                 r = 255; g = 255; b = 255;
                                 charAlpha = Math.min(1, 1.0 * breathFactor * layerAlphaBase * fadeOut + mouseBrightBoost);
                                 if (layer === 2) {
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.98 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 40 * glowMul * cfg.darkMul;
-                                } else if (layer === 1) {
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.7 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 20 * glowMul * cfg.darkMul;
+                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.9 * glowMul) + ')';
+                                    ctx.shadowBlur = 24 * glowMul;
                                 } else {
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.4 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 10 * glowMul * cfg.darkMul;
+                                    ctx.shadowColor = 'transparent';
+                                    ctx.shadowBlur = 0;
                                 }
                             } else if (t <= 3) {
                                 var mix = 1 - (t / 3);
@@ -7769,9 +7756,9 @@
                                 g = Math.round(accentParsed.g + (255 - accentParsed.g) * mix * 0.8);
                                 b = Math.round(accentParsed.b + (255 - accentParsed.b) * mix * 0.8);
                                 charAlpha = Math.min(1, (0.4 + mix * 0.55) * breathFactor * layerAlphaBase * fadeOut * trailFade + mouseBrightBoost * 0.6);
-                                if (layer === 2 && t <= 2) {
-                                    ctx.shadowColor = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (0.7 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 18 * glowMul * cfg.darkMul;
+                                if (layer === 2 && t <= 1) {
+                                    ctx.shadowColor = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (0.5 * glowMul) + ')';
+                                    ctx.shadowBlur = 12 * glowMul;
                                 }
                             } else {
                                 if (layer === 0) {
@@ -7876,10 +7863,15 @@
                 this.running = true;
                 var self = this;
                 this.lastTime = performance.now();
+                this._frameInterval = 33;
                 function loop(now) {
                     if (!self.running) return;
                     var delta = now - self.lastTime;
-                    self.lastTime = now;
+                    if (delta < self._frameInterval) {
+                        self.rafId = requestAnimationFrame(loop);
+                        return;
+                    }
+                    self.lastTime = now - (delta % self._frameInterval);
                     if (delta > 100) delta = 16;
                     var speedFactor = 0.03 + (self.speed - 20) * (1.5 - 0.03) / (200 - 20);
                     var step = speedFactor * (delta / 16);
@@ -8359,7 +8351,7 @@
             }
 
             LiquidGlassEngine.prototype.resize = function() {
-                var dpr = 0.75;
+                var dpr = 0.5;
                 var newW = Math.floor(window.innerWidth * dpr);
                 var newH = Math.floor(window.innerHeight * dpr);
                 if (this.glCanvas.width === newW && this.glCanvas.height === newH) return;
