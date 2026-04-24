@@ -92,9 +92,9 @@
 
         button,
         .btn,
-        [class*="button"]:not(.slider-label):not(.slider-wrap):not(.entry-card),
-        [class*="btn"]:not(.slider-wrap):not(.entry-card):not(.control-btn):not(.bottom-control-btn),
-        [role="button"]:not(.entry-card),
+        [class*="button"]:not(.slider-label):not(.slider-wrap):not(.entry-card):not(.about-content),
+        [class*="btn"]:not(.slider-wrap):not(.entry-card):not(.control-btn):not(.bottom-control-btn):not(.about-content),
+        [role="button"]:not(.entry-card):not(.about-content),
         .liquid-glass,
         .liquid-glass-btn,
         .status-badge,
@@ -120,9 +120,9 @@
 
         button:active,
         .btn:active,
-        [class*="button"]:active,
-        [class*="btn"]:active,
-        [role="button"]:active {
+        [class*="button"]:active:not(.entry-card):not(.about-content),
+        [class*="btn"]:active:not(.entry-card):not(.about-content),
+        [role="button"]:active:not(.entry-card):not(.about-content) {
             transform: scale(0.98) translateY(2px);
             backdrop-filter: blur(25px) saturate(200%) contrast(95%);
             -webkit-backdrop-filter: blur(25px) saturate(200%) contrast(95%);
@@ -1083,7 +1083,7 @@
 
 
         /* --- 输入屏幕重构 --- */
-        #input-screen { display: flex; display: -webkit-box; -webkit-box-orient: vertical; -webkit-box-align: center; -webkit-box-pack: center; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; min-height: 100dvh; z-index: 20; background: inherit; position: fixed; top: 0; left: 0; box-sizing: border-box; }
+        #input-screen { display: flex; display: -webkit-box; -webkit-box-orient: vertical; -webkit-box-align: center; -webkit-box-pack: center; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 100vh; min-height: 100dvh; z-index: 20; background: inherit; position: fixed; top: 0; left: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 56px); }
         
         .hero-glass-base {
             position: fixed;
@@ -1139,7 +1139,7 @@
         }
 
         .home-settings-panel {
-            position: fixed; top: 0; right: -500px; z-index: 200;
+            position: fixed; top: 0; right: -110vw; z-index: 200;
             width: 400px; max-width: 90vw; height: 100vh; height: 100dvh;
             background: rgba(255, 255, 255, 0.08) !important;
             backdrop-filter: blur(25px) saturate(200%) !important;
@@ -1283,25 +1283,27 @@
         
         .about-module { margin-top: 24px; text-align: center; position: relative; }
         .about-content { 
-            display: inline-flex; align-items: center; gap: 0.3rem; 
-            padding: 0.4rem 0.8rem; border-radius: 999px; cursor: pointer;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: inline-flex; align-items: center; gap: 6px; 
+            padding: 6px 16px; border-radius: 999px; cursor: pointer;
+            background: rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.25);
+            border-left: 1px solid rgba(255, 255, 255, 0.12);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
             backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 1px rgba(0,0,0,0.1);
             transition: all 0.15s ease;
-            margin-top: 0.8rem;
             isolation: isolate;
         }
-        .about-content:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255,255,255,0.25); }
-        .about-content:active { transform: scale(0.98) translateY(2px); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2); }
+        .about-content:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255,255,255,0.2); }
+        .about-content:active { transform: scale(0.97); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.15); }
         .about-icon { 
-            width: 8px; height: 8px; border-radius: 50%; 
-            border: 1.5px solid var(--accent); display: flex; align-items: center; justify-content: center;
-            font-family: 'EB Garamond', serif; font-size: 0.35rem; font-style: italic; 
+            width: 6px; height: 6px; border-radius: 50%; 
+            border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center;
+            font-family: 'EB Garamond', serif; font-size: 0.3rem; font-style: italic; 
             color: var(--accent); line-height: 1; font-weight: 700;
         }
-        .about-label { font-family: 'Montserrat', sans-serif; font-size: 0.4rem; color: var(--text-primary); opacity: 0.5; letter-spacing: 0.15em; text-transform: uppercase; }
+        .about-label { font-family: 'Montserrat', sans-serif; font-size: 0.45rem; color: var(--text-primary); opacity: 0.45; letter-spacing: 0.15em; text-transform: uppercase; }
         .about-detail { 
             display: none; position: fixed;
             left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -1359,7 +1361,7 @@
 
         .entry-container { display: flex; flex-direction: column; gap: 14px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
         .entry-card { 
-            width: 85%; max-width: 320px; padding: 22px 28px; 
+            width: 100%; max-width: 320px; padding: 16px 22px; 
             background: rgba(255, 255, 255, 0.08); 
             border-top: 1px solid rgba(255, 255, 255, 0.3);
             border-left: 1px solid rgba(255, 255, 255, 0.18);
@@ -1369,7 +1371,7 @@
             backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
             box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.2);
             transition: all 0.15s ease;
-            display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: flex-start !important; gap: 14px !important;
+            display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; gap: 14px !important;
             cursor: pointer; position: relative; overflow: hidden;
             margin: 0 auto !important;
             transform: translateZ(0);
@@ -1396,7 +1398,7 @@
         .liquid-upload-icon { width: 26px; height: 26px; margin: 0; color: var(--text-primary); opacity: 1; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
         .liquid-upload-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 3; margin: 0; }
         .liquid-upload-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary); margin: 0; }
-        .liquid-upload-desc { font-size: 0.6rem; opacity: 0.35; letter-spacing: 0.03em; color: var(--text-primary); margin: 0; }
+        .liquid-upload-desc { font-size: 0.65rem; opacity: 0.5; letter-spacing: 0.03em; color: var(--text-primary); margin: 0; }
         .entry-text-wrap { display: flex; flex-direction: column; min-width: 0; }
 
         .entry-file-input {
@@ -1480,7 +1482,7 @@
         #bg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         #bg-layer canvas { width: 100%; height: 100%; display: block; transition: filter 0.3s ease; object-fit: cover; }
         #display-screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 25; overflow: hidden; padding-top: env(safe-area-inset-top, 0px) !important; padding-bottom: env(safe-area-inset-bottom, 0px) !important; box-sizing: border-box; }
-        .display-area { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+        .display-area { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
         #standard-area { position: relative; z-index: 5; width: 100%; height: 100%; display: grid; place-items: center; }
 
         .sentence-text { 
@@ -1491,17 +1493,17 @@
             letter-spacing: var(--letter-spacing, 0em);
             opacity: 0; transform: translateY(100px) scale(0.85); 
             filter: blur(30px); transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
-            max-width: 85vw; word-wrap: break-word; padding: 0 3vw;
+            max-width: min(85vw, 720px); word-wrap: break-word; padding: 0 5vw;
             white-space: pre-wrap;
             word-break: normal; line-break: strict; hyphens: none;
-            text-align: justify;
+            text-align: left;
             will-change: opacity, transform;
         }
         .sentence-text.smart-break {
             word-break: keep-all; line-break: strict; overflow-wrap: break-word;
         }
         .sentence-text.wide-mode {
-            max-width: 66vw;
+            max-width: min(66vw, 960px);
         }
         .sentence-text.active { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); will-change: auto; z-index: 5; }
         .sentence-text.exit { opacity: 0 !important; filter: blur(30px) !important; transform: scale(1.1) !important; z-index: 1; pointer-events: none; }
@@ -2074,9 +2076,11 @@
         .control-btn.play-master:active { transform: scale(0.92); box-shadow: inset 0 2px 8px rgba(0,0,0,0.3); }
         .control-btn.play-master .btn-label { display: none; }
 
-        .slider-wrap { display: flex; flex-direction: column; gap: 8px; }
+        .slider-wrap { display: flex; flex-direction: column; gap: 6px; }
         .select-wrap { display: flex; flex-direction: column; gap: 8px; }
         .slider-label { font-size: 0.65rem; font-weight: 400; letter-spacing: 2px; color: rgba(255,255,255,0.4); text-transform: uppercase; font-family: var(--font-display); }
+        .slider-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .slider-value { font-size: 0.7rem; opacity: 0.5; color: rgba(255,255,255,0.7); font-variant-numeric: tabular-nums; }
         .slider-custom { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; outline: none; cursor: pointer; }
         .slider-custom::-webkit-slider-runnable-track { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; border: none; }
         .slider-custom::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 22px; width: 22px; background: radial-gradient(circle at 35% 35%, #fff 0%, rgba(255,255,255,0.85) 60%, rgba(200,200,220,0.7) 100%); border-radius: 50%; margin-top: -8px; box-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1), 0 0 12px rgba(123,97,255,0.2); transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
@@ -2419,6 +2423,7 @@
         .eink-toggle-wrap {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 0.8rem;
             margin-top: 0.5rem;
             pointer-events: auto;
@@ -3451,8 +3456,8 @@
             .btn-luxury { margin-top: 1.5rem; padding: 1rem 4rem; font-size: 1.1rem; }
             .sentence-text {
                 font-size: calc(var(--font-size-base) * 0.4 * var(--dpi-scale));
-                max-width: 98vw;
-                padding: 0 1rem;
+                max-width: 95vw;
+                padding: 0 1.2rem;
             }
             .theme-retro-typewriter .typewriter-paper {
                 width: 100vw;
@@ -3679,6 +3684,9 @@
             .home-settings-panel h3 {
                 font-size: 1rem;
             }
+            .eink-toggles-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (orientation: landscape) and (max-height: 500px) {
@@ -3896,7 +3904,7 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen" style="overflow:hidden;">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.35;"></canvas>
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.55;"></canvas>
             <canvas id="liquid-glass-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div style="position:relative;z-index:2;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
@@ -3982,38 +3990,50 @@
                 </div>
                 <div class="home-settings-section">
                     <div class="slider-wrap" style="max-width:100%;">
-                        <div class="slider-label">文字大小</div>
+                        <div class="slider-header">
+                            <div class="slider-label">文字大小</div>
+                            <span class="slider-value" id="matrix-font-size-val">14px</span>
+                        </div>
                         <input type="range" class="slider-custom" id="matrix-font-size" min="8" max="40" value="14" oninput="updateMatrixFontSize(this.value)">
-                        <span style="font-size:0.7rem;opacity:0.5;" id="matrix-font-size-val">14px</span>
                     </div>
                 </div>
                 <div class="home-settings-section">
                     <div class="slider-wrap" style="max-width:100%;">
-                        <div class="slider-label">文字流不透明度</div>
+                        <div class="slider-header">
+                            <div class="slider-label">文字流不透明度</div>
+                            <span class="slider-value" id="matrix-opacity-val">40%</span>
+                        </div>
                         <input type="range" class="slider-custom" id="matrix-opacity" min="5" max="100" value="40" oninput="updateMatrixOpacity(this.value)">
-                        <span style="font-size:0.7rem;opacity:0.5;" id="matrix-opacity-val">40%</span>
                     </div>
                 </div>
                 <div class="home-settings-section">
                     <div class="slider-wrap" style="max-width:100%;">
-                        <div class="slider-label">滚动速度</div>
+                        <div class="slider-header">
+                            <div class="slider-label">滚动速度</div>
+                            <span class="slider-value" id="matrix-speed-val">50</span>
+                        </div>
                         <input type="range" class="slider-custom" id="matrix-speed" min="20" max="200" value="50" oninput="updateMatrixSpeed(this.value)">
-                        <span style="font-size:0.7rem;opacity:0.5;" id="matrix-speed-val">50</span>
                     </div>
                 </div>
                 <div class="home-settings-section">
                     <div class="slider-wrap" style="max-width:100%;">
-                        <div class="slider-label">渐变顶部色</div>
-                        <input type="color" id="matrix-gradient-top" value="#00ff88" oninput="updateMatrixGradient()" style="width:32px;height:24px;border:none;background:transparent;cursor:pointer;">
-                        <div class="slider-label" style="margin-left:0.5rem;">渐变底部色</div>
-                        <input type="color" id="matrix-gradient-bottom" value="#0066ff" oninput="updateMatrixGradient()" style="width:32px;height:24px;border:none;background:transparent;cursor:pointer;">
+                        <div class="slider-header">
+                            <div class="slider-label">渐变顶部色</div>
+                            <input type="color" id="matrix-gradient-top" value="#00ff88" oninput="updateMatrixGradient()" style="width:32px;height:24px;border:none;background:transparent;cursor:pointer;border-radius:4px;">
+                        </div>
+                        <div class="slider-header">
+                            <div class="slider-label">渐变底部色</div>
+                            <input type="color" id="matrix-gradient-bottom" value="#0066ff" oninput="updateMatrixGradient()" style="width:32px;height:24px;border:none;background:transparent;cursor:pointer;border-radius:4px;">
+                        </div>
                     </div>
                 </div>
                 <div class="home-settings-section">
                     <div class="slider-wrap" style="max-width:100%;">
-                        <div class="slider-label">亮度</div>
+                        <div class="slider-header">
+                            <div class="slider-label">亮度</div>
+                            <span class="slider-value" id="matrix-brightness-val">100%</span>
+                        </div>
                         <input type="range" class="slider-custom" id="matrix-brightness" min="20" max="200" value="100" oninput="updateMatrixBrightness(this.value)">
-                        <span style="font-size:0.7rem;opacity:0.5;" id="matrix-brightness-val">100%</span>
                     </div>
                 </div>
                 <div class="home-settings-section">
@@ -4042,21 +4062,27 @@
                 </div>
                 <div class="home-settings-section" id="glow-intensity-section" style="display:none;">
                     <div class="slider-wrap" style="max-width:100%;">
-                        <div class="slider-label">发光强度</div>
+                        <div class="slider-header">
+                            <div class="slider-label">发光强度</div>
+                            <span class="slider-value" id="glow-intensity-val">50%</span>
+                        </div>
                         <input type="range" class="slider-custom" id="glow-intensity" min="0" max="100" value="50" oninput="updateGlowIntensity(this.value)">
-                        <span style="font-size:0.7rem;opacity:0.5;" id="glow-intensity-val">50%</span>
-                    </div>
-                </div>
-                <div class="home-settings-section">
-                    <div class="slider-wrap" style="max-width:100%;flex-direction:row;justify-content:space-between;align-items:center;">
-                        <div class="slider-label">鼠标避让</div>
-                        <div class="glow-toggle" id="mouse-repel-toggle" onclick="toggleMouseRepel()"></div>
                     </div>
                 </div>
                 <div class="home-settings-section">
                     <div class="slider-wrap" style="max-width:100%;">
-                        <div class="slider-label">文字流颜色</div>
-                        <input type="color" id="matrix-color-picker" value="#00ff88" onchange="updateMatrixColor(this.value)" style="width:36px;height:28px;border:none;background:none;cursor:pointer;border-radius:4px;">
+                        <div class="slider-header">
+                            <div class="slider-label">鼠标避让</div>
+                            <div class="glow-toggle" id="mouse-repel-toggle" onclick="toggleMouseRepel()"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="home-settings-section">
+                    <div class="slider-wrap" style="max-width:100%;">
+                        <div class="slider-header">
+                            <div class="slider-label">文字流颜色</div>
+                            <input type="color" id="matrix-color-picker" value="#00ff88" onchange="updateMatrixColor(this.value)" style="width:36px;height:28px;border:none;background:none;cursor:pointer;border-radius:4px;">
+                        </div>
                     </div>
                 </div>
                 <div class="home-settings-section">
@@ -4073,7 +4099,7 @@
             <div id="entry-selection" class="entry-container">
                 <div class="entry-card liquid-upload-card" id="epub-drop-zone">
                     <input type="file" id="file-input" accept=".epub,.md,.txt,text/plain,application/epub+zip,text/markdown" onchange="handleFileSelect(event)" class="entry-file-input" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
-                    <label for="file-input" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;cursor:pointer;width:100%;position:relative;z-index:2;">
+                    <label for="file-input" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:14px;cursor:pointer;width:100%;position:relative;z-index:2;">
                     <div class="liquid-upload-icon">
                         <svg viewBox="0 0 48 48" fill="none"><path d="M24 12v24M12 24h24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
                     </div>
@@ -4086,7 +4112,7 @@
 
                 <div class="entry-card liquid-upload-card" id="folder-entry-card">
                     <input type="file" id="folder-input" webkitdirectory directory multiple accept=".txt,.md,.epub,text/plain,application/epub+zip,text/markdown" onchange="handleFolderSelect(event)" class="entry-file-input" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
-                    <label for="folder-input" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;cursor:pointer;width:100%;position:relative;z-index:2;">
+                    <label for="folder-input" style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:14px;cursor:pointer;width:100%;position:relative;z-index:2;">
                     <div class="liquid-upload-icon">
                         <svg viewBox="0 0 48 48" fill="none"><path d="M8 16l6-6h12l4 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="6" y="16" width="36" height="22" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M20 24v8M16 28h8" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
                     </div>
@@ -4428,19 +4454,31 @@
 
                 <div class="control-group">
                     <div class="slider-wrap">
-                        <div class="slider-label">阅读速度: <span id="dwell-display" style="color:var(--accent)">×1.5</span></div>
+                        <div class="slider-header">
+                            <div class="slider-label">阅读速度</div>
+                            <span class="slider-value" id="dwell-display" style="color:var(--accent)">×1.5</span>
+                        </div>
                         <input type="range" class="slider-custom" id="dwell-slider" min="0.3" max="5" step="0.1" value="1.5" onchange="updateSpeed()" oninput="throttledUpdateSpeed()">
                     </div>
                     <div class="slider-wrap">
-                        <div class="slider-label">字体大小: <span id="size-display" style="color:var(--accent)">4.0rem</span></div>
+                        <div class="slider-header">
+                            <div class="slider-label">字体大小</div>
+                            <span class="slider-value" id="size-display" style="color:var(--accent)">4.0rem</span>
+                        </div>
                         <input type="range" class="slider-custom" id="size-slider" min="1.5" max="8" step="0.1" value="4" oninput="throttledUpdateSize()">
                     </div>
                     <div class="slider-wrap">
-                        <div class="slider-label">字体粗度：<span id="weight-display" style="color:var(--accent)">400</span></div>
+                        <div class="slider-header">
+                            <div class="slider-label">字体粗度</div>
+                            <span class="slider-value" id="weight-display" style="color:var(--accent)">400</span>
+                        </div>
                         <input type="range" class="slider-custom" id="weight-slider" min="100" max="900" step="1" value="400" oninput="throttledUpdateWeight()">
                     </div>
                     <div class="slider-wrap">
-                        <div class="slider-label">DPI 缩放：<span id="dpi-display" style="color:var(--accent)">100%</span></div>
+                        <div class="slider-header">
+                            <div class="slider-label">DPI 缩放</div>
+                            <span class="slider-value" id="dpi-display" style="color:var(--accent)">100%</span>
+                        </div>
                         <input type="range" class="slider-custom" id="dpi-slider" min="50" max="200" step="5" value="100" oninput="throttledUpdateDpi()">
                     </div>
                     <div class="select-wrap">
@@ -4545,7 +4583,10 @@
                         </select>
                     </div>
                     <div class="select-wrap">
-                        <div class="slider-label">动画方式: <span id="anim-display" style="color:var(--accent)">渐入渐出</span></div>
+                        <div class="slider-header">
+                            <div class="slider-label">动画方式</div>
+                            <span class="slider-value" id="anim-display" style="color:var(--accent)">渐入渐出</span>
+                        </div>
                         <div class="custom-font-select" id="custom-anim-select">
                             <div class="custom-font-select-header" id="custom-anim-select-header">
                                 <span id="selected-anim">渐入渐出</span>
@@ -4656,7 +4697,10 @@
                 </div>
 
                 <div class="slider-wrap" id="reading-glow-intensity-section" style="display:none;">
-                    <div class="slider-label">发光强度: <span id="reading-glow-intensity-val" style="color:var(--accent)">50%</span></div>
+                    <div class="slider-header">
+                        <div class="slider-label">发光强度</div>
+                        <span class="slider-value" id="reading-glow-intensity-val" style="color:var(--accent)">50%</span>
+                    </div>
                     <input type="range" class="slider-custom" id="reading-glow-intensity" min="0" max="100" value="50" oninput="updateGlowIntensity(this.value)">
                 </div>
 
@@ -7658,8 +7702,8 @@
                 var accentParsed = this._accentParsed || this.parseColor(this.accentColor);
                 var colWidth = this.fontSize * 0.7;
                 var layers = [
-                    { fontMul: 0.45, speedMul: 0.25, alphaBase: 0.08, darkMul: 0.08, blur: 0 },
-                    { fontMul: 0.8, speedMul: 0.65, alphaBase: 0.4, darkMul: 0.45, blur: 0 },
+                    { fontMul: 0.4, speedMul: 0.2, alphaBase: 0.12, darkMul: 0.1, blur: 1.5 },
+                    { fontMul: 0.75, speedMul: 0.6, alphaBase: 0.5, darkMul: 0.5, blur: 0.5 },
                     { fontMul: 1.4, speedMul: 1.8, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
                 ];
                 for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
@@ -7711,13 +7755,13 @@
                                 charAlpha = Math.min(1, 1.0 * breathFactor * layerAlphaBase * fadeOut + mouseBrightBoost);
                                 if (layer === 2) {
                                     ctx.shadowColor = 'rgba(255,255,255,' + (0.98 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 36 * glowMul * cfg.darkMul;
+                                    ctx.shadowBlur = 40 * glowMul * cfg.darkMul;
                                 } else if (layer === 1) {
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.6 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 16 * glowMul * cfg.darkMul;
+                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.7 * glowMul * cfg.darkMul) + ')';
+                                    ctx.shadowBlur = 20 * glowMul * cfg.darkMul;
                                 } else {
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.3 * glowMul * cfg.darkMul) + ')';
-                                    ctx.shadowBlur = 8 * glowMul * cfg.darkMul;
+                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.4 * glowMul * cfg.darkMul) + ')';
+                                    ctx.shadowBlur = 10 * glowMul * cfg.darkMul;
                                 }
                             } else if (t <= 3) {
                                 var mix = 1 - (t / 3);
