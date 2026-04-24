@@ -759,7 +759,7 @@
             background: transparent;
         }
 
-        .liquid-glass, .liquid-glass-btn, .nav-bar-luxury, .bottom-control-btn, .status-badge-setting, .status-badge, .entry-card, .toc-modal-content, .about-detail, .home-settings-panel, .theme-detail-panel, .crystal-dot, .glass-panel, .luxury-fab { will-change: transform; transform: translateZ(0); }
+        .liquid-glass, .liquid-glass-btn, .nav-bar-luxury, .bottom-control-btn, .status-badge-setting, .status-badge, .toc-modal-content, .about-detail, .home-settings-panel, .theme-detail-panel, .crystal-dot, .glass-panel, .luxury-fab { will-change: transform; transform: translateZ(0); }
         .display-area, #bg-layer, .film-grain-overlay, #display-screen, .app-container { will-change: transform; }
 
         /* ===== Liquid Glass 六层渲染结构 ===== */
@@ -1073,7 +1073,7 @@
 
 
         /* --- 输入屏幕重构 --- */
-        #input-screen { display: flex; flex-direction: column; align-items: stretch; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: inherit; position: fixed; top: 0; left: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 52px); padding-bottom: max(env(safe-area-inset-bottom), 12px); }
+        #input-screen { display: flex; flex-direction: column; align-items: stretch; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 52px); padding-bottom: max(env(safe-area-inset-bottom), 12px); }
         
         .hero-glass-base {
             position: fixed;
@@ -1283,7 +1283,6 @@
             backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
             box-shadow: 0 6px 20px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 1px rgba(0,0,0,0.1);
             transition: all 0.15s ease;
-            isolation: isolate;
         }
         .about-content:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255,255,255,0.2); }
         .about-content:active { transform: scale(0.97); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.15); }
@@ -1364,8 +1363,6 @@
             display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; gap: 14px !important;
             cursor: pointer; position: relative; overflow: hidden;
             margin: 0 auto !important;
-            transform: translateZ(0);
-            isolation: isolate;
         }
         .entry-card::before {
             content: '';
@@ -3894,9 +3891,9 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen" style="overflow:hidden;">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.5;"></canvas>
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
             <canvas id="liquid-glass-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
-            <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;">
+            <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;flex:1;min-height:0;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
 
             <div class="home-settings-overlay" id="home-settings-overlay" onclick="toggleHomeSettings()"></div>
@@ -8316,6 +8313,9 @@
                     return;
                 }
 
+                this._offscreen = document.createElement('canvas');
+                this._offCtx = this._offscreen.getContext('2d');
+
                 var program = createProgram(this.gl, vertexShaderSource, fragmentShaderSource);
                 if (!program) return;
                 this.program = program;
@@ -8344,7 +8344,7 @@
                 this.uFbmLayers = this.gl.getUniformLocation(program, 'u_fbm_layers');
 
                 this.isMobile = window.innerWidth < 768;
-                this.fbmLayers = 4;
+                this.fbmLayers = this.isMobile ? 3 : 4;
                 this.startTime = performance.now();
                 this.running = false;
                 this.animFrameId = null;
@@ -8369,7 +8369,7 @@
                 }
 
                 var now = performance.now();
-                if (!this._lastFrame || now - this._lastFrame >= 33) {
+                if (!this._lastFrame || now - this._lastFrame >= 50) {
                     this._lastFrame = now;
                     this.resize();
 
@@ -8378,9 +8378,17 @@
                     this.gl.enable(this.gl.BLEND);
                     this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
+                    var texW = this.glCanvas.width;
+                    var texH = this.glCanvas.height;
+                    if (this._offscreen.width !== texW || this._offscreen.height !== texH) {
+                        this._offscreen.width = texW;
+                        this._offscreen.height = texH;
+                    }
+                    this._offCtx.drawImage(this.matrixCanvas, 0, 0, texW, texH);
+
                     this.gl.bindTexture(this.gl.TEXTURE_2D, this.backgroundTexture);
                     this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA,
-                        this.gl.UNSIGNED_BYTE, this.matrixCanvas);
+                        this.gl.UNSIGNED_BYTE, this._offscreen);
 
                     this.gl.uniform1i(this.uBackground, 0);
                     this.gl.uniform1f(this.uTime, (now - this.startTime) / 1000.0);
