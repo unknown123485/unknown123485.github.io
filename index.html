@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
  <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -936,6 +936,21 @@
         .glass-degraded .liquid-glass::after,
         .glass-degraded .liquid-glass-btn::before,
         .glass-degraded .liquid-glass-btn::after {
+            display: none;
+        }
+
+        /* liquidGL WebGL 液态玻璃接管时隐藏 CSS 伪元素 */
+        .entry-card[data-liquidgl]::before,
+        .entry-card[data-liquidgl]::after,
+        .bottom-control-btn[data-liquidgl]::before,
+        .bottom-control-btn[data-liquidgl]::after,
+        .btn-luxury[data-liquidgl]::before,
+        .status-badge[data-liquidgl]::before,
+        .status-badge[data-liquidgl]::after,
+        .status-badge-setting[data-liquidgl]::before,
+        .status-badge-setting[data-liquidgl]::after,
+        .glass-panel[data-liquidgl]::before,
+        .glass-panel[data-liquidgl]::after {
             display: none;
         }
 
@@ -9826,6 +9841,45 @@
                 resize: resize
             };
         })();
+    </script>
+    <script src="scripts/html2canvas.min.js" defer></script>
+    <script src="scripts/liquidGL.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof liquidGL === "undefined") return;
+
+            var glassElements = document.querySelectorAll('.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel');
+            if (glassElements.length === 0) return;
+
+            var glassEffect = liquidGL({
+                target: '.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel',
+                snapshot: 'body',
+                resolution: 1.5,
+                refraction: 0.008,
+                bevelDepth: 0.05,
+                bevelWidth: 0.18,
+                frost: 3,
+                shadow: true,
+                specular: true,
+                tilt: true,
+                tiltFactor: 3,
+                reveal: "fade",
+                on: {
+                    init: function() {
+                        var renderer = window.__liquidGLRenderer__;
+                        if (renderer && renderer.lenses) {
+                            renderer.lenses.forEach(function(lens) {
+                                lens.element.setAttribute('data-liquidgl', '');
+                                lens.element.style.pointerEvents = 'auto';
+                            });
+                        }
+                        console.log("liquidGL initialized");
+                    }
+                }
+            });
+
+            window._liquidGLInstance = glassEffect;
+        });
     </script>
 </body>
 </html>
