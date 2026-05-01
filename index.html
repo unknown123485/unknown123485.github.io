@@ -3907,7 +3907,7 @@
 
         <div id="input-screen" style="overflow:hidden;">
             <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
-            <canvas id="liquid-glass-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
+            <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;flex:1;min-height:0;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
 
@@ -9845,52 +9845,149 @@
     <script src="scripts/html2canvas.min.js" defer></script>
     <script src="scripts/liquidGL.js" defer></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            if (typeof liquidGL === "undefined") return;
+        function initLiquidGLLibrary() {
+            if (typeof liquidGL === "undefined") {
+                console.warn("liquidGL not loaded, using CSS fallback");
+                return;
+            }
 
-            var glassElements = document.querySelectorAll('.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel');
+            var targets = '.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel';
+            var glassElements = document.querySelectorAll(targets);
             if (glassElements.length === 0) return;
 
-            var glassEffect = liquidGL({
-                target: '.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel',
-                snapshot: '#input-screen',
-                resolution: 1.0,
-                refraction: 0.015,
-                bevelDepth: 0.06,
-                bevelWidth: 0.2,
-                frost: 6,
-                shadow: false,
-                specular: false,
-                tilt: true,
-                tiltFactor: 4,
-                magnify: 1.02,
-                reveal: "none",
-                on: {
-                    init: function() {
-                        var renderer = window.__liquidGLRenderer__;
-                        if (renderer && renderer.lenses) {
-                            renderer.lenses.forEach(function(lens) {
-                                lens.element.setAttribute('data-liquidgl', '');
-                                lens.element.style.pointerEvents = 'auto';
-                                lens.element.style.opacity = '1';
-                                lens.element.style.backdropFilter = 'blur(20px) saturate(180%)';
-                                lens.element.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
-                                lens.element.style.background = 'rgba(255,255,255,0.06)';
-                            });
-                        }
-                        if (typeof liquidGL.registerDynamic === 'function') {
-                            var matrixCanvas = document.getElementById('matrix-canvas');
-                            if (matrixCanvas) {
-                                liquidGL.registerDynamic([matrixCanvas]);
-                            }
-                        }
-                        console.log("liquidGL initialized");
-                    }
-                }
+            var originalStyles = [];
+            glassElements.forEach(function(el, i) {
+                var cs = window.getComputedStyle(el);
+                originalStyles[i] = {
+                    opacity: el.style.opacity || '',
+                    background: el.style.background || '',
+                    backgroundColor: el.style.backgroundColor || '',
+                    backdropFilter: el.style.backdropFilter || '',
+                    webkitBackdropFilter: el.style.webkitBackdropFilter || '',
+                    backgroundImage: el.style.backgroundImage || '',
+                    pointerEvents: el.style.pointerEvents || '',
+                    boxShadow: el.style.boxShadow || '',
+                    position: el.style.position || '',
+                    transition: el.style.transition || ''
+                };
             });
 
+            var liquidGLFailed = false;
+            var glassEffect = null;
+
+            try {
+                glassEffect = liquidGL({
+                    target: targets,
+                    snapshot: '#input-screen',
+                    resolution: 1.0,
+                    refraction: 0.015,
+                    bevelDepth: 0.06,
+                    bevelWidth: 0.2,
+                    frost: 6,
+                    shadow: false,
+                    specular: false,
+                    tilt: true,
+                    tiltFactor: 4,
+                    magnify: 1.02,
+                    reveal: "none",
+                    on: {
+                        init: function() {
+                            console.log("liquidGL initialized successfully");
+                        }
+                    }
+                });
+
+                glassElements.forEach(function(el) {
+                    el.setAttribute('data-liquidgl', '');
+                });
+
+                if (typeof liquidGL.registerDynamic === 'function') {
+                    var matrixCanvas = document.getElementById('matrix-canvas');
+                    if (matrixCanvas) {
+                        liquidGL.registerDynamic([matrixCanvas]);
+                    }
+                }
+            } catch(e) {
+                console.error("liquidGL init error:", e);
+                liquidGLFailed = true;
+            }
+
+            function restoreCSSEffects() {
+                var renderer = window.__liquidGLRenderer__;
+                if (renderer) {
+                    if (renderer.lenses) {
+                        renderer.lenses.forEach(function(lens) {
+                            if (lens.el) {
+                                lens.el.style.opacity = '';
+                                lens.el.style.position = '';
+                                lens.el.style.transition = '';
+                                lens.el.style.backgroundColor = '';
+                                lens.el.style.backdropFilter = '';
+                                lens.el.style.webkitBackdropFilter = '';
+                                lens.el.style.backgroundImage = '';
+                                lens.el.style.background = '';
+                                lens.el.style.pointerEvents = '';
+                                lens.el.style.boxShadow = '';
+                            }
+                            if (lens._shadowEl) {
+                                lens._shadowEl.remove();
+                            }
+                        });
+                    }
+                    if (renderer.canvas && renderer.canvas.parentNode) {
+                        renderer.canvas.remove();
+                    }
+                    window.__liquidGLRenderer__ = null;
+                }
+
+                glassElements.forEach(function(el, i) {
+                    el.removeAttribute('data-liquidgl');
+                    el.style.backdropFilter = 'blur(20px) saturate(180%)';
+                    el.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
+                    el.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%)';
+                    el.style.boxShadow = originalStyles[i] ? (originalStyles[i].boxShadow || '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.6)') : '';
+                    el.style.pointerEvents = 'auto';
+                });
+
+                console.log("liquidGL failed, restored CSS glass effects");
+            }
+
+            function forceRevealLenses() {
+                var renderer = window.__liquidGLRenderer__;
+                if (!renderer || !renderer.lenses || renderer.lenses.length === 0) {
+                    restoreCSSEffects();
+                    return;
+                }
+
+                var hasTexture = !!renderer.texture;
+                var canvasVisible = renderer.canvas && renderer.canvas.style.opacity !== '0';
+
+                if (hasTexture && canvasVisible) {
+                    renderer.lenses.forEach(function(lens) {
+                        if (lens.el && (lens.el.style.opacity === '0' || lens.el.style.opacity === '')) {
+                            lens.el.style.opacity = lens.originalOpacity || '1';
+                        }
+                        if (lens.el) {
+                            lens.el.style.pointerEvents = 'auto';
+                        }
+                    });
+                    renderer.canvas.style.opacity = '1';
+                    console.log("liquidGL force reveal: WebGL rendering active");
+                } else {
+                    restoreCSSEffects();
+                }
+            }
+
+            if (liquidGLFailed) {
+                restoreCSSEffects();
+            } else {
+                setTimeout(forceRevealLenses, 3000);
+            }
+
             window._liquidGLInstance = glassEffect;
-        });
+        }
+
+        setTimeout(initLiquidGLLibrary, 2000);
     </script>
 </body>
 </html>
