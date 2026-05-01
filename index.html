@@ -944,13 +944,7 @@
         .entry-card[data-liquidgl]::after,
         .bottom-control-btn[data-liquidgl]::before,
         .bottom-control-btn[data-liquidgl]::after,
-        .btn-luxury[data-liquidgl]::before,
-        .status-badge[data-liquidgl]::before,
-        .status-badge[data-liquidgl]::after,
-        .status-badge-setting[data-liquidgl]::before,
-        .status-badge-setting[data-liquidgl]::after,
-        .glass-panel[data-liquidgl]::before,
-        .glass-panel[data-liquidgl]::after {
+        .btn-luxury[data-liquidgl]::before {
             display: none;
         }
 
@@ -9851,13 +9845,12 @@
                 return;
             }
 
-            var targets = '.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel';
+            var targets = '.entry-card, .bottom-control-btn, .btn-luxury';
             var glassElements = document.querySelectorAll(targets);
             if (glassElements.length === 0) return;
 
             var originalStyles = [];
             glassElements.forEach(function(el, i) {
-                var cs = window.getComputedStyle(el);
                 originalStyles[i] = {
                     opacity: el.style.opacity || '',
                     background: el.style.background || '',
@@ -9945,46 +9938,45 @@
                 console.log("liquidGL failed, restored CSS glass effects");
             }
 
+            var bgSnapCanvas = null;
+            var bgSnapCtx = null;
+
             function captureBackgroundDirectly() {
                 var renderer = window.__liquidGLRenderer__;
                 if (!renderer || !renderer.gl) return false;
 
                 var matrixCanvas = document.getElementById('matrix-canvas');
-                var liquidGlassCanvas = document.getElementById('liquid-glass-canvas');
                 if (!matrixCanvas) return false;
 
                 var dpr = Math.min(2, window.devicePixelRatio || 1);
                 var w = window.innerWidth;
                 var h = window.innerHeight;
+                var cw = Math.round(w * dpr);
+                var ch = Math.round(h * dpr);
 
-                var snapCanvas = document.createElement('canvas');
-                snapCanvas.width = Math.round(w * dpr);
-                snapCanvas.height = Math.round(h * dpr);
-                var ctx = snapCanvas.getContext('2d');
+                if (!bgSnapCanvas) {
+                    bgSnapCanvas = document.createElement('canvas');
+                    bgSnapCtx = bgSnapCanvas.getContext('2d');
+                }
+                if (bgSnapCanvas.width !== cw || bgSnapCanvas.height !== ch) {
+                    bgSnapCanvas.width = cw;
+                    bgSnapCanvas.height = ch;
+                }
 
-                ctx.fillStyle = '#0e0e18';
-                ctx.fillRect(0, 0, snapCanvas.width, snapCanvas.height);
+                bgSnapCtx.fillStyle = '#0e0e18';
+                bgSnapCtx.fillRect(0, 0, cw, ch);
 
                 try {
                     if (matrixCanvas.width > 0 && matrixCanvas.height > 0) {
-                        ctx.globalAlpha = 0.85;
-                        ctx.drawImage(matrixCanvas, 0, 0, snapCanvas.width, snapCanvas.height);
-                        ctx.globalAlpha = 1.0;
+                        bgSnapCtx.globalAlpha = 0.85;
+                        bgSnapCtx.drawImage(matrixCanvas, 0, 0, cw, ch);
+                        bgSnapCtx.globalAlpha = 1.0;
                     }
-                } catch(e) {
-                    console.warn("Could not draw matrix canvas:", e);
-                }
+                } catch(e) {}
 
-                try {
-                    if (liquidGlassCanvas && liquidGlassCanvas.width > 0 && liquidGlassCanvas.height > 0) {
-                        ctx.drawImage(liquidGlassCanvas, 0, 0, snapCanvas.width, snapCanvas.height);
-                    }
-                } catch(e) {
-                }
-
-                if (snapCanvas.width > 0 && snapCanvas.height > 0) {
+                if (cw > 0 && ch > 0) {
                     renderer.scaleFactor = dpr;
-                    renderer._uploadTexture(snapCanvas);
+                    renderer._uploadTexture(bgSnapCanvas);
                     return true;
                 }
                 return false;
@@ -10007,6 +9999,7 @@
 
                 if (renderer.canvas) {
                     renderer.canvas.style.opacity = '1';
+                    renderer.canvas.style.zIndex = '15';
                 }
 
                 renderer.lenses.forEach(function(lens) {
@@ -10024,18 +10017,23 @@
                 startBackgroundCaptureLoop();
             }
 
-            var bgCaptureInterval = null;
+            var bgCaptureRaf = null;
+            var captureFrameCount = 0;
             function startBackgroundCaptureLoop() {
-                if (bgCaptureInterval) return;
-                bgCaptureInterval = setInterval(function() {
+                if (bgCaptureRaf) return;
+                function loop() {
                     var renderer = window.__liquidGLRenderer__;
                     if (!renderer || !renderer.gl) {
-                        clearInterval(bgCaptureInterval);
-                        bgCaptureInterval = null;
+                        bgCaptureRaf = null;
                         return;
                     }
-                    captureBackgroundDirectly();
-                }, 500);
+                    captureFrameCount++;
+                    if (captureFrameCount % 2 === 0) {
+                        captureBackgroundDirectly();
+                    }
+                    bgCaptureRaf = requestAnimationFrame(loop);
+                }
+                bgCaptureRaf = requestAnimationFrame(loop);
             }
 
             if (liquidGLFailed) {
