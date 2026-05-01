@@ -9853,16 +9853,17 @@
 
             var glassEffect = liquidGL({
                 target: '.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel',
-                snapshot: 'body',
-                resolution: 1.5,
-                refraction: 0.008,
-                bevelDepth: 0.05,
-                bevelWidth: 0.18,
-                frost: 3,
-                shadow: true,
-                specular: true,
+                snapshot: '#input-screen',
+                resolution: 1.0,
+                refraction: 0.015,
+                bevelDepth: 0.06,
+                bevelWidth: 0.2,
+                frost: 6,
+                shadow: false,
+                specular: false,
                 tilt: true,
-                tiltFactor: 3,
+                tiltFactor: 4,
+                magnify: 1.02,
                 reveal: "fade",
                 on: {
                     init: function() {
@@ -9871,7 +9872,16 @@
                             renderer.lenses.forEach(function(lens) {
                                 lens.element.setAttribute('data-liquidgl', '');
                                 lens.element.style.pointerEvents = 'auto';
+                                lens.element.style.backdropFilter = 'blur(20px) saturate(180%)';
+                                lens.element.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
+                                lens.element.style.background = 'rgba(255,255,255,0.06)';
                             });
+                        }
+                        if (typeof liquidGL.registerDynamic === 'function') {
+                            var matrixCanvas = document.getElementById('matrix-canvas');
+                            if (matrixCanvas) {
+                                liquidGL.registerDynamic([matrixCanvas]);
+                            }
                         }
                         console.log("liquidGL initialized");
                     }
