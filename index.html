@@ -9851,6 +9851,7 @@
 
             var originalStyles = [];
             glassElements.forEach(function(el, i) {
+                var cs = window.getComputedStyle(el);
                 originalStyles[i] = {
                     opacity: el.style.opacity || '',
                     background: el.style.background || '',
@@ -9861,7 +9862,10 @@
                     pointerEvents: el.style.pointerEvents || '',
                     boxShadow: el.style.boxShadow || '',
                     position: el.style.position || '',
-                    transition: el.style.transition || ''
+                    transition: el.style.transition || '',
+                    computedBg: cs.backgroundColor,
+                    computedBgImage: cs.backgroundImage,
+                    computedBackdrop: cs.backdropFilter || cs.webkitBackdropFilter
                 };
             });
 
@@ -10022,13 +10026,16 @@
                     if (lens.el) {
                         lens.el.style.opacity = lens.originalOpacity || '1';
                         lens.el.style.pointerEvents = 'auto';
+                        lens.el.style.background = 'rgba(255,255,255,0.06)';
+                        lens.el.style.backdropFilter = 'blur(20px) saturate(180%)';
+                        lens.el.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
                     }
                     if (lens._revealProgress !== undefined) {
                         lens._revealProgress = 1;
                     }
                 });
 
-                console.log("liquidGL: force reveal complete");
+                console.log("liquidGL: force reveal complete with CSS backdrop");
 
                 startBackgroundCaptureLoop();
             }
@@ -10044,7 +10051,7 @@
                         return;
                     }
                     captureFrameCount++;
-                    if (captureFrameCount % 2 === 0) {
+                    if (captureFrameCount % 3 === 0) {
                         captureBackgroundDirectly();
                     }
                     bgCaptureRaf = requestAnimationFrame(loop);
