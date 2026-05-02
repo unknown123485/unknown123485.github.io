@@ -2182,60 +2182,92 @@
         .slider-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .slider-value { font-size: 0.7rem; opacity: 0.6; color: rgba(255,255,255,0.7); font-variant-numeric: tabular-nums; }
         /* 液态玻璃风格滑块 */
-        .slider-custom { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; outline: none; cursor: pointer; height: 28px; }
+        .slider-custom {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; background: transparent;
+            outline: none; cursor: pointer;
+            height: 32px;
+            position: relative;
+        }
         .slider-custom::-webkit-slider-runnable-track {
-            height: 6px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 3px;
+            height: 8px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 4px;
             border: none;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.08);
+            box-shadow:
+                inset 0 1px 3px rgba(0,0,0,0.4),
+                inset 0 -1px 1px rgba(255,255,255,0.05),
+                0 1px 0 rgba(255,255,255,0.06);
         }
         .slider-custom::-webkit-slider-thumb {
             -webkit-appearance: none; appearance: none;
-            height: 20px; width: 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(220,220,240,0.7) 50%, rgba(200,200,230,0.6) 100%);
+            height: 22px; width: 22px;
             border-radius: 50%;
             margin-top: -7px;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 20%, rgba(255,255,255,0.9) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 50% 80%, rgba(180,200,255,0.3) 0%, transparent 50%),
+                linear-gradient(160deg, rgba(255,255,255,0.7) 0%, rgba(200,210,240,0.4) 40%, rgba(160,170,210,0.3) 100%);
+            background-color: rgba(230,235,255,0.15);
+            border: 1px solid rgba(255,255,255,0.4);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.4),
-                0 0 0 1px rgba(255,255,255,0.3),
-                inset 0 1px 1px rgba(255,255,255,0.8),
-                inset 0 -1px 2px rgba(0,0,0,0.15);
-            transition: transform 0.2s cubic-bezier(0.22, 1.2, 0.36, 1), box-shadow 0.2s ease;
+                0 4px 12px rgba(0,0,0,0.35),
+                0 0 0 1px rgba(255,255,255,0.15),
+                inset 0 1px 2px rgba(255,255,255,0.8),
+                inset 0 -2px 3px rgba(0,0,0,0.15);
+            transition: transform 0.25s cubic-bezier(0.22, 1.4, 0.36, 1), box-shadow 0.25s ease;
             cursor: pointer;
-            backdrop-filter: blur(4px) saturate(150%);
+            backdrop-filter: blur(6px) saturate(180%);
+            position: relative;
+        }
+        .slider-custom::-webkit-slider-thumb::before {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.6) 0%, transparent 70%);
         }
         .slider-custom::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
+            transform: scale(1.2);
             box-shadow:
-                0 4px 12px rgba(0,0,0,0.5),
-                0 0 0 2px rgba(123,97,255,0.4),
-                inset 0 1px 2px rgba(255,255,255,0.9),
-                inset 0 -1px 2px rgba(0,0,0,0.1);
+                0 6px 20px rgba(0,0,0,0.4),
+                0 0 0 2px rgba(123,97,255,0.3),
+                0 0 20px rgba(123,97,255,0.15),
+                inset 0 1px 3px rgba(255,255,255,0.9),
+                inset 0 -2px 4px rgba(0,0,0,0.1);
+            border-color: rgba(255,255,255,0.6);
         }
         .slider-custom::-webkit-slider-thumb:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
             box-shadow:
-                0 1px 4px rgba(0,0,0,0.4),
-                inset 0 2px 4px rgba(0,0,0,0.2),
-                0 0 0 1px rgba(123,97,255,0.5);
+                0 1px 4px rgba(0,0,0,0.3),
+                inset 0 3px 6px rgba(0,0,0,0.25),
+                inset 0 -1px 2px rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.2);
         }
         .slider-custom::-moz-range-track {
-            height: 6px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 3px;
+            height: 8px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 4px;
             border: none;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.08);
+            box-shadow:
+                inset 0 1px 3px rgba(0,0,0,0.4),
+                inset 0 -1px 1px rgba(255,255,255,0.05),
+                0 1px 0 rgba(255,255,255,0.06);
         }
         .slider-custom::-moz-range-thumb {
-            height: 20px; width: 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(220,220,240,0.7) 50%, rgba(200,200,230,0.6) 100%);
-            border-radius: 50%; border: none;
+            height: 22px; width: 22px;
+            border-radius: 50%; border: 1px solid rgba(255,255,255,0.4);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 20%, rgba(255,255,255,0.9) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 50% 80%, rgba(180,200,255,0.3) 0%, transparent 50%),
+                linear-gradient(160deg, rgba(255,255,255,0.7) 0%, rgba(200,210,240,0.4) 40%, rgba(160,170,210,0.3) 100%);
+            background-color: rgba(230,235,255,0.15);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.4),
-                0 0 0 1px rgba(255,255,255,0.3),
-                inset 0 1px 1px rgba(255,255,255,0.8),
-                inset 0 -1px 2px rgba(0,0,0,0.15);
+                0 4px 12px rgba(0,0,0,0.35),
+                0 0 0 1px rgba(255,255,255,0.15),
+                inset 0 1px 2px rgba(255,255,255,0.8),
+                inset 0 -2px 3px rgba(0,0,0,0.15);
             cursor: pointer;
         }
         .font-select, .anim-select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 10px 14px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; outline: none; min-width: 160px; font-family: var(--font-display); backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%); -webkit-appearance: none; appearance: none; }
