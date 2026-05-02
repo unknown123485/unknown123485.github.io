@@ -82,28 +82,7 @@
             --eink-toggle-dot: #ffffff;
         }
 
-        select,
-        input,
-        input[type="range"],
-        input[type="color"],
-        input[type="file"],
-        input[type="checkbox"],
-        textarea,
-        .entry-file-input,
-        .glow-toggle,
-        .eink-toggle,
-        .slider-custom,
-        .slider-label,
-        .slider-wrap,
-        .slider-row,
-        .matrix-color-picker {
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            background: revert !important;
-            border: revert !important;
-            box-shadow: revert !important;
-            border-radius: revert !important;
-        }
+        /* 注意：不要在这里添加全局重置，会破坏所有自定义样式 */
 
         .liquid-glass,
         .liquid-glass-btn,
@@ -1418,7 +1397,7 @@
         .entry-container { display: flex; flex-direction: column; gap: 10px; align-items: center; box-sizing: border-box; max-width: 280px; margin: 0 auto; width: 100%; }
         .entry-card {
             width: 100%; max-width: 280px; padding: 6px 16px;
-            background: rgba(128, 128, 128, 0.08);
+            background: rgba(255, 255, 255, 0.06) !important;
             border-top: 1px solid rgba(255, 255, 255, 0.25);
             border-left: 1px solid rgba(255, 255, 255, 0.15);
             border-right: 1px solid rgba(255, 255, 255, 0.06);
@@ -8296,17 +8275,12 @@
                                 ctx.filter = 'none';
                             }
                         }
-                        // 逐字下落：只有当前字符完全显示后才移动到下一行
-                        var dropSpeed = layerSpeed * step * 0.15; // 大幅降低速度
-                        var speedThreshold = 1.0; // 每帧至少移动1个单位
-                        this.drops[i] += Math.max(dropSpeed, speedThreshold * 0.05);
-                        // 只有当drops增加超过1个字符高度时才更新字符索引
-                        var charAdvance = Math.floor(this.drops[i]) - Math.floor(this.drops[i] - Math.max(dropSpeed, speedThreshold * 0.05));
-                        if (charAdvance > 0) {
-                            this.columnCharIndex[i] += charAdvance;
-                            if (useSentences && this.columnSentences[i] && this.columnCharIndex[i] >= this.columnSentences[i].length) {
-                                this.assignSentence(i);
-                            }
+                        // 控制下落速度
+                        var dropSpeed = layerSpeed * step * 0.5;
+                        this.drops[i] += dropSpeed;
+                        this.columnCharIndex[i]++;
+                        if (useSentences && this.columnSentences[i] && this.columnCharIndex[i] >= this.columnSentences[i].length) {
+                            this.assignSentence(i);
                         }
                         if (this.drops[i] * layerFontSize > dh * this.columnMaxHeight[i] + 50) {
                             this.initColumn(i, false);
