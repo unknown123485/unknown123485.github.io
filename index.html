@@ -1092,7 +1092,7 @@
             top: 0 !important;
             left: 50%;
             transform: translateX(-50%);
-            margin-top: 320px !important;
+            margin-top: 420px !important;
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
             -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
@@ -1101,14 +1101,14 @@
             border-right: 1px solid rgba(255, 255, 255, 0.08);
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             border-radius: 20px;
-            padding: 10px 24px 8px;
+            padding: 12px 28px 10px;
             box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 60px rgba(0, 255, 136, 0.03);
             display: flex;
             flex-direction: column;
             flex-wrap: nowrap;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             z-index: 100;
             margin-bottom: 0;
             isolation: isolate;
@@ -1121,8 +1121,8 @@
             transition: opacity 0.3s ease;
         }
         .mas-reader-logo {
-            width: 56px;
-            height: 56px;
+            width: 96px;
+            height: 96px;
             margin: 0;
             display: block;
             filter: drop-shadow(0 2px 6px rgba(205, 133, 115, 0.45));
@@ -1131,9 +1131,9 @@
 
         .mas-reader-title {
             font-family: 'Noto Serif SC', 'Noto Serif TC', serif;
-            font-size: 0.85rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             color: rgba(255, 255, 255, 0.9);
             text-align: center;
             margin-bottom: 0;
@@ -3731,13 +3731,13 @@
 
         @media (max-width: 480px) {
             .mas-reader-title {
-                font-size: 0.7rem;
-                letter-spacing: 2px;
+                font-size: 0.85rem;
+                letter-spacing: 3px;
                 margin-bottom: 0;
             }
             .mas-reader-logo {
-                width: 30px;
-                height: 30px;
+                width: 56px;
+                height: 56px;
             }
             .entry-container {
                 max-width: 92vw;
@@ -3833,13 +3833,13 @@
             .liquid-upload-title { font-size: 1rem; }
             .liquid-upload-desc { font-size: 0.75rem; }
             .hero-glass-base {
-                margin-top: 140px !important;
-                padding: 12px 28px 8px;
+                margin-top: 180px !important;
+                padding: 14px 32px 12px;
             }
-            .mas-reader-logo { width: 40px; height: 40px; }
-            .mas-reader-title { font-size: 1rem; }
+            .mas-reader-logo { width: 140px; height: 140px; }
+            .mas-reader-title { font-size: 1.4rem; letter-spacing: 6px; }
             #input-screen > div:first-of-type {
-                margin-top: 300px !important;
+                margin-top: 380px !important;
             }
         }
         @media (min-width: 769px) {
@@ -3848,10 +3848,18 @@
                 align-items: center;
             }
             .hero-glass-base {
-                margin-top: 120px !important;
+                margin-top: 160px !important;
+            }
+            .mas-reader-logo {
+                width: 120px;
+                height: 120px;
+            }
+            .mas-reader-title {
+                font-size: 1.25rem;
+                letter-spacing: 5px;
             }
             #input-screen > div:first-of-type {
-                margin-top: 280px !important;
+                margin-top: 340px !important;
             }
         }
     </style>
