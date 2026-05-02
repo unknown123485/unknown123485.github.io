@@ -1085,7 +1085,7 @@
 
 
         /* --- 输入屏幕重构 --- */
-        #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; right: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 80px); padding-bottom: max(env(safe-area-inset-bottom), 12px); }
+        #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; right: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 80px); padding-bottom: max(env(safe-area-inset-bottom), 12px); overflow: hidden; }
         
         .hero-glass-base {
             position: fixed;
@@ -1361,7 +1361,7 @@
         .av-date { font-size: 0.6rem; color: var(--text-primary); opacity: 0.4; margin-top: 2px; }
         .av-desc { font-size: 0.65rem; color: var(--text-primary); opacity: 0.6; margin-top: 4px; line-height: 1.5; }
 
-        .entry-container { display: flex; flex-direction: column; gap: 12px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; width: 100%; }
+        .entry-container { display: flex; flex-direction: column; gap: 12px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
         .entry-card { 
             width: 100%; max-width: 320px; padding: 11px 20px; 
             background: rgba(255, 255, 255, 0.04); 
@@ -3435,13 +3435,15 @@
             }
             .entry-container {
                 max-width: 90vw;
+                width: 90vw;
                 gap: 12px;
             }
             .entry-card {
                 width: 100%;
-                max-width: none;
+                max-width: 100%;
                 padding: 14px 18px;
                 border-radius: 10px;
+                box-sizing: border-box;
             }
             .entry-card svg { width: 20px; height: 20px; }
             .liquid-upload-icon { width: 20px; height: 20px; }
@@ -3725,15 +3727,17 @@
                 height: 30px;
             }
             .entry-container {
-                max-width: 95vw;
+                max-width: 92vw;
+                width: 92vw;
                 gap: 12px;
                 padding: 0 0.5rem;
             }
             .entry-card {
                 width: 100%;
-                max-width: none;
+                max-width: 100%;
                 padding: 14px 18px;
                 border-radius: 10px;
+                box-sizing: border-box;
             }
             .liquid-upload-card { padding: 0.9rem 1.2rem !important; }
             .entry-card svg { width: 20px; height: 20px; }
@@ -3912,7 +3916,7 @@
         <div id="input-screen">
             <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
             <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
-            <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;">
+            <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:100%;flex:1;min-height:0;margin:0 auto;width:auto;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
 
             <div class="home-settings-overlay" id="home-settings-overlay" onclick="toggleHomeSettings()"></div>
