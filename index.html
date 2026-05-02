@@ -1109,11 +1109,16 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            z-index: 10001;
+            z-index: 100;
             margin-bottom: 0;
             isolation: isolate;
             white-space: nowrap;
             overflow: visible;
+        }
+        .home-settings-open .hero-glass-base {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
         .mas-reader-logo {
             width: 36px;
@@ -1996,8 +2001,8 @@
         }
         
         .bottom-control-btn {
-            background: rgba(255,255,255,0.03); 
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04); 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.15);
             backdrop-filter: blur(12px) saturate(160%); 
             border-radius: 50%;
             width: calc(50px * var(--dpi-scale));
@@ -2008,15 +2013,15 @@
             color: var(--text-primary);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: none;
         }
         .bottom-control-btn::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 50%;
-            border-radius: inherit;
-            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            height: 55%;
+            border-radius: 50% 50% 0 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 60%, transparent 100%);
             pointer-events: none;
         }
         
@@ -3813,16 +3818,35 @@
         }
         @media (min-width: 1200px) and (min-height: 800px) {
             .entry-container {
-                max-width: 400px;
+                max-width: 480px;
                 height: auto;
             }
             .entry-card {
-                padding: 18px 24px;
-                border-radius: 12px;
+                padding: 22px 32px;
+                border-radius: 16px;
+                font-size: 1.1rem;
             }
-            .entry-card svg { width: 22px; height: 22px; }
-            .liquid-upload-icon { width: 22px; height: 22px; }
-            .liquid-upload-title { font-size: 0.95rem; }
+            .entry-card svg { width: 28px; height: 28px; }
+            .liquid-upload-icon { width: 28px; height: 28px; }
+            .liquid-upload-title { font-size: 1.15rem; }
+            .liquid-upload-desc { font-size: 0.85rem; }
+            .hero-glass-base {
+                margin-top: 100px !important;
+                padding: 14px 36px 10px;
+            }
+            .mas-reader-logo { width: 48px; height: 48px; }
+            .mas-reader-title { font-size: 1.1rem; }
+            #input-screen > div:first-of-type {
+                margin-top: 280px !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .hero-glass-base {
+                margin-top: 80px !important;
+            }
+            #input-screen > div:first-of-type {
+                margin-top: 240px !important;
+            }
         }
     </style>
 </head>
@@ -3901,20 +3925,11 @@
             <button class="bottom-control-btn" id="prev-btn">
                 <svg viewBox="0 0 24 24"><path class="p-prev" fill="currentColor"/></svg>
             </button>
-            <button class="bottom-control-btn" onclick="toggleMode()" id="mode-btn" title="随机/循环">
-                <svg viewBox="0 0 24 24" id="mode-icon-svg"><path class="p-random" fill="currentColor"/></svg>
-            </button>
             <button class="bottom-control-btn play-master" id="bottom-play-btn">
                 <svg viewBox="0 0 24 24" id="bottom-play-icon-svg"><path class="p-play" fill="currentColor"/></svg>
             </button>
-            <button class="bottom-control-btn" onclick="toggleFullscreen()" id="fullscreen-btn" title="全屏">
-                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="currentColor"/></svg>
-            </button>
             <button class="bottom-control-btn" id="next-btn">
                 <svg viewBox="0 0 24 24"><path class="p-next" fill="currentColor"/></svg>
-            </button>
-            <button class="bottom-control-btn control-btn-exit" onclick="exitDisplay()" title="退出">
-                <svg viewBox="0 0 24 24"><path class="p-exit" fill="currentColor"/></svg>
             </button>
         </div>
 
@@ -5520,6 +5535,7 @@
             if (panel.classList.contains('open')) {
                 panel.classList.remove('open');
                 overlay.classList.remove('active');
+                document.body.classList.remove('home-settings-open');
                 var customText = document.getElementById('matrix-custom-text');
                 if (customText && matrixEngine) {
                     matrixEngine.setCustomText(customText.value);
@@ -5532,6 +5548,7 @@
             } else {
                 panel.classList.add('open');
                 overlay.classList.add('active');
+                document.body.classList.add('home-settings-open');
                 var savedHomeTheme = localStorage.getItem('homeTheme') || 'dark';
                 document.querySelectorAll('.home-theme-card').forEach(function(card) {
                     card.classList.toggle('active', card.getAttribute('data-home-theme') === savedHomeTheme);
