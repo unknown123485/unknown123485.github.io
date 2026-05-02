@@ -1412,13 +1412,9 @@
         }
         /* 第三个按钮靠左 */
         .entry-card:nth-child(3) {
-            margin: 0 !important;
             margin-left: 0 !important;
             margin-right: auto !important;
             align-self: flex-start;
-            width: 100% !important;
-            max-width: 280px !important;
-            box-sizing: border-box !important;
         }
         .entry-card::before {
             content: '';
@@ -8085,8 +8081,8 @@
                 this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
                 this.displayWidth = w;
                 this.displayHeight = h;
-                var colWidth = this.fontSize * 0.9;
-                this.columns = Math.floor(w / colWidth);
+                var colWidth = this.fontSize * 0.8;
+                this.columns = Math.max(30, Math.floor(w / colWidth));
                 this.drops = [];
                 this.columnSentences = [];
                 this.columnCharIndex = [];
@@ -8150,7 +8146,7 @@
                 var my = this.mouseY * dh;
                 var glowMul = this.glowIntensity;
                 var accentParsed = this._accentParsed || this.parseColor(this.accentColor);
-                var colWidth = this.fontSize * 1.5;
+                var colWidth = this.fontSize * 0.8;
                 var layers = [
                     { fontMul: 0.5, speedMul: 0.15, alphaBase: 0.06, darkMul: 0.08, blur: 1.5, zOffset: 80 },
                     { fontMul: 0.75, speedMul: 0.5, alphaBase: 0.2, darkMul: 0.4, blur: 0.5, zOffset: 40 },
@@ -8216,7 +8212,7 @@
                             ctx.filter = 'none';
                             if (t === 0) {
                                 r = 255; g = 255; b = 255;
-                                charAlpha = Math.min(1, 1.0 * breathFactor * layerAlphaBase * fadeOut + mouseBrightBoost);
+                                charAlpha = Math.min(1, 1.0 * layerAlphaBase * fadeOut + mouseBrightBoost);
                                 if (layer === 2) {
                                     ctx.shadowColor = 'rgba(255,255,255,' + (0.9 * glowMul) + ')';
                                     ctx.shadowBlur = 24 * glowMul;
@@ -8229,7 +8225,7 @@
                                 r = Math.round(accentParsed.r + (255 - accentParsed.r) * mix * 0.8);
                                 g = Math.round(accentParsed.g + (255 - accentParsed.g) * mix * 0.8);
                                 b = Math.round(accentParsed.b + (255 - accentParsed.b) * mix * 0.8);
-                                charAlpha = Math.min(1, (0.4 + mix * 0.55) * breathFactor * layerAlphaBase * fadeOut * trailFade + mouseBrightBoost * 0.6);
+                                charAlpha = Math.min(1, (0.4 + mix * 0.55) * layerAlphaBase * fadeOut * trailFade + mouseBrightBoost * 0.6);
                                 if (layer === 2 && t <= 1) {
                                     ctx.shadowColor = 'rgba(' + accentParsed.r + ',' + accentParsed.g + ',' + accentParsed.b + ',' + (0.5 * glowMul) + ')';
                                     ctx.shadowBlur = 12 * glowMul;
@@ -8248,7 +8244,7 @@
                                     g = Math.round(accentParsed.g * 0.5);
                                     b = Math.round(accentParsed.b * 0.5);
                                 }
-                                charAlpha = Math.max(0.02, (0.04 + headGlow * 0.2) * breathFactor * layerAlphaBase * fadeOut * trailFade);
+                                charAlpha = Math.max(0.02, (0.04 + headGlow * 0.2) * layerAlphaBase * fadeOut * trailFade);
                                 charAlpha = Math.min(1, charAlpha + mouseBrightBoost * 0.4);
                             }
                             if (this.gradientTopColor && this.gradientBottomColor) {
