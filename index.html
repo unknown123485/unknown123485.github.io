@@ -7513,7 +7513,7 @@
                 this.defaultChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`αβγδεζηθικλμνξοπρστυφχψω天地玄黄宇宙洪荒日月盈昃辰宿列张寒来暑往秋收冬藏';
                 this.customText = '';
                 this.sentences = [];
-                this.fontSize = 14;
+                this.fontSize = 16;
                 this.speed = 50;
                 this.glowEnabled = false;
                 this.glowIntensity = 0.5;
@@ -7648,7 +7648,7 @@
                 this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
                 this.displayWidth = w;
                 this.displayHeight = h;
-                var colWidth = this.fontSize * 0.7;
+                var colWidth = this.fontSize * 1.0;
                 this.columns = Math.floor(w / colWidth);
                 this.drops = [];
                 this.columnSentences = [];
@@ -7677,7 +7677,7 @@
                 this.columnStartY[i] = this.drops[i];
                 this.columnMaxHeight[i] = 0.5 + Math.random() * 0.5;
                 this.columnFadeSpeed[i] = 0.3 + Math.random() * 0.7;
-                this.columnTrailLen[i] = 14 + Math.floor(Math.random() * 26);
+                this.columnTrailLen[i] = 8 + Math.floor(Math.random() * 14);
                 this.columnSpeedMul[i] = 0.6 + Math.random() * 0.8;
                 this.assignSentence(i);
             };
@@ -7706,11 +7706,11 @@
                 var my = this.mouseY * dh;
                 var glowMul = this.glowIntensity;
                 var accentParsed = this._accentParsed || this.parseColor(this.accentColor);
-                var colWidth = this.fontSize * 0.7;
+                var colWidth = this.fontSize * 1.0;
                 var layers = [
-                    { fontMul: 0.4, speedMul: 0.2, alphaBase: 0.12, darkMul: 0.1, blur: 0 },
-                    { fontMul: 0.75, speedMul: 0.6, alphaBase: 0.5, darkMul: 0.5, blur: 0 },
-                    { fontMul: 1.4, speedMul: 1.8, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
+                    { fontMul: 0.5, speedMul: 0.2, alphaBase: 0.08, darkMul: 0.1, blur: 0 },
+                    { fontMul: 0.85, speedMul: 0.6, alphaBase: 0.4, darkMul: 0.5, blur: 0 },
+                    { fontMul: 1.2, speedMul: 1.8, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
                 ];
                 for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
                     for (var i = 0; i < this.drops.length; i++) {
