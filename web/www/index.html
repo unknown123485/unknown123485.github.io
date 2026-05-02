@@ -1085,11 +1085,11 @@
 
 
         /* --- 输入屏幕重构 --- */
-        #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; right: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 80px); padding-bottom: max(env(safe-area-inset-bottom), 12px); overflow: hidden; }
+        #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; right: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 110px); padding-bottom: max(env(safe-area-inset-bottom), 12px); overflow: hidden; }
         
         .hero-glass-base {
             position: fixed;
-            top: max(env(safe-area-inset-top), 12px);
+            top: calc(max(env(safe-area-inset-top), 12px) + 16px);
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.06);
@@ -1150,11 +1150,16 @@
             border: 1px solid rgba(255,255,255,0.15) !important;
             border-radius: 24px !important;
             padding: 2rem;
+            box-sizing: border-box;
             transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.4s ease;
             overflow-y: auto; overflow-x: hidden;
             isolation: isolate;
             scrollbar-width: none; -ms-overflow-style: none;
-            clip-path: inset(0 100% 0 0);
+            visibility: hidden;
+        }
+        .home-settings-panel * {
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .home-settings-panel::before {
             content: '';
@@ -1173,7 +1178,7 @@
             pointer-events: none;
         }
         .home-settings-panel::-webkit-scrollbar { display: none; }
-        .home-settings-panel.open { right: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 12px 40px rgba(0,0,0,0.5) !important; clip-path: inset(0 0 0 0); }
+        .home-settings-panel.open { right: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 12px 40px rgba(0,0,0,0.5) !important; visibility: visible; }
         .home-settings-panel h3 {
             font-family: 'EB Garamond', serif; font-size: 1.5rem;
             margin-bottom: 1.5rem; color: #fff;
@@ -1232,7 +1237,7 @@
             width: 100%; height: 80px; background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.12); border-radius: 12px;
             color: #fff; padding: 12px; font-size: 0.85rem;
-            resize: vertical; font-family: inherit;
+            resize: vertical; font-family: inherit; box-sizing: border-box;
         }
         .home-settings-section textarea:focus {
             outline: none; border-color: var(--accent);
@@ -3684,6 +3689,8 @@
                 border-radius: 0 !important;
                 border-left: none !important;
                 border-right: none !important;
+                padding: 1.5rem !important;
+                box-sizing: border-box !important;
             }
             .home-settings-panel h3 {
                 font-size: 1rem;
