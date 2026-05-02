@@ -952,16 +952,17 @@
 
         /* --- 巅峰状态标签 (液态玻璃) --- */
         .status-badge-container {
-            position: fixed; top: max(env(safe-area-inset-top), 15px); left: 1rem; 
+            position: fixed; top: max(env(safe-area-inset-top), 15px); left: 1rem; right: 1rem;
             display: flex; align-items: center; gap: 0.6rem;
             z-index: 9999;
+            overflow: visible;
         }
         
         .status-badge-setting {
-            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%);
+            background: rgba(255,255,255,0.04);
             padding: 0; border-radius: 50%; 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.15);
-            backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate)); 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.12);
+            backdrop-filter: blur(12px) saturate(160%); 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             transition: all var(--lg-duration) var(--lg-spring);
@@ -979,9 +980,10 @@
         .status-badge-setting::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 0; left: 0; right: 0;
+            height: 50%;
             border-radius: inherit;
-            background: linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 25%, transparent 50%);
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
             pointer-events: none;
         }
         
@@ -1099,14 +1101,14 @@
             border-right: 1px solid rgba(255, 255, 255, 0.08);
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             border-radius: 20px;
-            padding: 10px 20px 8px;
+            padding: 10px 24px 8px;
             box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 60px rgba(0, 255, 136, 0.03);
             display: flex;
             flex-direction: column;
             flex-wrap: nowrap;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
             z-index: 10001;
             margin-bottom: 0;
             isolation: isolate;
@@ -1114,8 +1116,8 @@
             overflow: visible;
         }
         .mas-reader-logo {
-            width: 28px;
-            height: 28px;
+            width: 36px;
+            height: 36px;
             margin: 0;
             display: block;
             filter: drop-shadow(0 2px 6px rgba(205, 133, 115, 0.45));
@@ -1124,9 +1126,9 @@
 
         .mas-reader-title {
             font-family: 'Noto Serif SC', 'Noto Serif TC', serif;
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             color: rgba(255, 255, 255, 0.9);
             text-align: center;
             margin-bottom: 0;
@@ -1362,14 +1364,14 @@
         .entry-container { display: flex; flex-direction: column; gap: 12px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
         .entry-card { 
             width: 100%; max-width: 320px; padding: 11px 20px; 
-            background: rgba(255, 255, 255, 0.08); 
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            border-left: 1px solid rgba(255, 255, 255, 0.18);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.04); 
+            border-top: 1px solid rgba(255, 255, 255, 0.25);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             border-radius: 16px;
-            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.2);
+            backdrop-filter: blur(12px) saturate(160%); -webkit-backdrop-filter: blur(12px) saturate(160%);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 1px rgba(0,0,0,0.15);
             transition: all 0.15s ease;
             display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; gap: 10px !important;
             cursor: pointer; position: relative; overflow: hidden;
@@ -1378,9 +1380,10 @@
         .entry-card::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 0; left: 0; right: 0;
+            height: 50%;
             border-radius: inherit;
-            background: linear-gradient(90deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 20%, transparent 50%);
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
             pointer-events: none;
             z-index: 1;
         }
@@ -1987,9 +1990,9 @@
         }
         
         .bottom-control-btn {
-            background: rgba(255,255,255,0.06); 
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.15);
-            backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate)); 
+            background: rgba(255,255,255,0.03); 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.12);
+            backdrop-filter: blur(12px) saturate(160%); 
             border-radius: 50%;
             width: calc(50px * var(--dpi-scale));
             height: calc(50px * var(--dpi-scale));
@@ -2004,9 +2007,10 @@
         .bottom-control-btn::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 0; left: 0; right: 0;
+            height: 50%;
             border-radius: inherit;
-            background: linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.06) 25%, transparent 50%);
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
             pointer-events: none;
         }
         
@@ -3712,9 +3716,13 @@
 
         @media (max-width: 480px) {
             .mas-reader-title {
-                font-size: 0.6rem;
-                letter-spacing: 1px;
+                font-size: 0.7rem;
+                letter-spacing: 2px;
                 margin-bottom: 0;
+            }
+            .mas-reader-logo {
+                width: 30px;
+                height: 30px;
             }
             .entry-container {
                 max-width: 95vw;
