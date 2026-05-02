@@ -8151,6 +8151,17 @@
                     { fontMul: 0.75, speedMul: 0.5, alphaBase: 0.2, darkMul: 0.4, blur: 0.5, zOffset: 40 },
                     { fontMul: 1.0, speedMul: 1.0, alphaBase: 0.7, darkMul: 1.0, blur: 0, zOffset: 0 }
                 ];
+                // 为每列预生成固定字符序列（如果不存在）
+                if (!this.columnChars) this.columnChars = [];
+                var chars = this.getChars();
+                for (var i = 0; i < this.columns; i++) {
+                    if (!this.columnChars[i]) {
+                        this.columnChars[i] = [];
+                        for (var c = 0; c < 50; c++) {
+                            this.columnChars[i].push(chars[Math.floor(Math.random() * chars.length)]);
+                        }
+                    }
+                }
                 for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
                     for (var i = 0; i < this.drops.length; i++) {
                         var layer = this.columnLayers[i] || 1;
@@ -8189,8 +8200,10 @@
                                 ci = ci % sent.length;
                                 text = sent[ci];
                             } else {
-                                var chars = this.getChars();
-                                text = chars[Math.floor(Math.random() * chars.length)];
+                                // 使用预生成的固定字符，根据位置索引获取，不随机
+                                var charIdx = Math.floor(this.drops[i] - t) % this.columnChars[i].length;
+                                if (charIdx < 0) charIdx += this.columnChars[i].length;
+                                text = this.columnChars[i][charIdx];
                             }
                             var r, g, b, charAlpha;
                             ctx.shadowColor = 'transparent';
@@ -8275,12 +8288,14 @@
                                 ctx.filter = 'none';
                             }
                         }
-                        // 控制下落速度
-                        var dropSpeed = layerSpeed * step * 0.5;
+                        // 控制下落速度 - 每帧移动固定距离
+                        var dropSpeed = layerSpeed * step * 0.3;
                         this.drops[i] += dropSpeed;
-                        this.columnCharIndex[i]++;
-                        if (useSentences && this.columnSentences[i] && this.columnCharIndex[i] >= this.columnSentences[i].length) {
-                            this.assignSentence(i);
+                        if (useSentences && this.columnSentences[i]) {
+                            this.columnCharIndex[i]++;
+                            if (this.columnCharIndex[i] >= this.columnSentences[i].length) {
+                                this.assignSentence(i);
+                            }
                         }
                         if (this.drops[i] * layerFontSize > dh * this.columnMaxHeight[i] + 50) {
                             this.initColumn(i, false);
