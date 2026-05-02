@@ -1413,7 +1413,12 @@
         /* 第三个按钮靠左 */
         .entry-card:nth-child(3) {
             margin: 0 !important;
+            margin-left: 0 !important;
+            margin-right: auto !important;
             align-self: flex-start;
+            width: 100% !important;
+            max-width: 280px !important;
+            box-sizing: border-box !important;
         }
         .entry-card::before {
             content: '';
@@ -4343,7 +4348,7 @@
                     </label>
                 </div>
 
-                <div class="entry-card liquid-upload-card" onclick="showManualInput()">
+                <div class="entry-card liquid-upload-card" onclick="showManualInput()" style="display:flex !important;flex-direction:row !important;align-items:center !important;justify-content:flex-start !important;gap:10px !important;width:100% !important;max-width:280px !important;box-sizing:border-box !important;">
                     <div class="liquid-upload-icon">
                         <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M14 16h20M14 22h16M14 28h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
                     </div>
@@ -8080,7 +8085,7 @@
                 this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
                 this.displayWidth = w;
                 this.displayHeight = h;
-                var colWidth = this.fontSize * 1.5;
+                var colWidth = this.fontSize * 0.9;
                 this.columns = Math.floor(w / colWidth);
                 this.drops = [];
                 this.columnSentences = [];
@@ -8139,7 +8144,7 @@
                 var dh = this.displayHeight || this.canvas.offsetHeight;
                 ctx.clearRect(0, 0, dw, dh);
                 this.breathPhase += 0.012;
-                var breathFactor = 0.88 + 0.12 * Math.sin(this.breathPhase);
+                var breathFactor = 1.0;
                 var useSentences = this.sentences.length > 0;
                 var mx = this.mouseX * dw;
                 var my = this.mouseY * dh;
