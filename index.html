@@ -1008,12 +1008,14 @@
         }
         .status-badge-setting:active,
         .status-badge-setting.pressing {
-            transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
-            transform: scale(0.85);
+            transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.08s ease-out;
+            transform: scale(0.96) translateY(1px);
             box-shadow:
                 0 1px 3px rgba(0,0,0,0.3),
-                inset 0 4px 10px rgba(0,0,0,0.5),
-                inset 0 2px 4px rgba(0,0,0,0.4);
+                inset 0 3px 8px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.3),
+                inset 0 -1px 1px rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
         }
         
         .status-badge-setting svg {
@@ -1041,9 +1043,14 @@
         }
         .status-badge:active,
         .status-badge.pressing {
-            transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
-            transform: scale(0.88);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);
+            transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.08s ease-out;
+            transform: scale(0.96) translateY(1px);
+            box-shadow:
+                0 1px 3px rgba(0,0,0,0.3),
+                inset 0 3px 8px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.3),
+                inset 0 -1px 1px rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
         }
         .status-badge::before {
             content: ''; position: absolute; inset: 0; border-radius: 1.2rem;
@@ -1103,12 +1110,32 @@
         /* --- 输入屏幕重构 --- */
         #input-screen { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; right: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 12px); padding-bottom: max(env(safe-area-inset-bottom), 12px); overflow: hidden; }
         
-        .hero-glass-base {
+        /* Logo和标题容器 - 只在主页面显示 */
+        .hero-header-container {
             position: fixed;
-            top: 0 !important;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
-            margin-top: 420px !important;
+            margin-top: 120px !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            z-index: 100;
+            pointer-events: none;
+        }
+        .mas-reader-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(205, 133, 115, 0.5));
+            pointer-events: auto;
+        }
+        .mas-reader-logo svg { width: 100%; height: 100%; }
+
+        .hero-glass-base {
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
             -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
@@ -1117,43 +1144,25 @@
             border-right: 1px solid rgba(255, 255, 255, 0.08);
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             border-radius: 20px;
-            padding: 12px 28px 10px;
+            padding: 10px 24px 8px;
             box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 60px rgba(0, 255, 136, 0.03);
             display: flex;
             flex-direction: column;
-            flex-wrap: nowrap;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            z-index: 100;
-            margin-bottom: 0;
+            gap: 4px;
             isolation: isolate;
             white-space: nowrap;
-            overflow: visible;
+            pointer-events: auto;
         }
-        .home-settings-open .hero-glass-base {
+        .home-settings-open .hero-header-container {
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
-        .mas-reader-logo {
-            width: 96px;
-            height: 96px;
-            margin: 0;
-            display: block;
-            filter: drop-shadow(0 2px 6px rgba(205, 133, 115, 0.45));
-            position: fixed;
-            top: 0 !important;
-            left: 50%;
-            transform: translateX(-50%);
-            margin-top: 380px !important;
-            z-index: 100;
-        }
-        .mas-reader-logo svg { width: 100%; height: 100%; }
-
         .mas-reader-title {
             font-family: 'Noto Serif SC', 'Noto Serif TC', serif;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 600;
             letter-spacing: 4px;
             color: rgba(255, 255, 255, 0.9);
@@ -1406,7 +1415,7 @@
         .av-date { font-size: 0.6rem; color: var(--text-primary); opacity: 0.4; margin-top: 2px; }
         .av-desc { font-size: 0.65rem; color: var(--text-primary); opacity: 0.6; margin-top: 4px; line-height: 1.5; }
 
-        .entry-container { display: flex; flex-direction: column; gap: 10px; align-items: center; box-sizing: border-box; max-width: 280px; margin: 0 auto; width: 100%; }
+        .entry-container { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; box-sizing: border-box; max-width: 280px; margin: 0 auto; width: 100%; }
         .entry-card {
             width: 100%; max-width: 280px; padding: 6px 16px;
             background: rgba(255, 255, 255, 0.04);
@@ -1420,7 +1429,17 @@
             transition: all 0.15s ease;
             display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: flex-start !important; gap: 10px !important;
             cursor: pointer; position: relative; overflow: hidden;
+        }
+        /* 第一、第二个按钮居中 */
+        .entry-card:nth-child(1),
+        .entry-card:nth-child(2) {
             margin: 0 auto !important;
+            align-self: center;
+        }
+        /* 第三个按钮靠左 */
+        .entry-card:nth-child(3) {
+            margin: 0 !important;
+            align-self: flex-start;
         }
         .entry-card::before {
             content: '';
@@ -1436,7 +1455,16 @@
             z-index: -1;
         }
         .entry-card:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255,255,255,0.25); box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 2px 3px rgba(255,255,255,0.35); }
-        .entry-card:active { transform: scale(0.98) translateY(2px); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.2); }
+        .entry-card:active {
+            transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.08s ease-out;
+            transform: scale(0.96) translateY(1px);
+            box-shadow:
+                0 1px 3px rgba(0,0,0,0.3),
+                inset 0 3px 8px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.3),
+                inset 0 -1px 1px rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+        }
         .entry-card svg { width: 20px; height: 20px; fill: var(--text-primary); margin: 0; opacity: 1; flex-shrink: 0; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5)); align-self: center; }
         .entry-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
         .entry-desc { font-size: 0.6rem; opacity: 0.45; line-height: 1.4; margin: 0; }
@@ -2081,13 +2109,14 @@
         }
         .bottom-control-btn:active,
         .bottom-control-btn.pressing {
-            transition: transform 0.06s ease-out, box-shadow 0.06s ease-out, background 0.06s ease-out;
-            transform: scale(0.85);
+            transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.08s ease-out;
+            transform: scale(0.96) translateY(1px);
             box-shadow:
                 0 1px 3px rgba(0,0,0,0.3),
-                inset 0 4px 10px rgba(0,0,0,0.5),
-                inset 0 2px 4px rgba(0,0,0,0.4);
-            background: rgba(255,255,255,0.04);
+                inset 0 3px 8px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.3),
+                inset 0 -1px 1px rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
         }
 
         .bottom-control-btn.play-master {
@@ -2126,7 +2155,16 @@
         .btn-label { font-size: 0.65rem; font-weight: 400; letter-spacing: 1px; opacity: 0.6; text-transform: uppercase; font-family: var(--font-display); }
         .control-btn:hover .btn-label { opacity: 1; color: var(--accent); }
         .control-btn:hover svg { transform: scale(1.1); color: var(--accent); }
-        .control-btn:active { transform: scale(0.96) translateZ(0); box-shadow: inset 0 3px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2); }
+        .control-btn:active {
+            transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.08s ease-out;
+            transform: scale(0.96) translateY(1px);
+            box-shadow:
+                0 1px 3px rgba(0,0,0,0.3),
+                inset 0 3px 8px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.3),
+                inset 0 -1px 1px rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+        }
         .control-btn:active svg { transform: scale(0.9); }
         .control-btn svg { width: 28px; height: 28px; fill: currentColor; transition: 0.3s; }
         
@@ -2143,12 +2181,63 @@
         .slider-label { font-size: 0.65rem; font-weight: 400; letter-spacing: 2px; color: rgba(255,255,255,0.45); text-transform: uppercase; font-family: var(--font-display); }
         .slider-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .slider-value { font-size: 0.7rem; opacity: 0.6; color: rgba(255,255,255,0.7); font-variant-numeric: tabular-nums; }
-        .slider-custom { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; outline: none; cursor: pointer; height: 24px; }
-        .slider-custom::-webkit-slider-runnable-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; border: none; }
-        .slider-custom::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 16px; width: 16px; background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(200,200,220,0.8) 100%); border-radius: 50%; margin-top: -6px; box-shadow: 0 1px 6px rgba(0,0,0,0.4), 0 0 0 2px rgba(123,97,255,0.3); transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
-        .slider-custom::-webkit-slider-thumb:active { transform: scale(1.25); box-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 0 3px rgba(123,97,255,0.5); }
-        .slider-custom::-moz-range-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; border: none; }
-        .slider-custom::-moz-range-thumb { height: 16px; width: 16px; background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(200,200,220,0.8) 100%); border-radius: 50%; border: none; box-shadow: 0 1px 6px rgba(0,0,0,0.4), 0 0 0 2px rgba(123,97,255,0.3); cursor: pointer; }
+        /* 液态玻璃风格滑块 */
+        .slider-custom { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; outline: none; cursor: pointer; height: 28px; }
+        .slider-custom::-webkit-slider-runnable-track {
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
+            border: none;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.08);
+        }
+        .slider-custom::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            height: 20px; width: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(220,220,240,0.7) 50%, rgba(200,200,230,0.6) 100%);
+            border-radius: 50%;
+            margin-top: -7px;
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.3),
+                inset 0 1px 1px rgba(255,255,255,0.8),
+                inset 0 -1px 2px rgba(0,0,0,0.15);
+            transition: transform 0.2s cubic-bezier(0.22, 1.2, 0.36, 1), box-shadow 0.2s ease;
+            cursor: pointer;
+            backdrop-filter: blur(4px) saturate(150%);
+        }
+        .slider-custom::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.5),
+                0 0 0 2px rgba(123,97,255,0.4),
+                inset 0 1px 2px rgba(255,255,255,0.9),
+                inset 0 -1px 2px rgba(0,0,0,0.1);
+        }
+        .slider-custom::-webkit-slider-thumb:active {
+            transform: scale(0.95);
+            box-shadow:
+                0 1px 4px rgba(0,0,0,0.4),
+                inset 0 2px 4px rgba(0,0,0,0.2),
+                0 0 0 1px rgba(123,97,255,0.5);
+        }
+        .slider-custom::-moz-range-track {
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
+            border: none;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.08);
+        }
+        .slider-custom::-moz-range-thumb {
+            height: 20px; width: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(220,220,240,0.7) 50%, rgba(200,200,230,0.6) 100%);
+            border-radius: 50%; border: none;
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.3),
+                inset 0 1px 1px rgba(255,255,255,0.8),
+                inset 0 -1px 2px rgba(0,0,0,0.15);
+            cursor: pointer;
+        }
         .font-select, .anim-select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 10px 14px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; outline: none; min-width: 160px; font-family: var(--font-display); backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%); -webkit-appearance: none; appearance: none; }
         .font-select optgroup { background: rgba(20,20,35,0.95); color: rgba(255,255,255,0.7); }
         .font-select option { background: rgba(20,20,35,0.95); color: white; padding: 8px; }
@@ -3890,34 +3979,32 @@
             .liquid-upload-icon { width: 22px; height: 22px; }
             .liquid-upload-title { font-size: 1rem; }
             .liquid-upload-desc { font-size: 0.75rem; }
+            .hero-header-container {
+                margin-top: 100px !important;
+                gap: 16px;
+            }
             .hero-glass-base {
-                margin-top: 180px !important;
                 padding: 14px 32px 12px;
             }
-            .mas-reader-logo { width: 140px; height: 140px; }
-            .mas-reader-title { font-size: 1.4rem; letter-spacing: 6px; }
-            #input-screen > div:first-of-type {
-                margin-top: 380px !important;
-            }
+            .mas-reader-logo { width: 100px; height: 100px; }
+            .mas-reader-title { font-size: 1.2rem; letter-spacing: 5px; }
         }
         @media (min-width: 769px) {
             .entry-container {
                 margin: 0 auto;
                 align-items: center;
             }
-            .hero-glass-base {
-                margin-top: 160px !important;
+            .hero-header-container {
+                margin-top: 80px !important;
+                gap: 14px;
             }
             .mas-reader-logo {
-                width: 120px;
-                height: 120px;
+                width: 90px;
+                height: 90px;
             }
             .mas-reader-title {
-                font-size: 1.25rem;
+                font-size: 1.1rem;
                 letter-spacing: 5px;
-            }
-            #input-screen > div:first-of-type {
-                margin-top: 340px !important;
             }
         }
     </style>
@@ -3961,32 +4048,34 @@
         </filter>
         </svg>
 
-    <div class="mas-reader-logo" aria-label="Mas.Reader Logo">
-        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="mr-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#FF2D55;stop-opacity:1"/>
-                    <stop offset="50%" style="stop-color:#FF6B8A;stop-opacity:0.9"/>
-                    <stop offset="100%" style="stop-color:#00F2FF;stop-opacity:0.8"/>
-                </linearGradient>
-                <filter id="mr-glow">
-                    <feGaussianBlur stdDeviation="2" result="blur"/>
-                    <feMerge>
-                        <feMergeNode in="blur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
-            <rect x="15" y="20" width="40" height="70" rx="6" fill="url(#mr-grad-1)" filter="url(#mr-glow)"/>
-            <rect x="65" y="20" width="40" height="70" rx="6" fill="url(#mr-grad-1)" filter="url(#mr-glow)" opacity="0.85"/>
-            <text x="35" y="68" text-anchor="middle" fill="white" font-size="36" font-family="'Montserrat', sans-serif" font-weight="900" filter="url(#mr-glow)">M</text>
-            <text x="85" y="68" text-anchor="middle" fill="white" font-size="36" font-family="'Montserrat', sans-serif" font-weight="900" filter="url(#mr-glow)">R</text>
-            <line x1="55" y1="25" x2="55" y2="85" stroke="#00F2FF" stroke-width="1.5" opacity="0.5"/>
-            <rect x="15" y="20" width="90" height="70" rx="6" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
-        </svg>
-    </div>
-    <div class="hero-glass-base">
-        <div class="mas-reader-title">Mas.Reader</div>
+    <div class="hero-header-container" id="hero-header-container">
+        <div class="mas-reader-logo" aria-label="Mas.Reader Logo">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="mr-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FF2D55;stop-opacity:1"/>
+                        <stop offset="50%" style="stop-color:#FF6B8A;stop-opacity:0.9"/>
+                        <stop offset="100%" style="stop-color:#00F2FF;stop-opacity:0.8"/>
+                    </linearGradient>
+                    <filter id="mr-glow">
+                        <feGaussianBlur stdDeviation="2" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <rect x="15" y="20" width="40" height="70" rx="6" fill="url(#mr-grad-1)" filter="url(#mr-glow)"/>
+                <rect x="65" y="20" width="40" height="70" rx="6" fill="url(#mr-grad-1)" filter="url(#mr-glow)" opacity="0.85"/>
+                <text x="35" y="68" text-anchor="middle" fill="white" font-size="36" font-family="'Montserrat', sans-serif" font-weight="900" filter="url(#mr-glow)">M</text>
+                <text x="85" y="68" text-anchor="middle" fill="white" font-size="36" font-family="'Montserrat', sans-serif" font-weight="900" filter="url(#mr-glow)">R</text>
+                <line x1="55" y1="25" x2="55" y2="85" stroke="#00F2FF" stroke-width="1.5" opacity="0.5"/>
+                <rect x="15" y="20" width="90" height="70" rx="6" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+            </svg>
+        </div>
+        <div class="hero-glass-base">
+            <div class="mas-reader-title">Mas.Reader</div>
+        </div>
     </div>
 
     <div class="fx-overlay"></div>
@@ -4632,27 +4721,38 @@
                         </div>
                         <input type="range" class="slider-custom" id="dwell-slider" min="0.3" max="5" step="0.1" value="1.5" onchange="updateSpeed()" oninput="throttledUpdateSpeed()">
                     </div>
-                    <div class="slider-wrap">
-                        <div class="slider-header">
-                            <div class="slider-label">字体大小</div>
-                            <span class="slider-value" id="size-display" style="color:var(--accent)">4.0rem</span>
+
+                    <!-- 字体设置 - 可展开 -->
+                    <div class="bg-adjust-section" style="width:100%;">
+                        <div class="slider-label" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:8px 0;" onclick="toggleFontSettingsSection()">
+                            <span>字体设置</span>
+                            <span id="font-settings-arrow" style="font-size:0.7rem; opacity:0.5; transition:transform 0.3s ease;">&#9662;</span>
                         </div>
-                        <input type="range" class="slider-custom" id="size-slider" min="1.5" max="8" step="0.1" value="4" oninput="throttledUpdateSize()">
-                    </div>
-                    <div class="slider-wrap">
-                        <div class="slider-header">
-                            <div class="slider-label">字体粗度</div>
-                            <span class="slider-value" id="weight-display" style="color:var(--accent)">400</span>
+                        <div id="font-settings-sliders" style="display:none; transition:all 0.3s ease;">
+                            <div class="slider-wrap" style="margin-bottom:0.6rem;">
+                                <div class="slider-header">
+                                    <div class="slider-label">字体大小</div>
+                                    <span class="slider-value" id="size-display" style="color:var(--accent)">4.0rem</span>
+                                </div>
+                                <input type="range" class="slider-custom" id="size-slider" min="1.5" max="8" step="0.1" value="4" oninput="throttledUpdateSize()">
+                            </div>
+                            <div class="slider-wrap" style="margin-bottom:0.6rem;">
+                                <div class="slider-header">
+                                    <div class="slider-label">字体粗度</div>
+                                    <span class="slider-value" id="weight-display" style="color:var(--accent)">400</span>
+                                </div>
+                                <input type="range" class="slider-custom" id="weight-slider" min="100" max="900" step="1" value="400" oninput="throttledUpdateWeight()">
+                            </div>
+                            <div class="slider-wrap" style="margin-bottom:0.6rem;">
+                                <div class="slider-header">
+                                    <div class="slider-label">DPI 缩放</div>
+                                    <span class="slider-value" id="dpi-display" style="color:var(--accent)">100%</span>
+                                </div>
+                                <input type="range" class="slider-custom" id="dpi-slider" min="50" max="200" step="5" value="100" oninput="throttledUpdateDpi()">
+                            </div>
                         </div>
-                        <input type="range" class="slider-custom" id="weight-slider" min="100" max="900" step="1" value="400" oninput="throttledUpdateWeight()">
                     </div>
-                    <div class="slider-wrap">
-                        <div class="slider-header">
-                            <div class="slider-label">DPI 缩放</div>
-                            <span class="slider-value" id="dpi-display" style="color:var(--accent)">100%</span>
-                        </div>
-                        <input type="range" class="slider-custom" id="dpi-slider" min="50" max="200" step="5" value="100" oninput="throttledUpdateDpi()">
-                    </div>
+
                     <div class="select-wrap">
                         <div class="slider-label">选择字体</div>
                         <div class="custom-font-select" id="custom-font-select">
@@ -5690,10 +5790,12 @@
         function toggleHomeSettings() {
             var panel = document.getElementById('home-settings-panel');
             var overlay = document.getElementById('home-settings-overlay');
+            var heroContainer = document.getElementById('hero-header-container');
             if (panel.classList.contains('open')) {
                 panel.classList.remove('open');
                 overlay.classList.remove('active');
                 document.body.classList.remove('home-settings-open');
+                if (heroContainer) heroContainer.style.display = '';
                 var customText = document.getElementById('matrix-custom-text');
                 if (customText && matrixEngine) {
                     matrixEngine.setCustomText(customText.value);
@@ -5707,6 +5809,7 @@
                 panel.classList.add('open');
                 overlay.classList.add('active');
                 document.body.classList.add('home-settings-open');
+                if (heroContainer) heroContainer.style.display = 'none';
                 var savedHomeTheme = localStorage.getItem('homeTheme') || 'dark';
                 document.querySelectorAll('.home-theme-card').forEach(function(card) {
                     card.classList.toggle('active', card.getAttribute('data-home-theme') === savedHomeTheme);
@@ -7104,8 +7207,8 @@
             const bottomPlayIcon = document.getElementById('bottom-play-icon-svg');
             if (bottomPlayIcon) bottomPlayIcon.innerHTML = '<path class="p-pause" fill="currentColor"/>';
             document.getElementById('input-screen').style.display = 'none';
-            var heroHeader = document.querySelector('.hero-glass-base');
-            if (heroHeader) heroHeader.style.display = 'none';
+            var heroContainer = document.getElementById('hero-header-container');
+            if (heroContainer) heroContainer.style.display = 'none';
             if (window._liquidGlassEngine) window._liquidGlassEngine.stop();
             var lgCanvas = document.getElementById('liquid-glass-canvas');
             if (lgCanvas) lgCanvas.style.display = 'none';
@@ -7511,8 +7614,8 @@
             setTimeout(() => {
                 ds.style.display = 'none';
                 document.getElementById('input-screen').style.display = 'flex';
-                var heroHeader = document.querySelector('.hero-glass-base');
-                if (heroHeader) heroHeader.style.display = '';
+                var heroContainer = document.getElementById('hero-header-container');
+                if (heroContainer) heroContainer.style.display = '';
                 var lgCanvas = document.getElementById('liquid-glass-canvas');
                 if (lgCanvas) lgCanvas.style.display = '';
                 if (window._liquidGlassEngine) window._liquidGlassEngine.start();
@@ -7819,6 +7922,18 @@
             }
         }
 
+        function toggleFontSettingsSection() {
+            var sliders = document.getElementById('font-settings-sliders');
+            var arrow = document.getElementById('font-settings-arrow');
+            if (sliders.style.display === 'none') {
+                sliders.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                sliders.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
         function toggleLowPerfMode() {
             lowPerfMode = !lowPerfMode;
             const toggle = document.getElementById('lowperf-toggle');
@@ -8019,19 +8134,27 @@
             MatrixEngine.prototype.initColumn = function(i, initial) {
                 var rnd = Math.random();
                 var layer;
-                if (rnd < 0.3) layer = 0;
-                else if (rnd < 0.75) layer = 1;
+                if (rnd < 0.25) layer = 0;
+                else if (rnd < 0.7) layer = 1;
                 else layer = 2;
                 this.columnLayers[i] = layer;
                 var startYRange = this.displayHeight / this.fontSize;
+                // 随机起始Y位置，让列从屏幕上方不同位置开始
                 this.drops[i] = initial
-                    ? -(Math.random() * startYRange * 2 + Math.random() * startYRange)
-                    : -(Math.random() * startYRange * 0.8 + Math.random() * 30);
+                    ? -(Math.random() * startYRange * 3 + Math.random() * startYRange * 2)
+                    : -(Math.random() * startYRange * 1.5 + Math.random() * 50 + 100);
                 this.columnStartY[i] = this.drops[i];
-                this.columnMaxHeight[i] = 0.5 + Math.random() * 0.5;
+                // 控制最大高度，让代码流在屏幕不同区域消失
+                this.columnMaxHeight[i] = 0.3 + Math.random() * 0.7;
                 this.columnFadeSpeed[i] = 0.3 + Math.random() * 0.7;
-                this.columnTrailLen[i] = 6 + Math.floor(Math.random() * 10);
-                this.columnSpeedMul[i] = 0.6 + Math.random() * 0.8;
+                // 控制拖尾长度
+                this.columnTrailLen[i] = 4 + Math.floor(Math.random() * 12);
+                // 速度倍率：远景慢，近景快
+                var baseSpeed = layer === 0 ? 0.3 : (layer === 1 ? 0.6 : 0.8);
+                this.columnSpeedMul[i] = baseSpeed + Math.random() * 0.4;
+                // 横向偏移：让列不从完全规则的位置出现
+                this.columnXOffset = this.columnXOffset || [];
+                this.columnXOffset[i] = (Math.random() - 0.5) * this.fontSize * 0.8;
                 this.assignSentence(i);
             };
             MatrixEngine.prototype.updateAccentColor = function() {
@@ -8076,7 +8199,8 @@
                         var progress = Math.max(0, Math.min(1, y / (dh * this.columnMaxHeight[i])));
                         var headGlow = Math.max(0, 1 - progress * 2.0);
                         var fadeOut = progress > 0.5 ? Math.max(0, 1 - (progress - 0.5) / 0.5) : 1.0;
-                        var drawX = i * colWidth + (Math.sin(i * 0.7 + this.breathPhase * 0.3) * cfg.zOffset * 0.15);
+                        var xOffset = (this.columnXOffset && this.columnXOffset[i]) ? this.columnXOffset[i] : 0;
+                        var drawX = i * colWidth + xOffset + (Math.sin(i * 0.7 + this.breathPhase * 0.3) * cfg.zOffset * 0.1);
                         var distToMouse = Math.sqrt(Math.pow(drawX - mx, 2) + Math.pow(y - my, 2));
                         var repelX = 0;
                         if (this.mouseRepel && distToMouse < 180 && distToMouse > 0) {
@@ -8187,12 +8311,19 @@
                                 ctx.filter = 'none';
                             }
                         }
-                        this.columnCharIndex[i]++;
-                        if (useSentences && this.columnSentences[i] && this.columnCharIndex[i] >= this.columnSentences[i].length) {
-                            this.assignSentence(i);
+                        // 逐字下落：只有当前字符完全显示后才移动到下一行
+                        var dropSpeed = layerSpeed * step * 0.15; // 大幅降低速度
+                        var speedThreshold = 1.0; // 每帧至少移动1个单位
+                        this.drops[i] += Math.max(dropSpeed, speedThreshold * 0.05);
+                        // 只有当drops增加超过1个字符高度时才更新字符索引
+                        var charAdvance = Math.floor(this.drops[i]) - Math.floor(this.drops[i] - Math.max(dropSpeed, speedThreshold * 0.05));
+                        if (charAdvance > 0) {
+                            this.columnCharIndex[i] += charAdvance;
+                            if (useSentences && this.columnSentences[i] && this.columnCharIndex[i] >= this.columnSentences[i].length) {
+                                this.assignSentence(i);
+                            }
                         }
-                        this.drops[i] += layerSpeed * step;
-                        if (this.drops[i] * layerFontSize > dh * this.columnMaxHeight[i] + 30) {
+                        if (this.drops[i] * layerFontSize > dh * this.columnMaxHeight[i] + 50) {
                             this.initColumn(i, false);
                         }
                     }
