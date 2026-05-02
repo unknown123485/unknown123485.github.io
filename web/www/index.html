@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
  <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -952,10 +952,9 @@
 
         /* --- 巅峰状态标签 (液态玻璃) --- */
         .status-badge-container {
-            position: fixed; top: max(env(safe-area-inset-top), 15px); left: 1rem; right: 1rem;
+            position: fixed; top: max(env(safe-area-inset-top), 15px); left: 1rem;
             display: flex; align-items: center; gap: 0.6rem;
             z-index: 9999;
-            overflow: visible;
         }
         
         .status-badge-setting {
@@ -1086,7 +1085,7 @@
 
 
         /* --- 输入屏幕重构 --- */
-        #input-screen { display: flex; flex-direction: column; align-items: stretch; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 80px); padding-bottom: max(env(safe-area-inset-bottom), 12px); }
+        #input-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; right: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 80px); padding-bottom: max(env(safe-area-inset-bottom), 12px); }
         
         .hero-glass-base {
             position: fixed;
@@ -1147,14 +1146,15 @@
             background: rgba(255, 255, 255, 0.08) !important;
             backdrop-filter: blur(25px) saturate(200%) !important;
             -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
-            box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 12px 40px rgba(0,0,0,0.5) !important;
+            box-shadow: none !important;
             border: 1px solid rgba(255,255,255,0.15) !important;
             border-radius: 24px !important;
             padding: 2rem;
-            transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.4s ease;
             overflow-y: auto; overflow-x: hidden;
             isolation: isolate;
             scrollbar-width: none; -ms-overflow-style: none;
+            clip-path: inset(0 100% 0 0);
         }
         .home-settings-panel::before {
             content: '';
@@ -1173,7 +1173,7 @@
             pointer-events: none;
         }
         .home-settings-panel::-webkit-scrollbar { display: none; }
-        .home-settings-panel.open { right: 0; }
+        .home-settings-panel.open { right: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 12px 40px rgba(0,0,0,0.5) !important; clip-path: inset(0 0 0 0); }
         .home-settings-panel h3 {
             font-family: 'EB Garamond', serif; font-size: 1.5rem;
             margin-bottom: 1.5rem; color: #fff;
@@ -1361,7 +1361,7 @@
         .av-date { font-size: 0.6rem; color: var(--text-primary); opacity: 0.4; margin-top: 2px; }
         .av-desc { font-size: 0.65rem; color: var(--text-primary); opacity: 0.6; margin-top: 4px; line-height: 1.5; }
 
-        .entry-container { display: flex; flex-direction: column; gap: 12px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; }
+        .entry-container { display: flex; flex-direction: column; gap: 12px; align-items: center; padding: 0 2rem; box-sizing: border-box; max-width: 320px; margin: 0 auto; width: 100%; }
         .entry-card { 
             width: 100%; max-width: 320px; padding: 11px 20px; 
             background: rgba(255, 255, 255, 0.04); 
@@ -3909,10 +3909,10 @@
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
-        <div id="input-screen" style="overflow:hidden;">
+        <div id="input-screen">
             <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
-            <canvas id="liquid-glass-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
-            <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;flex:1;min-height:0;">
+            <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
+            <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
 
             <div class="home-settings-overlay" id="home-settings-overlay" onclick="toggleHomeSettings()"></div>
@@ -7648,7 +7648,7 @@
                 this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
                 this.displayWidth = w;
                 this.displayHeight = h;
-                var colWidth = this.fontSize * 1.0;
+                var colWidth = this.fontSize * 1.5;
                 this.columns = Math.floor(w / colWidth);
                 this.drops = [];
                 this.columnSentences = [];
@@ -7677,7 +7677,7 @@
                 this.columnStartY[i] = this.drops[i];
                 this.columnMaxHeight[i] = 0.5 + Math.random() * 0.5;
                 this.columnFadeSpeed[i] = 0.3 + Math.random() * 0.7;
-                this.columnTrailLen[i] = 8 + Math.floor(Math.random() * 14);
+                this.columnTrailLen[i] = 6 + Math.floor(Math.random() * 10);
                 this.columnSpeedMul[i] = 0.6 + Math.random() * 0.8;
                 this.assignSentence(i);
             };
@@ -7697,7 +7697,7 @@
                 var ctx = this.ctx;
                 var dw = this.displayWidth || this.canvas.offsetWidth;
                 var dh = this.displayHeight || this.canvas.offsetHeight;
-                ctx.fillStyle = 'rgba(0,0,0,0.04)';
+                ctx.fillStyle = 'rgba(0,0,0,0.08)';
                 ctx.fillRect(0, 0, dw, dh);
                 this.breathPhase += 0.012;
                 var breathFactor = 0.88 + 0.12 * Math.sin(this.breathPhase);
@@ -7706,11 +7706,11 @@
                 var my = this.mouseY * dh;
                 var glowMul = this.glowIntensity;
                 var accentParsed = this._accentParsed || this.parseColor(this.accentColor);
-                var colWidth = this.fontSize * 1.0;
+                var colWidth = this.fontSize * 1.5;
                 var layers = [
-                    { fontMul: 0.5, speedMul: 0.2, alphaBase: 0.08, darkMul: 0.1, blur: 0 },
-                    { fontMul: 0.85, speedMul: 0.6, alphaBase: 0.4, darkMul: 0.5, blur: 0 },
-                    { fontMul: 1.2, speedMul: 1.8, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
+                    { fontMul: 0.55, speedMul: 0.2, alphaBase: 0.04, darkMul: 0.1, blur: 0 },
+                    { fontMul: 0.8, speedMul: 0.6, alphaBase: 0.25, darkMul: 0.5, blur: 0 },
+                    { fontMul: 1.0, speedMul: 1.8, alphaBase: 1.0, darkMul: 1.0, blur: 0 }
                 ];
                 for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
                     for (var i = 0; i < this.drops.length; i++) {
@@ -7928,7 +7928,7 @@
             InkWashEngine.prototype.resize = function() {
                 this.canvas.width = this.canvas.offsetWidth;
                 this.canvas.height = this.canvas.offsetHeight;
-                this.columns = Math.floor(this.canvas.width / (this.fontSize * 1.2));
+                this.columns = Math.floor(this.canvas.width / (this.fontSize * 1.5));
                 this.drops = [];
                 this.blurAmounts = [];
                 for (var i = 0; i < this.columns; i++) {
@@ -7950,7 +7950,7 @@
                 ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
                 for (var i = 0; i < this.drops.length; i++) {
                     var char = this.chars[Math.floor(Math.random() * this.chars.length)];
-                    var x = this.canvas.width - (i * this.fontSize * 1.2) - this.fontSize;
+                    var x = this.canvas.width - (i * this.fontSize * 1.5) - this.fontSize;
                     var y = this.drops[i] * this.fontSize;
                     var progress = (this.drops[i] * this.fontSize) / this.canvas.height;
                     var opacity = Math.max(0.05, 0.4 * (1 - progress));
@@ -9846,6 +9846,7 @@
             };
         })();
     </script>
+    <script src="scripts/html2canvas.min.js" defer></script>
     <script>
         (function() {
             var targets = '.entry-card, .bottom-control-btn, .btn-luxury, .status-badge, .status-badge-setting, .glass-panel';
