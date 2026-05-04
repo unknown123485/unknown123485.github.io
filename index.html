@@ -11,19 +11,20 @@
     <meta http-equiv="Expires" content="0">
     <title>Mas.reader v6.5.0</title>
     <script>
-        // 强制清除缓存并重新加载 - v6.5.0
+        // 缓存控制 - v6.5.0
         (function() {
-            var url = window.location.href;
-            var hasVersion = /[?&]v=6\.5\.0/.test(url);
-            var hasForce = /[?&]force=1/.test(url);
-            // 如果已经带版本号且不是强制刷新，则不再跳转
-            if (hasVersion && !hasForce) return;
-            // 清除所有旧的缓存参数
-            url = url.replace(/[?&](v=[^&]+|nocache=\d+|force=\d+)/g, '');
-            url = url.replace(/\?$/,'').replace(/&$/,'');
-            // 添加新版本号和强制缓存清除参数
-            var sep = url.indexOf('?') === -1 ? '?' : '&';
-            window.location.replace(url + sep + 'v=6.5.0&nocache=' + Date.now() + '&force=1');
+            // 仅检测是否为本地开发环境
+            var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            if (isLocal) {
+                // 本地开发时添加时间戳防止缓存
+                var url = window.location.href;
+                if (!/[?&]dev=\d+/.test(url)) {
+                    url = url.replace(/[?&]dev=\d+/g, '');
+                    url = url.replace(/\?$/,'').replace(/&$/,'');
+                    var sep = url.indexOf('?') === -1 ? '?' : '&';
+                    window.location.replace(url + sep + 'dev=' + Date.now());
+                }
+            }
         })();
     </script>
     <style>
