@@ -8423,7 +8423,7 @@
                 this.columnLayers[i] = layer;
                 var startYRange = this.displayHeight / this.fontSize;
                 this.drops[i] = initial
-                    ? -(Math.random() * startYRange * 1.5 + Math.random() * startYRange)
+                    ? -(Math.random() * 20 + 5)
                     : -(Math.random() * startYRange * 0.8 + Math.random() * 30 + 20);
                 this.columnStartY[i] = this.drops[i];
                 this.columnMaxHeight[i] = 1.0 + Math.random() * 0.5;
