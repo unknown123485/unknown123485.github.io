@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.3.8</title>
+    <title>Mas.reader v6.3.9</title>
     <script>
         // 强制清除缓存并重新加载
         (function() {
@@ -8432,6 +8432,12 @@
                 this.columnXOffset = this.columnXOffset || [];
                 this.columnXOffset[i] = (Math.random() - 0.5) * this.fontSize * 0.8;
                 this.assignSentence(i);
+                var chars = this.getChars();
+                var trailLen = this.columnTrailLen[i] || 12;
+                this.columnChars[i] = [];
+                for (var c = 0; c < trailLen + 20; c++) {
+                    this.columnChars[i].push(chars[Math.floor(Math.random() * chars.length)]);
+                }
             };
             MatrixEngine.prototype.updateAccentColor = function() {
                 var now = performance.now();
@@ -8471,15 +8477,6 @@
                     { fontMul: 1.0, speedMul: 1.0, alphaBase: 0.7, blur: 0, zOffset: 0 }
                 ];
                 if (!this.columnChars) this.columnChars = [];
-                var chars = this.getChars();
-                for (var i = 0; i < this.columns; i++) {
-                    if (!this.columnChars[i]) {
-                        this.columnChars[i] = [];
-                        for (var c = 0; c < 30; c++) {
-                            this.columnChars[i].push(chars[Math.floor(Math.random() * chars.length)]);
-                        }
-                    }
-                }
                 var hasGrad = this.gradientTopColor && this.gradientBottomColor;
                 var topC, botC;
                 if (hasGrad) {
@@ -8551,8 +8548,7 @@
                                 ci = ci % sent.length;
                                 text = sent[ci];
                             } else {
-                                var charIdx = Math.floor(this.drops[i] - t) % this.columnChars[i].length;
-                                if (charIdx < 0) charIdx += this.columnChars[i].length;
+                                var charIdx = t % this.columnChars[i].length;
                                 text = this.columnChars[i][charIdx];
                             }
                             var r, g, b, charAlpha;
