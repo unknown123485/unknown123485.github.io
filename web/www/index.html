@@ -902,11 +902,13 @@
                 inset 0 -1px 1px rgba(0,0,0,0.1);
             color: white;
             cursor: pointer;
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .liquid-glass-btn::before {
             content: '';
@@ -934,13 +936,14 @@
         }
         .liquid-glass-btn:active:not(:disabled) {
             transition: none;
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.2),
-                inset 0 3px 6px rgba(0,0,0,0.25),
-                inset 0 -2px 3px rgba(255,255,255,0.15),
-                inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+                0 1px 4px rgba(0,0,0,0.35),
+                inset 0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(0,0,0,0.3),
+                inset 0 -3px 6px rgba(255,255,255,0.2),
+                inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%);
         }
 
         /* 性能降级: 传统毛玻璃 */
@@ -985,7 +988,7 @@
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-primary);
             width: 2rem;
             height: 2rem;
@@ -998,6 +1001,8 @@
             border: none;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .status-badge-setting::before {
             content: '';
@@ -1026,13 +1031,14 @@
         }
         .status-badge-setting:active {
             transition: none;
-            transform: scale(0.95);
+            transform: scale(0.92);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.3),
-                inset 0 3px 6px rgba(0,0,0,0.25),
-                inset 0 -2px 3px rgba(255,255,255,0.15),
-                inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+                0 1px 4px rgba(0,0,0,0.4),
+                inset 0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(0,0,0,0.3),
+                inset 0 -3px 6px rgba(255,255,255,0.2),
+                inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%);
         }
         
         .status-badge-setting svg {
@@ -1060,19 +1066,22 @@
             min-width: 2.4rem;
             height: 2.4rem;
             box-sizing: border-box;
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .status-badge:active {
             transition: none;
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.3),
-                inset 0 3px 6px rgba(0,0,0,0.25),
-                inset 0 -2px 3px rgba(255,255,255,0.15),
-                inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+                0 1px 4px rgba(0,0,0,0.4),
+                inset 0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(0,0,0,0.3),
+                inset 0 -3px 6px rgba(255,255,255,0.2),
+                inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%);
         }
         .status-badge::before {
             content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
@@ -1094,12 +1103,14 @@
             backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-primary);
             width: 2rem; height: 2rem; min-width: 2rem; min-height: 2rem;
             position: relative; overflow: hidden; border: none;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .bg-adjust-btn::before {
             content: '';
@@ -1120,9 +1131,9 @@
         }
         .bg-adjust-btn:active {
             transition: none;
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 3px 6px rgba(0,0,0,0.25), inset 0 -2px 3px rgba(255,255,255,0.15), inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            transform: scale(0.92);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.35), inset 0 4px 12px rgba(0,0,0,0.4), inset 0 2px 6px rgba(0,0,0,0.3), inset 0 -3px 6px rgba(255,255,255,0.2), inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%);
         }
         .bg-adjust-btn svg { width: 1rem; height: 1rem; position: relative; z-index: 3; }
         .bg-adjust-panel {
@@ -1176,23 +1187,21 @@
         .mas-reader-logo svg { width: 100%; height: 100%; }
 
         .hero-glass-base {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%);
-            backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
-            -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(28px) saturate(200%);
+            -webkit-backdrop-filter: blur(28px) saturate(200%);
+            border: none;
             border-radius: 20px;
             padding: 10px 24px 8px;
-            box-shadow: 
-                inset 0 1px 1px rgba(255, 255, 255, 0.2),
-                inset 0 -1px 1px rgba(0, 0, 0, 0.1),
-                0 8px 32px rgba(0, 0, 0, 0.4),
-                0 0 60px rgba(0, 255, 136, 0.03);
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.4),
+                inset 0 1px 1px rgba(255,255,255,0.5),
+                inset 0 -1px 1px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 4px;
-            isolation: isolate;
             white-space: nowrap;
             pointer-events: auto;
             position: relative;
@@ -1201,23 +1210,19 @@
         .hero-glass-base::before {
             content: '';
             position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            padding: 1.5px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.3) 100%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
+            top: 0; left: 15%; right: 15%; height: 1.5px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
             pointer-events: none;
-            opacity: 0.6;
+            z-index: 1;
         }
         .hero-glass-base::after {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.15) 0%, transparent 60%);
+            background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.18), transparent);
             pointer-events: none;
+            z-index: 2;
         }
         .home-settings-open .hero-header-container {
             opacity: 0;
@@ -1415,11 +1420,13 @@
                 0 6px 20px rgba(0,0,0,0.2),
                 inset 0 1px 1px rgba(255,255,255,0.4),
                 inset 0 -1px 1px rgba(0,0,0,0.1);
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .about-content::before {
             content: '';
@@ -1441,13 +1448,14 @@
         .about-content:hover { background: linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%); }
         .about-content:active {
             transition: none;
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.2),
-                inset 0 3px 6px rgba(0,0,0,0.25),
-                inset 0 -2px 3px rgba(255,255,255,0.15),
-                inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+                0 1px 4px rgba(0,0,0,0.35),
+                inset 0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(0,0,0,0.3),
+                inset 0 -3px 6px rgba(255,255,255,0.2),
+                inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%);
         }
         .about-icon { 
             width: 6px; height: 6px; border-radius: 50%; 
@@ -1522,13 +1530,15 @@
                 0 8px 32px rgba(0,0,0,0.4),
                 inset 0 1px 1px rgba(255,255,255,0.4),
                 inset 0 -1px 1px rgba(0,0,0,0.1);
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px;
             cursor: pointer; position: relative; overflow: hidden;
             margin-left: auto;
             margin-right: auto;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .entry-card::before {
             content: '';
@@ -1559,13 +1569,14 @@
         }
         .entry-card:active {
             transition: none;
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.3),
-                inset 0 3px 6px rgba(0,0,0,0.25),
-                inset 0 -2px 3px rgba(255,255,255,0.15),
-                inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%) !important;
+                0 1px 4px rgba(0,0,0,0.4),
+                inset 0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(0,0,0,0.3),
+                inset 0 -3px 6px rgba(255,255,255,0.2),
+                inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%) !important;
         }
         .entry-card svg { width: 20px; height: 20px; fill: var(--text-primary); margin: 0; opacity: 1; flex-shrink: 0; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5)); align-self: center; }
         .entry-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
@@ -1620,11 +1631,11 @@
         .entry-card.drag-over { background: var(--accent); border-color: white; }
         .entry-card.drag-over * { color: white !important; fill: white !important; }
 
-        .btn-back { margin-top: 2rem; background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%); border: none; color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease; backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.4), inset 0 -1px 1px rgba(0,0,0,0.1); position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        .btn-back { margin-top: 2rem; background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%); border: none; color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.4), inset 0 -1px 1px rgba(0,0,0,0.1); position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
         .btn-back::before { content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); pointer-events: none; z-index: 1; }
         .btn-back::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.12), transparent); pointer-events: none; z-index: 2; }
         .btn-back:hover { background: linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%); }
-        .btn-back:active { transition: none; transform: scale(0.97); box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 3px 6px rgba(0,0,0,0.25), inset 0 -2px 3px rgba(255,255,255,0.15), inset 0 1px 2px rgba(0,0,0,0.15); background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%); }
+        .btn-back:active { transition: none; transform: scale(0.95); box-shadow: 0 1px 4px rgba(0,0,0,0.4), inset 0 4px 12px rgba(0,0,0,0.4), inset 0 2px 6px rgba(0,0,0,0.3), inset 0 -3px 6px rgba(255,255,255,0.2), inset 0 -1px 3px rgba(255,255,255,0.1); background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%); }
         .text-input { 
             width: 75vw; height: 50vh; background: transparent; border: none; 
             color: var(--text-primary); font-size: 1.6rem; line-height: 1.8; 
@@ -1653,8 +1664,8 @@
             color: #111;
             filter: url(#distress-filter) contrast(1.1) sepia(0.1);
         }
-        .btn-luxury { margin-top: 4rem; padding: 1.5rem 7rem; font-size: 1.5rem; background: var(--accent); color: white; border: none; border-radius: 60px; cursor: pointer; font-weight: 900; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: transform 0.05s ease, box-shadow 0.05s ease; letter-spacing: 0.3em; text-transform: uppercase; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        .btn-luxury:active { transition: none; transform: scale(0.97); box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 3px 8px rgba(0,0,0,0.3), inset 0 -1px 2px rgba(255,255,255,0.1); }
+        .btn-luxury { margin-top: 4rem; padding: 1.5rem 7rem; font-size: 1.5rem; background: var(--accent); color: white; border: none; border-radius: 60px; cursor: pointer; font-weight: 900; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1); letter-spacing: 0.3em; text-transform: uppercase; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+        .btn-luxury:active { transition: none; transform: scale(0.95); box-shadow: 0 4px 12px rgba(0,0,0,0.35), inset 0 4px 12px rgba(0,0,0,0.35), inset 0 2px 6px rgba(0,0,0,0.25), inset 0 -3px 6px rgba(255,255,255,0.15), inset 0 -1px 3px rgba(255,255,255,0.08); }
 
         /* --- 展示屏幕 --- */
         #bg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -2197,13 +2208,15 @@
             height: calc(50px * var(--dpi-scale));
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-primary);
             position: relative;
             overflow: hidden;
             border: none;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .bottom-control-btn::before {
             content: '';
@@ -2232,13 +2245,14 @@
         }
         .bottom-control-btn:active {
             transition: none;
-            transform: scale(0.95);
+            transform: scale(0.92);
             box-shadow:
-                0 2px 8px rgba(0,0,0,0.3),
-                inset 0 3px 6px rgba(0,0,0,0.25),
-                inset 0 -2px 3px rgba(255,255,255,0.15),
-                inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+                0 1px 4px rgba(0,0,0,0.4),
+                inset 0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(0,0,0,0.3),
+                inset 0 -3px 6px rgba(255,255,255,0.2),
+                inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%);
         }
 
         .bottom-control-btn.play-master {
@@ -2269,7 +2283,7 @@
         .control-btn {
             background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
             border: none; color: white; cursor: pointer;
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.05s ease;
+            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
             min-width: 60px; border-radius: 14px; padding: 0.6rem 1rem;
             backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%);
@@ -2281,6 +2295,8 @@
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .control-btn::before {
             content: '';
@@ -2305,13 +2321,14 @@
         .control-btn:hover svg { transform: scale(1.1); color: var(--accent); }
         .control-btn:active {
             transition: none;
-            transform: scale(0.96);
+            transform: scale(0.94);
             box-shadow:
-                0 1px 4px rgba(0,0,0,0.3),
-                inset 0 3px 6px rgba(0,0,0,0.25),
-                inset 0 -2px 3px rgba(255,255,255,0.15),
-                inset 0 1px 2px rgba(0,0,0,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+                0 1px 4px rgba(0,0,0,0.4),
+                inset 0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(0,0,0,0.3),
+                inset 0 -3px 6px rgba(255,255,255,0.2),
+                inset 0 -1px 3px rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40%, rgba(255,255,255,0.02) 100%);
         }
         .control-btn:active svg { transform: scale(0.9); }
         .control-btn svg { width: 28px; height: 28px; fill: currentColor; transition: 0.3s; position: relative; z-index: 3; }
@@ -3838,14 +3855,18 @@
                 padding-bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px)) !important;
                 -webkit-overflow-scrolling: touch;
                 overscroll-behavior: contain;
-                contain: layout style paint;
                 will-change: transform, opacity;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
             }
             .nav-bar-luxury .dpi-content-wrap {
                 transform: none;
                 max-width: 100%;
                 padding-top: 0.5rem;
                 min-height: min-content;
+                overflow-y: visible;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
             }
             .nav-bar-luxury.open {
                 transform: translateX(-50%) translateY(0);
