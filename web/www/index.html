@@ -922,8 +922,9 @@
         .liquid-glass-btn::before {
             content: '';
             position: absolute;
-            top: 0; left: 15%; right: 15%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.2) 0%, transparent 60%);
             pointer-events: none;
             z-index: 1;
         }
@@ -932,7 +933,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 50% 30% at 50% 5%, rgba(255,255,255,0.08), transparent);
             pointer-events: none;
             z-index: 2;
         }
@@ -946,13 +947,11 @@
         .liquid-glass-btn:active:not(:disabled) {
             transition: none;
             transform: scale(0.92) translateY(3px);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.5),
-                inset 0 8px 24px rgba(0,0,0,0.6),
-                inset 0 4px 12px rgba(0,0,0,0.45),
-                inset 0 -6px 16px rgba(255,255,255,0.3),
-                inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
 
         /* 性能降级: 传统毛玻璃 */
@@ -1016,8 +1015,9 @@
         .status-badge-setting::before {
             content: '';
             position: absolute;
-            top: 0; left: 20%; right: 20%; height: 1.5px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.25) 0%, transparent 70%);
             pointer-events: none;
             z-index: 1;
         }
@@ -1026,7 +1026,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse 50% 35% at 50% 15%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 60% 30% at 50% 10%, rgba(255,255,255,0.1), transparent);
             pointer-events: none;
             z-index: 2;
         }
@@ -1041,13 +1041,11 @@
         .status-badge-setting:active {
             transition: none;
             transform: scale(0.88) translateY(4px);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.5),
-                inset 0 8px 24px rgba(0,0,0,0.6),
-                inset 0 4px 12px rgba(0,0,0,0.45),
-                inset 0 -6px 16px rgba(255,255,255,0.3),
-                inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
         
         .status-badge-setting svg {
@@ -1084,23 +1082,21 @@
         .status-badge:active {
             transition: none;
             transform: scale(0.92) translateY(3px);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.5),
-                inset 0 8px 24px rgba(0,0,0,0.6),
-                inset 0 4px 12px rgba(0,0,0,0.45),
-                inset 0 -6px 16px rgba(255,255,255,0.3),
-                inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
         .status-badge::before {
-            content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            content: ''; position: absolute; inset: 0; border-radius: inherit;
+            background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.2) 0%, transparent 60%);
             pointer-events: none;
             z-index: 1;
         }
         .status-badge::after {
             content: ''; position: absolute; inset: 0; border-radius: inherit;
-            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 50% 30% at 50% 5%, rgba(255,255,255,0.08), transparent);
             pointer-events: none;
             z-index: 2;
         }
@@ -1124,8 +1120,9 @@
         .bg-adjust-btn::before {
             content: '';
             position: absolute;
-            top: 0; left: 20%; right: 20%; height: 1.5px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.25) 0%, transparent 70%);
             pointer-events: none;
             z-index: 1;
         }
@@ -1134,15 +1131,18 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse 50% 35% at 50% 15%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 60% 30% at 50% 10%, rgba(255,255,255,0.1), transparent);
             pointer-events: none;
             z-index: 2;
         }
         .bg-adjust-btn:active {
             transition: none;
             transform: scale(0.88) translateY(4px);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 8px 24px rgba(0,0,0,0.6), inset 0 4px 12px rgba(0,0,0,0.45), inset 0 -6px 16px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
         .bg-adjust-btn svg { width: 1rem; height: 1rem; position: relative; z-index: 3; }
         .bg-adjust-panel {
@@ -1440,8 +1440,9 @@
         .about-content::before {
             content: '';
             position: absolute;
-            top: 0; left: 15%; right: 15%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.2) 0%, transparent 60%);
             pointer-events: none;
             z-index: 1;
         }
@@ -1450,7 +1451,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 50% 30% at 50% 5%, rgba(255,255,255,0.08), transparent);
             pointer-events: none;
             z-index: 2;
         }
@@ -1458,13 +1459,11 @@
         .about-content:active {
             transition: none;
             transform: scale(0.92) translateY(3px);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.5),
-                inset 0 8px 24px rgba(0,0,0,0.6),
-                inset 0 4px 12px rgba(0,0,0,0.45),
-                inset 0 -6px 16px rgba(255,255,255,0.3),
-                inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
         .about-icon { 
             width: 6px; height: 6px; border-radius: 50%; 
@@ -1552,8 +1551,9 @@
         .entry-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 15%; right: 15%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.2) 0%, transparent 60%);
             pointer-events: none;
             z-index: 1;
         }
@@ -1562,7 +1562,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 50% 30% at 50% 5%, rgba(255,255,255,0.08), transparent);
             pointer-events: none;
             z-index: 2;
         }
@@ -1579,13 +1579,11 @@
         .entry-card:active {
             transition: none;
             transform: scale(0.92) translateY(3px);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.5),
-                inset 0 8px 24px rgba(0,0,0,0.6),
-                inset 0 4px 12px rgba(0,0,0,0.45),
-                inset 0 -6px 16px rgba(255,255,255,0.3),
-                inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%) !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%) !important;
         }
         .entry-card svg { width: 20px; height: 20px; fill: var(--text-primary); margin: 0; opacity: 1; flex-shrink: 0; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5)); align-self: center; }
         .entry-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
@@ -1641,10 +1639,10 @@
         .entry-card.drag-over * { color: white !important; fill: white !important; }
 
         .btn-back { margin-top: 2rem; background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%); border: none; color: white; padding: 1rem 3rem; border-radius: 30px; cursor: pointer; transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.4), inset 0 -1px 1px rgba(0,0,0,0.1); position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-        .btn-back::before { content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); pointer-events: none; z-index: 1; }
-        .btn-back::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.12), transparent); pointer-events: none; z-index: 2; }
+        .btn-back::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.2) 0%, transparent 60%); pointer-events: none; z-index: 1; }
+        .btn-back::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(ellipse 50% 30% at 50% 5%, rgba(255,255,255,0.08), transparent); pointer-events: none; z-index: 2; }
         .btn-back:hover { background: linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%); }
-        .btn-back:active { transition: none; transform: scale(0.91) translateY(3px); box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 8px 24px rgba(0,0,0,0.6), inset 0 4px 12px rgba(0,0,0,0.45), inset 0 -6px 16px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(255,255,255,0.15); background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%); }
+        .btn-back:active { transition: none; transform: scale(0.91) translateY(3px); box-shadow: 0 2px 6px rgba(0,0,0,0.5); background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%), linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%); }
         .text-input { 
             width: 75vw; height: 50vh; background: transparent; border: none; 
             color: var(--text-primary); font-size: 1.6rem; line-height: 1.8; 
@@ -1674,7 +1672,7 @@
             filter: url(#distress-filter) contrast(1.1) sepia(0.1);
         }
         .btn-luxury { margin-top: 4rem; padding: 1.5rem 7rem; font-size: 1.5rem; background: var(--accent); color: white; border: none; border-radius: 60px; cursor: pointer; font-weight: 900; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1); letter-spacing: 0.3em; text-transform: uppercase; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-        .btn-luxury:active { transition: none; transform: scale(0.91) translateY(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.45), inset 0 8px 24px rgba(0,0,0,0.55), inset 0 4px 12px rgba(0,0,0,0.4), inset 0 -6px 16px rgba(255,255,255,0.25), inset 0 -3px 8px rgba(255,255,255,0.12); }
+        .btn-luxury:active { transition: none; transform: scale(0.91) translateY(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.45); background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.45) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.12) 0%, transparent 70%), linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.08) 50%, rgba(40,40,50,0.04) 100%) !important; }
 
         /* --- 展示屏幕 --- */
         #bg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -2230,8 +2228,9 @@
         .bottom-control-btn::before {
             content: '';
             position: absolute;
-            top: 0; left: 20%; right: 20%; height: 1.5px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.25) 0%, transparent 70%);
             pointer-events: none;
             z-index: 1;
         }
@@ -2240,7 +2239,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse 50% 35% at 50% 15%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 60% 30% at 50% 10%, rgba(255,255,255,0.1), transparent);
             pointer-events: none;
             z-index: 2;
         }
@@ -2255,13 +2254,11 @@
         .bottom-control-btn:active {
             transition: none;
             transform: scale(0.88) translateY(4px);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.5),
-                inset 0 8px 24px rgba(0,0,0,0.6),
-                inset 0 4px 12px rgba(0,0,0,0.45),
-                inset 0 -6px 16px rgba(255,255,255,0.3),
-                inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
 
         .bottom-control-btn.play-master {
@@ -2310,8 +2307,9 @@
         .control-btn::before {
             content: '';
             position: absolute;
-            top: 0; left: 15%; right: 15%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.2) 0%, transparent 60%);
             pointer-events: none;
             z-index: 1;
         }
@@ -2320,7 +2318,7 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.12), transparent);
+            background: radial-gradient(ellipse 50% 30% at 50% 5%, rgba(255,255,255,0.08), transparent);
             pointer-events: none;
             z-index: 2;
         }
@@ -2331,13 +2329,11 @@
         .control-btn:active {
             transition: none;
             transform: scale(0.9) translateY(3px);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.5),
-                inset 0 8px 24px rgba(0,0,0,0.6),
-                inset 0 4px 12px rgba(0,0,0,0.45),
-                inset 0 -6px 16px rgba(255,255,255,0.3),
-                inset 0 -3px 8px rgba(255,255,255,0.15);
-            background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(40,40,50,0.08) 100%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
         .control-btn:active svg { transform: scale(0.9); }
         .control-btn svg { width: 28px; height: 28px; fill: currentColor; transition: 0.3s; position: relative; z-index: 3; }
