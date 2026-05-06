@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.5.0</title>
+    <title>Mas.reader v6.5.1</title>
     <script>
-        // 缓存控制 - v6.5.0
+        // 缓存控制 - v6.5.1
         (function() {
             // 仅检测是否为本地开发环境
             var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -8501,7 +8501,13 @@
                 this.displayHeight = h;
                 var colWidth = this.fontSize * 0.6;
                 var baseCols = Math.floor(w / colWidth);
-                this.columns = Math.max(5, Math.min(120, Math.floor(baseCols * this.density)));
+                var newColumns = Math.max(5, Math.min(120, Math.floor(baseCols * this.density)));
+                var oldColumns = this.columns || 0;
+                var oldDrops = this.drops || [];
+                var oldChars = this.columnChars || [];
+                var oldSentences = this.columnSentences || [];
+                var oldCharIndex = this.columnCharIndex || [];
+                this.columns = newColumns;
                 this.drops = [];
                 this.columnSentences = [];
                 this.columnCharIndex = [];
@@ -8512,8 +8518,20 @@
                 this.columnTrailLen = [];
                 this.columnSpeedMul = [];
                 this.columnChars = [];
-                for (var i = 0; i < this.columns; i++) {
-                    this.initColumn(i, true);
+                for (var i = 0; i < newColumns; i++) {
+                    if (i < oldColumns && oldChars[i] && oldChars[i].length > 0) {
+                        this.columnChars[i] = oldChars[i];
+                        var savedSent = oldSentences[i] || null;
+                        var savedIdx = oldCharIndex[i] || 0;
+                        var savedDrop = oldDrops[i];
+                        this.initColumn(i, true);
+                        this.columnChars[i] = oldChars[i];
+                        this.columnSentences[i] = savedSent;
+                        this.columnCharIndex[i] = savedIdx;
+                        if (savedDrop !== undefined) this.drops[i] = savedDrop;
+                    } else {
+                        this.initColumn(i, true);
+                    }
                 }
             };
             MatrixEngine.prototype.initColumn = function(i, initial) {
@@ -8524,6 +8542,8 @@
                 else layer = 2;
                 this.columnLayers[i] = layer;
                 var startYRange = this.displayHeight / this.fontSize;
+                var hadOldChars = this.columnChars[i] && this.columnChars[i].length > 0;
+                var oldDrop = this.drops[i];
                 this.drops[i] = initial
                     ? -(Math.random() * 20 + 5)
                     : -(Math.random() * startYRange * 0.8 + Math.random() * 30 + 20);
@@ -8538,9 +8558,11 @@
                 this.assignSentence(i);
                 var chars = this.getChars();
                 var trailLen = this.columnTrailLen[i] || 12;
-                this.columnChars[i] = [];
-                for (var c = 0; c < trailLen + 20; c++) {
-                    this.columnChars[i].push(chars[Math.floor(Math.random() * chars.length)]);
+                if (!hadOldChars) {
+                    this.columnChars[i] = [];
+                    for (var c = 0; c < trailLen + 20; c++) {
+                        this.columnChars[i].push(chars[Math.floor(Math.random() * chars.length)]);
+                    }
                 }
             };
             MatrixEngine.prototype.updateAccentColor = function() {
