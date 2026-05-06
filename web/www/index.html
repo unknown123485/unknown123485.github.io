@@ -8653,7 +8653,7 @@
                                 ci = ci % sent.length;
                                 text = sent[ci];
                             } else {
-                                var charIdx = t % this.columnChars[i].length;
+                                var charIdx = (i * 7 + t * 13) % this.columnChars[i].length;
                                 text = this.columnChars[i][charIdx];
                             }
                             var r, g, b, charAlpha;
