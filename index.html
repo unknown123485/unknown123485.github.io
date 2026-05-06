@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.5.2</title>
+    <title>Mas.reader v6.5.3</title>
     <script>
-        // 缓存控制 - v6.5.2
+        // 缓存控制 - v6.5.3
         (function() {
             // 仅检测是否为本地开发环境
             var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -8537,6 +8537,12 @@
                 }
             };
             MatrixEngine.prototype.initColumn = function(i, initial) {
+                var hadOldChars = this.columnChars[i] && this.columnChars[i].length > 0;
+                if (hadOldChars) {
+                    this.drops[i] = -(Math.random() * 20 + 5);
+                    this.columnStartY[i] = this.drops[i];
+                    return;
+                }
                 var rnd = Math.random();
                 var layer;
                 if (rnd < 0.25) layer = 0;
@@ -8544,8 +8550,6 @@
                 else layer = 2;
                 this.columnLayers[i] = layer;
                 var startYRange = this.displayHeight / this.fontSize;
-                var hadOldChars = this.columnChars[i] && this.columnChars[i].length > 0;
-                var oldDrop = this.drops[i];
                 this.drops[i] = initial
                     ? -(Math.random() * 20 + 5)
                     : -(Math.random() * startYRange * 0.8 + Math.random() * 30 + 20);
@@ -8560,11 +8564,9 @@
                 this.assignSentence(i, false);
                 var chars = this.getChars();
                 var trailLen = this.columnTrailLen[i] || 12;
-                if (!hadOldChars) {
-                    this.columnChars[i] = [];
-                    for (var c = 0; c < trailLen + 20; c++) {
-                        this.columnChars[i].push(chars[Math.floor(Math.random() * chars.length)]);
-                    }
+                this.columnChars[i] = [];
+                for (var c = 0; c < trailLen + 20; c++) {
+                    this.columnChars[i].push(chars[Math.floor(Math.random() * chars.length)]);
                 }
             };
             MatrixEngine.prototype.updateAccentColor = function() {
