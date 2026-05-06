@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.5.3</title>
+    <title>Mas.reader v6.5.4</title>
     <script>
-        // 缓存控制 - v6.5.3
+        // 缓存控制 - v6.5.4
         (function() {
             // 仅检测是否为本地开发环境
             var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -8626,6 +8626,8 @@
                 var mouseActive = this.mouseActive;
                 var mouseRepel = this.mouseRepel;
                 var brightness = this.brightness;
+                var glowShadow1 = glowMul > 0 ? 'rgba(255,255,255,' + (0.9 * glowMul) + ')' : '';
+                var glowShadow2 = glowMul > 0 ? 'rgba(' + ar + ',' + ag + ',' + ab + ',' + (0.5 * glowMul) + ')' : '';
                 for (var layerIdx = 0; layerIdx < 3; layerIdx++) {
                     var cfg = layers[layerIdx];
                     var layerFontSize = this.fontSize * cfg.fontMul;
@@ -8655,55 +8657,67 @@
                         var dx = drawX - mx, dy = y - my;
                         var distToMouse = dx * dx + dy * dy;
                         var repelX = 0;
-                        if (mouseRepel && distToMouse < 32400 && distToMouse > 0) {
-                            var d = Math.sqrt(distToMouse);
-                            var force = (180 - d) / 180 * 22;
-                            repelX = (dx / d) * force;
+                        var mouseBrightBoost = 0;
+                        if (distToMouse < 32400 && distToMouse > 0) {
+                            if (mouseRepel) {
+                                var d = Math.sqrt(distToMouse);
+                                var force = (180 - d) / 180 * 22;
+                                repelX = (dx / d) * force;
+                            }
+                            if (mouseActive) {
+                                mouseBrightBoost = (1 - Math.sqrt(distToMouse) / 180) * 0.7;
+                            }
                         }
                         drawX += repelX;
-                        var mouseBrightBoost = 0;
-                        if (mouseActive && distToMouse < 32400) {
-                            mouseBrightBoost = (1 - Math.sqrt(distToMouse) / 180) * 0.7;
-                        }
                         var trailLen = this.columnTrailLen[i] || 12;
+                        var colChars = this.columnChars[i];
+                        var colSent = useSentences ? this.columnSentences[i] : null;
+                        var colCharIdx = useSentences ? this.columnCharIndex[i] : 0;
                         for (var t = 0; t < trailLen; t++) {
                             var trailY = y - t * layerFontSize;
                             if (trailY < -layerFontSize * 2 || trailY > dh + layerFontSize) continue;
                             var trailFade = (1 - t / trailLen);
                             trailFade = trailFade * trailFade;
                             var text;
-                            if (useSentences && this.columnSentences[i]) {
-                                var sent = this.columnSentences[i];
-                                var ci = (this.columnCharIndex[i] - t);
-                                if (ci < 0) ci += sent.length;
-                                ci = ci % sent.length;
-                                text = sent[ci];
+                            if (colSent) {
+                                var ci = (colCharIdx - t);
+                                var sentLen = colSent.length;
+                                if (ci < 0) ci += sentLen;
+                                text = colSent[ci % sentLen];
                             } else {
-                                var charIdx = (i * 7 + t * 13) % this.columnChars[i].length;
-                                text = this.columnChars[i][charIdx];
+                                text = colChars[(i * 7 + t * 13) % colChars.length];
                             }
                             var r, g, b, charAlpha;
-                            var needShadow = false;
                             if (t === 0) {
                                 r = 255; g = 255; b = 255;
                                 charAlpha = cfg.alphaBase * fadeOut + mouseBrightBoost;
                                 if (charAlpha > 1) charAlpha = 1;
                                 if (!useBlur && glowMul > 0) {
-                                    needShadow = true;
-                                    ctx.shadowColor = 'rgba(255,255,255,' + (0.9 * glowMul).toFixed(2) + ')';
+                                    ctx.shadowColor = glowShadow1;
                                     ctx.shadowBlur = 24 * glowMul;
+                                    ctx.globalAlpha = charAlpha;
+                                    ctx.fillStyle = '#ffffff';
+                                    ctx.fillText(text, drawX, trailY);
+                                    ctx.shadowColor = 'transparent';
+                                    ctx.shadowBlur = 0;
+                                    continue;
                                 }
                             } else if (t <= 3) {
                                 var mix = 1 - t / 3;
-                                r = Math.round(ar + (255 - ar) * mix * 0.8);
-                                g = Math.round(ag + (255 - ag) * mix * 0.8);
-                                b = Math.round(ab + (255 - ab) * mix * 0.8);
+                                r = (ar + (255 - ar) * mix * 0.8) | 0;
+                                g = (ag + (255 - ag) * mix * 0.8) | 0;
+                                b = (ab + (255 - ab) * mix * 0.8) | 0;
                                 charAlpha = (0.4 + mix * 0.55) * cfg.alphaBase * fadeOut * trailFade + mouseBrightBoost * 0.6;
                                 if (charAlpha > 1) charAlpha = 1;
                                 if (!useBlur && t <= 1 && glowMul > 0) {
-                                    needShadow = true;
-                                    ctx.shadowColor = 'rgba(' + ar + ',' + ag + ',' + ab + ',' + (0.5 * glowMul).toFixed(2) + ')';
+                                    ctx.shadowColor = glowShadow2;
                                     ctx.shadowBlur = 12 * glowMul;
+                                    ctx.globalAlpha = charAlpha;
+                                    ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+                                    ctx.fillText(text, drawX, trailY);
+                                    ctx.shadowColor = 'transparent';
+                                    ctx.shadowBlur = 0;
+                                    continue;
                                 }
                             } else {
                                 r = ar; g = ag; b = ab;
@@ -8716,31 +8730,30 @@
                                 var gradRatio = trailY / dh;
                                 if (gradRatio < 0) gradRatio = 0;
                                 if (gradRatio > 1) gradRatio = 1;
-                                var gr = Math.round(topC.r + (botC.r - topC.r) * gradRatio);
-                                var gg = Math.round(topC.g + (botC.g - topC.g) * gradRatio);
-                                var gb = Math.round(topC.b + (botC.b - topC.b) * gradRatio);
-                                r = Math.round(r * 0.45 + gr * 0.55);
-                                g = Math.round(g * 0.45 + gg * 0.55);
-                                b = Math.round(b * 0.45 + gb * 0.55);
+                                var gr = (topC.r + (botC.r - topC.r) * gradRatio) | 0;
+                                var gg = (topC.g + (botC.g - topC.g) * gradRatio) | 0;
+                                var gb = (topC.b + (botC.b - topC.b) * gradRatio) | 0;
+                                r = (r * 0.45 + gr * 0.55) | 0;
+                                g = (g * 0.45 + gg * 0.55) | 0;
+                                b = (b * 0.45 + gb * 0.55) | 0;
                             }
                             if (brightness !== 1.0) {
                                 var bb = brightness;
-                                r = Math.min(255, Math.round(r * bb));
-                                g = Math.min(255, Math.round(g * bb));
-                                b = Math.min(255, Math.round(b * bb));
+                                r = r * bb | 0;
+                                if (r > 255) r = 255;
+                                g = g * bb | 0;
+                                if (g > 255) g = 255;
+                                b = b * bb | 0;
+                                if (b > 255) b = 255;
                             }
                             ctx.globalAlpha = charAlpha;
                             ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
                             ctx.fillText(text, drawX, trailY);
-                            if (needShadow) {
-                                ctx.shadowColor = 'transparent';
-                                ctx.shadowBlur = 0;
-                            }
                         }
                         if (useBlur) ctx.filter = 'none';
                         this.drops[i] += layerSpeed * step * 0.6;
                         if (useSentences && this.columnSentences[i]) {
-                            var newIdx = Math.floor(this.drops[i]);
+                            var newIdx = this.drops[i] | 0;
                             if (newIdx !== this.columnCharIndex[i]) {
                                 this.columnCharIndex[i] = newIdx;
                                 var sentLen = this.columnSentences[i].length;
