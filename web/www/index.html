@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.5.1</title>
+    <title>Mas.reader v6.5.2</title>
     <script>
-        // 缓存控制 - v6.5.1
+        // 缓存控制 - v6.5.2
         (function() {
             // 仅检测是否为本地开发环境
             var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -8456,10 +8456,12 @@
                     this.assignSentence(i);
                 }
             };
-            MatrixEngine.prototype.assignSentence = function(col) {
+            MatrixEngine.prototype.assignSentence = function(col, force) {
                 if (this.sentences.length > 0) {
-                    this.columnSentences[col] = this.sentences[Math.floor(Math.random() * this.sentences.length)];
-                    this.columnCharIndex[col] = 0;
+                    if (force || !this.columnSentences[col]) {
+                        this.columnSentences[col] = this.sentences[Math.floor(Math.random() * this.sentences.length)];
+                        this.columnCharIndex[col] = 0;
+                    }
                 } else {
                     this.columnSentences[col] = null;
                     this.columnCharIndex[col] = 0;
@@ -8555,7 +8557,7 @@
                 this.columnSpeedMul[i] = baseSpeed + Math.random() * 0.3;
                 this.columnXOffset = this.columnXOffset || [];
                 this.columnXOffset[i] = (Math.random() - 0.5) * this.fontSize * 0.8;
-                this.assignSentence(i);
+                this.assignSentence(i, false);
                 var chars = this.getChars();
                 var trailLen = this.columnTrailLen[i] || 12;
                 if (!hadOldChars) {
@@ -8739,8 +8741,9 @@
                             var newIdx = Math.floor(this.drops[i]);
                             if (newIdx !== this.columnCharIndex[i]) {
                                 this.columnCharIndex[i] = newIdx;
-                                if (this.columnCharIndex[i] >= this.columnSentences[i].length) {
-                                    this.assignSentence(i);
+                                var sentLen = this.columnSentences[i].length;
+                                if (sentLen > 0) {
+                                    this.columnCharIndex[i] = this.columnCharIndex[i] % sentLen;
                                 }
                             }
                         }
