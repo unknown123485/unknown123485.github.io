@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.5.5</title>
+    <title>Mas.reader v6.5.6</title>
     <script>
-        // 缓存控制 - v6.5.5
+        // 缓存控制 - v6.5.6
         (function() {
             // 仅检测是否为本地开发环境
             var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -8588,11 +8588,11 @@
                 this.assignSentence(i, false);
                 var chars = this.getChars();
                 var trailLen = this.columnTrailLen[i] || 12;
-                var charArray = [];
+                var charStr = '';
                 for (var c = 0; c < trailLen + 20; c++) {
-                    charArray.push(chars[Math.floor(Math.random() * chars.length)]);
+                    charStr += chars[Math.floor(Math.random() * chars.length)];
                 }
-                this.columnChars[i] = charArray;
+                this.columnChars[i] = charStr;
             };
             MatrixEngine.prototype.updateAccentColor = function() {
                 var now = performance.now();
@@ -8710,7 +8710,7 @@
                                 if (ci < 0) ci += sentLen;
                                 text = colSent[ci % sentLen];
                             } else {
-                                text = colChars[(i * 7 + t * 13) % colChars.length];
+                                text = colChars.charAt((i * 7 + t * 13) % colChars.length);
                             }
                             var r, g, b, charAlpha;
                             if (t === 0) {
