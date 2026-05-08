@@ -17,7 +17,7 @@
             overflow: hidden;
             position: relative;
         }
-        /* 扫描线 */
+        /* 极简扫描线 */
         .scan-line {
             position: fixed;
             inset: 0;
@@ -25,277 +25,159 @@
                 0deg,
                 transparent,
                 transparent 4px,
-                rgba(100, 200, 180, 0.012) 4px,
-                rgba(100, 200, 180, 0.012) 8px
+                rgba(100, 200, 180, 0.008) 4px,
+                rgba(100, 200, 180, 0.008) 8px
             );
             pointer-events: none;
             z-index: 5;
-            animation: scanMove 12s linear infinite;
-        }
-        @keyframes scanMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100px; }
-        }
-        /* 噪点 */
-        .noise {
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 6;
-            opacity: 0.4;
-            animation: noiseShift 0.2s steps(4) infinite;
-        }
-        @keyframes noiseShift {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(-1px, 1px); }
-            50% { transform: translate(1px, -1px); }
-            75% { transform: translate(-1px, 2px); }
-            100% { transform: translate(0, 0); }
         }
         .container {
             text-align: center;
-            padding: 50px;
+            padding: 60px;
             max-width: 850px;
             position: relative;
             z-index: 10;
         }
         .hologram-frame {
-            border: 1px solid rgba(100, 200, 180, 0.1);
-            border-radius: 4px;
+            border: 1px solid rgba(100, 200, 180, 0.08);
             padding: 50px;
             position: relative;
             background: rgba(100, 200, 180, 0.005);
-            box-shadow:
-                0 0 60px rgba(100, 200, 180, 0.03),
-                inset 0 0 60px rgba(100, 200, 180, 0.01);
-            animation: framePulse 5s ease-in-out infinite;
-        }
-        @keyframes framePulse {
-            0%, 100% {
-                box-shadow: 0 0 60px rgba(100, 200, 180, 0.03), inset 0 0 60px rgba(100, 200, 180, 0.01);
-                border-color: rgba(100, 200, 180, 0.1);
-            }
-            50% {
-                box-shadow: 0 0 80px rgba(100, 200, 180, 0.05), inset 0 0 80px rgba(100, 200, 180, 0.015);
-                border-color: rgba(100, 200, 180, 0.14);
-            }
+            box-shadow: 0 0 40px rgba(100, 200, 180, 0.02);
         }
         .hologram-frame::before,
         .hologram-frame::after {
             content: '';
             position: absolute;
-            width: 10px;
-            height: 10px;
-            border: 2px solid rgba(100, 200, 180, 0.2);
+            width: 8px;
+            height: 8px;
+            border: 1px solid rgba(100, 200, 180, 0.15);
         }
         .hologram-frame::before {
-            top: -2px;
-            left: -2px;
+            top: -1px;
+            left: -1px;
             border-right: none;
             border-bottom: none;
         }
         .hologram-frame::after {
-            bottom: -2px;
-            right: -2px;
+            bottom: -1px;
+            right: -1px;
             border-left: none;
             border-top: none;
         }
         .corner {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            border: 2px solid rgba(100, 200, 180, 0.2);
+            width: 8px;
+            height: 8px;
+            border: 1px solid rgba(100, 200, 180, 0.15);
         }
         .corner.tr {
-            top: -2px;
-            right: -2px;
+            top: -1px;
+            right: -1px;
             border-left: none;
             border-bottom: none;
         }
         .corner.bl {
-            bottom: -2px;
-            left: -2px;
+            bottom: -1px;
+            left: -1px;
             border-right: none;
             border-top: none;
         }
         .quote-text {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             line-height: 1.9;
-            color: #a8d5c8;
+            color: rgba(160, 220, 200, 0.85);
             letter-spacing: 0.1em;
             position: relative;
             opacity: 0;
-            transition: opacity 0.6s ease;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .quote-text.show {
             opacity: 1;
+            transform: translateY(0);
         }
         .quote-text .char {
             display: inline-block;
-            position: relative;
-            animation: holoFlicker 4s ease-in-out infinite;
-        }
-        .quote-text .char:nth-child(2n) { animation-delay: 0.2s; }
-        .quote-text .char:nth-child(3n) { animation-delay: 0.5s; }
-        .quote-text .char:nth-child(5n) { animation-delay: 0.8s; }
-        .quote-text .char:nth-child(7n) { animation-delay: 1.1s; }
-
-        @keyframes holoFlicker {
-            0%, 100% {
-                opacity: 1;
-                text-shadow:
-                    0 0 2px rgba(100, 200, 180, 0.6),
-                    0 0 8px rgba(100, 200, 180, 0.3);
-            }
-            50% {
-                opacity: 0.9;
-                text-shadow:
-                    0 0 4px rgba(100, 200, 180, 0.7),
-                    0 0 12px rgba(100, 200, 180, 0.4);
-            }
-            93% { opacity: 1; }
-            94% { opacity: 0.3; }
-            95% { opacity: 1; }
-            97% { opacity: 0.5; }
-            98% { opacity: 1; }
-        }
-        .glitch-text {
-            position: relative;
-        }
-        .glitch-text::before,
-        .glitch-text::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             opacity: 0;
+            animation: charFade 0.5s ease forwards;
         }
-        .glitch-text.glitching::before {
-            color: #ff6b6b;
-            opacity: 0.4;
-            animation: glitch-1 0.35s ease forwards;
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        @keyframes charFade {
+            to { opacity: 1; }
         }
-        .glitch-text.glitching::after {
-            color: #4ecdc4;
-            opacity: 0.4;
-            animation: glitch-2 0.35s ease forwards;
-            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: rgba(100, 200, 180, 0.1);
+            margin: 40px auto 25px;
+            opacity: 0;
+            transition: opacity 1.5s ease 0.5s;
         }
-        @keyframes glitch-1 {
-            0% { transform: translateX(0); opacity: 0.4; }
-            20% { transform: translateX(-3px); }
-            40% { transform: translateX(3px); }
-            60% { transform: translateX(-2px); }
-            80% { transform: translateX(2px); }
-            100% { transform: translateX(0); opacity: 0; }
-        }
-        @keyframes glitch-2 {
-            0% { transform: translateX(0); opacity: 0.4; }
-            20% { transform: translateX(3px); }
-            40% { transform: translateX(-3px); }
-            60% { transform: translateX(2px); }
-            80% { transform: translateX(-2px); }
-            100% { transform: translateX(0); opacity: 0; }
+        .divider.show {
+            opacity: 1;
         }
         .quote-info {
-            margin-top: 30px;
-            font-size: 0.85rem;
-            color: #4a7c6f;
-            letter-spacing: 0.15em;
+            font-size: 0.8rem;
+            color: rgba(100, 200, 180, 0.35);
+            letter-spacing: 0.2em;
             opacity: 0;
-            transition: opacity 1.2s ease;
+            transition: opacity 1.5s ease 0.8s;
         }
         .quote-info.show {
             opacity: 1;
         }
-        .data-stream {
-            position: fixed;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.55rem;
-            color: rgba(100, 200, 180, 0.1);
-            writing-mode: vertical-rl;
-            font-family: monospace;
-            z-index: 5;
-            letter-spacing: 0.3em;
-        }
-        .hologram-base {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 250px;
-            height: 60px;
-            background: radial-gradient(ellipse, rgba(100, 200, 180, 0.06) 0%, transparent 70%);
-            filter: blur(30px);
-            z-index: 1;
-            animation: basePulse 4s ease-in-out infinite;
-        }
-        @keyframes basePulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.8; }
-        }
         .back-link {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            color: rgba(100, 200, 180, 0.2);
+            top: 40px;
+            left: 40px;
+            color: rgba(100, 200, 180, 0.15);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             z-index: 100;
-            transition: color 0.4s;
+            transition: color 0.5s;
+            letter-spacing: 0.15em;
         }
-        .back-link:hover { color: #a8d5c8; }
+        .back-link:hover { color: rgba(100, 200, 180, 0.4); }
         .controls {
             position: fixed;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            gap: 30px;
             z-index: 100;
             opacity: 0.3;
-            transition: opacity 0.4s;
+            transition: opacity 0.5s;
         }
         .controls:hover { opacity: 1; }
         .btn {
-            background: rgba(100, 200, 180, 0.03);
-            border: 1px solid rgba(100, 200, 180, 0.1);
-            color: #4a7c6f;
-            padding: 10px 28px;
-            border-radius: 30px;
+            background: transparent;
+            border: 1px solid rgba(100, 200, 180, 0.08);
+            color: rgba(100, 200, 180, 0.25);
+            padding: 10px 24px;
+            border-radius: 0;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            letter-spacing: 0.08em;
+            font-size: 0.8rem;
+            transition: all 0.5s ease;
+            letter-spacing: 0.1em;
             font-family: inherit;
         }
         .btn:hover {
-            background: rgba(100, 200, 180, 0.06);
-            border-color: rgba(100, 200, 180, 0.2);
-            color: #a8d5c8;
-            transform: translateY(-2px);
+            border-color: rgba(100, 200, 180, 0.18);
+            color: rgba(100, 200, 180, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="scan-line"></div>
-    <div class="noise"></div>
-    <div class="hologram-base"></div>
-    <div class="data-stream" id="dataStream"></div>
-
-    <a href="index.html" class="back-link">&larr; 返回目录</a>
+    <a href="index.html" class="back-link">&larr; 返回</a>
 
     <div class="container">
         <div class="hologram-frame">
             <div class="corner tr"></div>
             <div class="corner bl"></div>
-            <div class="quote-text glitch-text" id="quoteText" data-text=""></div>
+            <div class="quote-text" id="quoteText"></div>
+            <div class="divider" id="divider"></div>
             <div class="quote-info" id="quoteInfo">
                 <span id="author"></span> &middot; <span id="book"></span>
             </div>
@@ -320,26 +202,15 @@
         let currentIndex = 0;
         let autoPlayInterval = null;
 
-        function generateDataStream() {
-            const stream = document.getElementById('dataStream');
-            let text = '';
-            for (let i = 0; i < 40; i++) {
-                text += Math.random() > 0.5 ? '1' : '0';
-                if (i % 4 === 3) text += ' ';
-            }
-            stream.textContent = text;
-        }
-
-        setInterval(generateDataStream, 150);
-
         function showQuote() {
             const quote = quotes[currentIndex];
             const textEl = document.getElementById('quoteText');
             const infoEl = document.getElementById('quoteInfo');
+            const dividerEl = document.getElementById('divider');
 
             textEl.classList.remove('show');
             infoEl.classList.remove('show');
-            textEl.classList.add('glitching');
+            dividerEl.classList.remove('show');
 
             setTimeout(() => {
                 textEl.innerHTML = '';
@@ -352,14 +223,15 @@
                     textEl.appendChild(span);
                 });
 
-                textEl.setAttribute('data-text', quote.text);
                 document.getElementById('author').textContent = quote.author;
                 document.getElementById('book').textContent = quote.book;
 
-                textEl.classList.remove('glitching');
                 textEl.classList.add('show');
-                setTimeout(() => infoEl.classList.add('show'), 500);
-            }, 350);
+                setTimeout(() => {
+                    dividerEl.classList.add('show');
+                    infoEl.classList.add('show');
+                }, 400);
+            }, 400);
         }
 
         function nextQuote() {

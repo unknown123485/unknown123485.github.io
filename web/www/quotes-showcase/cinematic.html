@@ -7,20 +7,14 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #050508;
-            color: #e2d5b5;
+            background: #050505;
+            color: #c9b896;
             min-height: 100vh;
             overflow: hidden;
             font-family: 'Noto Serif SC', 'Georgia', serif;
             position: relative;
         }
-        /* 星空背景 */
-        .stars-bg {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(ellipse at center, #0a0a1a 0%, #020205 100%);
-            z-index: 0;
-        }
+        /* 极简星空 - 只有少量星星 */
         .stars {
             position: fixed;
             inset: 0;
@@ -28,13 +22,13 @@
         }
         .star {
             position: absolute;
-            background: #e2d5b5;
+            background: #c9b896;
             border-radius: 50%;
-            animation: starTwinkle ease-in-out infinite alternate;
+            animation: twinkle ease-in-out infinite alternate;
         }
-        @keyframes starTwinkle {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            100% { opacity: 0.8; transform: scale(1.1); }
+        @keyframes twinkle {
+            0% { opacity: 0.15; }
+            100% { opacity: 0.5; }
         }
         /* 3D透视容器 */
         .crawl-container {
@@ -45,54 +39,51 @@
             height: 100%;
             display: flex;
             justify-content: center;
-            perspective: 500px;
+            perspective: 600px;
             overflow: hidden;
             z-index: 2;
         }
         .crawl-content {
-            width: 75%;
-            max-width: 750px;
+            width: 70%;
+            max-width: 700px;
             transform-origin: 50% 100%;
-            transform: rotateX(55deg) translateY(100vh);
-            animation: crawl 60s linear infinite;
+            transform: rotateX(60deg) translateY(100vh);
+            animation: crawl 50s linear infinite;
         }
         @keyframes crawl {
-            0% { transform: rotateX(55deg) translateY(80vh); opacity: 1; }
+            0% { transform: rotateX(60deg) translateY(80vh); opacity: 1; }
             95% { opacity: 1; }
-            100% { transform: rotateX(55deg) translateY(-250vh); opacity: 0; }
+            100% { transform: rotateX(60deg) translateY(-200vh); opacity: 0; }
         }
         .quote-item {
-            text-align: justify;
-            text-align-last: center;
-            margin-bottom: 120px;
-            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 100px;
+            opacity: 0.85;
         }
         .quote-text {
-            font-size: 2rem;
+            font-size: 1.8rem;
             line-height: 1.9;
-            font-weight: 400;
-            text-shadow: 0 0 15px rgba(226, 213, 181, 0.15);
-            letter-spacing: 0.05em;
+            font-weight: 300;
+            letter-spacing: 0.06em;
         }
         .quote-info {
-            margin-top: 30px;
-            font-size: 0.95rem;
-            color: #c4b896;
-            text-align: center;
-            letter-spacing: 0.15em;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #a89870;
+            letter-spacing: 0.2em;
         }
         .book-name {
             font-style: italic;
-            opacity: 0.7;
+            opacity: 0.6;
         }
-        /* 底部渐隐遮罩 */
+        /* 底部渐隐 */
         .fade-bottom {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 45vh;
-            background: linear-gradient(to top, #020205 0%, transparent 100%);
+            height: 50vh;
+            background: linear-gradient(to top, #050505 0%, transparent 100%);
             z-index: 3;
             pointer-events: none;
         }
@@ -102,60 +93,59 @@
             left: 0;
             right: 0;
             height: 20vh;
-            background: linear-gradient(to bottom, #020205 0%, transparent 100%);
+            background: linear-gradient(to bottom, #050505 0%, transparent 100%);
             z-index: 3;
             pointer-events: none;
         }
         .back-link {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            color: rgba(226, 213, 181, 0.3);
+            top: 40px;
+            left: 40px;
+            color: rgba(201, 184, 150, 0.25);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             z-index: 100;
-            transition: color 0.4s;
-            letter-spacing: 0.1em;
+            transition: color 0.5s;
+            letter-spacing: 0.15em;
+            font-weight: 300;
         }
-        .back-link:hover { color: #c4b896; }
+        .back-link:hover { color: rgba(201, 184, 150, 0.6); }
         .controls {
             position: fixed;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            gap: 30px;
             z-index: 100;
             opacity: 0.3;
-            transition: opacity 0.4s;
+            transition: opacity 0.5s;
         }
         .controls:hover { opacity: 1; }
         .btn {
-            background: rgba(226, 213, 181, 0.05);
-            border: 1px solid rgba(226, 213, 181, 0.12);
-            color: #8a7d5f;
-            padding: 8px 22px;
-            border-radius: 30px;
+            background: transparent;
+            border: 1px solid rgba(201, 184, 150, 0.1);
+            color: rgba(201, 184, 150, 0.3);
+            padding: 10px 24px;
+            border-radius: 0;
             cursor: pointer;
             font-size: 0.8rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            letter-spacing: 0.08em;
+            transition: all 0.5s ease;
+            letter-spacing: 0.1em;
             font-family: inherit;
+            font-weight: 300;
         }
         .btn:hover {
-            background: rgba(226, 213, 181, 0.1);
-            border-color: rgba(226, 213, 181, 0.25);
-            color: #c4b896;
-            transform: translateY(-2px);
+            border-color: rgba(201, 184, 150, 0.25);
+            color: rgba(201, 184, 150, 0.6);
         }
     </style>
 </head>
 <body>
-    <div class="stars-bg"></div>
     <div class="stars" id="stars"></div>
     <div class="fade-top"></div>
     <div class="fade-bottom"></div>
-    <a href="index.html" class="back-link">&larr; 返回目录</a>
+    <a href="index.html" class="back-link">&larr; 返回</a>
 
     <div class="crawl-container">
         <div class="crawl-content" id="crawlContent"></div>
@@ -179,12 +169,12 @@
             { text: "时间是一把筛子，最终会淘去一切沉渣。", author: "雨果", book: "悲惨世界" }
         ];
 
-        let animationDuration = 60;
+        let animationDuration = 50;
         let isPaused = false;
 
         function createStars() {
             const container = document.getElementById('stars');
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 80; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 const size = Math.random() * 1.5 + 0.5;
@@ -193,7 +183,7 @@
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
                 star.style.animationDelay = Math.random() * 4 + 's';
-                star.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
                 container.appendChild(star);
             }
         }
@@ -201,13 +191,13 @@
         function renderQuotes() {
             const container = document.getElementById('crawlContent');
             let html = '';
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 5; i++) {
                 quotes.forEach(quote => {
                     html += `
                         <div class="quote-item">
                             <div class="quote-text">${quote.text}</div>
                             <div class="quote-info">
-                                —— ${quote.author} &middot; <span class="book-name">《${quote.book}》</span>
+                                ${quote.author} &middot; <span class="book-name">${quote.book}</span>
                             </div>
                         </div>
                     `;
@@ -222,7 +212,7 @@
         }
 
         function slowDown() {
-            animationDuration = Math.min(120, animationDuration + 5);
+            animationDuration = Math.min(100, animationDuration + 5);
             updateSpeed();
         }
 
