@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>粒子重组效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', serif;
+        }
+        canvas {
+            position: fixed;
+            inset: 0;
+        }
+        .quote-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .quote-text {
+            font-size: 2.5rem;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 40px;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .quote-text.show {
+            opacity: 1;
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.6);
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="quote-container">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author"></span> · <span id="book"></span>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "我们都是由星尘构成的", author: "卡尔·萨根", book: "宇宙" },
+            { text: "给岁月以文明", author: "刘慈欣", book: "三体" },
+            { text: "宇宙就是一座黑暗森林", author: "刘慈欣", book: "三体II" },
+            { text: "人类的赞歌就是勇气的赞歌", author: "荒木飞吕彦", book: "JOJO" },
+            { text: "不要温和地走进那个良夜", author: "狄兰·托马斯", book: "诗集" },
+            { text: "世界上只有一种英雄主义", author: "罗曼·罗兰", book: "米开朗基罗传" }
+        ];
+
+        let currentIndex = 0;
+        let particles = [];
+        let targetPositions = [];
+        let phase = 'scatter';
+        let canvas, ctx;
+        let width, height;
+        const PARTICLE_COUNT = 3000;
+
+        function init() {
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            resize();
+            window.addEventListener('resize', resize);
+            createParticles();
+            animate();
+            showQuote();
+        }
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    tx: 0,
+                    ty: 0,
+                    size: Math.random() * 2 + 0.5,
+                    alpha: Math.random() * 0.5 + 0.3,
+                    color: `hsl(${Math.random() * 60 + 180}, 70%, 60%)`
+                });
+            }
+        }
+
+        function setTargets(text) {
+            targetPositions = [];
+            const offCanvas = document.createElement('canvas');
+            offCanvas.width = width;
+            offCanvas.height = height;
+            const offCtx = offCanvas.getContext('2d');
+            
+            offCtx.font = 'bold 60px "Noto Serif SC", serif';
+            offCtx.fillStyle = '#fff';
+            offCtx.textAlign = 'center';
+            offCtx.textBaseline = 'middle';
+            offCtx.fillText(text, width / 2, height / 2);
+            
+            const imageData = offCtx.getImageData(0, 0, width, height);
+            const pixels = imageData.data;
+            
+            for (let y = 0; y < height; y += 3) {
+                for (let x = 0; x < width; x += 3) {
+                    const index = (y * width + x) * 4;
+                    if (pixels[index + 3] > 128) {
+                        targetPositions.push({ x, y });
+                    }
+                }
+            }
+            
+            // 分配目标位置给粒子
+            particles.forEach((p, i) => {
+                if (i < targetPositions.length) {
+                    p.tx = targetPositions[i].x;
+                    p.ty = targetPositions[i].y;
+                } else {
+                    p.tx = Math.random() * width;
+                    p.ty = Math.random() * height;
+                }
+            });
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+            
+            particles.forEach(p => {
+                if (phase === 'form') {
+                    const dx = p.tx - p.x;
+                    const dy = p.ty - p.y;
+                    p.vx += dx * 0.01;
+                    p.vy += dy * 0.01;
+                    p.vx *= 0.95;
+                    p.vy *= 0.95;
+                } else if (phase === 'disperse') {
+                    const angle = Math.atan2(p.y - height / 2, p.x - width / 2);
+                    p.vx += Math.cos(angle) * 0.5;
+                    p.vy += Math.sin(angle) * 0.5;
+                } else {
+                    p.vx += (Math.random() - 0.5) * 0.1;
+                    p.vy += (Math.random() - 0.5) * 0.1;
+                }
+                
+                p.x += p.vx;
+                p.y += p.vy;
+                
+                // 边界处理
+                if (p.x < 0) p.x = width;
+                if (p.x > width) p.x = 0;
+                if (p.y < 0) p.y = height;
+                if (p.y > height) p.y = 0;
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.alpha;
+                ctx.fill();
+            });
+            
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(animate);
+        }
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+            
+            phase = 'disperse';
+            
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+                
+                setTargets(quote.text);
+                phase = 'form';
+                
+                setTimeout(() => {
+                    phase = 'show';
+                    textEl.classList.add('show');
+                    infoEl.classList.add('show');
+                }, 3000);
+            }, 1000);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+        });
+
+        setInterval(nextQuote, 8000);
+        init();
+    </script>
+</body>
+</html>

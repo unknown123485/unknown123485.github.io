@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全息投影效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #020205;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', 'Noto Serif SC', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 扫描线 */
+        .scan-line {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 255, 200, 0.02) 3px,
+                rgba(0, 255, 200, 0.02) 6px
+            );
+            pointer-events: none;
+            z-index: 5;
+            animation: scanMove 8s linear infinite;
+        }
+        @keyframes scanMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100px; }
+        }
+        /* 噪点 */
+        .noise {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 6;
+            opacity: 0.4;
+            animation: noiseShift 0.2s steps(3) infinite;
+        }
+        @keyframes noiseShift {
+            0% { transform: translate(0, 0); }
+            33% { transform: translate(-1px, 1px); }
+            66% { transform: translate(1px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+        /* 容器 */
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 900px;
+            position: relative;
+            z-index: 10;
+        }
+        /* 全息框架 */
+        .hologram-frame {
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            border-radius: 4px;
+            padding: 50px;
+            position: relative;
+            background: rgba(0, 255, 200, 0.01);
+            box-shadow:
+                0 0 60px rgba(0, 255, 200, 0.05),
+                inset 0 0 60px rgba(0, 255, 200, 0.02);
+            animation: framePulse 4s ease-in-out infinite;
+        }
+        @keyframes framePulse {
+            0%, 100% {
+                box-shadow:
+                    0 0 60px rgba(0, 255, 200, 0.05),
+                    inset 0 0 60px rgba(0, 255, 200, 0.02);
+                border-color: rgba(0, 255, 200, 0.15);
+            }
+            50% {
+                box-shadow:
+                    0 0 80px rgba(0, 255, 200, 0.08),
+                    inset 0 0 80px rgba(0, 255, 200, 0.03);
+                border-color: rgba(0, 255, 200, 0.2);
+            }
+        }
+        /* 角标 */
+        .hologram-frame::before,
+        .hologram-frame::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(0, 255, 200, 0.3);
+        }
+        .hologram-frame::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+        .hologram-frame::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+        .corner {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(0, 255, 200, 0.3);
+        }
+        .corner.tr {
+            top: -2px;
+            right: -2px;
+            border-left: none;
+            border-bottom: none;
+        }
+        .corner.bl {
+            bottom: -2px;
+            left: -2px;
+            border-right: none;
+            border-top: none;
+        }
+        /* 文字 */
+        .quote-text {
+            font-size: 2rem;
+            line-height: 1.8;
+            color: #a0f0e0;
+            letter-spacing: 0.1em;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .quote-text.show {
+            opacity: 1;
+        }
+        .quote-text .char {
+            display: inline-block;
+            position: relative;
+            animation: hologramFlicker 3s ease-in-out infinite;
+        }
+        .quote-text .char:nth-child(2n) { animation-delay: 0.2s; }
+        .quote-text .char:nth-child(3n) { animation-delay: 0.5s; }
+        .quote-text .char:nth-child(5n) { animation-delay: 0.8s; }
+
+        @keyframes hologramFlicker {
+            0%, 100% {
+                opacity: 1;
+                text-shadow:
+                    0 0 2px rgba(0, 255, 200, 0.8),
+                    0 0 8px rgba(0, 255, 200, 0.4),
+                    0 0 16px rgba(0, 255, 200, 0.2);
+            }
+            50% {
+                opacity: 0.9;
+                text-shadow:
+                    0 0 4px rgba(0, 255, 200, 0.9),
+                    0 0 12px rgba(0, 255, 200, 0.5),
+                    0 0 24px rgba(0, 255, 200, 0.3);
+            }
+            92% { opacity: 1; }
+            93% { opacity: 0.3; }
+            94% { opacity: 1; }
+            96% { opacity: 0.5; }
+            97% { opacity: 1; }
+        }
+        /* 故障效果 */
+        .glitch-text {
+            position: relative;
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+        .glitch-text.glitching::before {
+            color: #ff0040;
+            opacity: 0.6;
+            animation: glitch-1 0.3s ease forwards;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+        .glitch-text.glitching::after {
+            color: #00ffaa;
+            opacity: 0.6;
+            animation: glitch-2 0.3s ease forwards;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        }
+        @keyframes glitch-1 {
+            0% { transform: translateX(0); opacity: 0.6; }
+            20% { transform: translateX(-3px); }
+            40% { transform: translateX(3px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+            100% { transform: translateX(0); opacity: 0; }
+        }
+        @keyframes glitch-2 {
+            0% { transform: translateX(0); opacity: 0.6; }
+            20% { transform: translateX(3px); }
+            40% { transform: translateX(-3px); }
+            60% { transform: translateX(2px); }
+            80% { transform: translateX(-2px); }
+            100% { transform: translateX(0); opacity: 0; }
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #508070;
+            letter-spacing: 0.15em;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+        /* 数据流 */
+        .data-stream {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.65rem;
+            color: rgba(0, 255, 200, 0.15);
+            writing-mode: vertical-rl;
+            font-family: monospace;
+            z-index: 5;
+            letter-spacing: 0.3em;
+        }
+        /* 底部投影 */
+        .hologram-base {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 80px;
+            background: radial-gradient(ellipse, rgba(0, 255, 200, 0.1) 0%, transparent 70%);
+            filter: blur(30px);
+            z-index: 1;
+            animation: basePulse 3s ease-in-out infinite;
+        }
+        @keyframes basePulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(0, 255, 200, 0.3);
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 100;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #a0f0e0; }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .controls:hover { opacity: 1; }
+        .btn {
+            background: rgba(0, 255, 200, 0.05);
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            color: #508070;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover {
+            background: rgba(0, 255, 200, 0.1);
+            border-color: rgba(0, 255, 200, 0.3);
+            color: #a0f0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="scan-line"></div>
+    <div class="noise"></div>
+    <div class="hologram-base"></div>
+    <div class="data-stream" id="dataStream"></div>
+
+    <a href="index.html" class="back-link">&larr; 返回目录</a>
+
+    <div class="container">
+        <div class="hologram-frame">
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="quote-text glitch-text" id="quoteText" data-text=""></div>
+            <div class="quote-info" id="quoteInfo">
+                <span id="author"></span> &middot; <span id="book"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "我正在成为我自己", author: "刘慈欣", book: "三体" },
+            { text: "宇宙很大，生活更大", author: "刘慈欣", book: "三体" },
+            { text: "给岁月以文明，而不是给文明以岁月", author: "刘慈欣", book: "三体" },
+            { text: "弱小和无知不是生存的障碍，傲慢才是", author: "刘慈欣", book: "三体" },
+            { text: "不要回答！不要回答！不要回答！", author: "刘慈欣", book: "三体" },
+            { text: "我们都是阴沟里的虫子，但总还是得有人仰望星空", author: "刘慈欣", book: "三体" }
+        ];
+
+        let currentIndex = 0;
+
+        function generateDataStream() {
+            const stream = document.getElementById('dataStream');
+            let text = '';
+            for (let i = 0; i < 40; i++) {
+                text += Math.random() > 0.5 ? '1' : '0';
+                if (i % 4 === 3) text += ' ';
+            }
+            stream.textContent = text;
+        }
+
+        setInterval(generateDataStream, 150);
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+            textEl.classList.add('glitching');
+
+            setTimeout(() => {
+                textEl.innerHTML = '';
+                const chars = quote.text.split('');
+                chars.forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'char';
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    span.style.animationDelay = (i * 0.04) + 's';
+                    textEl.appendChild(span);
+                });
+
+                textEl.setAttribute('data-text', quote.text);
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+
+                textEl.classList.remove('glitching');
+                textEl.classList.add('show');
+                setTimeout(() => infoEl.classList.add('show'), 400);
+            }, 300);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        showQuote();
+    </script>
+</body>
+</html>

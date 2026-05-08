@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自然场景融合 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', serif;
+            position: relative;
+        }
+        .rain-container {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            z-index: 1;
+        }
+        .raindrop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4));
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        .quote-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 40px;
+        }
+        .quote-text {
+            font-size: 2.5rem;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 800px;
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            padding: 40px 60px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+        .quote-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+        .lightning {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.1);
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .lightning.flash {
+            animation: flash 0.2s ease;
+        }
+        @keyframes flash {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 100;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #fff; }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+        .controls:hover { opacity: 1; }
+        .btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="rain-container" id="rainContainer"></div>
+    <div class="lightning" id="lightning"></div>
+    <a href="index.html" class="back-link">← 返回目录</a>
+    
+    <div class="quote-container">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author"></span> · <span id="book"></span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "雨声说些什么？", author: "余光中", book: "听听那冷雨" },
+            { text: "空山新雨后，天气晚来秋", author: "王维", book: "山居秋暝" },
+            { text: "夜阑卧听风吹雨，铁马冰河入梦来", author: "陆游", book: "十一月四日风雨大作" },
+            { text: "君问归期未有期，巴山夜雨涨秋池", author: "李商隐", book: "夜雨寄北" },
+            { text: "好雨知时节，当春乃发生", author: "杜甫", book: "春夜喜雨" },
+            { text: "清明时节雨纷纷，路上行人欲断魂", author: "杜牧", book: "清明" }
+        ];
+
+        let currentIndex = 0;
+
+        function createRain() {
+            const container = document.getElementById('rainContainer');
+            for (let i = 0; i < 100; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'raindrop';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                drop.style.opacity = Math.random() * 0.5 + 0.2;
+                container.appendChild(drop);
+            }
+        }
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            const lightning = document.getElementById('lightning');
+            
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+            
+            // 闪电效果
+            lightning.classList.add('flash');
+            setTimeout(() => lightning.classList.remove('flash'), 200);
+            
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+                
+                textEl.classList.add('show');
+                infoEl.classList.add('show');
+            }, 500);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        createRain();
+        showQuote();
+    </script>
+</body>
+</html>

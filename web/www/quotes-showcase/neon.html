@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>霓虹灯管效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #08080f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Noto Serif SC', serif;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 网格背景 */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .grid-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, #08080f 70%);
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 900px;
+            position: relative;
+            z-index: 2;
+        }
+        .quote-wrapper {
+            position: relative;
+            padding: 2rem;
+        }
+        /* 霓虹文字 - 更精致的多层发光 */
+        .quote-text {
+            font-size: 2.8rem;
+            line-height: 1.8;
+            color: #e0e0ff;
+            position: relative;
+            letter-spacing: 0.05em;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .quote-text.show {
+            opacity: 1;
+        }
+        .quote-text .char {
+            display: inline-block;
+            position: relative;
+            color: #f0f0ff;
+            text-shadow:
+                0 0 2px rgba(255,255,255,0.8),
+                0 0 8px rgba(180,160,255,0.6),
+                0 0 16px rgba(140,100,255,0.4),
+                0 0 32px rgba(100,60,255,0.2);
+            animation: neonPulse 4s ease-in-out infinite;
+        }
+        .quote-text .char:nth-child(3n) { animation-delay: 0.3s; }
+        .quote-text .char:nth-child(3n+1) { animation-delay: 0.6s; }
+        .quote-text .char:nth-child(3n+2) { animation-delay: 0.9s; }
+
+        @keyframes neonPulse {
+            0%, 100% {
+                text-shadow:
+                    0 0 2px rgba(255,255,255,0.8),
+                    0 0 8px rgba(180,160,255,0.6),
+                    0 0 16px rgba(140,100,255,0.4),
+                    0 0 32px rgba(100,60,255,0.2);
+                opacity: 1;
+            }
+            50% {
+                text-shadow:
+                    0 0 4px rgba(255,255,255,0.9),
+                    0 0 12px rgba(180,160,255,0.8),
+                    0 0 24px rgba(140,100,255,0.5),
+                    0 0 48px rgba(100,60,255,0.3);
+                opacity: 0.95;
+            }
+        }
+        /* 装饰性灯管边框 */
+        .neon-frame {
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(140,100,255,0.15);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        .neon-frame::before,
+        .neon-frame::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(140,100,255,0.4);
+            box-shadow:
+                0 0 8px rgba(140,100,255,0.3),
+                inset 0 0 8px rgba(140,100,255,0.1);
+        }
+        .neon-frame::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 8px 0 0 0;
+        }
+        .neon-frame::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 8px 0;
+        }
+        /* 底部光晕 */
+        .glow-base {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 60px;
+            background: radial-gradient(ellipse, rgba(140,100,255,0.15) 0%, transparent 70%);
+            filter: blur(20px);
+            pointer-events: none;
+        }
+        .quote-info {
+            margin-top: 40px;
+            font-size: 1.1rem;
+            color: #a090c0;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+        .quote-info .author {
+            color: #c0b0e0;
+        }
+        .quote-info .book {
+            color: #8070a0;
+            font-style: italic;
+        }
+        /* 扫描线效果 */
+        .scanline {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.15) 2px,
+                rgba(0,0,0,0.15) 4px
+            );
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.3;
+        }
+        /* 浮动粒子 */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: rgba(180,160,255,0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: 0 0 6px rgba(180,160,255,0.4);
+            animation: floatUp 8s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(160,150,180,0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            z-index: 100;
+        }
+        .back-link:hover { color: #c0b0e0; }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+        .btn {
+            background: rgba(140,100,255,0.08);
+            border: 1px solid rgba(140,100,255,0.2);
+            color: #a090c0;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover {
+            background: rgba(140,100,255,0.15);
+            border-color: rgba(140,100,255,0.35);
+            color: #d0c0f0;
+            box-shadow: 0 0 20px rgba(140,100,255,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="scanline"></div>
+    <a href="index.html" class="back-link">&larr; 返回目录</a>
+
+    <div class="container">
+        <div class="quote-wrapper">
+            <div class="neon-frame"></div>
+            <div class="quote-text" id="quoteText"></div>
+            <div class="glow-base"></div>
+        </div>
+        <div class="quote-info" id="quoteInfo">
+            <span class="author" id="author"></span> &middot; <span class="book" id="book"></span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "霓虹之下，我们都是孤独的舞者", author: "村上春树", book: "挪威的森林" },
+            { text: "城市是一座巨大的迷宫，我们在其中寻找出口", author: "博尔赫斯", book: "迷宫" },
+            { text: "黑夜给了我黑色的眼睛，我却用它寻找光明", author: "顾城", book: "一代人" },
+            { text: "我们都是夜行动物，在城市的霓虹中觅食", author: "雷蒙德·钱德勒", book: "漫长的告别" },
+            { text: "在赛博朋克的世界里，每个人都是自己的黑客", author: "威廉·吉布森", book: "神经漫游者" },
+            { text: "霓虹灯下的阴影里，藏着最真实的我们", author: "菲茨杰拉德", book: "了不起的盖茨比" }
+        ];
+
+        let currentIndex = 0;
+
+        function createParticles() {
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.animationDelay = Math.random() * 8 + 's';
+                p.style.animationDuration = (6 + Math.random() * 6) + 's';
+                document.body.appendChild(p);
+            }
+        }
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+
+            setTimeout(() => {
+                textEl.innerHTML = '';
+                const chars = quote.text.split('');
+                chars.forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'char';
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    span.style.animationDelay = (i * 0.05) + 's';
+                    textEl.appendChild(span);
+                });
+
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+
+                textEl.classList.add('show');
+                setTimeout(() => infoEl.classList.add('show'), 300);
+            }, 300);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        createParticles();
+        showQuote();
+    </script>
+</body>
+</html>

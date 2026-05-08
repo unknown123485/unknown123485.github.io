@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分形生长效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Noto Serif SC', serif;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 画布背景 */
+        #fractalCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 900px;
+            position: relative;
+            z-index: 10;
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .quote-text {
+            font-size: 2.4rem;
+            line-height: 1.8;
+            color: #e8e8f0;
+            position: relative;
+            letter-spacing: 0.08em;
+        }
+        .quote-text .char {
+            display: inline-block;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: fractalAppear 0.6s ease forwards;
+        }
+        @keyframes fractalAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+                filter: blur(8px);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1) rotate(2deg);
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+                filter: blur(0);
+            }
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #808090;
+            letter-spacing: 0.15em;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(200, 200, 220, 0.4);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            z-index: 100;
+        }
+        .back-link:hover { color: #e8e8f0; }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a0a0b0;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            letter-spacing: 0.05em;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #e0e0f0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fractalCanvas"></canvas>
+    <a href="index.html" class="back-link">&larr; 返回目录</a>
+
+    <div class="container">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author"></span> &middot; <span id="book"></span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "种一棵树最好的时间是十年前，其次是现在", author: "丹比萨·莫约", book: "死去的援助" },
+            { text: "生命不是要等待暴风雨过去，而是要学会在雨中跳舞", author: "维维安·格林", book: "生活哲学" },
+            { text: "万物生长，各自高贵", author: "庄子", book: "逍遥游" },
+            { text: "苔花如米小，也学牡丹开", author: "袁枚", book: "苔" },
+            { text: "野火烧不尽，春风吹又生", author: "白居易", book: "赋得古原草送别" },
+            { text: "落红不是无情物，化作春泥更护花", author: "龚自珍", book: "己亥杂诗" }
+        ];
+
+        let currentIndex = 0;
+        let canvas, ctx;
+        let branches = [];
+        let animating = true;
+
+        function initCanvas() {
+            canvas = document.getElementById('fractalCanvas');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawFractal();
+        }
+
+        function drawFractal() {
+            ctx.fillStyle = '#0a0a0f';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const maxIter = 80;
+            const scale = Math.min(canvas.width, canvas.height) / 3;
+
+            // 绘制曼德勃罗集
+            for (let px = 0; px < canvas.width; px += 2) {
+                for (let py = 0; py < canvas.height; py += 2) {
+                    const x0 = (px - centerX) / scale - 0.5;
+                    const y0 = (py - centerY) / scale;
+
+                    let x = 0, y = 0;
+                    let iter = 0;
+
+                    while (x * x + y * y <= 4 && iter < maxIter) {
+                        const xtemp = x * x - y * y + x0;
+                        y = 2 * x * y + y0;
+                        x = xtemp;
+                        iter++;
+                    }
+
+                    if (iter < maxIter) {
+                        const hue = 200 + (iter / maxIter) * 60;
+                        const brightness = 20 + (iter / maxIter) * 30;
+                        ctx.fillStyle = `hsl(${hue}, 60%, ${brightness}%)`;
+                        ctx.fillRect(px, py, 2, 2);
+                    }
+                }
+            }
+
+            // 绘制装饰性分形树
+            drawTree(centerX, canvas.height, -Math.PI / 2, 120, 8);
+        }
+
+        function drawTree(x, y, angle, length, depth) {
+            if (depth === 0) return;
+
+            const endX = x + Math.cos(angle) * length;
+            const endY = y + Math.sin(angle) * length;
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = `rgba(180, 160, 220, ${0.1 + depth * 0.03})`;
+            ctx.lineWidth = depth * 0.5;
+            ctx.stroke();
+
+            const newLength = length * 0.7;
+            drawTree(endX, endY, angle - 0.3, newLength, depth - 1);
+            drawTree(endX, endY, angle + 0.3, newLength, depth - 1);
+        }
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+
+            textEl.innerHTML = '';
+            infoEl.classList.remove('show');
+
+            const chars = quote.text.split('');
+            chars.forEach((char, i) => {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                span.style.animationDelay = (i * 0.06) + 's';
+                textEl.appendChild(span);
+            });
+
+            setTimeout(() => {
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+                infoEl.classList.add('show');
+            }, chars.length * 60 + 400);
+
+            // 重新绘制分形
+            drawFractal();
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        initCanvas();
+        showQuote();
+    </script>
+</body>
+</html>
