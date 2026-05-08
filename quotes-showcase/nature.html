@@ -9,25 +9,40 @@
         body {
             min-height: 100vh;
             overflow: hidden;
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Georgia', serif;
             position: relative;
+            background: #000;
         }
-        .rain-container {
+        /* 场景背景 */
+        .scene-bg {
             position: fixed;
             inset: 0;
-            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             z-index: 1;
+            transition: opacity 2s ease;
         }
-        .raindrop {
-            position: absolute;
-            width: 2px;
-            height: 20px;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4));
-            animation: fall linear infinite;
+        .scene-bg.rain {
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
         }
-        @keyframes fall {
-            to { transform: translateY(100vh); }
+        .scene-bg.snow {
+            background: linear-gradient(to bottom, #2a2a3e 0%, #3a3a4e 50%, #4a4a5e 100%);
         }
+        .scene-bg.starry {
+            background: linear-gradient(to bottom, #050510 0%, #0a0a1a 50%, #101020 100%);
+        }
+        .scene-bg.sakura {
+            background: linear-gradient(to bottom, #2a1a2e 0%, #3a2a3e 40%, #4a3a4e 100%);
+        }
+        .scene-bg.autumn {
+            background: linear-gradient(to bottom, #2a1a0a 0%, #3a2a1a 50%, #4a3a2a 100%);
+        }
+        /* Canvas粒子层 */
+        #particleCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+        /* 内容容器 */
         .quote-container {
             position: fixed;
             inset: 0;
@@ -39,108 +54,195 @@
             padding: 40px;
         }
         .quote-text {
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 3vw, 2.6rem);
             line-height: 1.8;
             text-align: center;
-            max-width: 800px;
-            color: #fff;
-            background: rgba(255,255,255,0.1);
+            max-width: 85vw;
+            color: rgba(255, 255, 255, 0.95);
+            background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(20px);
-            padding: 40px 60px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            padding: 50px 70px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s ease;
+            transform: translateY(30px);
+            transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            letter-spacing: 0.08em;
+            font-weight: 300;
         }
         .quote-text.show {
             opacity: 1;
             transform: translateY(0);
         }
-        .quote-info {
-            margin-top: 30px;
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.7);
+        .quote-text .char {
+            display: inline-block;
+            opacity: 0;
+            animation: charFade 0.6s ease forwards;
+        }
+        @keyframes charFade {
+            to { opacity: 1; }
+        }
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            margin: 30px auto 20px;
             opacity: 0;
             transition: opacity 1s ease 0.5s;
+        }
+        .divider.show {
+            opacity: 1;
+        }
+        .quote-info {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.2em;
+            opacity: 0;
+            transition: opacity 1s ease 0.8s;
+            font-weight: 300;
         }
         .quote-info.show {
             opacity: 1;
         }
+        /* 闪电效果 */
         .lightning {
             position: fixed;
             inset: 0;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.15);
             opacity: 0;
             z-index: 5;
             pointer-events: none;
         }
         .lightning.flash {
-            animation: flash 0.2s ease;
+            animation: flash 0.3s ease;
         }
         @keyframes flash {
             0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
         .back-link {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            color: rgba(255,255,255,0.5);
+            top: 40px;
+            left: 40px;
+            color: rgba(255, 255, 255, 0.3);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             z-index: 100;
-            transition: color 0.3s;
+            transition: all 0.6s;
+            letter-spacing: 0.15em;
+            font-weight: 300;
         }
-        .back-link:hover { color: #fff; }
+        .back-link:hover { color: rgba(255, 255, 255, 0.7); }
+        /* 场景切换按钮 */
+        .scene-selector {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        .scene-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.5s;
+            letter-spacing: 0.1em;
+            font-family: inherit;
+        }
+        .scene-btn:hover, .scene-btn.active {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.05);
+        }
         .controls {
             position: fixed;
-            bottom: 30px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 15px;
+            gap: 20px;
             z-index: 100;
-            opacity: 0.4;
-            transition: opacity 0.3s;
         }
-        .controls:hover { opacity: 1; }
         .btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: #fff;
-            padding: 10px 24px;
-            border-radius: 30px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            padding: 12px 32px;
+            border-radius: 0;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+            font-size: 0.75rem;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            letter-spacing: 0.15em;
+            font-family: inherit;
+            font-weight: 300;
         }
         .btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .file-input {
+            position: fixed;
+            top: 80px;
+            right: 40px;
+            z-index: 100;
+        }
+        .file-input input { display: none; }
+        .file-input label {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.5s;
+            letter-spacing: 0.1em;
+            display: inline-block;
+        }
+        .file-input label:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
 <body>
-    <div class="rain-container" id="rainContainer"></div>
+    <div class="scene-bg rain" id="sceneBg"></div>
+    <canvas id="particleCanvas"></canvas>
     <div class="lightning" id="lightning"></div>
-    <a href="index.html" class="back-link">← 返回目录</a>
-    
+    <a href="index.html" class="back-link">&larr; 返回</a>
+
+    <div class="scene-selector">
+        <button class="scene-btn active" onclick="setScene('rain')">雨夜</button>
+        <button class="scene-btn" onclick="setScene('snow')">雪景</button>
+        <button class="scene-btn" onclick="setScene('starry')">星空</button>
+        <button class="scene-btn" onclick="setScene('sakura')">樱花</button>
+        <button class="scene-btn" onclick="setScene('autumn')">落叶</button>
+    </div>
+
+    <div class="file-input">
+        <input type="file" id="fileInput" accept=".txt,.json" onchange="loadFile(event)">
+        <label for="fileInput">选择书籍文件</label>
+    </div>
+
     <div class="quote-container">
         <div class="quote-text" id="quoteText"></div>
+        <div class="divider" id="divider"></div>
         <div class="quote-info" id="quoteInfo">
-            <span id="author"></span> · <span id="book"></span>
+            <span id="author"></span> &middot; <span id="book"></span>
         </div>
     </div>
-    
+
     <div class="controls">
         <button class="btn" onclick="prevQuote()">上一个</button>
         <button class="btn" onclick="nextQuote()">下一个</button>
     </div>
 
     <script>
-        const quotes = [
+        let quotes = [
             { text: "雨声说些什么？", author: "余光中", book: "听听那冷雨" },
             { text: "空山新雨后，天气晚来秋", author: "王维", book: "山居秋暝" },
             { text: "夜阑卧听风吹雨，铁马冰河入梦来", author: "陆游", book: "十一月四日风雨大作" },
@@ -150,17 +252,231 @@
         ];
 
         let currentIndex = 0;
+        let currentScene = 'rain';
+        let canvas, ctx;
+        let width, height;
+        let particles = [];
+        let animId;
 
-        function createRain() {
-            const container = document.getElementById('rainContainer');
-            for (let i = 0; i < 100; i++) {
-                const drop = document.createElement('div');
-                drop.className = 'raindrop';
-                drop.style.left = Math.random() * 100 + '%';
-                drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
-                drop.style.animationDelay = Math.random() * 2 + 's';
-                drop.style.opacity = Math.random() * 0.5 + 0.2;
-                container.appendChild(drop);
+        const sceneQuotes = {
+            rain: [
+                { text: "雨声说些什么？", author: "余光中", book: "听听那冷雨" },
+                { text: "空山新雨后，天气晚来秋", author: "王维", book: "山居秋暝" },
+                { text: "夜阑卧听风吹雨，铁马冰河入梦来", author: "陆游", book: "十一月四日风雨大作" },
+                { text: "君问归期未有期，巴山夜雨涨秋池", author: "李商隐", book: "夜雨寄北" },
+                { text: "好雨知时节，当春乃发生", author: "杜甫", book: "春夜喜雨" },
+                { text: "清明时节雨纷纷，路上行人欲断魂", author: "杜牧", book: "清明" }
+            ],
+            snow: [
+                { text: "忽如一夜春风来，千树万树梨花开", author: "岑参", book: "白雪歌送武判官归京" },
+                { text: "孤舟蓑笠翁，独钓寒江雪", author: "柳宗元", book: "江雪" },
+                { text: "柴门闻犬吠，风雪夜归人", author: "刘长卿", book: "逢雪宿芙蓉山主人" },
+                { text: "窗含西岭千秋雪，门泊东吴万里船", author: "杜甫", book: "绝句" },
+                { text: "梅须逊雪三分白，雪却输梅一段香", author: "卢梅坡", book: "雪梅" },
+                { text: "北国风光，千里冰封，万里雪飘", author: "毛泽东", book: "沁园春·雪" }
+            ],
+            starry: [
+                { text: "星垂平野阔，月涌大江流", author: "杜甫", book: "旅夜书怀" },
+                { text: "迢迢牵牛星，皎皎河汉女", author: "佚名", book: "古诗十九首" },
+                { text: "危楼高百尺，手可摘星辰", author: "李白", book: "夜宿山寺" },
+                { text: "天阶夜色凉如水，卧看牵牛织女星", author: "杜牧", book: "秋夕" },
+                { text: "七八个星天外，两三点雨山前", author: "辛弃疾", book: "西江月" },
+                { text: "明月几时有？把酒问青天", author: "苏轼", book: "水调歌头" }
+            ],
+            sakura: [
+                { text: "樱花红陌上，柳叶绿池边", author: "周恩来", book: "春日偶成" },
+                { text: "山深未必得春迟，处处山樱花压枝", author: "方岳", book: "入村" },
+                { text: "樱花落尽春将困，秋千架下归时", author: "李煜", book: "谢新恩" },
+                { text: "小园新种红樱树，闲绕花枝便当游", author: "白居易", book: "酬韩侍郎" },
+                { text: "樱花烂漫几多时？柳绿桃红两未知", author: "李商隐", book: "无题" },
+                { text: "昨日雪如花，今日花如雪", author: "邓尔雅", book: "花" }
+            ],
+            autumn: [
+                { text: "停车坐爱枫林晚，霜叶红于二月花", author: "杜牧", book: "山行" },
+                { text: "无边落木萧萧下，不尽长江滚滚来", author: "杜甫", book: "登高" },
+                { text: "秋风起兮白云飞，草木黄落兮雁南归", author: "刘彻", book: "秋风辞" },
+                { text: "落霞与孤鹜齐飞，秋水共长天一色", author: "王勃", book: "滕王阁序" },
+                { text: "自古逢秋悲寂寥，我言秋日胜春朝", author: "刘禹锡", book: "秋词" },
+                { text: "银烛秋光冷画屏，轻罗小扇扑流萤", author: "杜牧", book: "秋夕" }
+            ]
+        };
+
+        function init() {
+            canvas = document.getElementById('particleCanvas');
+            ctx = canvas.getContext('2d');
+            resize();
+            window.addEventListener('resize', resize);
+            createParticles();
+            animate();
+            showQuote();
+        }
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function createParticles() {
+            particles = [];
+            const count = currentScene === 'starry' ? 300 : 200;
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2 + 0.5,
+                    speedX: 0,
+                    speedY: 0,
+                    opacity: Math.random(),
+                    opacitySpeed: Math.random() * 0.02 + 0.005
+                });
+            }
+            updateParticleBehavior();
+        }
+
+        function updateParticleBehavior() {
+            particles.forEach(p => {
+                switch (currentScene) {
+                    case 'rain':
+                        p.speedX = (Math.random() - 0.5) * 0.5;
+                        p.speedY = Math.random() * 8 + 5;
+                        p.size = Math.random() * 1.5 + 0.5;
+                        break;
+                    case 'snow':
+                        p.speedX = (Math.random() - 0.5) * 2;
+                        p.speedY = Math.random() * 2 + 0.5;
+                        p.size = Math.random() * 3 + 1;
+                        break;
+                    case 'starry':
+                        p.speedX = 0;
+                        p.speedY = 0;
+                        p.size = Math.random() * 1.5 + 0.3;
+                        break;
+                    case 'sakura':
+                        p.speedX = (Math.random() - 0.5) * 3;
+                        p.speedY = Math.random() * 1.5 + 0.3;
+                        p.size = Math.random() * 4 + 2;
+                        break;
+                    case 'autumn':
+                        p.speedX = (Math.random() - 0.5) * 4;
+                        p.speedY = Math.random() * 2 + 1;
+                        p.size = Math.random() * 5 + 3;
+                        break;
+                }
+            });
+        }
+
+        function drawParticle(p) {
+            ctx.save();
+            switch (currentScene) {
+                case 'rain':
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x + p.speedX, p.y + p.size * 5);
+                    ctx.strokeStyle = `rgba(200, 220, 255, ${p.opacity * 0.5})`;
+                    ctx.lineWidth = p.size;
+                    ctx.stroke();
+                    break;
+                case 'snow':
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity * 0.8})`;
+                    ctx.fill();
+                    // 雪花光晕
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity * 0.1})`;
+                    ctx.fill();
+                    break;
+                case 'starry':
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 220, ${p.opacity})`;
+                    ctx.fill();
+                    // 星光闪烁
+                    if (p.opacity > 0.8) {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 255, 200, ${p.opacity * 0.1})`;
+                        ctx.fill();
+                    }
+                    break;
+                case 'sakura':
+                    // 樱花花瓣 - 粉色椭圆
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.x * 0.01);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 180, 200, ${p.opacity * 0.7})`;
+                    ctx.fill();
+                    break;
+                case 'autumn':
+                    // 落叶 - 橙色/红色椭圆
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.x * 0.02 + p.y * 0.01);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, p.size, p.size * 0.7, 0, 0, Math.PI * 2);
+                    const hue = 20 + Math.random() * 40;
+                    ctx.fillStyle = `rgba(${200 + hue}, ${100 + hue * 0.5}, 50, ${p.opacity * 0.8})`;
+                    ctx.fill();
+                    break;
+            }
+            ctx.restore();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.opacity += p.opacitySpeed;
+
+                if (p.opacity > 1 || p.opacity < 0.2) {
+                    p.opacitySpeed = -p.opacitySpeed;
+                }
+
+                // 边界处理
+                if (currentScene === 'starry') {
+                    // 星星保持不动，只闪烁
+                } else {
+                    if (p.y > height) {
+                        p.y = -10;
+                        p.x = Math.random() * width;
+                    }
+                    if (p.x > width) p.x = 0;
+                    if (p.x < 0) p.x = width;
+                }
+
+                drawParticle(p);
+            });
+
+            animId = requestAnimationFrame(animate);
+        }
+
+        function setScene(scene) {
+            currentScene = scene;
+            quotes = sceneQuotes[scene];
+            currentIndex = 0;
+
+            // 更新背景
+            const bg = document.getElementById('sceneBg');
+            bg.className = 'scene-bg ' + scene;
+
+            // 更新按钮状态
+            document.querySelectorAll('.scene-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 重新创建粒子
+            createParticles();
+            showQuote();
+
+            // 闪电效果（仅雨夜）
+            if (scene === 'rain') {
+                const lightning = document.getElementById('lightning');
+                lightning.classList.add('flash');
+                setTimeout(() => lightning.classList.remove('flash'), 300);
             }
         }
 
@@ -168,22 +484,31 @@
             const quote = quotes[currentIndex];
             const textEl = document.getElementById('quoteText');
             const infoEl = document.getElementById('quoteInfo');
-            const lightning = document.getElementById('lightning');
-            
+            const dividerEl = document.getElementById('divider');
+
             textEl.classList.remove('show');
             infoEl.classList.remove('show');
-            
-            // 闪电效果
-            lightning.classList.add('flash');
-            setTimeout(() => lightning.classList.remove('flash'), 200);
-            
+            dividerEl.classList.remove('show');
+
             setTimeout(() => {
-                textEl.textContent = quote.text;
+                textEl.innerHTML = '';
+                const chars = quote.text.split('');
+                chars.forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'char';
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    span.style.animationDelay = (i * 0.05) + 's';
+                    textEl.appendChild(span);
+                });
+
                 document.getElementById('author').textContent = quote.author;
                 document.getElementById('book').textContent = quote.book;
-                
+
                 textEl.classList.add('show');
-                infoEl.classList.add('show');
+                setTimeout(() => {
+                    dividerEl.classList.add('show');
+                    infoEl.classList.add('show');
+                }, 600);
             }, 500);
         }
 
@@ -197,13 +522,39 @@
             showQuote();
         }
 
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        quotes = data;
+                        currentIndex = 0;
+                        showQuote();
+                    }
+                } catch (err) {
+                    const lines = e.target.result.split('\n').filter(line => line.trim());
+                    quotes = lines.map(line => ({
+                        text: line,
+                        author: '未知',
+                        book: '自定义'
+                    }));
+                    currentIndex = 0;
+                    showQuote();
+                }
+            };
+            reader.readAsText(file);
+        }
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') nextQuote();
             if (e.key === 'ArrowLeft') prevQuote();
         });
 
-        createRain();
-        showQuote();
+        init();
     </script>
 </body>
 </html>
