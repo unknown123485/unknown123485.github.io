@@ -9,21 +9,18 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.5.7</title>
+    <title>Mas.reader v6.5.8</title>
     <script>
-        // 缓存控制 - v6.5.7
+        // 缓存控制 - v6.5.8
         (function() {
-            // 仅检测是否为本地开发环境
+            var url = window.location.href;
+            var hasVersion = /[?&]v=\d+/.test(url);
             var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            if (isLocal) {
-                // 本地开发时添加时间戳防止缓存
-                var url = window.location.href;
-                if (!/[?&]dev=\d+/.test(url)) {
-                    url = url.replace(/[?&]dev=\d+/g, '');
-                    url = url.replace(/\?$/,'').replace(/&$/,'');
-                    var sep = url.indexOf('?') === -1 ? '?' : '&';
-                    window.location.replace(url + sep + 'dev=' + Date.now());
-                }
+            if (!hasVersion) {
+                url = url.replace(/[?&]v=\d+/g, '');
+                url = url.replace(/\?$/,'').replace(/&$/,'');
+                var sep = url.indexOf('?') === -1 ? '?' : '&';
+                window.location.replace(url + sep + 'v=' + Date.now());
             }
         })();
     </script>
@@ -6641,7 +6638,7 @@
             if (currentQuoteEffect === 'none') return;
 
             var iframe = document.createElement('iframe');
-            iframe.src = 'quotes-showcase/' + currentQuoteEffect + '.html';
+            iframe.src = 'quotes-showcase/' + currentQuoteEffect + '.html?v=' + Date.now();
             iframe.style.width = '100%';
             iframe.style.height = '100%';
             iframe.style.border = 'none';
