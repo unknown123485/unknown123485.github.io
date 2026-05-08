@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>粒子重组效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #050508;
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', serif;
+        }
+        canvas {
+            position: fixed;
+            inset: 0;
+        }
+        .quote-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .quote-text {
+            font-size: 2.5rem;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 40px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            text-shadow: 0 0 30px rgba(100, 200, 255, 0.5);
+        }
+        .quote-text.show {
+            opacity: 1;
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: #88aaff;
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 100;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #fff; }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+        .controls:hover { opacity: 1; }
+        .btn {
+            background: rgba(100, 150, 255, 0.1);
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            color: #88aaff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: rgba(100, 150, 255, 0.2);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas>
+    <a href="index.html" class="back-link">← 返回目录</a>
+    
+    <div class="quote-container">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author"></span> · <span id="book"></span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "我们都是由星尘构成的", author: "卡尔·萨根", book: "宇宙" },
+            { text: "给岁月以文明", author: "刘慈欣", book: "三体" },
+            { text: "宇宙就是一座黑暗森林", author: "刘慈欣", book: "三体II" },
+            { text: "人类的赞歌就是勇气的赞歌", author: "荒木飞吕彦", book: "JOJO" },
+            { text: "不要温和地走进那个良夜", author: "狄兰·托马斯", book: "诗集" },
+            { text: "世界上只有一种英雄主义", author: "罗曼·罗兰", book: "米开朗基罗传" }
+        ];
+
+        let currentIndex = 0;
+        let particles = [];
+        let targetPositions = [];
+        let animationPhase = 'scatter'; // scatter, form, show, disperse
+        let canvas, ctx;
+        let width, height;
+
+        function init() {
+            canvas = document.getElementById('particleCanvas');
+            ctx = canvas.getContext('2d');
+            resize();
+            window.addEventListener('resize', resize);
+            animate();
+            showQuote();
+        }
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function createParticles(text) {
+            particles = [];
+            targetPositions = [];
+            
+            // 创建离屏canvas来获取文字像素
+            const offCanvas = document.createElement('canvas');
+            offCanvas.width = width;
+            offCanvas.height = height;
+            const offCtx = offCanvas.getContext('2d');
+            
+            offCtx.font = 'bold 48px "Noto Serif SC", serif';
+            offCtx.fillStyle = '#fff';
+            offCtx.textAlign = 'center';
+            offCtx.textBaseline = 'middle';
+            
+            const lines = text.split('');
+            const lineHeight = 60;
+            const startY = height / 2 - (lines.length * lineHeight) / 2;
+            
+            lines.forEach((char, i) => {
+                const x = width / 2;
+                const y = startY + i * lineHeight;
+                offCtx.fillText(char, x, y);
+            });
+            
+            // 获取像素数据
+            const imageData = offCtx.getImageData(0, 0, width, height);
+            const pixels = imageData.data;
+            
+            // 采样像素位置
+            for (let y = 0; y < height; y += 4) {
+                for (let x = 0; x < width; x += 4) {
+                    const index = (y * width + x) * 4;
+                    if (pixels[index + 3] > 128) {
+                        targetPositions.push({ x, y });
+                        particles.push({
+                            x: Math.random() * width,
+                            y: Math.random() * height,
+                            tx: x,
+                            ty: y,
+                            vx: 0,
+                            vy: 0,
+                            size: Math.random() * 2 + 1,
+                            alpha: Math.random() * 0.5 + 0.5
+                        });
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+            
+            particles.forEach(p => {
+                if (animationPhase === 'form') {
+                    // 向目标位置移动
+                    const dx = p.tx - p.x;
+                    const dy = p.ty - p.y;
+                    p.vx += dx * 0.02;
+                    p.vy += dy * 0.02;
+                    p.vx *= 0.9;
+                    p.vy *= 0.9;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                } else if (animationPhase === 'disperse') {
+                    // 向外扩散
+                    const angle = Math.atan2(p.y - height / 2, p.x - width / 2);
+                    p.vx += Math.cos(angle) * 0.5;
+                    p.vy += Math.sin(angle) * 0.5;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                } else if (animationPhase === 'scatter') {
+                    // 随机漂移
+                    p.x += (Math.random() - 0.5) * 2;
+                    p.y += (Math.random() - 0.5) * 2;
+                }
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(100, 200, 255, ${p.alpha})`;
+                ctx.fill();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+            
+            animationPhase = 'disperse';
+            
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+                
+                createParticles(quote.text);
+                animationPhase = 'form';
+                
+                setTimeout(() => {
+                    animationPhase = 'show';
+                    textEl.classList.add('show');
+                    infoEl.classList.add('show');
+                }, 2000);
+            }, 1000);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        init();
+    </script>
+</body>
+</html>

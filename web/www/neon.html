@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>霓虹灯管效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Noto Serif SC', serif;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 900px;
+        }
+        .quote-text {
+            font-size: 3rem;
+            line-height: 1.6;
+            color: #fff;
+            text-shadow: 
+                0 0 10px #ff00de,
+                0 0 20px #ff00de,
+                0 0 40px #ff00de,
+                0 0 80px #ff00de;
+            animation: flicker 3s infinite alternate;
+            opacity: 0;
+        }
+        .quote-text.show {
+            opacity: 1;
+            animation: flicker 3s infinite alternate, reveal 0.5s ease forwards;
+        }
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 
+                    0 0 10px #ff00de,
+                    0 0 20px #ff00de,
+                    0 0 40px #ff00de,
+                    0 0 80px #ff00de;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.8;
+            }
+        }
+        @keyframes reveal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .quote-info {
+            margin-top: 40px;
+            font-size: 1.2rem;
+            color: #00ffff;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+        .glitch {
+            position: relative;
+        }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch::before {
+            color: #ff00de;
+            animation: glitch-1 2s infinite linear alternate-reverse;
+            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        }
+        .glitch::after {
+            color: #00ffff;
+            animation: glitch-2 3s infinite linear alternate-reverse;
+            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+        }
+        @keyframes glitch-1 {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-3px); }
+            40% { transform: translateX(3px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes glitch-2 {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(3px); }
+            40% { transform: translateX(-3px); }
+            60% { transform: translateX(2px); }
+            80% { transform: translateX(-2px); }
+            100% { transform: translateX(0); }
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #fff; }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            background: rgba(255,0,222,0.1);
+            border: 1px solid rgba(255,0,222,0.3);
+            color: #ff00de;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-shadow: 0 0 10px rgba(255,0,222,0.5);
+        }
+        .btn:hover {
+            background: rgba(255,0,222,0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255,0,222,0.3);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← 返回目录</a>
+    
+    <div class="container">
+        <div class="quote-text glitch" id="quoteText" data-text=""></div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author"></span> · <span id="book"></span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "霓虹之下，我们都是孤独的舞者", author: "村上春树", book: "挪威的森林" },
+            { text: "城市是一座巨大的迷宫，我们在其中寻找出口", author: "博尔赫斯", book: "迷宫" },
+            { text: "黑夜给了我黑色的眼睛，我却用它寻找光明", author: "顾城", book: "一代人" },
+            { text: "我们都是夜行动物，在城市的霓虹中觅食", author: "雷蒙德·钱德勒", book: "漫长的告别" },
+            { text: "在赛博朋克的世界里，每个人都是自己的黑客", author: "威廉·吉布森", book: "神经漫游者" },
+            { text: "霓虹灯下的阴影里，藏着最真实的我们", author: "菲茨杰拉德", book: "了不起的盖茨比" }
+        ];
+
+        let currentIndex = 0;
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+            
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                textEl.setAttribute('data-text', quote.text);
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+                
+                textEl.classList.add('show');
+                infoEl.classList.add('show');
+            }, 300);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        showQuote();
+    </script>
+</body>
+</html>

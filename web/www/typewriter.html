@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简打字机效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', 'Noto Serif SC', monospace;
+            overflow: hidden;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        .quote-text {
+            font-size: 2.5rem;
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+            min-height: 200px;
+        }
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background: #e0e0e0;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        .quote-info {
+            margin-top: 40px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            font-size: 1.1rem;
+            color: #888;
+        }
+        .quote-info.show {
+            opacity: 1;
+        }
+        .book-name {
+            font-style: italic;
+            color: #aaa;
+        }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        .controls:hover { opacity: 1; }
+        .btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #fff; }
+        .paper-texture {
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="paper-texture"></div>
+    <a href="index.html" class="back-link">← 返回目录</a>
+    
+    <div class="container">
+        <div class="quote-text" id="quoteText">
+            <span id="textContent"></span><span class="cursor"></span>
+        </div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author"></span> · <span class="book-name" id="book"></span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="togglePause()">暂停/继续</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "人是一根有思想的芦苇。", author: "帕斯卡", book: "思想录" },
+            { text: "我思故我在。", author: "笛卡尔", book: "第一哲学沉思集" },
+            { text: "未经审视的人生不值得过。", author: "苏格拉底", book: "申辩篇" },
+            { text: "世界上只有一种真正的英雄主义，那就是认清生活的真相后依然热爱生活。", author: "罗曼·罗兰", book: "米开朗基罗传" },
+            { text: "你担心什么，什么就控制你。", author: "约翰·洛克", book: "政府论" },
+            { text: "人生而自由，却无往不在枷锁之中。", author: "卢梭", book: "社会契约论" },
+            { text: "存在即合理。", author: "黑格尔", book: "法哲学原理" },
+            { text: "他人即地狱。", author: "萨特", book: "禁闭" },
+            { text: "一个人知道自己为什么而活，就可以忍受任何一种生活。", author: "尼采", book: "查拉图斯特拉如是说" },
+            { text: "我们听到的一切都是一个观点，不是事实。我们看见的一切都是一个视角，不是真相。", author: "马可·奥勒留", book: "沉思录" }
+        ];
+
+        let currentIndex = 0;
+        let charIndex = 0;
+        let isTyping = true;
+        let isPaused = false;
+        let typingInterval;
+
+        function typeChar() {
+            if (isPaused) return;
+            
+            const quote = quotes[currentIndex];
+            const textContent = document.getElementById('textContent');
+            
+            if (charIndex < quote.text.length) {
+                textContent.textContent += quote.text[charIndex];
+                charIndex++;
+                
+                // 随机打字速度，模拟真实打字
+                const speed = 80 + Math.random() * 120;
+                typingInterval = setTimeout(typeChar, speed);
+            } else {
+                // 打字完成，显示作者信息
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+                document.getElementById('quoteInfo').classList.add('show');
+                
+                // 3秒后自动切换
+                setTimeout(() => {
+                    if (!isPaused) nextQuote();
+                }, 4000);
+            }
+        }
+
+        function startTyping() {
+            clearTimeout(typingInterval);
+            document.getElementById('textContent').textContent = '';
+            document.getElementById('quoteInfo').classList.remove('show');
+            charIndex = 0;
+            isTyping = true;
+            typeChar();
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            startTyping();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            startTyping();
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            if (!isPaused && isTyping) {
+                typeChar();
+            }
+        }
+
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === ' ') {
+                e.preventDefault();
+                togglePause();
+            }
+        });
+
+        // 开始
+        startTyping();
+    </script>
+</body>
+</html>

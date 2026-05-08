@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水墨晕染效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f0e8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
+        }
+        .ink-bg {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(0,0,0,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(0,0,0,0.02) 0%, transparent 40%);
+        }
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px;
+            max-width: 900px;
+        }
+        .quote-text {
+            font-size: 3.5rem;
+            line-height: 1.6;
+            color: #1a1a1a;
+            filter: url(#ink-filter);
+            opacity: 0;
+            animation: inkReveal 4s ease-out forwards;
+        }
+        @keyframes inkReveal {
+            0% { 
+                opacity: 0;
+                filter: url(#ink-filter) blur(20px);
+            }
+            30% {
+                opacity: 0.3;
+            }
+            100% { 
+                opacity: 1;
+                filter: url(#ink-filter) blur(0px);
+            }
+        }
+        .quote-info {
+            margin-top: 50px;
+            font-size: 1.3rem;
+            color: #666;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 3s forwards;
+        }
+        .ink-drop {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,0,0,0.08) 0%, transparent 70%);
+            animation: inkSpread 8s ease-out infinite;
+            pointer-events: none;
+        }
+        .ink-drop:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .ink-drop:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
+        .ink-drop:nth-child(3) { bottom: 20%; left: 30%; animation-delay: 4s; }
+        @keyframes inkSpread {
+            0% { transform: scale(0); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 100;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #333; }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+        .btn {
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.2);
+            color: #333;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background: rgba(0,0,0,0.1);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="ink-filter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+    </svg>
+    
+    <div class="ink-bg"></div>
+    <div class="ink-drop"></div>
+    <div class="ink-drop"></div>
+    <div class="ink-drop"></div>
+    
+    <a href="index.html" class="back-link">← 返回目录</a>
+    
+    <div class="container">
+        <div class="quote-text" id="quoteText">道可道，非常道</div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author">老子</span> · <span id="book">道德经</span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "道可道，非常道", author: "老子", book: "道德经" },
+            { text: "采菊东篱下，悠然见南山", author: "陶渊明", book: "饮酒" },
+            { text: "大江东去，浪淘尽，千古风流人物", author: "苏轼", book: "念奴娇·赤壁怀古" },
+            { text: "落霞与孤鹜齐飞，秋水共长天一色", author: "王勃", book: "滕王阁序" },
+            { text: "山重水复疑无路，柳暗花明又一村", author: "陆游", book: "游山西村" },
+            { text: "问君能有几多愁，恰似一江春水向东流", author: "李煜", book: "虞美人" },
+            { text: "人生若只如初见，何事秋风悲画扇", author: "纳兰性德", book: "木兰花令" },
+            { text: "行到水穷处，坐看云起时", author: "王维", book: "终南别业" }
+        ];
+
+        let currentIndex = 0;
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            
+            // 重置动画
+            textEl.style.animation = 'none';
+            infoEl.style.animation = 'none';
+            textEl.offsetHeight; // 触发重排
+            
+            textEl.textContent = quote.text;
+            document.getElementById('author').textContent = quote.author;
+            document.getElementById('book').textContent = quote.book;
+            
+            textEl.style.animation = 'inkReveal 4s ease-out forwards';
+            infoEl.style.animation = 'fadeIn 2s ease-out 3s forwards';
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        showQuote();
+    </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>翻书页效果 - 书摘展示</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+font-family: 'Noto Serif SC', serif;
+overflow: hidden;
+}
+.book-container {
+width: 600px;
+height: 400px;
+perspective: 1500px;
+position: relative;
+}
+.book {
+width: 100%;
+height: 100%;
+position: relative;
+transform-style: preserve-3d;
+}
+.page {
+position: absolute;
+width: 50%;
+height: 100%;
+top: 0;
+background: linear-gradient(to right, #f5f5dc 0%, #fafafa 5%, #fff 10%);
+border-radius: 0 10px 10px 0;
+box-shadow: 0 0 20px rgba(0,0,0,0.3);
+transform-origin: left center;
+transform-style: preserve-3d;
+transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+padding: 40px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+.page::before {
+content: '';
+position: absolute;
+left: 0;
+top: 0;
+bottom: 0;
+width: 40px;
+background: linear-gradient(to right, rgba(0,0,0,0.1) 0%, transparent 100%);
+}
+.page.flipped {
+transform: rotateY(-180deg);
+}
+.page-back {
+position: absolute;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+background: linear-gradient(to left, #f5f5dc 0%, #fafafa 5%, #fff 10%);
+border-radius: 10px 0 0 10px;
+backface-visibility: hidden;
+transform: rotateY(180deg);
+padding: 40px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+.quote-text {
+font-size: 1.5rem;
+line-height: 1.8;
+color: #333;
+margin-bottom: 30px;
+}
+.quote-info {
+font-size: 1rem;
+color: #666;
+text-align: right;
+}
+.book-cover {
+position: absolute;
+width: 50%;
+height: 100%;
+right: 0;
+top: 0;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+border-radius: 0 10px 10px 0;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+color: #fff;
+padding: 40px;
+text-align: center;
+}
+.cover-title {
+font-size: 2rem;
+margin-bottom: 20px;
+}
+.cover-author {
+font-size: 1.2rem;
+opacity: 0.8;
+}
+.controls {
+position: fixed;
+bottom: 30px;
+left: 50%;
+transform: translateX(-50%);
+display: flex;
+gap: 15px;
+}
+.btn {
+background: rgba(255,255,255,0.1);
+border: 1px solid rgba(255,255,255,0.3);
+color: #fff;
+padding: 10px 24px;
+border-radius: 30px;
+cursor: pointer;
+font-size: 0.9rem;
+transition: all 0.3s;
+}
+.btn:hover {
+background: rgba(255,255,255,0.2);
+transform: scale(1.05);
+}
+.back-link {
+position: fixed;
+top: 30px;
+left: 30px;
+color: rgba(255,255,255,0.5);
+text-decoration: none;
+font-size: 0.9rem;
+transition: color 0.3s;
+}
+.back-link:hover { color: #fff; }
+</style>
+</head>
+<body>
+<a href="index.html" class="back-link">← 返回目录</a>
+
+<div class="book-container">
+<div class="book" id="book">
+<div class="page" id="page">
+<div class="quote-text" id="quoteText"></div>
+<div class="quote-info">
+<span id="author"></span> · <span id="bookName"></span>
+</div>
+<div class="page-back">
+<div class="quote-text" id="backText"></div>
+<div class="quote-info">
+<span id="backAuthor"></span> · <span id="backBook"></span>
+</div>
+</div>
+</div>
+<div class="book-cover">
+<div class="cover-title" id="coverTitle">书摘精选</div>
+<div class="cover-author">点击翻页</div>
+</div>
+</div>
+</div>
+
+<div class="controls">
+<button class="btn" onclick="prevPage()">上一页</button>
+<button class="btn" onclick="flipPage()">翻页</button>
+<button class="btn" onclick="nextPage()">下一页</button>
+</div>
+
+<script>
+const quotes = [
+{ text: "人是一根有思想的芦苇。", author: "帕斯卡", book: "思想录" },
+{ text: "我思故我在。", author: "笛卡尔", book: "第一哲学沉思集" },
+{ text: "未经审视的人生不值得过。", author: "苏格拉底", book: "申辩篇" },
+{ text: "世界上只有一种真正的英雄主义。", author: "罗曼·罗兰", book: "米开朗基罗传" },
+{ text: "人生而自由，却无往不在枷锁之中。", author: "卢梭", book: "社会契约论" },
+{ text: "存在即合理。", author: "黑格尔", book: "法哲学原理" }
+];
+
+let currentIndex = 0;
+let isFlipped = false;
+
+function showQuote() {
+const quote = quotes[currentIndex];
+document.getElementById('quoteText').textContent = quote.text;
+document.getElementById('author').textContent = quote.author;
+document.getElementById('bookName').textContent = quote.book;
+}
+
+function showBackQuote() {
+const nextIndex = (currentIndex + 1) % quotes.length;
+const quote = quotes[nextIndex];
+document.getElementById('backText').textContent = quote.text;
+document.getElementById('backAuthor').textContent = quote.author;
+document.getElementById('backBook').textContent = quote.book;
+}
+
+function flipPage() {
+const page = document.getElementById('page');
+if (!isFlipped) {
+showBackQuote();
+page.classList.add('flipped');
+isFlipped = true;
+} else {
+currentIndex = (currentIndex + 1) % quotes.length;
+showQuote();
+page.classList.remove('flipped');
+isFlipped = false;
+}
+}
+
+function nextPage() {
+if (isFlipped) {
+currentIndex = (currentIndex + 1) % quotes.length;
+showQuote();
+document.getElementById('page').classList.remove('flipped');
+isFlipped = false;
+} else {
+flipPage();
+}
+}
+
+function prevPage() {
+currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+showQuote();
+document.getElementById('page').classList.remove('flipped');
+isFlipped = false;
+}
+
+document.addEventListener('keydown', (e) => {
+if (e.key === 'ArrowRight') nextPage();
+if (e.key === 'ArrowLeft') prevPage();
+if (e.key === ' ') {
+e.preventDefault();
+flipPage();
+}
+});
+
+showQuote();
+</script>
+</body>
+</html>
