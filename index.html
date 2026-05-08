@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v6.5.6</title>
+    <title>Mas.reader v6.5.7</title>
     <script>
-        // 缓存控制 - v6.5.6
+        // 缓存控制 - v6.5.7
         (function() {
             // 仅检测是否为本地开发环境
             var isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -4332,6 +4332,7 @@
         <div id="input-screen">
             <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
             <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
+            <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;"></div>
             <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;margin-top:200px;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
 
@@ -4402,6 +4403,41 @@
                         </div>
                         <div class="home-theme-card" data-bg-effect="none" onclick="setBgEffect('none')" style="padding:0.4rem 0.8rem;">
                             <div class="theme-label" style="font-size:0.7rem;">无</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="home-settings-section">
+                    <label>书摘展示效果</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem;">
+                        <div class="home-theme-card" data-quote-effect="none" onclick="setQuoteEffect('none')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">关闭</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="typewriter" onclick="setQuoteEffect('typewriter')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">打字机</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="cinematic" onclick="setQuoteEffect('cinematic')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">电影滚动</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="inkwash" onclick="setQuoteEffect('inkwash')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">水墨晕染</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="particles" onclick="setQuoteEffect('particles')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">粒子重组</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="neon" onclick="setQuoteEffect('neon')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">霓虹灯管</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="nature" onclick="setQuoteEffect('nature')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">自然场景</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="letterpress" onclick="setQuoteEffect('letterpress')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">活字印刷</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="fractal" onclick="setQuoteEffect('fractal')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">分形生长</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="hologram" onclick="setQuoteEffect('hologram')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">全息投影</div>
                         </div>
                     </div>
                 </div>
@@ -6574,6 +6610,37 @@
                     bgEffectEngine.start();
                 }
             }
+        }
+
+        var currentQuoteEffect = localStorage.getItem('quoteEffect') || 'none';
+
+        function setQuoteEffect(effect) {
+            currentQuoteEffect = effect;
+            localStorage.setItem('quoteEffect', effect);
+            document.querySelectorAll('[data-quote-effect]').forEach(function(el) {
+                el.classList.toggle('active', el.getAttribute('data-quote-effect') === effect);
+            });
+            applyQuoteEffect();
+        }
+
+        function applyQuoteEffect() {
+            var container = document.getElementById('quote-showcase-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            container.style.display = currentQuoteEffect === 'none' ? 'none' : 'block';
+            
+            if (currentQuoteEffect === 'none') return;
+            
+            var iframe = document.createElement('iframe');
+            iframe.src = 'quotes-showcase/' + currentQuoteEffect + '.html';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            container.appendChild(iframe);
         }
 
         var BubblesEngine = (function() {
@@ -9215,6 +9282,12 @@
                 }
             } else if (savedEffect !== 'none') {
                 setBgEffect(savedEffect);
+            }
+            
+            // 初始化书摘展示效果
+            var savedQuoteEffect = localStorage.getItem('quoteEffect') || 'none';
+            if (savedQuoteEffect !== 'none') {
+                setQuoteEffect(savedQuoteEffect);
             }
         }
 
