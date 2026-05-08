@@ -7,130 +7,169 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #d4c5b0;
+            background: #d4c5a8;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Georgia', serif;
             overflow: hidden;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            position: relative;
+        }
+        /* 纸张纹理 */
+        .paper {
+            position: fixed;
+            inset: 0;
+            background:
+                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+                linear-gradient(160deg, #ddd0b8 0%, #d4c5a8 50%, #d8cdb0 100%);
+            z-index: 0;
+        }
+        /* 极简边框 */
+        .frame {
+            position: fixed;
+            inset: 30px;
+            border: 1px solid rgba(92, 74, 48, 0.1);
+            z-index: 1;
+            pointer-events: none;
         }
         .container {
             text-align: center;
-            padding: 40px;
-            max-width: 900px;
+            padding: 60px;
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+        .type-case {
+            background: rgba(180, 165, 140, 0.2);
+            padding: 50px;
             position: relative;
         }
         .quote-text {
-            font-size: 2.5rem;
-            line-height: 1.8;
-            color: #2c1810;
+            font-size: 2.2rem;
+            line-height: 2.2;
+            color: #1a0f05;
             min-height: 200px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
+            letter-spacing: 0.1em;
+            font-weight: 400;
         }
-        .char {
-            display: inline-block;
-            font-size: 2.5rem;
-            color: #2c1810;
-            text-shadow: 
-                1px 1px 0 rgba(0,0,0,0.3),
-                2px 2px 0 rgba(0,0,0,0.2),
-                3px 3px 0 rgba(0,0,0,0.1);
+        .type-char {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.6rem;
+            height: 2.6rem;
+            font-size: 1.6rem;
+            color: #1a0f05;
+            background: linear-gradient(180deg, #e8ddd0 0%, #d8cdb8 100%);
+            border: 1px solid #b8a888;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             opacity: 0;
-            transform: translateY(-100px) rotate(-10deg);
-            animation: dropIn 0.5s ease forwards;
+            transform: translateY(-40px);
+            animation: typeDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        @keyframes dropIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-100px) rotate(-10deg);
-            }
-            60% {
-                opacity: 1;
-                transform: translateY(10px) rotate(2deg);
-            }
-            80% {
-                transform: translateY(-5px) rotate(-1deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) rotate(0);
-            }
+        .type-char.inked {
+            color: #0a0500;
+        }
+        @keyframes typeDrop {
+            0% { opacity: 0; transform: translateY(-40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .type-char.pressed {
+            animation: typeDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, typePress 0.3s ease 0.5s forwards;
+        }
+        @keyframes typePress {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.97) translateY(1px); }
+            100% { transform: scale(1); }
         }
         .quote-info {
             margin-top: 40px;
-            font-size: 1.2rem;
-            color: #5c4033;
+            font-size: 0.9rem;
+            color: #5c4a30;
+            letter-spacing: 0.2em;
             opacity: 0;
-            transition: opacity 1s ease;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
         }
         .quote-info.show {
             opacity: 1;
         }
-        .ink-splash {
-            position: fixed;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(44,24,16,0.1) 0%, transparent 70%);
-            pointer-events: none;
-            animation: splash 0.5s ease-out forwards;
+        .type-mark {
+            position: absolute;
+            font-size: 0.55rem;
+            color: rgba(92,74,48,0.2);
+            font-family: monospace;
         }
-        @keyframes splash {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(3); opacity: 0; }
-        }
+        .type-mark.top-left { top: 15px; left: 20px; }
+        .type-mark.top-right { top: 15px; right: 20px; }
+        .type-mark.bottom-left { bottom: 15px; left: 20px; }
+        .type-mark.bottom-right { bottom: 15px; right: 20px; }
         .back-link {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            color: #5c4033;
+            top: 40px;
+            left: 40px;
+            color: #5c4a30;
             text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
+            font-size: 0.8rem;
+            transition: color 0.5s;
+            z-index: 100;
+            opacity: 0.5;
+            letter-spacing: 0.1em;
         }
-        .back-link:hover { color: #2c1810; }
+        .back-link:hover { color: #1a0f05; opacity: 1; }
         .controls {
             position: fixed;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 15px;
+            gap: 30px;
+            z-index: 100;
         }
         .btn {
-            background: rgba(44,24,16,0.1);
-            border: 1px solid rgba(44,24,16,0.3);
-            color: #2c1810;
+            background: rgba(92,74,48,0.06);
+            border: 1px solid rgba(92,74,48,0.15);
+            color: #5c4a30;
             padding: 10px 24px;
-            border-radius: 30px;
+            border-radius: 0;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+            font-size: 0.8rem;
+            transition: all 0.5s ease;
             font-family: inherit;
+            letter-spacing: 0.1em;
         }
         .btn:hover {
-            background: rgba(44,24,16,0.2);
-            transform: scale(1.05);
+            background: rgba(92,74,48,0.12);
+            border-color: rgba(92,74,48,0.3);
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← 返回目录</a>
-    
+    <div class="paper"></div>
+    <div class="frame"></div>
+    <a href="index.html" class="back-link">&larr; 返回</a>
+
     <div class="container">
-        <div class="quote-text" id="quoteText"></div>
+        <div class="type-case">
+            <span class="type-mark top-left">12pt</span>
+            <span class="type-mark top-right">&sect;1</span>
+            <div class="quote-text" id="quoteText"></div>
+            <span class="type-mark bottom-left">铅字排版</span>
+            <span class="type-mark bottom-right" id="pageNum">001</span>
+        </div>
         <div class="quote-info" id="quoteInfo">
-            <span id="author"></span> · <span id="book"></span>
+            <span id="author"></span> &middot; <span id="book"></span>
         </div>
     </div>
-    
+
     <div class="controls">
         <button class="btn" onclick="prevQuote()">上一个</button>
         <button class="btn" onclick="nextQuote()">下一个</button>
@@ -147,39 +186,37 @@
         ];
 
         let currentIndex = 0;
+        let autoPlayInterval = null;
 
         function showQuote() {
             const quote = quotes[currentIndex];
             const textEl = document.getElementById('quoteText');
             const infoEl = document.getElementById('quoteInfo');
-            
+
             textEl.innerHTML = '';
             infoEl.classList.remove('show');
-            
+
             const chars = quote.text.split('');
             chars.forEach((char, i) => {
                 const span = document.createElement('span');
-                span.className = 'char';
+                span.className = 'type-char';
+                if (Math.random() > 0.3) span.classList.add('inked');
                 span.textContent = char === ' ' ? '\u00A0' : char;
                 span.style.animationDelay = (i * 0.1) + 's';
                 textEl.appendChild(span);
-                
-                // 创建墨点效果
+
                 setTimeout(() => {
-                    const splash = document.createElement('div');
-                    splash.className = 'ink-splash';
-                    splash.style.left = (Math.random() * window.innerWidth) + 'px';
-                    splash.style.top = (Math.random() * window.innerHeight) + 'px';
-                    document.body.appendChild(splash);
-                    setTimeout(() => splash.remove(), 500);
-                }, i * 100);
+                    span.classList.add('pressed');
+                }, i * 100 + 500);
             });
-            
+
+            document.getElementById('pageNum').textContent = String(currentIndex + 1).padStart(3, '0');
+
             setTimeout(() => {
                 document.getElementById('author').textContent = quote.author;
                 document.getElementById('book').textContent = quote.book;
                 infoEl.classList.add('show');
-            }, chars.length * 100 + 500);
+            }, chars.length * 100 + 800);
         }
 
         function nextQuote() {
@@ -192,12 +229,28 @@
             showQuote();
         }
 
+        function startAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(nextQuote, 9000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+        }
+
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextQuote();
-            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === 'ArrowRight') { nextQuote(); stopAutoPlay(); }
+            if (e.key === 'ArrowLeft') { prevQuote(); stopAutoPlay(); }
         });
 
+        document.addEventListener('mouseenter', stopAutoPlay, true);
+        document.addEventListener('mouseleave', startAutoPlay, true);
+
         showQuote();
+        startAutoPlay();
     </script>
 </body>
 </html>
