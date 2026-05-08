@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #c8b89a;
+            background: #c4b5a0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -22,7 +22,7 @@
             position: fixed;
             inset: 0;
             background:
-                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
                 linear-gradient(135deg, #d4c5a8 0%, #c8b89a 50%, #d0c0a0 100%);
             z-index: 0;
         }
@@ -45,16 +45,6 @@
             border: 1px solid rgba(92,74,48,0.3);
             border-radius: 2px;
         }
-        /* 压痕效果 */
-        .impression {
-            position: absolute;
-            inset: 0;
-            box-shadow:
-                inset 2px 2px 4px rgba(0,0,0,0.15),
-                inset -1px -1px 2px rgba(255,255,255,0.3);
-            border-radius: inherit;
-            pointer-events: none;
-        }
         .container {
             text-align: center;
             padding: 60px;
@@ -65,7 +55,7 @@
         /* 活字排版区域 */
         .type-case {
             background: rgba(180,165,140,0.3);
-            padding: 40px;
+            padding: 50px;
             border-radius: 2px;
             position: relative;
             box-shadow:
@@ -73,24 +63,24 @@
                 inset 0 -1px 2px rgba(255,255,255,0.2);
         }
         .quote-text {
-            font-size: 2.2rem;
-            line-height: 2;
+            font-size: 2.4rem;
+            line-height: 2.2;
             color: #1a0f05;
             min-height: 200px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 2px;
-            letter-spacing: 0.15em;
+            gap: 4px;
+            letter-spacing: 0.1em;
         }
         /* 单个活字 */
         .type-char {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 2.8rem;
-            height: 2.8rem;
+            width: 3rem;
+            height: 3rem;
             font-size: 1.8rem;
             color: #1a0f05;
             background: linear-gradient(180deg, #e8ddd0 0%, #d8cdb8 100%);
@@ -98,12 +88,12 @@
             border-radius: 2px;
             position: relative;
             box-shadow:
-                0 2px 4px rgba(0,0,0,0.2),
+                0 3px 6px rgba(0,0,0,0.2),
                 inset 0 1px 1px rgba(255,255,255,0.5),
                 inset 0 -1px 1px rgba(0,0,0,0.1);
             opacity: 0;
-            transform: translateY(-50px) rotate(-5deg);
-            animation: typeDrop 0.4s ease forwards;
+            transform: translateY(-60px) rotate(-8deg);
+            animation: typeDrop 0.5s ease forwards;
         }
         .type-char::before {
             content: '';
@@ -127,24 +117,22 @@
         /* 油墨效果 */
         .type-char.inked {
             color: #0a0500;
-            text-shadow:
-                0 0 1px rgba(0,0,0,0.3),
-                1px 1px 0 rgba(0,0,0,0.1);
+            text-shadow: 0 0 1px rgba(0,0,0,0.2);
         }
         .type-char.inked::after {
-            background: radial-gradient(ellipse, rgba(0,0,0,0.08) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%);
         }
         @keyframes typeDrop {
             0% {
                 opacity: 0;
-                transform: translateY(-50px) rotate(-5deg);
+                transform: translateY(-60px) rotate(-8deg);
             }
             60% {
                 opacity: 1;
-                transform: translateY(3px) rotate(1deg);
+                transform: translateY(4px) rotate(1deg);
             }
             80% {
-                transform: translateY(-1px) rotate(-0.5deg);
+                transform: translateY(-2px) rotate(-0.5deg);
             }
             100% {
                 opacity: 1;
@@ -153,27 +141,27 @@
         }
         /* 压印效果 */
         .type-char.pressed {
-            animation: typePress 0.3s ease forwards;
+            animation: typeDrop 0.5s ease forwards, typePress 0.3s ease 0.5s forwards;
         }
         @keyframes typePress {
-            0% { transform: scale(1); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-            50% { transform: scale(0.95) translateY(2px); box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-            100% { transform: scale(1); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+            0% { transform: scale(1); box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+            50% { transform: scale(0.94) translateY(3px); box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+            100% { transform: scale(1); box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
         }
         /* 油墨飞溅 */
         .ink-splat {
             position: fixed;
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(40,25,10,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(40,25,10,0.06) 0%, transparent 70%);
             pointer-events: none;
             z-index: 3;
-            animation: splatFade 1s ease-out forwards;
+            animation: splatFade 1.2s ease-out forwards;
         }
         @keyframes splatFade {
             0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(2.5); opacity: 0; }
+            100% { transform: scale(3); opacity: 0; }
         }
         /* 油墨痕迹 */
         .ink-bleed {
@@ -182,7 +170,7 @@
             left: 10%;
             width: 80%;
             height: 3px;
-            background: linear-gradient(90deg, transparent, rgba(40,25,10,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(40,25,10,0.08), transparent);
             filter: blur(1px);
         }
         .quote-info {
@@ -204,10 +192,10 @@
             color: rgba(92,74,48,0.3);
             font-family: monospace;
         }
-        .type-mark.top-left { top: 10px; left: 15px; }
-        .type-mark.top-right { top: 10px; right: 15px; }
-        .type-mark.bottom-left { bottom: 10px; left: 15px; }
-        .type-mark.bottom-right { bottom: 10px; right: 15px; }
+        .type-mark.top-left { top: 12px; left: 18px; }
+        .type-mark.top-right { top: 12px; right: 18px; }
+        .type-mark.bottom-left { bottom: 12px; left: 18px; }
+        .type-mark.bottom-right { bottom: 12px; right: 18px; }
         .back-link {
             position: fixed;
             top: 35px;
@@ -281,14 +269,15 @@
         ];
 
         let currentIndex = 0;
+        let autoPlayInterval = null;
 
         function createInkSplat(x, y) {
             const splat = document.createElement('div');
             splat.className = 'ink-splat';
-            splat.style.left = (x - 40) + 'px';
-            splat.style.top = (y - 40) + 'px';
+            splat.style.left = (x - 30) + 'px';
+            splat.style.top = (y - 30) + 'px';
             document.body.appendChild(splat);
-            setTimeout(() => splat.remove(), 1000);
+            setTimeout(() => splat.remove(), 1200);
         }
 
         function showQuote() {
@@ -305,28 +294,25 @@
                 span.className = 'type-char';
                 if (Math.random() > 0.3) span.classList.add('inked');
                 span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.animationDelay = (i * 0.08) + 's';
+                span.style.animationDelay = (i * 0.1) + 's';
                 textEl.appendChild(span);
 
-                // 随机添加压印效果
                 setTimeout(() => {
                     span.classList.add('pressed');
-                    // 偶尔产生墨点
                     if (Math.random() > 0.85) {
                         const rect = span.getBoundingClientRect();
                         createInkSplat(rect.left + rect.width/2, rect.top + rect.height/2);
                     }
-                }, i * 80 + 400);
+                }, i * 100 + 500);
             });
 
-            // 更新页码
             document.getElementById('pageNum').textContent = String(currentIndex + 1).padStart(3, '0');
 
             setTimeout(() => {
                 document.getElementById('author').textContent = quote.author;
                 document.getElementById('book').textContent = quote.book;
                 infoEl.classList.add('show');
-            }, chars.length * 80 + 600);
+            }, chars.length * 100 + 800);
         }
 
         function nextQuote() {
@@ -339,12 +325,28 @@
             showQuote();
         }
 
+        function startAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(nextQuote, 8000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+        }
+
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextQuote();
-            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === 'ArrowRight') { nextQuote(); stopAutoPlay(); }
+            if (e.key === 'ArrowLeft') { prevQuote(); stopAutoPlay(); }
         });
 
+        document.addEventListener('mouseenter', stopAutoPlay, true);
+        document.addEventListener('mouseleave', startAutoPlay, true);
+
         showQuote();
+        startAutoPlay();
     </script>
 </body>
 </html>

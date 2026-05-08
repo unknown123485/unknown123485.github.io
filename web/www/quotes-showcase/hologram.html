@@ -24,13 +24,13 @@
             background: repeating-linear-gradient(
                 0deg,
                 transparent,
-                transparent 3px,
-                rgba(0, 255, 200, 0.02) 3px,
-                rgba(0, 255, 200, 0.02) 6px
+                transparent 4px,
+                rgba(0, 255, 200, 0.015) 4px,
+                rgba(0, 255, 200, 0.015) 8px
             );
             pointer-events: none;
             z-index: 5;
-            animation: scanMove 8s linear infinite;
+            animation: scanMove 10s linear infinite;
         }
         @keyframes scanMove {
             0% { background-position: 0 0; }
@@ -40,16 +40,17 @@
         .noise {
             position: fixed;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 6;
-            opacity: 0.4;
-            animation: noiseShift 0.2s steps(3) infinite;
+            opacity: 0.5;
+            animation: noiseShift 0.15s steps(4) infinite;
         }
         @keyframes noiseShift {
             0% { transform: translate(0, 0); }
-            33% { transform: translate(-1px, 1px); }
-            66% { transform: translate(1px, -1px); }
+            25% { transform: translate(-2px, 1px); }
+            50% { transform: translate(1px, -2px); }
+            75% { transform: translate(-1px, 2px); }
             100% { transform: translate(0, 0); }
         }
         /* 容器 */
@@ -62,28 +63,24 @@
         }
         /* 全息框架 */
         .hologram-frame {
-            border: 1px solid rgba(0, 255, 200, 0.15);
+            border: 1px solid rgba(0, 255, 200, 0.12);
             border-radius: 4px;
             padding: 50px;
             position: relative;
-            background: rgba(0, 255, 200, 0.01);
+            background: rgba(0, 255, 200, 0.005);
             box-shadow:
-                0 0 60px rgba(0, 255, 200, 0.05),
-                inset 0 0 60px rgba(0, 255, 200, 0.02);
+                0 0 80px rgba(0, 255, 200, 0.04),
+                inset 0 0 80px rgba(0, 255, 200, 0.015);
             animation: framePulse 4s ease-in-out infinite;
         }
         @keyframes framePulse {
             0%, 100% {
-                box-shadow:
-                    0 0 60px rgba(0, 255, 200, 0.05),
-                    inset 0 0 60px rgba(0, 255, 200, 0.02);
-                border-color: rgba(0, 255, 200, 0.15);
+                box-shadow: 0 0 80px rgba(0, 255, 200, 0.04), inset 0 0 80px rgba(0, 255, 200, 0.015);
+                border-color: rgba(0, 255, 200, 0.12);
             }
             50% {
-                box-shadow:
-                    0 0 80px rgba(0, 255, 200, 0.08),
-                    inset 0 0 80px rgba(0, 255, 200, 0.03);
-                border-color: rgba(0, 255, 200, 0.2);
+                box-shadow: 0 0 100px rgba(0, 255, 200, 0.07), inset 0 0 100px rgba(0, 255, 200, 0.025);
+                border-color: rgba(0, 255, 200, 0.18);
             }
         }
         /* 角标 */
@@ -91,9 +88,9 @@
         .hologram-frame::after {
             content: '';
             position: absolute;
-            width: 15px;
-            height: 15px;
-            border: 2px solid rgba(0, 255, 200, 0.3);
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(0, 255, 200, 0.25);
         }
         .hologram-frame::before {
             top: -2px;
@@ -109,9 +106,9 @@
         }
         .corner {
             position: absolute;
-            width: 15px;
-            height: 15px;
-            border: 2px solid rgba(0, 255, 200, 0.3);
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(0, 255, 200, 0.25);
         }
         .corner.tr {
             top: -2px;
@@ -125,7 +122,7 @@
             border-right: none;
             border-top: none;
         }
-        /* 文字 */
+        /* 文字 - 色散效果 */
         .quote-text {
             font-size: 2rem;
             line-height: 1.8;
@@ -143,9 +140,10 @@
             position: relative;
             animation: hologramFlicker 3s ease-in-out infinite;
         }
-        .quote-text .char:nth-child(2n) { animation-delay: 0.2s; }
-        .quote-text .char:nth-child(3n) { animation-delay: 0.5s; }
-        .quote-text .char:nth-child(5n) { animation-delay: 0.8s; }
+        .quote-text .char:nth-child(2n) { animation-delay: 0.15s; }
+        .quote-text .char:nth-child(3n) { animation-delay: 0.3s; }
+        .quote-text .char:nth-child(5n) { animation-delay: 0.6s; }
+        .quote-text .char:nth-child(7n) { animation-delay: 0.9s; }
 
         @keyframes hologramFlicker {
             0%, 100% {
@@ -156,17 +154,17 @@
                     0 0 16px rgba(0, 255, 200, 0.2);
             }
             50% {
-                opacity: 0.9;
+                opacity: 0.92;
                 text-shadow:
                     0 0 4px rgba(0, 255, 200, 0.9),
                     0 0 12px rgba(0, 255, 200, 0.5),
                     0 0 24px rgba(0, 255, 200, 0.3);
             }
-            92% { opacity: 1; }
-            93% { opacity: 0.3; }
-            94% { opacity: 1; }
-            96% { opacity: 0.5; }
-            97% { opacity: 1; }
+            93% { opacity: 1; }
+            94% { opacity: 0.2; }
+            95% { opacity: 1; }
+            97% { opacity: 0.4; }
+            98% { opacity: 1; }
         }
         /* 故障效果 */
         .glitch-text {
@@ -184,35 +182,35 @@
         }
         .glitch-text.glitching::before {
             color: #ff0040;
-            opacity: 0.6;
+            opacity: 0.5;
             animation: glitch-1 0.3s ease forwards;
             clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
         }
         .glitch-text.glitching::after {
             color: #00ffaa;
-            opacity: 0.6;
+            opacity: 0.5;
             animation: glitch-2 0.3s ease forwards;
             clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
         }
         @keyframes glitch-1 {
-            0% { transform: translateX(0); opacity: 0.6; }
-            20% { transform: translateX(-3px); }
-            40% { transform: translateX(3px); }
+            0% { transform: translateX(0); opacity: 0.5; }
+            20% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
             60% { transform: translateX(-2px); }
             80% { transform: translateX(2px); }
             100% { transform: translateX(0); opacity: 0; }
         }
         @keyframes glitch-2 {
-            0% { transform: translateX(0); opacity: 0.6; }
-            20% { transform: translateX(3px); }
-            40% { transform: translateX(-3px); }
+            0% { transform: translateX(0); opacity: 0.5; }
+            20% { transform: translateX(4px); }
+            40% { transform: translateX(-4px); }
             60% { transform: translateX(2px); }
             80% { transform: translateX(-2px); }
             100% { transform: translateX(0); opacity: 0; }
         }
         .quote-info {
             margin-top: 30px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #508070;
             letter-spacing: 0.15em;
             opacity: 0;
@@ -227,8 +225,8 @@
             right: 30px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 0.65rem;
-            color: rgba(0, 255, 200, 0.15);
+            font-size: 0.6rem;
+            color: rgba(0, 255, 200, 0.12);
             writing-mode: vertical-rl;
             font-family: monospace;
             z-index: 5;
@@ -242,20 +240,20 @@
             transform: translateX(-50%);
             width: 300px;
             height: 80px;
-            background: radial-gradient(ellipse, rgba(0, 255, 200, 0.1) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(0, 255, 200, 0.08) 0%, transparent 70%);
             filter: blur(30px);
             z-index: 1;
             animation: basePulse 3s ease-in-out infinite;
         }
         @keyframes basePulse {
-            0%, 100% { opacity: 0.6; }
+            0%, 100% { opacity: 0.5; }
             50% { opacity: 1; }
         }
         .back-link {
             position: fixed;
             top: 30px;
             left: 30px;
-            color: rgba(0, 255, 200, 0.3);
+            color: rgba(0, 255, 200, 0.25);
             text-decoration: none;
             font-size: 0.9rem;
             z-index: 100;
@@ -270,13 +268,13 @@
             display: flex;
             gap: 15px;
             z-index: 100;
-            opacity: 0.5;
+            opacity: 0.4;
             transition: opacity 0.3s;
         }
         .controls:hover { opacity: 1; }
         .btn {
-            background: rgba(0, 255, 200, 0.05);
-            border: 1px solid rgba(0, 255, 200, 0.15);
+            background: rgba(0, 255, 200, 0.04);
+            border: 1px solid rgba(0, 255, 200, 0.12);
             color: #508070;
             padding: 10px 24px;
             border-radius: 30px;
@@ -286,8 +284,8 @@
             letter-spacing: 0.05em;
         }
         .btn:hover {
-            background: rgba(0, 255, 200, 0.1);
-            border-color: rgba(0, 255, 200, 0.3);
+            background: rgba(0, 255, 200, 0.08);
+            border-color: rgba(0, 255, 200, 0.25);
             color: #a0f0e0;
         }
     </style>
@@ -327,6 +325,7 @@
         ];
 
         let currentIndex = 0;
+        let autoPlayInterval = null;
 
         function generateDataStream() {
             const stream = document.getElementById('dataStream');
@@ -338,7 +337,7 @@
             stream.textContent = text;
         }
 
-        setInterval(generateDataStream, 150);
+        setInterval(generateDataStream, 120);
 
         function showQuote() {
             const quote = quotes[currentIndex];
@@ -380,12 +379,28 @@
             showQuote();
         }
 
+        function startAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(nextQuote, 6000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+        }
+
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextQuote();
-            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === 'ArrowRight') { nextQuote(); stopAutoPlay(); }
+            if (e.key === 'ArrowLeft') { prevQuote(); stopAutoPlay(); }
         });
 
+        document.addEventListener('mouseenter', stopAutoPlay, true);
+        document.addEventListener('mouseleave', startAutoPlay, true);
+
         showQuote();
+        startAutoPlay();
     </script>
 </body>
 </html>

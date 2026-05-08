@@ -14,32 +14,27 @@
             font-family: 'Noto Serif SC', serif;
             position: relative;
         }
-        /* 星空背景 */
-        .starfield {
+        /* 星空背景 - 多层星星 */
+        .stars-bg {
             position: fixed;
             inset: 0;
-            background: radial-gradient(ellipse at center, #1a1a2e 0%, #000 100%);
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
             z-index: 0;
         }
         .stars {
             position: fixed;
             inset: 0;
-            background-image:
-                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
-                radial-gradient(1px 1px at 230px 80px, #fff, transparent),
-                radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
-                radial-gradient(1px 1px at 370px 60px, #fff, transparent),
-                radial-gradient(2px 2px at 450px 100px, rgba(255,255,255,0.8), transparent);
-            background-size: 500px 200px;
-            animation: twinkle 4s ease-in-out infinite alternate;
             z-index: 1;
         }
-        @keyframes twinkle {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: starTwinkle ease-in-out infinite alternate;
+        }
+        @keyframes starTwinkle {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
         }
         /* 3D透视容器 */
         .crawl-container {
@@ -50,47 +45,71 @@
             height: 100%;
             display: flex;
             justify-content: center;
-            perspective: 600px;
+            perspective: 400px;
             overflow: hidden;
             z-index: 2;
         }
         .crawl-content {
-            width: 70%;
-            max-width: 700px;
+            width: 80%;
+            max-width: 800px;
             transform-origin: 50% 100%;
-            transform: rotateX(55deg) translateY(100vh);
-            animation: crawl 40s linear infinite;
+            transform: rotateX(60deg) translateY(100vh);
+            animation: crawl 50s linear infinite;
         }
         @keyframes crawl {
-            0% { transform: rotateX(55deg) translateY(100vh); opacity: 1; }
+            0% { transform: rotateX(60deg) translateY(80vh); opacity: 1; }
             95% { opacity: 1; }
-            100% { transform: rotateX(55deg) translateY(-150vh); opacity: 0; }
+            100% { transform: rotateX(60deg) translateY(-200vh); opacity: 0; }
         }
         .quote-item {
-            text-align: center;
-            margin-bottom: 120px;
+            text-align: justify;
+            text-align-last: center;
+            margin-bottom: 100px;
             opacity: 0.95;
         }
         .quote-text {
-            font-size: 2rem;
+            font-size: 2.2rem;
             line-height: 1.8;
             font-weight: 600;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
         .quote-info {
-            margin-top: 30px;
-            font-size: 1.1rem;
+            margin-top: 25px;
+            font-size: 1rem;
             color: #ffed4a;
+            text-align: center;
         }
         .book-name {
             font-style: italic;
             opacity: 0.8;
         }
+        /* 底部渐隐遮罩 */
+        .fade-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40vh;
+            background: linear-gradient(to top, #000 0%, transparent 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+        /* 顶部暗角 */
+        .fade-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15vh;
+            background: linear-gradient(to bottom, #000 0%, transparent 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
         .back-link {
             position: fixed;
             top: 30px;
             left: 30px;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.4);
             text-decoration: none;
             font-size: 0.9rem;
             z-index: 100;
@@ -105,13 +124,13 @@
             display: flex;
             gap: 15px;
             z-index: 100;
-            opacity: 0.4;
+            opacity: 0.3;
             transition: opacity 0.3s;
         }
         .controls:hover { opacity: 1; }
         .btn {
             background: rgba(255,215,0,0.1);
-            border: 1px solid rgba(255,215,0,0.3);
+            border: 1px solid rgba(255,215,0,0.2);
             color: #ffd700;
             padding: 8px 20px;
             border-radius: 20px;
@@ -123,22 +142,12 @@
             background: rgba(255,215,0,0.2);
             transform: scale(1.05);
         }
-        /* 底部渐隐遮罩 */
-        .fade-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 30vh;
-            background: linear-gradient(to top, #000 0%, transparent 100%);
-            z-index: 3;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
-    <div class="starfield"></div>
-    <div class="stars"></div>
+    <div class="stars-bg"></div>
+    <div class="stars" id="stars"></div>
+    <div class="fade-top"></div>
     <div class="fade-bottom"></div>
     <a href="index.html" class="back-link">&larr; 返回目录</a>
 
@@ -164,20 +173,36 @@
             { text: "时间是一把筛子，最终会淘去一切沉渣。", author: "雨果", book: "悲惨世界" }
         ];
 
-        let animationDuration = 40;
+        let animationDuration = 50;
         let isPaused = false;
+
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 2 + 0.5;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (1 + Math.random() * 2) + 's';
+                container.appendChild(star);
+            }
+        }
 
         function renderQuotes() {
             const container = document.getElementById('crawlContent');
             let html = '';
             // 重复多次以确保持续滚动
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 6; i++) {
                 quotes.forEach(quote => {
                     html += `
                         <div class="quote-item">
                             <div class="quote-text">${quote.text}</div>
                             <div class="quote-info">
-                                ${quote.author} &middot; <span class="book-name">${quote.book}</span>
+                                —— ${quote.author} &middot; <span class="book-name">《${quote.book}》</span>
                             </div>
                         </div>
                     `;
@@ -187,22 +212,20 @@
         }
 
         function speedUp() {
-            animationDuration = Math.max(10, animationDuration - 5);
+            animationDuration = Math.max(15, animationDuration - 5);
             updateSpeed();
         }
 
         function slowDown() {
-            animationDuration = Math.min(80, animationDuration + 5);
+            animationDuration = Math.min(100, animationDuration + 5);
             updateSpeed();
         }
 
         function updateSpeed() {
             const content = document.querySelector('.crawl-content');
             if (content) {
-                content.style.animationDuration = animationDuration + 's';
-                // 重置动画以应用新速度
                 content.style.animation = 'none';
-                content.offsetHeight; // 触发重排
+                content.offsetHeight;
                 content.style.animation = `crawl ${animationDuration}s linear infinite`;
             }
         }
@@ -210,15 +233,10 @@
         function togglePause() {
             const content = document.querySelector('.crawl-content');
             if (!content) return;
-            if (isPaused) {
-                content.style.animationPlayState = 'running';
-            } else {
-                content.style.animationPlayState = 'paused';
-            }
+            content.style.animationPlayState = isPaused ? 'running' : 'paused';
             isPaused = !isPaused;
         }
 
-        // 键盘控制
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowUp') speedUp();
             if (e.key === 'ArrowDown') slowDown();
@@ -228,6 +246,7 @@
             }
         });
 
+        createStars();
         renderQuotes();
     </script>
 </body>
