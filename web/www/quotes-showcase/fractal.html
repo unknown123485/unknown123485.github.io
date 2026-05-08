@@ -7,13 +7,13 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #050508;
+            background: #0a0a10;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Georgia', serif;
             overflow: hidden;
             position: relative;
         }
@@ -25,32 +25,33 @@
         .container {
             text-align: center;
             padding: 50px;
-            max-width: 850px;
+            max-width: 800px;
             position: relative;
             z-index: 10;
-            background: rgba(5, 5, 8, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            background: rgba(10, 10, 16, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
         }
         .quote-text {
-            font-size: 2.2rem;
-            line-height: 1.8;
-            color: #e8e8f0;
-            letter-spacing: 0.08em;
+            font-size: 2rem;
+            line-height: 1.9;
+            color: #e2e8f0;
+            letter-spacing: 0.06em;
+            font-weight: 300;
         }
         .quote-text .char {
             display: inline-block;
             opacity: 0;
-            transform: scale(0.3) translateY(20px);
-            animation: fractalAppear 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform: scale(0.4) translateY(15px);
+            animation: fractalReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        @keyframes fractalAppear {
+        @keyframes fractalReveal {
             0% {
                 opacity: 0;
-                transform: scale(0.3) translateY(20px);
-                filter: blur(10px);
+                transform: scale(0.4) translateY(15px);
+                filter: blur(8px);
             }
             100% {
                 opacity: 1;
@@ -60,11 +61,11 @@
         }
         .quote-info {
             margin-top: 25px;
-            font-size: 0.95rem;
-            color: #808090;
+            font-size: 0.9rem;
+            color: #64748b;
             letter-spacing: 0.15em;
             opacity: 0;
-            transition: opacity 1s ease;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .quote-info.show {
             opacity: 1;
@@ -73,37 +74,39 @@
             position: fixed;
             top: 30px;
             left: 30px;
-            color: rgba(200, 200, 220, 0.4);
+            color: rgba(148, 163, 184, 0.4);
             text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
+            font-size: 0.85rem;
+            transition: color 0.4s;
             z-index: 100;
         }
-        .back-link:hover { color: #e8e8f0; }
+        .back-link:hover { color: #94a3b8; }
         .controls {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 15px;
+            gap: 20px;
             z-index: 100;
         }
         .btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #a0a0b0;
-            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #475569;
+            padding: 10px 28px;
             border-radius: 30px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            letter-spacing: 0.05em;
+            font-size: 0.85rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.08em;
+            font-family: inherit;
         }
         .btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: #e0e0f0;
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #94a3b8;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -155,16 +158,14 @@
             const h = canvas.height;
             const imageData = ctx.createImageData(w, h);
             const data = imageData.data;
-
-            const maxIter = 100;
-            const scale = Math.min(w, h) / 3;
+            const maxIter = 80;
+            const scale = Math.min(w, h) / 2.8;
             const offsetX = -0.5;
 
             for (let px = 0; px < w; px += 2) {
                 for (let py = 0; py < h; py += 2) {
                     const x0 = (px - w / 2) / scale + offsetX;
                     const y0 = (py - h / 2) / scale;
-
                     let x = 0, y = 0;
                     let iter = 0;
 
@@ -178,60 +179,24 @@
                     const idx = (py * w + px) * 4;
                     if (iter < maxIter) {
                         const t = iter / maxIter;
-                        const hue = 200 + t * 100;
-                        const sat = 50 + t * 30;
-                        const light = t * 25;
+                        const hue = 220 + t * 80;
+                        const sat = 40 + t * 30;
+                        const light = 8 + t * 18;
                         const rgb = hslToRgb(hue / 360, sat / 100, light / 100);
                         data[idx] = rgb[0];
                         data[idx + 1] = rgb[1];
                         data[idx + 2] = rgb[2];
                         data[idx + 3] = 255;
                     } else {
-                        data[idx] = 5;
-                        data[idx + 1] = 5;
-                        data[idx + 2] = 8;
+                        data[idx] = 8;
+                        data[idx + 1] = 8;
+                        data[idx + 2] = 12;
                         data[idx + 3] = 255;
                     }
                 }
             }
 
             ctx.putImageData(imageData, 0, 0);
-            drawJuliaOverlay();
-        }
-
-        function drawJuliaOverlay() {
-            const w = canvas.width;
-            const h = canvas.height;
-            const maxIter = 60;
-            const scale = Math.min(w, h) / 2.5;
-            const cx = -0.7, cy = 0.27015;
-
-            ctx.globalCompositeOperation = 'screen';
-
-            for (let px = 0; px < w; px += 3) {
-                for (let py = 0; py < h; py += 3) {
-                    const x0 = (px - w / 2) / scale;
-                    const y0 = (py - h / 2) / scale;
-
-                    let x = x0, y = y0;
-                    let iter = 0;
-
-                    while (x * x + y * y <= 4 && iter < maxIter) {
-                        const xtemp = x * x - y * y + cx;
-                        y = 2 * x * y + cy;
-                        x = xtemp;
-                        iter++;
-                    }
-
-                    if (iter < maxIter) {
-                        const t = iter / maxIter;
-                        ctx.fillStyle = `rgba(${100 + t * 100}, ${50 + t * 80}, ${150 + t * 50}, ${0.03 + t * 0.05})`;
-                        ctx.fillRect(px, py, 3, 3);
-                    }
-                }
-            }
-
-            ctx.globalCompositeOperation = 'source-over';
         }
 
         function hslToRgb(h, s, l) {
@@ -269,7 +234,7 @@
                 const span = document.createElement('span');
                 span.className = 'char';
                 span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.animationDelay = (i * 0.05) + 's';
+                span.style.animationDelay = (i * 0.06) + 's';
                 textEl.appendChild(span);
             });
 
@@ -277,7 +242,7 @@
                 document.getElementById('author').textContent = quote.author;
                 document.getElementById('book').textContent = quote.book;
                 infoEl.classList.add('show');
-            }, chars.length * 50 + 500);
+            }, chars.length * 60 + 600);
         }
 
         function nextQuote() {
@@ -292,7 +257,7 @@
 
         function startAutoPlay() {
             if (autoPlayInterval) clearInterval(autoPlayInterval);
-            autoPlayInterval = setInterval(nextQuote, 7000);
+            autoPlayInterval = setInterval(nextQuote, 8000);
         }
 
         function stopAutoPlay() {

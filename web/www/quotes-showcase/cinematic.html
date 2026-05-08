@@ -7,18 +7,18 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #000;
-            color: #ffd700;
+            background: #050508;
+            color: #e2d5b5;
             min-height: 100vh;
             overflow: hidden;
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Georgia', serif;
             position: relative;
         }
-        /* 星空背景 - 多层星星 */
+        /* 星空背景 */
         .stars-bg {
             position: fixed;
             inset: 0;
-            background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #020205 100%);
             z-index: 0;
         }
         .stars {
@@ -28,13 +28,13 @@
         }
         .star {
             position: absolute;
-            background: #fff;
+            background: #e2d5b5;
             border-radius: 50%;
             animation: starTwinkle ease-in-out infinite alternate;
         }
         @keyframes starTwinkle {
-            0% { opacity: 0.3; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); }
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 0.8; transform: scale(1.1); }
         }
         /* 3D透视容器 */
         .crawl-container {
@@ -45,43 +45,45 @@
             height: 100%;
             display: flex;
             justify-content: center;
-            perspective: 400px;
+            perspective: 500px;
             overflow: hidden;
             z-index: 2;
         }
         .crawl-content {
-            width: 80%;
-            max-width: 800px;
+            width: 75%;
+            max-width: 750px;
             transform-origin: 50% 100%;
-            transform: rotateX(60deg) translateY(100vh);
-            animation: crawl 50s linear infinite;
+            transform: rotateX(55deg) translateY(100vh);
+            animation: crawl 60s linear infinite;
         }
         @keyframes crawl {
-            0% { transform: rotateX(60deg) translateY(80vh); opacity: 1; }
+            0% { transform: rotateX(55deg) translateY(80vh); opacity: 1; }
             95% { opacity: 1; }
-            100% { transform: rotateX(60deg) translateY(-200vh); opacity: 0; }
+            100% { transform: rotateX(55deg) translateY(-250vh); opacity: 0; }
         }
         .quote-item {
             text-align: justify;
             text-align-last: center;
-            margin-bottom: 100px;
-            opacity: 0.95;
+            margin-bottom: 120px;
+            opacity: 0.9;
         }
         .quote-text {
-            font-size: 2.2rem;
-            line-height: 1.8;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            font-size: 2rem;
+            line-height: 1.9;
+            font-weight: 400;
+            text-shadow: 0 0 15px rgba(226, 213, 181, 0.15);
+            letter-spacing: 0.05em;
         }
         .quote-info {
-            margin-top: 25px;
-            font-size: 1rem;
-            color: #ffed4a;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: #c4b896;
             text-align: center;
+            letter-spacing: 0.15em;
         }
         .book-name {
             font-style: italic;
-            opacity: 0.8;
+            opacity: 0.7;
         }
         /* 底部渐隐遮罩 */
         .fade-bottom {
@@ -89,19 +91,18 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 40vh;
-            background: linear-gradient(to top, #000 0%, transparent 100%);
+            height: 45vh;
+            background: linear-gradient(to top, #020205 0%, transparent 100%);
             z-index: 3;
             pointer-events: none;
         }
-        /* 顶部暗角 */
         .fade-top {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 15vh;
-            background: linear-gradient(to bottom, #000 0%, transparent 100%);
+            height: 20vh;
+            background: linear-gradient(to bottom, #020205 0%, transparent 100%);
             z-index: 3;
             pointer-events: none;
         }
@@ -109,38 +110,43 @@
             position: fixed;
             top: 30px;
             left: 30px;
-            color: rgba(255,255,255,0.4);
+            color: rgba(226, 213, 181, 0.3);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             z-index: 100;
-            transition: color 0.3s;
+            transition: color 0.4s;
+            letter-spacing: 0.1em;
         }
-        .back-link:hover { color: #fff; }
+        .back-link:hover { color: #c4b896; }
         .controls {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 15px;
+            gap: 20px;
             z-index: 100;
             opacity: 0.3;
-            transition: opacity 0.3s;
+            transition: opacity 0.4s;
         }
         .controls:hover { opacity: 1; }
         .btn {
-            background: rgba(255,215,0,0.1);
-            border: 1px solid rgba(255,215,0,0.2);
-            color: #ffd700;
-            padding: 8px 20px;
-            border-radius: 20px;
+            background: rgba(226, 213, 181, 0.05);
+            border: 1px solid rgba(226, 213, 181, 0.12);
+            color: #8a7d5f;
+            padding: 8px 22px;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
+            font-size: 0.8rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.08em;
+            font-family: inherit;
         }
         .btn:hover {
-            background: rgba(255,215,0,0.2);
-            transform: scale(1.05);
+            background: rgba(226, 213, 181, 0.1);
+            border-color: rgba(226, 213, 181, 0.25);
+            color: #c4b896;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -173,21 +179,21 @@
             { text: "时间是一把筛子，最终会淘去一切沉渣。", author: "雨果", book: "悲惨世界" }
         ];
 
-        let animationDuration = 50;
+        let animationDuration = 60;
         let isPaused = false;
 
         function createStars() {
             const container = document.getElementById('stars');
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < 200; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                const size = Math.random() * 2 + 0.5;
+                const size = Math.random() * 1.5 + 0.5;
                 star.style.width = size + 'px';
                 star.style.height = size + 'px';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                star.style.animationDuration = (1 + Math.random() * 2) + 's';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
                 container.appendChild(star);
             }
         }
@@ -195,7 +201,6 @@
         function renderQuotes() {
             const container = document.getElementById('crawlContent');
             let html = '';
-            // 重复多次以确保持续滚动
             for (let i = 0; i < 6; i++) {
                 quotes.forEach(quote => {
                     html += `
@@ -212,12 +217,12 @@
         }
 
         function speedUp() {
-            animationDuration = Math.max(15, animationDuration - 5);
+            animationDuration = Math.max(20, animationDuration - 5);
             updateSpeed();
         }
 
         function slowDown() {
-            animationDuration = Math.min(100, animationDuration + 5);
+            animationDuration = Math.min(120, animationDuration + 5);
             updateSpeed();
         }
 
