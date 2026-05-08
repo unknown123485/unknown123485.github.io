@@ -7,160 +7,179 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #c9b99a;
+            background: #1a1a1a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', 'Georgia', serif;
+            font-family: 'Courier New', 'Noto Serif SC', monospace;
             overflow: hidden;
             position: relative;
         }
-        /* 纸张纹理 - 多层叠加 */
-        .paper {
-            position: fixed;
-            inset: 0;
-            background:
-                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
-                linear-gradient(165deg, #d4c5a8 0%, #c9b99a 40%, #d0c0a0 60%, #c5b290 100%);
-            z-index: 0;
+        /* 打字机整体 */
+        .typewriter {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1f1f1f 100%);
+            border-radius: 20px 20px 10px 10px;
+            padding: 40px 30px 80px;
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(255,255,255,0.05);
         }
-        /* 纸张边缘暗角 */
+        /* 打字机顶部面板 */
+        .typewriter-top {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 30px;
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        }
+        /* 纸张 */
+        .paper {
+            background: #f5f0e8;
+            min-height: 300px;
+            padding: 60px 50px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            background-image:
+                url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        /* 纸张上的横线 */
+        .paper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 39px,
+                rgba(200, 190, 170, 0.3) 39px,
+                rgba(200, 190, 170, 0.3) 40px
+            );
+            pointer-events: none;
+        }
+        /* 纸张边缘 */
         .paper::after {
             content: '';
             position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(100, 80, 50, 0.1) 100%);
-            pointer-events: none;
-        }
-        /* 装饰边框 */
-        .frame {
-            position: fixed;
-            inset: 25px;
-            border: 1px solid rgba(92, 74, 48, 0.12);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .frame::before {
-            content: '';
-            position: absolute;
-            inset: 4px;
-            border: 1px solid rgba(92, 74, 48, 0.06);
-        }
-        .container {
-            text-align: center;
-            padding: 60px;
-            max-width: 850px;
-            position: relative;
-            z-index: 10;
-        }
-        /* 活字盘背景 */
-        .type-case {
-            background:
-                linear-gradient(180deg, rgba(160, 145, 120, 0.3) 0%, rgba(150, 135, 110, 0.4) 100%);
-            padding: 50px;
-            position: relative;
-            box-shadow:
-                inset 0 2px 4px rgba(0,0,0,0.1),
-                inset 0 -1px 2px rgba(255,255,255,0.1),
-                0 10px 30px rgba(0,0,0,0.15);
-            border: 1px solid rgba(120, 100, 70, 0.2);
+            left: 60px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 100, 100, 0.2);
         }
         .quote-text {
-            font-size: 2rem;
-            line-height: 2.2;
-            color: #1a0f05;
-            min-height: 200px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 3px;
-            letter-spacing: 0.08em;
-            font-weight: 500;
-        }
-        /* 活字 - 立体效果 */
-        .type-char {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.4rem;
-            height: 2.4rem;
-            font-size: 1.4rem;
-            color: #1a0f05;
-            background: linear-gradient(180deg, #e0d5c8 0%, #d0c5b8 50%, #c8bdb0 100%);
-            border: 1px solid #a89878;
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            line-height: 40px;
+            color: #2a2520;
+            letter-spacing: 0.05em;
+            font-weight: 400;
             position: relative;
-            box-shadow:
-                0 2px 3px rgba(0,0,0,0.15),
-                0 1px 1px rgba(0,0,0,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.3);
+            z-index: 1;
+            min-height: 200px;
+        }
+        .quote-text .char {
+            display: inline-block;
             opacity: 0;
-            transform: translateY(-30px) rotateX(-20deg);
-            animation: typeDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        /* 活字上的墨迹 */
-        .type-char.inked {
-            color: #0a0500;
-            text-shadow: 0 0 1px rgba(0,0,0,0.3);
+        .quote-text .char.typed {
+            opacity: 1;
+            animation: typeIn 0.05s ease;
         }
-        .type-char.inked::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent 60%, rgba(0,0,0,0.05) 100%);
-            pointer-events: none;
+        @keyframes typeIn {
+            0% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
-        @keyframes typeDrop {
-            0% { opacity: 0; transform: translateY(-30px) rotateX(-20deg); }
-            100% { opacity: 1; transform: translateY(0) rotateX(0); }
+        /* 光标 */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: #333;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
         }
-        /* 压印效果 */
-        .type-char.pressed {
-            animation: typeDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, typePress 0.4s ease 0.6s forwards;
-        }
-        @keyframes typePress {
-            0% { transform: scale(1); box-shadow: 0 2px 3px rgba(0,0,0,0.15); }
-            30% { transform: scale(0.96) translateY(2px); box-shadow: 0 0 1px rgba(0,0,0,0.2); }
-            60% { transform: scale(0.98) translateY(1px); }
-            100% { transform: scale(1); box-shadow: 0 2px 3px rgba(0,0,0,0.15); }
-        }
-        /* 压印后的凹陷效果 */
-        .type-char.impressed {
-            box-shadow:
-                inset 0 1px 3px rgba(0,0,0,0.2),
-                0 1px 1px rgba(0,0,0,0.05);
-            transform: translateY(1px);
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
         .quote-info {
-            margin-top: 40px;
+            margin-top: 30px;
             font-size: 0.85rem;
-            color: #5c4a30;
-            letter-spacing: 0.2em;
-            opacity: 0;
-            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 500;
+            color: #8a8078;
+            text-align: right;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 1;
         }
-        .quote-info.show {
-            opacity: 0.7;
+        /* 打字机键盘区域 */
+        .keyboard {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #252525 0%, #1a1a1a 100%);
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 0 20px;
         }
-        .back-link {
-            position: fixed;
-            top: 40px;
-            left: 40px;
-            color: rgba(92, 74, 48, 0.4);
-            text-decoration: none;
-            font-size: 0.75rem;
-            z-index: 100;
-            transition: color 0.5s;
-            letter-spacing: 0.15em;
-            font-weight: 400;
+        .key {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+            border-radius: 4px;
+            border: 1px solid #444;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #888;
+            transition: all 0.1s;
         }
-        .back-link:hover { color: rgba(92, 74, 48, 0.8); }
+        .key.active {
+            transform: translateY(2px);
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+            background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 100%);
+            color: #aaa;
+        }
+        /* 滚筒 */
+        .roller {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            height: 20px;
+            background: linear-gradient(180deg, #444 0%, #333 100%);
+            border-radius: 10px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+        }
+        /* 压纸杆 */
+        .paper-holder {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 8px;
+            background: #555;
+            border-radius: 4px;
+        }
         .controls {
             position: fixed;
-            bottom: 40px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -168,36 +187,75 @@
             z-index: 100;
         }
         .btn {
-            background: rgba(92,74,48,0.08);
-            border: 1px solid rgba(92,74,48,0.2);
-            color: #5c4a30;
-            padding: 10px 24px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.4);
+            padding: 12px 32px;
             border-radius: 0;
             cursor: pointer;
             font-size: 0.75rem;
-            transition: all 0.5s ease;
+            transition: all 0.6s;
+            letter-spacing: 0.15em;
             font-family: inherit;
-            letter-spacing: 0.1em;
-            font-weight: 400;
         }
         .btn:hover {
-            background: rgba(92,74,48,0.15);
-            border-color: rgba(92,74,48,0.4);
+            border-color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.8);
+        }
+        .back-link {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            color: rgba(255,255,255,0.2);
+            text-decoration: none;
+            font-size: 0.75rem;
+            z-index: 100;
+            transition: color 0.5s;
+            letter-spacing: 0.15em;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.6); }
+        .file-input {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 100;
+        }
+        .file-input input { display: none; }
+        .file-input label {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.4);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.5s;
+            letter-spacing: 0.1em;
+            display: inline-block;
+        }
+        .file-input label:hover {
+            border-color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.8);
         }
     </style>
 </head>
 <body>
-    <div class="paper"></div>
-    <div class="frame"></div>
     <a href="index.html" class="back-link">&larr; 返回</a>
+    <div class="file-input">
+        <input type="file" id="fileInput" accept=".txt,.json" onchange="loadFile(event)">
+        <label for="fileInput">选择书籍文件</label>
+    </div>
 
-    <div class="container">
-        <div class="type-case">
+    <div class="typewriter">
+        <div class="typewriter-top"></div>
+        <div class="roller"></div>
+        <div class="paper-holder"></div>
+        <div class="paper">
             <div class="quote-text" id="quoteText"></div>
+            <div class="quote-info" id="quoteInfo">
+                <span id="author"></span> &middot; <span id="book"></span>
+            </div>
         </div>
-        <div class="quote-info" id="quoteInfo">
-            <span id="author"></span> &middot; <span id="book"></span>
-        </div>
+        <div class="keyboard" id="keyboard"></div>
     </div>
 
     <div class="controls">
@@ -206,7 +264,7 @@
     </div>
 
     <script>
-        const quotes = [
+        let quotes = [
             { text: "知识就是力量，但更重要的是运用知识的智慧", author: "培根", book: "新工具" },
             { text: "书籍是人类进步的阶梯", author: "高尔基", book: "论文学" },
             { text: "读一本好书，就是和许多高尚的人谈话", author: "歌德", book: "格言与感想" },
@@ -216,41 +274,73 @@
         ];
 
         let currentIndex = 0;
+        let typingInterval = null;
+
+        // 创建键盘
+        function createKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            const keys = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+            for (let char of keys) {
+                const key = document.createElement('div');
+                key.className = 'key';
+                key.textContent = char;
+                key.id = 'key-' + char;
+                keyboard.appendChild(key);
+            }
+        }
+
+        function typeText(text) {
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            textEl.innerHTML = '';
+            infoEl.style.opacity = '0';
+
+            if (typingInterval) clearInterval(typingInterval);
+
+            let i = 0;
+            const chars = text.split('');
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+
+            typingInterval = setInterval(() => {
+                if (i >= chars.length) {
+                    clearInterval(typingInterval);
+                    textEl.appendChild(cursor);
+                    setTimeout(() => {
+                        infoEl.style.opacity = '1';
+                        infoEl.style.transition = 'opacity 1s';
+                    }, 500);
+                    return;
+                }
+
+                const char = chars[i];
+                const span = document.createElement('span');
+                span.className = 'char typed';
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                textEl.appendChild(span);
+
+                // 高亮对应的键
+                const keyChar = char.toUpperCase();
+                const key = document.getElementById('key-' + keyChar);
+                if (key) {
+                    key.classList.add('active');
+                    setTimeout(() => key.classList.remove('active'), 100);
+                }
+
+                // 打字机声音效果（视觉）
+                const paper = document.querySelector('.paper');
+                paper.style.transform = 'translateY(1px)';
+                setTimeout(() => paper.style.transform = 'translateY(0)', 50);
+
+                i++;
+            }, 100);
+        }
 
         function showQuote() {
             const quote = quotes[currentIndex];
-            const textEl = document.getElementById('quoteText');
-            const infoEl = document.getElementById('quoteInfo');
-
-            textEl.innerHTML = '';
-            infoEl.classList.remove('show');
-
-            const chars = quote.text.split('');
-            chars.forEach((char, i) => {
-                const span = document.createElement('span');
-                span.className = 'type-char';
-                if (char !== ' ') {
-                    span.classList.add('inked');
-                }
-                span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.animationDelay = (i * 0.08) + 's';
-                textEl.appendChild(span);
-
-                // 压印效果
-                setTimeout(() => {
-                    span.classList.add('pressed');
-                    setTimeout(() => {
-                        span.classList.add('impressed');
-                    }, 1000);
-                }, i * 80);
-            });
-
             document.getElementById('author').textContent = quote.author;
             document.getElementById('book').textContent = quote.book;
-
-            setTimeout(() => {
-                infoEl.classList.add('show');
-            }, chars.length * 80 + 500);
+            typeText(quote.text);
         }
 
         function nextQuote() {
@@ -263,11 +353,39 @@
             showQuote();
         }
 
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        quotes = data;
+                        currentIndex = 0;
+                        showQuote();
+                    }
+                } catch (err) {
+                    const lines = e.target.result.split('\n').filter(line => line.trim());
+                    quotes = lines.map(line => ({
+                        text: line,
+                        author: '未知',
+                        book: '自定义'
+                    }));
+                    currentIndex = 0;
+                    showQuote();
+                }
+            };
+            reader.readAsText(file);
+        }
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') nextQuote();
             if (e.key === 'ArrowLeft') prevQuote();
         });
 
+        createKeyboard();
         showQuote();
     </script>
 </body>

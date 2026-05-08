@@ -7,90 +7,75 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #000;
+            background: #050508;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', 'Georgia', serif;
+            font-family: 'Noto Serif SC', 'Georgia', 'Times New Roman', serif;
             overflow: hidden;
             position: relative;
         }
-        /* 深邃背景 - 多层径向渐变营造空间感 */
         .bg {
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(ellipse 80% 50% at 50% 120%, rgba(120, 50, 200, 0.15) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 30% 50%, rgba(200, 50, 150, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 70% 50%, rgba(50, 100, 220, 0.05) 0%, transparent 50%),
-                #000;
+                radial-gradient(ellipse at 50% 120%, rgba(100, 60, 160, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 50%, rgba(160, 60, 120, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 50%, rgba(40, 80, 180, 0.03) 0%, transparent 50%),
+                #050508;
             z-index: 0;
-        }
-        /* 微妙的颗粒纹理 */
-        .bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-            opacity: 0.4;
-            pointer-events: none;
         }
         .container {
             text-align: center;
-            padding: 60px;
-            max-width: 900px;
+            padding: 40px 60px;
+            max-width: 90vw;
+            width: 100%;
             position: relative;
             z-index: 10;
         }
-        /* 装饰引号 - 巨大但极淡 */
         .quote-mark {
-            font-size: 12rem;
-            color: rgba(180, 120, 255, 0.06);
+            font-size: 10rem;
+            color: rgba(160, 120, 220, 0.03);
             line-height: 0.3;
             margin-bottom: 20px;
-            font-family: 'Times New Roman', serif;
+            font-family: Georgia, serif;
             font-weight: 300;
             user-select: none;
         }
-        /* 核心文字 - 真正的霓虹发光效果 */
         .quote-text {
-            font-size: 2.4rem;
-            line-height: 2;
-            color: #fff;
-            letter-spacing: 0.12em;
+            font-size: clamp(1.5rem, 3vw, 2.8rem);
+            line-height: 1.8;
+            color: rgba(230, 220, 255, 0.85);
+            letter-spacing: 0.1em;
             font-weight: 300;
             opacity: 0;
             transform: translateY(30px);
             transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
-            /* 多层发光 - 模拟真实霓虹灯管 */
             text-shadow:
-                0 0 7px rgba(180, 120, 255, 0.8),
-                0 0 15px rgba(180, 120, 255, 0.6),
-                0 0 30px rgba(180, 120, 255, 0.4),
-                0 0 60px rgba(180, 120, 255, 0.2),
-                0 0 100px rgba(180, 120, 255, 0.1);
+                0 0 5px rgba(160, 120, 220, 0.4),
+                0 0 10px rgba(160, 120, 220, 0.2),
+                0 0 20px rgba(160, 120, 220, 0.1);
         }
         .quote-text.show {
             opacity: 1;
             transform: translateY(0);
         }
-        /* 文字闪烁动画 - 模拟霓虹灯管的不稳定 */
         .quote-text.flicker {
-            animation: neonFlicker 4s ease-in-out infinite;
+            animation: neonFlicker 5s ease-in-out infinite;
         }
         @keyframes neonFlicker {
             0%, 100% { opacity: 1; }
-            5% { opacity: 0.95; }
+            5% { opacity: 0.98; }
             10% { opacity: 1; }
-            15% { opacity: 0.9; }
+            15% { opacity: 0.97; }
             20% { opacity: 1; }
-            50% { opacity: 0.98; }
-            52% { opacity: 0.85; }
-            54% { opacity: 0.98; }
+            50% { opacity: 0.99; }
+            52% { opacity: 0.95; }
+            54% { opacity: 0.99; }
             90% { opacity: 1; }
-            92% { opacity: 0.9; }
+            92% { opacity: 0.97; }
             94% { opacity: 1; }
         }
         .quote-text .char {
@@ -102,22 +87,21 @@
         @keyframes charReveal {
             to { opacity: 1; transform: translateY(0); }
         }
-        /* 精致分隔线 - 发光效果 */
         .divider {
             width: 80px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(180, 120, 255, 0.5), transparent);
-            margin: 50px auto 30px;
+            background: linear-gradient(90deg, transparent, rgba(160, 120, 220, 0.3), transparent);
+            margin: 40px auto 25px;
             opacity: 0;
             transition: opacity 2s ease 0.8s;
-            box-shadow: 0 0 10px rgba(180, 120, 255, 0.3);
+            box-shadow: 0 0 8px rgba(160, 120, 220, 0.15);
         }
         .divider.show {
             opacity: 1;
         }
         .quote-info {
             font-size: 0.85rem;
-            color: rgba(180, 160, 220, 0.5);
+            color: rgba(160, 140, 200, 0.4);
             letter-spacing: 0.3em;
             opacity: 0;
             transition: opacity 2s ease 1.2s;
@@ -130,7 +114,7 @@
             position: fixed;
             top: 40px;
             left: 40px;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.15);
             text-decoration: none;
             font-size: 0.75rem;
             transition: all 0.6s;
@@ -139,8 +123,8 @@
             font-weight: 300;
         }
         .back-link:hover {
-            color: rgba(180, 120, 255, 0.8);
-            text-shadow: 0 0 20px rgba(180, 120, 255, 0.5);
+            color: rgba(160, 120, 220, 0.6);
+            text-shadow: 0 0 15px rgba(160, 120, 220, 0.3);
         }
         .controls {
             position: fixed;
@@ -153,8 +137,8 @@
         }
         .btn {
             background: transparent;
-            border: 1px solid rgba(180, 120, 255, 0.15);
-            color: rgba(180, 160, 220, 0.4);
+            border: 1px solid rgba(160, 120, 220, 0.1);
+            color: rgba(160, 140, 200, 0.35);
             padding: 14px 36px;
             border-radius: 0;
             cursor: pointer;
@@ -170,14 +154,14 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(180, 120, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(160, 120, 220, 0.08), transparent);
             transform: translateX(-100%);
             transition: transform 0.6s;
         }
         .btn:hover {
-            border-color: rgba(180, 120, 255, 0.4);
-            color: rgba(180, 160, 220, 0.8);
-            box-shadow: 0 0 30px rgba(180, 120, 255, 0.15);
+            border-color: rgba(160, 120, 220, 0.3);
+            color: rgba(160, 140, 200, 0.7);
+            box-shadow: 0 0 20px rgba(160, 120, 220, 0.1);
         }
         .btn:hover::before {
             transform: translateX(100%);

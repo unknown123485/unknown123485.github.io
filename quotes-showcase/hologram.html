@@ -17,16 +17,16 @@
             overflow: hidden;
             position: relative;
         }
-        /* 扫描线效果 */
+        /* 扫描线 */
         .scan-line {
             position: fixed;
             inset: 0;
             background: repeating-linear-gradient(
                 0deg,
                 transparent,
-                transparent 3px,
-                rgba(0, 255, 200, 0.015) 3px,
-                rgba(0, 255, 200, 0.015) 6px
+                transparent 2px,
+                rgba(0, 255, 200, 0.02) 2px,
+                rgba(0, 255, 200, 0.02) 4px
             );
             pointer-events: none;
             z-index: 5;
@@ -37,11 +37,12 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.3), transparent);
-            animation: scanMove 4s ease-in-out infinite;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.4), transparent);
+            animation: scanMove 3s ease-in-out infinite;
             z-index: 6;
             pointer-events: none;
+            box-shadow: 0 0 20px rgba(0, 255, 200, 0.3);
         }
         @keyframes scanMove {
             0%, 100% { top: 0; opacity: 0; }
@@ -49,29 +50,58 @@
             90% { opacity: 1; }
             100% { top: 100vh; opacity: 0; }
         }
+        /* 全息底座 */
+        .hologram-base {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 100px;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 255, 200, 0.1) 0%, transparent 70%);
+            z-index: 2;
+        }
+        .hologram-base::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 20px;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 255, 200, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
         /* 全息框架 */
         .hologram-frame {
-            border: 1px solid rgba(0, 255, 200, 0.15);
+            border: 1px solid rgba(0, 255, 200, 0.2);
             padding: 60px;
             position: relative;
             background: rgba(0, 255, 200, 0.02);
             box-shadow:
                 0 0 60px rgba(0, 255, 200, 0.05),
                 inset 0 0 60px rgba(0, 255, 200, 0.02);
-            animation: framePulse 4s ease-in-out infinite;
+            animation: framePulse 3s ease-in-out infinite;
+            z-index: 10;
         }
         @keyframes framePulse {
-            0%, 100% { box-shadow: 0 0 60px rgba(0, 255, 200, 0.05), inset 0 0 60px rgba(0, 255, 200, 0.02); }
-            50% { box-shadow: 0 0 80px rgba(0, 255, 200, 0.08), inset 0 0 80px rgba(0, 255, 200, 0.03); }
+            0%, 100% { 
+                box-shadow: 0 0 60px rgba(0, 255, 200, 0.05), inset 0 0 60px rgba(0, 255, 200, 0.02);
+                border-color: rgba(0, 255, 200, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 100px rgba(0, 255, 200, 0.1), inset 0 0 80px rgba(0, 255, 200, 0.05);
+                border-color: rgba(0, 255, 200, 0.3);
+            }
         }
         /* 角落装饰 */
         .hologram-frame::before,
         .hologram-frame::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(0, 255, 200, 0.3);
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(0, 255, 200, 0.4);
         }
         .hologram-frame::before {
             top: -2px;
@@ -87,9 +117,9 @@
         }
         .corner {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(0, 255, 200, 0.3);
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(0, 255, 200, 0.4);
         }
         .corner.tl { top: -2px; right: -2px; border-left: none; border-bottom: none; }
         .corner.br { bottom: -2px; left: -2px; border-right: none; border-top: none; }
@@ -97,43 +127,42 @@
         .glitch {
             position: relative;
         }
-        .glitch::before,
-        .glitch::after {
+        .glitch.active::before,
+        .glitch.active::after {
             content: attr(data-text);
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0;
         }
         .glitch.active::before {
-            animation: glitch1 0.3s ease;
-            color: rgba(255, 0, 100, 0.5);
-            opacity: 0.8;
+            animation: glitch1 0.2s ease;
+            color: rgba(255, 0, 100, 0.6);
+            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
         }
         .glitch.active::after {
-            animation: glitch2 0.3s ease;
-            color: rgba(0, 255, 200, 0.5);
-            opacity: 0.8;
+            animation: glitch2 0.2s ease;
+            color: rgba(0, 255, 200, 0.6);
+            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
         }
         @keyframes glitch1 {
-            0%, 100% { transform: translate(0); opacity: 0; }
-            20% { transform: translate(-3px, 2px); opacity: 0.8; }
-            40% { transform: translate(3px, -2px); opacity: 0.8; }
-            60% { transform: translate(-2px, 1px); opacity: 0.8; }
-            80% { transform: translate(2px, -1px); opacity: 0.8; }
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-5px, 2px); }
+            40% { transform: translate(5px, -2px); }
+            60% { transform: translate(-3px, 1px); }
+            80% { transform: translate(3px, -1px); }
         }
         @keyframes glitch2 {
-            0%, 100% { transform: translate(0); opacity: 0; }
-            20% { transform: translate(3px, -2px); opacity: 0.8; }
-            40% { transform: translate(-3px, 2px); opacity: 0.8; }
-            60% { transform: translate(2px, -1px); opacity: 0.8; }
-            80% { transform: translate(-2px, 1px); opacity: 0.8; }
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(5px, -2px); }
+            40% { transform: translate(-5px, 2px); }
+            60% { transform: translate(3px, -1px); }
+            80% { transform: translate(-3px, 1px); }
         }
         .quote-text {
-            font-size: 1.8rem;
-            line-height: 1.9;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.8;
             color: rgba(0, 255, 200, 0.9);
             letter-spacing: 0.12em;
             position: relative;
@@ -160,11 +189,11 @@
         .divider {
             width: 60px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.4), transparent);
-            margin: 40px auto 25px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.5), transparent);
+            margin: 35px auto 20px;
             opacity: 0;
             transition: opacity 1.5s ease 0.5s;
-            box-shadow: 0 0 10px rgba(0, 255, 200, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 200, 0.3);
         }
         .divider.show {
             opacity: 1;
@@ -183,10 +212,11 @@
         /* 数据装饰 */
         .data-deco {
             position: fixed;
-            font-size: 0.6rem;
-            color: rgba(0, 255, 200, 0.15);
+            font-size: 0.65rem;
+            color: rgba(0, 255, 200, 0.2);
             letter-spacing: 0.1em;
             font-family: 'Courier New', monospace;
+            z-index: 100;
         }
         .data-deco.tl { top: 20px; left: 20px; }
         .data-deco.tr { top: 20px; right: 20px; }
@@ -237,6 +267,7 @@
 <body>
     <div class="scan-line"></div>
     <div class="scan-beam"></div>
+    <div class="hologram-base"></div>
     <a href="index.html" class="back-link">&larr; 返回</a>
 
     <div class="data-deco tl">SYS.HOLOGRAM.v2.7</div>
@@ -299,10 +330,9 @@
 
                 textEl.classList.add('show');
 
-                // 随机触发故障效果
                 setTimeout(() => {
                     textEl.classList.add('active');
-                    setTimeout(() => textEl.classList.remove('active'), 300);
+                    setTimeout(() => textEl.classList.remove('active'), 200);
                 }, 800);
 
                 setTimeout(() => {
@@ -334,7 +364,7 @@
                 textEl.classList.add('active');
                 setTimeout(() => textEl.classList.remove('active'), 200);
             }
-        }, 3000);
+        }, 4000);
 
         showQuote();
     </script>
