@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #0a0a12;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -17,20 +17,11 @@
             overflow: hidden;
             perspective: 2000px;
         }
-        .bg {
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at 30% 50%, rgba(120, 80, 60, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 50%, rgba(60, 80, 120, 0.06) 0%, transparent 50%),
-                #0a0a12;
-            z-index: 0;
-        }
         .scene {
             width: 90vw;
-            max-width: 900px;
-            height: 70vh;
-            max-height: 600px;
+            max-width: 1000px;
+            height: 75vh;
+            max-height: 700px;
             position: relative;
             transform-style: preserve-3d;
             z-index: 10;
@@ -40,84 +31,68 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            display: flex;
-        }
-        .page-wrapper {
-            width: 50%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-        .page-wrapper.right {
-            transform-origin: left center;
-        }
-        .page-wrapper.right.flipped {
-            transform: rotateY(-180deg);
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
         .page {
             position: absolute;
-            width: 100%;
+            width: 50%;
             height: 100%;
-            background: linear-gradient(to right, #e8e0d0 0%, #f5f0e8 5%, #f5f0e8 95%, #e0d8c8 100%);
-            border-radius: 3px 12px 12px 3px;
-            box-shadow:
-                0 0 30px rgba(0,0,0,0.4),
-                inset -3px 0 10px rgba(0,0,0,0.05);
-            padding: 60px 50px;
+            top: 0;
+            background: linear-gradient(to right, #f5f0e8 0%, #f0ebe0 100%);
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            backface-visibility: hidden;
+            padding: 50px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            backface-visibility: hidden;
+            box-shadow: inset -5px 0 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .page.right {
+            left: 50%;
+            transform-origin: left center;
+            background: linear-gradient(to left, #f5f0e8 0%, #f0ebe0 100%);
+            box-shadow: inset 5px 0 15px rgba(0,0,0,0.1);
+        }
+        .page.flipped {
+            transform: rotateY(-180deg);
         }
         .page-back {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to left, #e8e0d0 0%, #f5f0e8 5%, #f5f0e8 95%, #e0d8c8 100%);
-            border-radius: 12px 3px 3px 12px;
-            padding: 60px 50px;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to left, #f0ebe0 0%, #e8e3d8 100%);
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            padding: 50px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            backface-visibility: hidden;
-            transform: rotateY(180deg);
-            box-shadow:
-                0 0 30px rgba(0,0,0,0.4),
-                inset 3px 0 10px rgba(0,0,0,0.05);
-        }
-        .page::before,
-        .page-back::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
-            pointer-events: none;
-            border-radius: inherit;
+            box-shadow: inset 5px 0 15px rgba(0,0,0,0.1);
         }
         .quote-text {
-            font-size: clamp(1.2rem, 2.5vw, 2rem);
+            font-size: clamp(1.1rem, 2.2vw, 1.8rem);
             line-height: 1.9;
             color: #2a2520;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             letter-spacing: 0.05em;
             font-weight: 400;
         }
         .quote-info {
-            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            font-size: clamp(0.75rem, 1.3vw, 0.9rem);
             color: #8a8078;
             text-align: right;
             letter-spacing: 0.1em;
-        }
-        .page-shadow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 15%);
-            pointer-events: none;
-            border-radius: 3px 12px 12px 3px;
         }
         .controls {
             position: fixed;
@@ -130,101 +105,62 @@
         }
         .btn {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.6);
             padding: 12px 32px;
             border-radius: 0;
             cursor: pointer;
-            font-size: 0.75rem;
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            letter-spacing: 0.15em;
+            font-size: 0.8rem;
+            transition: all 0.5s ease;
+            letter-spacing: 0.1em;
             font-family: inherit;
-            font-weight: 300;
         }
         .btn:hover {
-            border-color: rgba(255,255,255,0.3);
-            color: rgba(255,255,255,0.8);
+            border-color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.05);
         }
         .back-link {
             position: fixed;
             top: 40px;
             left: 40px;
-            color: rgba(255,255,255,0.2);
-            text-decoration: none;
-            font-size: 0.75rem;
-            z-index: 100;
-            transition: all 0.6s;
-            letter-spacing: 0.15em;
-            font-weight: 300;
-        }
-        .back-link:hover { color: rgba(255,255,255,0.6); }
-        .spine {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 20px;
-            transform: translateX(-50%);
-            background: linear-gradient(to right, #3a3028, #5a5048, #3a3028);
-            border-radius: 3px;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
-            z-index: 5;
-        }
-        .file-input {
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            z-index: 100;
-        }
-        .file-input input {
-            display: none;
-        }
-        .file-input label {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
             color: rgba(255,255,255,0.4);
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            transition: all 0.6s;
+            text-decoration: none;
+            font-size: 0.8rem;
+            z-index: 100;
+            transition: color 0.5s;
             letter-spacing: 0.1em;
-            display: inline-block;
         }
-        .file-input label:hover {
-            border-color: rgba(255,255,255,0.3);
-            color: rgba(255,255,255,0.8);
+        .back-link:hover { color: rgba(255,255,255,0.8); }
+        .page-num {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.7rem;
+            color: #aaa;
         }
+        .page-num.left { left: 30px; }
+        .page-num.right { right: 30px; }
     </style>
 </head>
 <body>
-    <div class="bg"></div>
     <a href="index.html" class="back-link">&larr; 返回</a>
-    <div class="file-input">
-        <input type="file" id="fileInput" accept=".txt,.json" onchange="loadFile(event)">
-        <label for="fileInput">选择书籍文件</label>
-    </div>
 
     <div class="scene">
-        <div class="spine"></div>
         <div class="book" id="book">
-            <div class="page-wrapper left">
-                <div class="page" id="leftPage">
-                    <div class="quote-text" id="leftText"></div>
-                    <div class="quote-info">
-                        <span id="leftAuthor"></span> &middot; <span id="leftBook"></span>
-                    </div>
-                    <div class="page-shadow"></div>
+            <div class="page" id="leftPage">
+                <div class="quote-text" id="leftText"></div>
+                <div class="quote-info">
+                    <span id="leftAuthor"></span> &middot; <span id="leftBook"></span>
                 </div>
+                <div class="page-num left" id="leftNum"></div>
             </div>
-            <div class="page-wrapper right" id="rightWrapper">
-                <div class="page" id="rightPage">
-                    <div class="quote-text" id="rightText"></div>
-                    <div class="quote-info">
-                        <span id="rightAuthor"></span> &middot; <span id="rightBook"></span>
-                    </div>
-                    <div class="page-shadow"></div>
+            <div class="page right" id="rightPage">
+                <div class="quote-text" id="rightText"></div>
+                <div class="quote-info">
+                    <span id="rightAuthor"></span> &middot; <span id="rightBook"></span>
                 </div>
-                <div class="page-back" id="rightBack">
+                <div class="page-num right" id="rightNum"></div>
+                <div class="page-back">
                     <div class="quote-text" id="backText"></div>
                     <div class="quote-info">
                         <span id="backAuthor"></span> &middot; <span id="backBook"></span>
@@ -241,60 +177,65 @@
     </div>
 
     <script>
-        let quotes = [
+        const quotes = [
             { text: "人是一根有思想的芦苇", author: "帕斯卡", book: "思想录" },
             { text: "我思故我在", author: "笛卡尔", book: "第一哲学沉思集" },
             { text: "未经审视的人生不值得过", author: "苏格拉底", book: "申辩篇" },
             { text: "世界上只有一种真正的英雄主义", author: "罗曼·罗兰", book: "米开朗基罗传" },
             { text: "人生而自由，却无往不在枷锁之中", author: "卢梭", book: "社会契约论" },
-            { text: "存在即合理", author: "黑格尔", book: "法哲学原理" }
+            { text: "存在即合理", author: "黑格尔", book: "法哲学原理" },
+            { text: "知识就是力量", author: "培根", book: "新工具" },
+            { text: "我唯一知道的就是我一无所知", author: "苏格拉底", book: "申辩篇" }
         ];
 
-        let currentIndex = 0;
+        let currentPage = 0;
         let isFlipped = false;
 
         function showPages() {
-            const leftQuote = quotes[currentIndex * 2] || quotes[0];
-            const rightQuote = quotes[currentIndex * 2 + 1] || quotes[1];
+            const leftIdx = currentPage * 2;
+            const rightIdx = leftIdx + 1;
+
+            const leftQuote = quotes[leftIdx] || { text: "", author: "", book: "" };
+            const rightQuote = quotes[rightIdx] || { text: "", author: "", book: "" };
 
             document.getElementById('leftText').textContent = leftQuote.text;
             document.getElementById('leftAuthor').textContent = leftQuote.author;
             document.getElementById('leftBook').textContent = leftQuote.book;
+            document.getElementById('leftNum').textContent = leftIdx + 1;
 
             document.getElementById('rightText').textContent = rightQuote.text;
             document.getElementById('rightAuthor').textContent = rightQuote.author;
             document.getElementById('rightBook').textContent = rightQuote.book;
-        }
+            document.getElementById('rightNum').textContent = rightIdx + 1;
 
-        function showBackPage() {
-            const nextIndex = (currentIndex + 1) * 2;
-            const backQuote = quotes[nextIndex] || quotes[0];
-            document.getElementById('backText').textContent = backQuote.text;
-            document.getElementById('backAuthor').textContent = backQuote.author;
-            document.getElementById('backBook').textContent = backQuote.book;
+            // 预加载背面内容（下一页）
+            const nextLeftIdx = (currentPage + 1) * 2;
+            const nextLeftQuote = quotes[nextLeftIdx] || { text: "", author: "", book: "" };
+            document.getElementById('backText').textContent = nextLeftQuote.text;
+            document.getElementById('backAuthor').textContent = nextLeftQuote.author;
+            document.getElementById('backBook').textContent = nextLeftQuote.book;
         }
 
         function flipPage() {
-            const wrapper = document.getElementById('rightWrapper');
+            const rightPage = document.getElementById('rightPage');
             if (!isFlipped) {
-                showBackPage();
-                wrapper.classList.add('flipped');
+                rightPage.classList.add('flipped');
                 isFlipped = true;
             } else {
-                currentIndex++;
-                if (currentIndex * 2 >= quotes.length) currentIndex = 0;
+                currentPage++;
+                if (currentPage * 2 >= quotes.length) currentPage = 0;
                 showPages();
-                wrapper.classList.remove('flipped');
+                rightPage.classList.remove('flipped');
                 isFlipped = false;
             }
         }
 
         function nextPage() {
             if (isFlipped) {
-                currentIndex++;
-                if (currentIndex * 2 >= quotes.length) currentIndex = 0;
+                currentPage++;
+                if (currentPage * 2 >= quotes.length) currentPage = 0;
                 showPages();
-                document.getElementById('rightWrapper').classList.remove('flipped');
+                document.getElementById('rightPage').classList.remove('flipped');
                 isFlipped = false;
             } else {
                 flipPage();
@@ -302,41 +243,11 @@
         }
 
         function prevPage() {
-            currentIndex--;
-            if (currentIndex < 0) currentIndex = Math.floor((quotes.length - 1) / 2);
+            currentPage--;
+            if (currentPage < 0) currentPage = Math.floor((quotes.length - 1) / 2);
             showPages();
-            document.getElementById('rightWrapper').classList.remove('flipped');
+            document.getElementById('rightPage').classList.remove('flipped');
             isFlipped = false;
-        }
-
-        function loadFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (Array.isArray(data)) {
-                        quotes = data;
-                        currentIndex = 0;
-                        isFlipped = false;
-                        showPages();
-                    }
-                } catch (err) {
-                    // 如果是纯文本，按行分割
-                    const lines = e.target.result.split('\n').filter(line => line.trim());
-                    quotes = lines.map((line, i) => ({
-                        text: line,
-                        author: '未知',
-                        book: '自定义'
-                    }));
-                    currentIndex = 0;
-                    isFlipped = false;
-                    showPages();
-                }
-            };
-            reader.readAsText(file);
         }
 
         document.addEventListener('keydown', (e) => {

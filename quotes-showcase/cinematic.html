@@ -34,11 +34,20 @@
             z-index: 2;
         }
         .crawl-content {
-            width: 80%;
-            max-width: 800px;
+            width: 90%;
+            max-width: 1200px;
             transform-origin: 50% 100%;
             transform: rotateX(60deg) translateY(100vh);
             animation: crawl 60s linear infinite;
+        }
+        @media (min-width: 1920px) {
+            .crawl-content { max-width: 1400px; }
+        }
+        @media (min-width: 2560px) {
+            .crawl-content { max-width: 1600px; }
+        }
+        @media (max-width: 768px) {
+            .crawl-content { width: 95%; max-width: 600px; }
         }
         @keyframes crawl {
             0% { transform: rotateX(60deg) translateY(100vh); opacity: 1; }

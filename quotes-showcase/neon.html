@@ -7,105 +7,158 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #050508;
+            background: #0a0a0f;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', 'Georgia', 'Times New Roman', serif;
+            font-family: 'Noto Serif SC', 'Georgia', serif;
             overflow: hidden;
             position: relative;
         }
-        .bg {
+        /* 背景霓虹光晕 */
+        .neon-bg {
             position: fixed;
             inset: 0;
-            background:
-                radial-gradient(ellipse at 50% 120%, rgba(100, 60, 160, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 30% 50%, rgba(160, 60, 120, 0.03) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 50%, rgba(40, 80, 180, 0.03) 0%, transparent 50%),
-                #050508;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(128, 0, 255, 0.1) 0%, transparent 50%),
+                #0a0a0f;
             z-index: 0;
         }
-        .container {
-            text-align: center;
-            padding: 40px 60px;
-            max-width: 90vw;
-            width: 100%;
+        /* 霓虹灯管边框效果 */
+        .neon-container {
             position: relative;
+            padding: 80px 100px;
             z-index: 10;
         }
-        .quote-mark {
-            font-size: 10rem;
-            color: rgba(160, 120, 220, 0.03);
-            line-height: 0.3;
-            margin-bottom: 20px;
-            font-family: Georgia, serif;
-            font-weight: 300;
-            user-select: none;
+        .neon-border {
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(255, 0, 128, 0.3);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 128, 0.2),
+                inset 0 0 20px rgba(255, 0, 128, 0.1);
+            animation: borderPulse 3s ease-in-out infinite;
         }
+        @keyframes borderPulse {
+            0%, 100% { 
+                border-color: rgba(255, 0, 128, 0.3);
+                box-shadow: 0 0 20px rgba(255, 0, 128, 0.2), inset 0 0 20px rgba(255, 0, 128, 0.1);
+            }
+            33% { 
+                border-color: rgba(0, 255, 255, 0.3);
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            }
+            66% { 
+                border-color: rgba(128, 0, 255, 0.3);
+                box-shadow: 0 0 20px rgba(128, 0, 255, 0.2), inset 0 0 20px rgba(128, 0, 255, 0.1);
+            }
+        }
+        /* 角落霓虹灯 */
+        .neon-corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            z-index: 11;
+        }
+        .neon-corner::before,
+        .neon-corner::after {
+            content: '';
+            position: absolute;
+            background: #ff0080;
+            box-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080, 0 0 30px #ff0080;
+            animation: cornerColor 3s ease-in-out infinite;
+        }
+        @keyframes cornerColor {
+            0%, 100% { background: #ff0080; box-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080; }
+            33% { background: #00ffff; box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+            66% { background: #8000ff; box-shadow: 0 0 10px #8000ff, 0 0 20px #8000ff; }
+        }
+        .neon-corner.tl { top: -5px; left: -5px; }
+        .neon-corner.tl::before { top: 0; left: 0; width: 30px; height: 3px; }
+        .neon-corner.tl::after { top: 0; left: 0; width: 3px; height: 30px; }
+        .neon-corner.tr { top: -5px; right: -5px; }
+        .neon-corner.tr::before { top: 0; right: 0; width: 30px; height: 3px; }
+        .neon-corner.tr::after { top: 0; right: 0; width: 3px; height: 30px; }
+        .neon-corner.bl { bottom: -5px; left: -5px; }
+        .neon-corner.bl::before { bottom: 0; left: 0; width: 30px; height: 3px; }
+        .neon-corner.bl::after { bottom: 0; left: 0; width: 3px; height: 30px; }
+        .neon-corner.br { bottom: -5px; right: -5px; }
+        .neon-corner.br::before { bottom: 0; right: 0; width: 30px; height: 3px; }
+        .neon-corner.br::after { bottom: 0; right: 0; width: 3px; height: 30px; }
+        
         .quote-text {
-            font-size: clamp(1.5rem, 3vw, 2.8rem);
-            line-height: 1.8;
-            color: rgba(230, 220, 255, 0.85);
-            letter-spacing: 0.1em;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            line-height: 1.6;
+            color: #fff;
+            letter-spacing: 0.15em;
             font-weight: 300;
+            text-align: center;
             opacity: 0;
             transform: translateY(30px);
             transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            /* 多层霓虹发光 */
             text-shadow:
-                0 0 5px rgba(160, 120, 220, 0.4),
-                0 0 10px rgba(160, 120, 220, 0.2),
-                0 0 20px rgba(160, 120, 220, 0.1);
+                0 0 5px rgba(255, 0, 128, 0.8),
+                0 0 10px rgba(255, 0, 128, 0.6),
+                0 0 20px rgba(255, 0, 128, 0.4),
+                0 0 40px rgba(255, 0, 128, 0.2),
+                0 0 80px rgba(255, 0, 128, 0.1);
+            animation: neonColor 3s ease-in-out infinite;
+        }
+        @keyframes neonColor {
+            0%, 100% { 
+                text-shadow: 0 0 5px rgba(255, 0, 128, 0.8), 0 0 10px rgba(255, 0, 128, 0.6), 0 0 20px rgba(255, 0, 128, 0.4), 0 0 40px rgba(255, 0, 128, 0.2);
+            }
+            33% { 
+                text-shadow: 0 0 5px rgba(0, 255, 255, 0.8), 0 0 10px rgba(0, 255, 255, 0.6), 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.2);
+            }
+            66% { 
+                text-shadow: 0 0 5px rgba(128, 0, 255, 0.8), 0 0 10px rgba(128, 0, 255, 0.6), 0 0 20px rgba(128, 0, 255, 0.4), 0 0 40px rgba(128, 0, 255, 0.2);
+            }
         }
         .quote-text.show {
             opacity: 1;
             transform: translateY(0);
         }
-        .quote-text.flicker {
-            animation: neonFlicker 5s ease-in-out infinite;
-        }
-        @keyframes neonFlicker {
-            0%, 100% { opacity: 1; }
-            5% { opacity: 0.98; }
-            10% { opacity: 1; }
-            15% { opacity: 0.97; }
-            20% { opacity: 1; }
-            50% { opacity: 0.99; }
-            52% { opacity: 0.95; }
-            54% { opacity: 0.99; }
-            90% { opacity: 1; }
-            92% { opacity: 0.97; }
-            94% { opacity: 1; }
-        }
         .quote-text .char {
             display: inline-block;
             opacity: 0;
-            transform: translateY(15px);
-            animation: charReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: charReveal 0.6s ease forwards;
         }
         @keyframes charReveal {
-            to { opacity: 1; transform: translateY(0); }
+            to { opacity: 1; }
         }
         .divider {
-            width: 80px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(160, 120, 220, 0.3), transparent);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff0080, transparent);
             margin: 40px auto 25px;
             opacity: 0;
-            transition: opacity 2s ease 0.8s;
-            box-shadow: 0 0 8px rgba(160, 120, 220, 0.15);
+            transition: opacity 1.5s ease 0.8s;
+            box-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080;
+            animation: dividerColor 3s ease-in-out infinite;
+        }
+        @keyframes dividerColor {
+            0%, 100% { background: linear-gradient(90deg, transparent, #ff0080, transparent); box-shadow: 0 0 10px #ff0080; }
+            33% { background: linear-gradient(90deg, transparent, #00ffff, transparent); box-shadow: 0 0 10px #00ffff; }
+            66% { background: linear-gradient(90deg, transparent, #8000ff, transparent); box-shadow: 0 0 10px #8000ff; }
         }
         .divider.show {
             opacity: 1;
         }
         .quote-info {
-            font-size: 0.85rem;
-            color: rgba(160, 140, 200, 0.4);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
             letter-spacing: 0.3em;
             opacity: 0;
-            transition: opacity 2s ease 1.2s;
+            transition: opacity 1.5s ease 1.2s;
             font-weight: 300;
+            text-align: center;
         }
         .quote-info.show {
             opacity: 1;
@@ -114,17 +167,16 @@
             position: fixed;
             top: 40px;
             left: 40px;
-            color: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.3);
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             transition: all 0.6s;
             z-index: 100;
             letter-spacing: 0.2em;
-            font-weight: 300;
         }
         .back-link:hover {
-            color: rgba(160, 120, 220, 0.6);
-            text-shadow: 0 0 15px rgba(160, 120, 220, 0.3);
+            color: #ff0080;
+            text-shadow: 0 0 10px #ff0080;
         }
         .controls {
             position: fixed;
@@ -137,43 +189,36 @@
         }
         .btn {
             background: transparent;
-            border: 1px solid rgba(160, 120, 220, 0.1);
-            color: rgba(160, 140, 200, 0.35);
+            border: 1px solid rgba(255, 0, 128, 0.3);
+            color: rgba(255, 255, 255, 0.5);
             padding: 14px 36px;
             border-radius: 0;
             cursor: pointer;
-            font-size: 0.75rem;
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            font-size: 0.8rem;
+            transition: all 0.6s;
             letter-spacing: 0.2em;
             font-family: inherit;
-            font-weight: 300;
             position: relative;
             overflow: hidden;
         }
-        .btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(160, 120, 220, 0.08), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
         .btn:hover {
-            border-color: rgba(160, 120, 220, 0.3);
-            color: rgba(160, 140, 200, 0.7);
-            box-shadow: 0 0 20px rgba(160, 120, 220, 0.1);
-        }
-        .btn:hover::before {
-            transform: translateX(100%);
+            border-color: #ff0080;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
         }
     </style>
 </head>
 <body>
-    <div class="bg"></div>
+    <div class="neon-bg"></div>
     <a href="index.html" class="back-link">&larr; 返回</a>
 
-    <div class="container">
-        <div class="quote-mark">"</div>
+    <div class="neon-container">
+        <div class="neon-border"></div>
+        <div class="neon-corner tl"></div>
+        <div class="neon-corner tr"></div>
+        <div class="neon-corner bl"></div>
+        <div class="neon-corner br"></div>
         <div class="quote-text" id="quoteText"></div>
         <div class="divider" id="divider"></div>
         <div class="quote-info" id="quoteInfo">
@@ -189,11 +234,10 @@
     <script>
         const quotes = [
             { text: "霓虹之下，我们都是孤独的舞者", author: "村上春树", book: "挪威的森林" },
-            { text: "城市是一座巨大的迷宫，我们在其中寻找出口", author: "博尔赫斯", book: "迷宫" },
-            { text: "黑夜给了我黑色的眼睛，我却用它寻找光明", author: "顾城", book: "一代人" },
-            { text: "我们都是夜行动物，在城市的霓虹中觅食", author: "雷蒙德·钱德勒", book: "漫长的告别" },
-            { text: "在赛博朋克的世界里，每个人都是自己的黑客", author: "威廉·吉布森", book: "神经漫游者" },
-            { text: "霓虹灯下的阴影里，藏着最真实的我们", author: "菲茨杰拉德", book: "了不起的盖茨比" }
+            { text: "城市是一座巨大的迷宫", author: "博尔赫斯", book: "迷宫" },
+            { text: "黑夜给了我黑色的眼睛", author: "顾城", book: "一代人" },
+            { text: "在赛博朋克的世界里", author: "威廉·吉布森", book: "神经漫游者" },
+            { text: "霓虹灯下的阴影里", author: "菲茨杰拉德", book: "了不起的盖茨比" }
         ];
 
         let currentIndex = 0;
@@ -204,7 +248,7 @@
             const infoEl = document.getElementById('quoteInfo');
             const dividerEl = document.getElementById('divider');
 
-            textEl.classList.remove('show', 'flicker');
+            textEl.classList.remove('show');
             infoEl.classList.remove('show');
             dividerEl.classList.remove('show');
 
@@ -215,7 +259,7 @@
                     const span = document.createElement('span');
                     span.className = 'char';
                     span.textContent = char === ' ' ? '\u00A0' : char;
-                    span.style.animationDelay = (i * 0.05) + 's';
+                    span.style.animationDelay = (i * 0.08) + 's';
                     textEl.appendChild(span);
                 });
 
@@ -224,7 +268,6 @@
 
                 textEl.classList.add('show');
                 setTimeout(() => {
-                    textEl.classList.add('flicker');
                     dividerEl.classList.add('show');
                     infoEl.classList.add('show');
                 }, 600);
