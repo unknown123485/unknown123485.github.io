@@ -7,233 +7,210 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #050508;
+            background: #0c0c14;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Noto Serif SC', 'Georgia', serif;
             overflow: hidden;
             position: relative;
         }
-        /* 深邃背景 + 径向光晕 */
-        .bg-glow {
+        /* 深邃背景 */
+        .bg {
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(ellipse 80% 50% at 50% 120%, rgba(120, 80, 220, 0.15) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 20% 50%, rgba(80, 40, 160, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 30%, rgba(60, 30, 140, 0.08) 0%, transparent 50%),
-                #050508;
+            background:
+                radial-gradient(ellipse 60% 40% at 70% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 30% at 30% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+                #0c0c14;
             z-index: 0;
         }
-        /* 网格地板 */
-        .grid-floor {
+        /*  subtle grid */
+        .grid {
             position: fixed;
-            bottom: -30%;
-            left: -50%;
-            width: 200%;
-            height: 80%;
-            background-image: 
-                linear-gradient(rgba(120, 80, 220, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(120, 80, 220, 0.08) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform: perspective(500px) rotateX(60deg);
-            animation: gridMove 20s linear infinite;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 80px 80px;
             pointer-events: none;
             z-index: 1;
         }
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 60px; }
-        }
-        /* 浮动粒子 */
-        .particle {
+        /* floating orbs */
+        .orb {
             position: fixed;
-            width: 3px;
-            height: 3px;
             border-radius: 50%;
+            filter: blur(80px);
             pointer-events: none;
-            z-index: 2;
-            animation: particleFloat linear infinite;
+            z-index: 1;
+            animation: orbFloat 20s ease-in-out infinite;
         }
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+        .orb-1 {
+            width: 400px; height: 400px;
+            background: rgba(139, 92, 246, 0.12);
+            top: 10%; left: 60%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 300px; height: 300px;
+            background: rgba(59, 130, 246, 0.08);
+            top: 60%; left: 10%;
+            animation-delay: -7s;
+        }
+        .orb-3 {
+            width: 250px; height: 250px;
+            background: rgba(236, 72, 153, 0.06);
+            top: 40%; left: 40%;
+            animation-delay: -14s;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
         .container {
             text-align: center;
-            padding: 40px;
-            max-width: 900px;
+            padding: 60px;
+            max-width: 800px;
             position: relative;
             z-index: 10;
         }
-        /* 霓虹文字 - 专业多层阴影 */
+        /* 引号装饰 */
+        .quote-mark {
+            font-size: 6rem;
+            color: rgba(139, 92, 246, 0.15);
+            line-height: 1;
+            margin-bottom: -20px;
+            font-family: Georgia, serif;
+        }
         .quote-text {
-            font-size: 2.8rem;
-            line-height: 1.8;
-            color: #f0e8ff;
-            letter-spacing: 0.08em;
+            font-size: 2.4rem;
+            line-height: 1.9;
+            color: #e2e8f0;
+            letter-spacing: 0.06em;
+            font-weight: 300;
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .quote-text.show {
             opacity: 1;
         }
         .quote-text .char {
             display: inline-block;
-            position: relative;
-            color: #faf5ff;
-            text-shadow:
-                /* 核心高光 */
-                0 0 1px #fff,
-                0 0 2px #fff,
-                /* 内层辉光 */
-                0 0 10px rgba(180, 140, 255, 0.8),
-                0 0 20px rgba(160, 120, 240, 0.6),
-                /* 中层扩散 */
-                0 0 40px rgba(140, 100, 220, 0.4),
-                0 0 80px rgba(120, 80, 200, 0.3),
-                /* 外层光晕 */
-                0 0 120px rgba(100, 60, 180, 0.2);
-            animation: neonBreathe 3s ease-in-out infinite;
-        }
-        .quote-text .char:nth-child(3n) { animation-delay: 0.2s; }
-        .quote-text .char:nth-child(3n+1) { animation-delay: 0.5s; }
-        .quote-text .char:nth-child(3n+2) { animation-delay: 0.8s; }
-
-        @keyframes neonBreathe {
-            0%, 100% {
-                text-shadow:
-                    0 0 1px #fff,
-                    0 0 2px #fff,
-                    0 0 10px rgba(180, 140, 255, 0.8),
-                    0 0 20px rgba(160, 120, 240, 0.6),
-                    0 0 40px rgba(140, 100, 220, 0.4),
-                    0 0 80px rgba(120, 80, 200, 0.3),
-                    0 0 120px rgba(100, 60, 180, 0.2);
-                opacity: 1;
-            }
-            50% {
-                text-shadow:
-                    0 0 2px #fff,
-                    0 0 4px #fff,
-                    0 0 15px rgba(180, 140, 255, 1),
-                    0 0 30px rgba(160, 120, 240, 0.8),
-                    0 0 60px rgba(140, 100, 220, 0.5),
-                    0 0 100px rgba(120, 80, 200, 0.4),
-                    0 0 150px rgba(100, 60, 180, 0.25);
-                opacity: 0.95;
-            }
-        }
-        /* 偶尔闪烁效果 */
-        .quote-text .char.flicker {
-            animation: neonBreathe 3s ease-in-out infinite, flicker 4s ease-in-out infinite;
-        }
-        @keyframes flicker {
-            0%, 90%, 100% { opacity: 1; }
-            91% { opacity: 0.3; }
-            92% { opacity: 1; }
-            93% { opacity: 0.5; }
-            94% { opacity: 1; }
-        }
-        /* 装饰线 */
-        .neon-line {
-            width: 200px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(180, 140, 255, 0.5), transparent);
-            margin: 30px auto;
-            box-shadow: 0 0 10px rgba(180, 140, 255, 0.3);
             opacity: 0;
-            transition: opacity 1s ease 0.3s;
+            transform: translateY(30px);
+            animation: charReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        .neon-line.show {
+        @keyframes charReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* 霓虹光晕 - 更 subtle */
+        .glow-line {
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
+            margin: 40px auto;
+            opacity: 0;
+            transition: opacity 1.5s ease 0.5s;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+        .glow-line.show {
             opacity: 1;
         }
         .quote-info {
-            margin-top: 20px;
-            font-size: 1rem;
-            color: #a090c0;
-            letter-spacing: 0.15em;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #64748b;
+            letter-spacing: 0.2em;
             opacity: 0;
-            transition: opacity 1s ease 0.6s;
+            transition: opacity 1s ease 1s;
+            font-weight: 400;
         }
         .quote-info.show {
             opacity: 1;
         }
         .quote-info .author {
-            color: #c0b0e0;
+            color: #94a3b8;
         }
         .quote-info .book {
-            color: #8070a0;
+            color: #475569;
             font-style: italic;
         }
-        /* 扫描线 */
-        .scanline {
+        /* 底部粒子 */
+        .particle {
             position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 3px,
-                rgba(0, 0, 0, 0.08) 3px,
-                rgba(0, 0, 0, 0.08) 6px
-            );
+            width: 2px;
+            height: 2px;
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 50%;
             pointer-events: none;
-            z-index: 20;
-            opacity: 0.4;
+            z-index: 2;
+            animation: particleRise 15s linear infinite;
+        }
+        @keyframes particleRise {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
         }
         .back-link {
             position: fixed;
             top: 30px;
             left: 30px;
-            color: rgba(160, 150, 180, 0.5);
+            color: rgba(148, 163, 184, 0.4);
             text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
+            font-size: 0.85rem;
+            transition: color 0.4s;
             z-index: 100;
+            letter-spacing: 0.1em;
         }
-        .back-link:hover { color: #c0b0e0; }
+        .back-link:hover { color: #94a3b8; }
         .controls {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 15px;
+            gap: 20px;
             z-index: 100;
         }
         .btn {
-            background: rgba(140, 100, 220, 0.08);
-            border: 1px solid rgba(140, 100, 220, 0.2);
-            color: #a090c0;
-            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #64748b;
+            padding: 10px 28px;
             border-radius: 30px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            letter-spacing: 0.05em;
+            font-size: 0.85rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.08em;
+            font-family: inherit;
         }
         .btn:hover {
-            background: rgba(140, 100, 220, 0.15);
-            border-color: rgba(140, 100, 220, 0.35);
-            color: #d0c0f0;
-            box-shadow: 0 0 20px rgba(140, 100, 220, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(139, 92, 246, 0.2);
+            color: #94a3b8;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
-    <div class="grid-floor"></div>
-    <div class="scanline"></div>
+    <div class="bg"></div>
+    <div class="grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
     <a href="index.html" class="back-link">&larr; 返回目录</a>
 
     <div class="container">
+        <div class="quote-mark">"</div>
         <div class="quote-text" id="quoteText"></div>
-        <div class="neon-line" id="neonLine"></div>
+        <div class="glow-line" id="glowLine"></div>
         <div class="quote-info" id="quoteInfo">
             <span class="author" id="author"></span> &middot; <span class="book" id="book"></span>
         </div>
@@ -258,18 +235,15 @@
         let autoPlayInterval = null;
 
         function createParticles() {
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 12; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 p.style.left = Math.random() * 100 + 'vw';
-                p.style.animationDelay = Math.random() * 10 + 's';
-                p.style.animationDuration = (8 + Math.random() * 8) + 's';
-                const size = 1 + Math.random() * 3;
+                p.style.animationDelay = Math.random() * 15 + 's';
+                p.style.animationDuration = (12 + Math.random() * 10) + 's';
+                const size = 1 + Math.random() * 2;
                 p.style.width = size + 'px';
                 p.style.height = size + 'px';
-                const hue = 240 + Math.random() * 40;
-                p.style.background = `hsl(${hue}, 70%, 70%)`;
-                p.style.boxShadow = `0 0 ${size * 2}px hsl(${hue}, 70%, 70%)`;
                 document.body.appendChild(p);
             }
         }
@@ -278,7 +252,7 @@
             const quote = quotes[currentIndex];
             const textEl = document.getElementById('quoteText');
             const infoEl = document.getElementById('quoteInfo');
-            const lineEl = document.getElementById('neonLine');
+            const lineEl = document.getElementById('glowLine');
 
             textEl.classList.remove('show');
             infoEl.classList.remove('show');
@@ -290,9 +264,8 @@
                 chars.forEach((char, i) => {
                     const span = document.createElement('span');
                     span.className = 'char';
-                    if (Math.random() > 0.7) span.classList.add('flicker');
                     span.textContent = char === ' ' ? '\u00A0' : char;
-                    span.style.animationDelay = (i * 0.04) + 's';
+                    span.style.animationDelay = (i * 0.06) + 's';
                     textEl.appendChild(span);
                 });
 
@@ -303,8 +276,8 @@
                 setTimeout(() => {
                     lineEl.classList.add('show');
                     infoEl.classList.add('show');
-                }, 200);
-            }, 300);
+                }, 400);
+            }, 400);
         }
 
         function nextQuote() {
@@ -319,7 +292,7 @@
 
         function startAutoPlay() {
             if (autoPlayInterval) clearInterval(autoPlayInterval);
-            autoPlayInterval = setInterval(nextQuote, 6000);
+            autoPlayInterval = setInterval(nextQuote, 7000);
         }
 
         function stopAutoPlay() {
@@ -334,7 +307,6 @@
             if (e.key === 'ArrowLeft') { prevQuote(); stopAutoPlay(); }
         });
 
-        // 鼠标悬停时暂停自动播放
         document.addEventListener('mouseenter', stopAutoPlay, true);
         document.addEventListener('mouseleave', startAutoPlay, true);
 
