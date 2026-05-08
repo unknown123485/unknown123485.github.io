@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #d4c5a8;
+            background: #c9b99a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -17,37 +17,58 @@
             overflow: hidden;
             position: relative;
         }
-        /* 纸张纹理 */
+        /* 纸张纹理 - 多层叠加 */
         .paper {
             position: fixed;
             inset: 0;
             background:
-                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
-                linear-gradient(160deg, #ddd0b8 0%, #d4c5a8 50%, #d8cdb0 100%);
+                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+                linear-gradient(165deg, #d4c5a8 0%, #c9b99a 40%, #d0c0a0 60%, #c5b290 100%);
             z-index: 0;
         }
-        /* 极简边框 */
+        /* 纸张边缘暗角 */
+        .paper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(100, 80, 50, 0.1) 100%);
+            pointer-events: none;
+        }
+        /* 装饰边框 */
         .frame {
             position: fixed;
-            inset: 30px;
-            border: 1px solid rgba(92, 74, 48, 0.1);
+            inset: 25px;
+            border: 1px solid rgba(92, 74, 48, 0.12);
             z-index: 1;
             pointer-events: none;
+        }
+        .frame::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid rgba(92, 74, 48, 0.06);
         }
         .container {
             text-align: center;
             padding: 60px;
-            max-width: 800px;
+            max-width: 850px;
             position: relative;
-            z-index: 2;
+            z-index: 10;
         }
+        /* 活字盘背景 */
         .type-case {
-            background: rgba(180, 165, 140, 0.2);
+            background:
+                linear-gradient(180deg, rgba(160, 145, 120, 0.3) 0%, rgba(150, 135, 110, 0.4) 100%);
             padding: 50px;
             position: relative;
+            box-shadow:
+                inset 0 2px 4px rgba(0,0,0,0.1),
+                inset 0 -1px 2px rgba(255,255,255,0.1),
+                0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(120, 100, 70, 0.2);
         }
         .quote-text {
-            font-size: 2.2rem;
+            font-size: 2rem;
             line-height: 2.2;
             color: #1a0f05;
             min-height: 200px;
@@ -55,100 +76,113 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 4px;
-            letter-spacing: 0.1em;
-            font-weight: 400;
+            gap: 3px;
+            letter-spacing: 0.08em;
+            font-weight: 500;
         }
+        /* 活字 - 立体效果 */
         .type-char {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 2.6rem;
-            height: 2.6rem;
-            font-size: 1.6rem;
+            width: 2.4rem;
+            height: 2.4rem;
+            font-size: 1.4rem;
             color: #1a0f05;
-            background: linear-gradient(180deg, #e8ddd0 0%, #d8cdb8 100%);
-            border: 1px solid #b8a888;
+            background: linear-gradient(180deg, #e0d5c8 0%, #d0c5b8 50%, #c8bdb0 100%);
+            border: 1px solid #a89878;
             position: relative;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow:
+                0 2px 3px rgba(0,0,0,0.15),
+                0 1px 1px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.3);
             opacity: 0;
-            transform: translateY(-40px);
-            animation: typeDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform: translateY(-30px) rotateX(-20deg);
+            animation: typeDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
+        /* 活字上的墨迹 */
         .type-char.inked {
             color: #0a0500;
+            text-shadow: 0 0 1px rgba(0,0,0,0.3);
+        }
+        .type-char.inked::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 60%, rgba(0,0,0,0.05) 100%);
+            pointer-events: none;
         }
         @keyframes typeDrop {
-            0% { opacity: 0; transform: translateY(-40px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { opacity: 0; transform: translateY(-30px) rotateX(-20deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0); }
         }
+        /* 压印效果 */
         .type-char.pressed {
-            animation: typeDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, typePress 0.3s ease 0.5s forwards;
+            animation: typeDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, typePress 0.4s ease 0.6s forwards;
         }
         @keyframes typePress {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.97) translateY(1px); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 2px 3px rgba(0,0,0,0.15); }
+            30% { transform: scale(0.96) translateY(2px); box-shadow: 0 0 1px rgba(0,0,0,0.2); }
+            60% { transform: scale(0.98) translateY(1px); }
+            100% { transform: scale(1); box-shadow: 0 2px 3px rgba(0,0,0,0.15); }
+        }
+        /* 压印后的凹陷效果 */
+        .type-char.impressed {
+            box-shadow:
+                inset 0 1px 3px rgba(0,0,0,0.2),
+                0 1px 1px rgba(0,0,0,0.05);
+            transform: translateY(1px);
         }
         .quote-info {
             margin-top: 40px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #5c4a30;
             letter-spacing: 0.2em;
             opacity: 0;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
         }
         .quote-info.show {
-            opacity: 1;
+            opacity: 0.7;
         }
-        .type-mark {
-            position: absolute;
-            font-size: 0.55rem;
-            color: rgba(92,74,48,0.2);
-            font-family: monospace;
-        }
-        .type-mark.top-left { top: 15px; left: 20px; }
-        .type-mark.top-right { top: 15px; right: 20px; }
-        .type-mark.bottom-left { bottom: 15px; left: 20px; }
-        .type-mark.bottom-right { bottom: 15px; right: 20px; }
         .back-link {
             position: fixed;
             top: 40px;
             left: 40px;
-            color: #5c4a30;
+            color: rgba(92, 74, 48, 0.4);
             text-decoration: none;
-            font-size: 0.8rem;
-            transition: color 0.5s;
+            font-size: 0.75rem;
             z-index: 100;
-            opacity: 0.5;
-            letter-spacing: 0.1em;
+            transition: color 0.5s;
+            letter-spacing: 0.15em;
+            font-weight: 400;
         }
-        .back-link:hover { color: #1a0f05; opacity: 1; }
+        .back-link:hover { color: rgba(92, 74, 48, 0.8); }
         .controls {
             position: fixed;
             bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 30px;
+            gap: 20px;
             z-index: 100;
         }
         .btn {
-            background: rgba(92,74,48,0.06);
-            border: 1px solid rgba(92,74,48,0.15);
+            background: rgba(92,74,48,0.08);
+            border: 1px solid rgba(92,74,48,0.2);
             color: #5c4a30;
             padding: 10px 24px;
             border-radius: 0;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: all 0.5s ease;
             font-family: inherit;
             letter-spacing: 0.1em;
+            font-weight: 400;
         }
         .btn:hover {
-            background: rgba(92,74,48,0.12);
-            border-color: rgba(92,74,48,0.3);
+            background: rgba(92,74,48,0.15);
+            border-color: rgba(92,74,48,0.4);
         }
     </style>
 </head>
@@ -159,11 +193,7 @@
 
     <div class="container">
         <div class="type-case">
-            <span class="type-mark top-left">12pt</span>
-            <span class="type-mark top-right">&sect;1</span>
             <div class="quote-text" id="quoteText"></div>
-            <span class="type-mark bottom-left">铅字排版</span>
-            <span class="type-mark bottom-right" id="pageNum">001</span>
         </div>
         <div class="quote-info" id="quoteInfo">
             <span id="author"></span> &middot; <span id="book"></span>
@@ -177,16 +207,15 @@
 
     <script>
         const quotes = [
-            { text: "知识就是力量", author: "培根", book: "新工具" },
-            { text: "我思故我在", author: "笛卡尔", book: "第一哲学沉思集" },
-            { text: "存在即合理", author: "黑格尔", book: "法哲学原理" },
-            { text: "人是一根有思想的芦苇", author: "帕斯卡", book: "思想录" },
-            { text: "认识你自己", author: "苏格拉底", book: "申辩篇" },
-            { text: "万物皆有裂痕，那是光照进来的地方", author: "莱昂纳德·科恩", book: "颂歌" }
+            { text: "知识就是力量，但更重要的是运用知识的智慧", author: "培根", book: "新工具" },
+            { text: "书籍是人类进步的阶梯", author: "高尔基", book: "论文学" },
+            { text: "读一本好书，就是和许多高尚的人谈话", author: "歌德", book: "格言与感想" },
+            { text: "书山有路勤为径，学海无涯苦作舟", author: "韩愈", book: "古今贤文" },
+            { text: "纸上得来终觉浅，绝知此事要躬行", author: "陆游", book: "冬夜读书示子聿" },
+            { text: "博学之，审问之，慎思之，明辨之，笃行之", author: "孔子", book: "中庸" }
         ];
 
         let currentIndex = 0;
-        let autoPlayInterval = null;
 
         function showQuote() {
             const quote = quotes[currentIndex];
@@ -200,23 +229,28 @@
             chars.forEach((char, i) => {
                 const span = document.createElement('span');
                 span.className = 'type-char';
-                if (Math.random() > 0.3) span.classList.add('inked');
+                if (char !== ' ') {
+                    span.classList.add('inked');
+                }
                 span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.animationDelay = (i * 0.1) + 's';
+                span.style.animationDelay = (i * 0.08) + 's';
                 textEl.appendChild(span);
 
+                // 压印效果
                 setTimeout(() => {
                     span.classList.add('pressed');
-                }, i * 100 + 500);
+                    setTimeout(() => {
+                        span.classList.add('impressed');
+                    }, 1000);
+                }, i * 80);
             });
 
-            document.getElementById('pageNum').textContent = String(currentIndex + 1).padStart(3, '0');
+            document.getElementById('author').textContent = quote.author;
+            document.getElementById('book').textContent = quote.book;
 
             setTimeout(() => {
-                document.getElementById('author').textContent = quote.author;
-                document.getElementById('book').textContent = quote.book;
                 infoEl.classList.add('show');
-            }, chars.length * 100 + 800);
+            }, chars.length * 80 + 500);
         }
 
         function nextQuote() {
@@ -229,28 +263,12 @@
             showQuote();
         }
 
-        function startAutoPlay() {
-            if (autoPlayInterval) clearInterval(autoPlayInterval);
-            autoPlayInterval = setInterval(nextQuote, 9000);
-        }
-
-        function stopAutoPlay() {
-            if (autoPlayInterval) {
-                clearInterval(autoPlayInterval);
-                autoPlayInterval = null;
-            }
-        }
-
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') { nextQuote(); stopAutoPlay(); }
-            if (e.key === 'ArrowLeft') { prevQuote(); stopAutoPlay(); }
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
         });
 
-        document.addEventListener('mouseenter', stopAutoPlay, true);
-        document.addEventListener('mouseleave', startAutoPlay, true);
-
         showQuote();
-        startAutoPlay();
     </script>
 </body>
 </html>

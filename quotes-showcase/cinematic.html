@@ -7,83 +7,77 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #050505;
-            color: #c9b896;
+            background: #000;
+            color: #e8d5a3;
             min-height: 100vh;
             overflow: hidden;
             font-family: 'Noto Serif SC', 'Georgia', serif;
             position: relative;
         }
-        /* 极简星空 - 只有少量星星 */
-        .stars {
+        /* 真正的星空 - Canvas绘制 */
+        #starCanvas {
             position: fixed;
             inset: 0;
             z-index: 1;
         }
-        .star {
-            position: absolute;
-            background: #c9b896;
-            border-radius: 50%;
-            animation: twinkle ease-in-out infinite alternate;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0.15; }
-            100% { opacity: 0.5; }
-        }
-        /* 3D透视容器 */
+        /* 3D透视容器 - 星球大战风格 */
         .crawl-container {
             position: fixed;
-            bottom: 0;
+            bottom: -20vh;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 120vh;
             display: flex;
             justify-content: center;
-            perspective: 600px;
+            perspective: 400px;
             overflow: hidden;
             z-index: 2;
         }
         .crawl-content {
-            width: 70%;
-            max-width: 700px;
+            width: 80%;
+            max-width: 800px;
             transform-origin: 50% 100%;
             transform: rotateX(60deg) translateY(100vh);
-            animation: crawl 50s linear infinite;
+            animation: crawl 60s linear infinite;
         }
         @keyframes crawl {
-            0% { transform: rotateX(60deg) translateY(80vh); opacity: 1; }
-            95% { opacity: 1; }
-            100% { transform: rotateX(60deg) translateY(-200vh); opacity: 0; }
+            0% { transform: rotateX(60deg) translateY(100vh); opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: rotateX(60deg) translateY(-300vh); opacity: 0; }
         }
         .quote-item {
-            text-align: center;
-            margin-bottom: 100px;
-            opacity: 0.85;
+            text-align: justify;
+            text-align-last: center;
+            margin-bottom: 120px;
+            opacity: 0.9;
         }
         .quote-text {
-            font-size: 1.8rem;
-            line-height: 1.9;
-            font-weight: 300;
-            letter-spacing: 0.06em;
+            font-size: 2.2rem;
+            line-height: 1.8;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #f0d878;
+            text-shadow: 0 0 2px rgba(240, 216, 120, 0.3);
         }
         .quote-info {
-            margin-top: 25px;
-            font-size: 0.85rem;
-            color: #a89870;
-            letter-spacing: 0.2em;
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #c9a84c;
+            letter-spacing: 0.15em;
+            text-align: center;
         }
         .book-name {
             font-style: italic;
-            opacity: 0.6;
+            opacity: 0.7;
         }
-        /* 底部渐隐 */
+        /* 顶部和底部渐隐 - 更自然 */
         .fade-bottom {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 50vh;
-            background: linear-gradient(to top, #050505 0%, transparent 100%);
+            height: 40vh;
+            background: linear-gradient(to top, #000 0%, transparent 100%);
             z-index: 3;
             pointer-events: none;
         }
@@ -92,8 +86,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 20vh;
-            background: linear-gradient(to bottom, #050505 0%, transparent 100%);
+            height: 15vh;
+            background: linear-gradient(to bottom, #000 0%, transparent 100%);
             z-index: 3;
             pointer-events: none;
         }
@@ -101,48 +95,48 @@
             position: fixed;
             top: 40px;
             left: 40px;
-            color: rgba(201, 184, 150, 0.25);
+            color: rgba(240, 216, 120, 0.3);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             z-index: 100;
-            transition: color 0.5s;
+            transition: all 0.6s;
             letter-spacing: 0.15em;
             font-weight: 300;
         }
-        .back-link:hover { color: rgba(201, 184, 150, 0.6); }
+        .back-link:hover { color: rgba(240, 216, 120, 0.8); }
         .controls {
             position: fixed;
             bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 30px;
+            gap: 20px;
             z-index: 100;
-            opacity: 0.3;
+            opacity: 0.2;
             transition: opacity 0.5s;
         }
-        .controls:hover { opacity: 1; }
+        .controls:hover { opacity: 0.8; }
         .btn {
             background: transparent;
-            border: 1px solid rgba(201, 184, 150, 0.1);
-            color: rgba(201, 184, 150, 0.3);
+            border: 1px solid rgba(240, 216, 120, 0.15);
+            color: rgba(240, 216, 120, 0.4);
             padding: 10px 24px;
             border-radius: 0;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: all 0.5s ease;
             letter-spacing: 0.1em;
             font-family: inherit;
             font-weight: 300;
         }
         .btn:hover {
-            border-color: rgba(201, 184, 150, 0.25);
-            color: rgba(201, 184, 150, 0.6);
+            border-color: rgba(240, 216, 120, 0.4);
+            color: rgba(240, 216, 120, 0.8);
         }
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
+    <canvas id="starCanvas"></canvas>
     <div class="fade-top"></div>
     <div class="fade-bottom"></div>
     <a href="index.html" class="back-link">&larr; 返回</a>
@@ -169,29 +163,51 @@
             { text: "时间是一把筛子，最终会淘去一切沉渣。", author: "雨果", book: "悲惨世界" }
         ];
 
-        let animationDuration = 50;
+        let animationDuration = 60;
         let isPaused = false;
 
-        function createStars() {
-            const container = document.getElementById('stars');
-            for (let i = 0; i < 80; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                const size = Math.random() * 1.5 + 0.5;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 4 + 's';
-                star.style.animationDuration = (2 + Math.random() * 3) + 's';
-                container.appendChild(star);
+        // Canvas星空
+        function initStars() {
+            const canvas = document.getElementById('starCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.3,
+                    opacity: Math.random() * 0.5 + 0.1,
+                    speed: Math.random() * 0.02 + 0.005
+                });
             }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => {
+                    star.opacity += star.speed;
+                    const alpha = 0.3 + Math.sin(star.opacity) * 0.3;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 248, 220, ${alpha})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
         }
 
         function renderQuotes() {
             const container = document.getElementById('crawlContent');
             let html = '';
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 3; i++) {
                 quotes.forEach(quote => {
                     html += `
                         <div class="quote-item">
@@ -212,7 +228,7 @@
         }
 
         function slowDown() {
-            animationDuration = Math.min(100, animationDuration + 5);
+            animationDuration = Math.min(120, animationDuration + 5);
             updateSpeed();
         }
 
@@ -241,7 +257,7 @@
             }
         });
 
-        createStars();
+        initStars();
         renderQuotes();
     </script>
 </body>

@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #06060a;
+            background: #000;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -17,81 +17,133 @@
             overflow: hidden;
             position: relative;
         }
-        /* 极简扫描线 */
+        /* 扫描线效果 */
         .scan-line {
             position: fixed;
             inset: 0;
             background: repeating-linear-gradient(
                 0deg,
                 transparent,
-                transparent 4px,
-                rgba(100, 200, 180, 0.008) 4px,
-                rgba(100, 200, 180, 0.008) 8px
+                transparent 3px,
+                rgba(0, 255, 200, 0.015) 3px,
+                rgba(0, 255, 200, 0.015) 6px
             );
             pointer-events: none;
             z-index: 5;
         }
-        .container {
-            text-align: center;
-            padding: 60px;
-            max-width: 850px;
-            position: relative;
-            z-index: 10;
+        /* 扫描光束 */
+        .scan-beam {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.3), transparent);
+            animation: scanMove 4s ease-in-out infinite;
+            z-index: 6;
+            pointer-events: none;
         }
+        @keyframes scanMove {
+            0%, 100% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100vh; opacity: 0; }
+        }
+        /* 全息框架 */
         .hologram-frame {
-            border: 1px solid rgba(100, 200, 180, 0.08);
-            padding: 50px;
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            padding: 60px;
             position: relative;
-            background: rgba(100, 200, 180, 0.005);
-            box-shadow: 0 0 40px rgba(100, 200, 180, 0.02);
+            background: rgba(0, 255, 200, 0.02);
+            box-shadow:
+                0 0 60px rgba(0, 255, 200, 0.05),
+                inset 0 0 60px rgba(0, 255, 200, 0.02);
+            animation: framePulse 4s ease-in-out infinite;
         }
+        @keyframes framePulse {
+            0%, 100% { box-shadow: 0 0 60px rgba(0, 255, 200, 0.05), inset 0 0 60px rgba(0, 255, 200, 0.02); }
+            50% { box-shadow: 0 0 80px rgba(0, 255, 200, 0.08), inset 0 0 80px rgba(0, 255, 200, 0.03); }
+        }
+        /* 角落装饰 */
         .hologram-frame::before,
         .hologram-frame::after {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
-            border: 1px solid rgba(100, 200, 180, 0.15);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 255, 200, 0.3);
         }
         .hologram-frame::before {
-            top: -1px;
-            left: -1px;
+            top: -2px;
+            left: -2px;
             border-right: none;
             border-bottom: none;
         }
         .hologram-frame::after {
-            bottom: -1px;
-            right: -1px;
+            bottom: -2px;
+            right: -2px;
             border-left: none;
             border-top: none;
         }
         .corner {
             position: absolute;
-            width: 8px;
-            height: 8px;
-            border: 1px solid rgba(100, 200, 180, 0.15);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 255, 200, 0.3);
         }
-        .corner.tr {
-            top: -1px;
-            right: -1px;
-            border-left: none;
-            border-bottom: none;
+        .corner.tl { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .corner.br { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        /* 故障效果 */
+        .glitch {
+            position: relative;
         }
-        .corner.bl {
-            bottom: -1px;
-            left: -1px;
-            border-right: none;
-            border-top: none;
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+        .glitch.active::before {
+            animation: glitch1 0.3s ease;
+            color: rgba(255, 0, 100, 0.5);
+            opacity: 0.8;
+        }
+        .glitch.active::after {
+            animation: glitch2 0.3s ease;
+            color: rgba(0, 255, 200, 0.5);
+            opacity: 0.8;
+        }
+        @keyframes glitch1 {
+            0%, 100% { transform: translate(0); opacity: 0; }
+            20% { transform: translate(-3px, 2px); opacity: 0.8; }
+            40% { transform: translate(3px, -2px); opacity: 0.8; }
+            60% { transform: translate(-2px, 1px); opacity: 0.8; }
+            80% { transform: translate(2px, -1px); opacity: 0.8; }
+        }
+        @keyframes glitch2 {
+            0%, 100% { transform: translate(0); opacity: 0; }
+            20% { transform: translate(3px, -2px); opacity: 0.8; }
+            40% { transform: translate(-3px, 2px); opacity: 0.8; }
+            60% { transform: translate(2px, -1px); opacity: 0.8; }
+            80% { transform: translate(-2px, 1px); opacity: 0.8; }
         }
         .quote-text {
             font-size: 1.8rem;
             line-height: 1.9;
-            color: rgba(160, 220, 200, 0.85);
-            letter-spacing: 0.1em;
+            color: rgba(0, 255, 200, 0.9);
+            letter-spacing: 0.12em;
             position: relative;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: translateY(25px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            text-shadow:
+                0 0 10px rgba(0, 255, 200, 0.5),
+                0 0 20px rgba(0, 255, 200, 0.3),
+                0 0 40px rgba(0, 255, 200, 0.1);
         }
         .quote-text.show {
             opacity: 1;
@@ -100,7 +152,7 @@
         .quote-text .char {
             display: inline-block;
             opacity: 0;
-            animation: charFade 0.5s ease forwards;
+            animation: charFade 0.4s ease forwards;
         }
         @keyframes charFade {
             to { opacity: 1; }
@@ -108,79 +160,97 @@
         .divider {
             width: 60px;
             height: 1px;
-            background: rgba(100, 200, 180, 0.1);
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.4), transparent);
             margin: 40px auto 25px;
             opacity: 0;
             transition: opacity 1.5s ease 0.5s;
+            box-shadow: 0 0 10px rgba(0, 255, 200, 0.2);
         }
         .divider.show {
             opacity: 1;
         }
         .quote-info {
             font-size: 0.8rem;
-            color: rgba(100, 200, 180, 0.35);
+            color: rgba(0, 255, 200, 0.5);
             letter-spacing: 0.2em;
             opacity: 0;
             transition: opacity 1.5s ease 0.8s;
+            font-weight: 300;
         }
         .quote-info.show {
             opacity: 1;
         }
+        /* 数据装饰 */
+        .data-deco {
+            position: fixed;
+            font-size: 0.6rem;
+            color: rgba(0, 255, 200, 0.15);
+            letter-spacing: 0.1em;
+            font-family: 'Courier New', monospace;
+        }
+        .data-deco.tl { top: 20px; left: 20px; }
+        .data-deco.tr { top: 20px; right: 20px; }
+        .data-deco.bl { bottom: 20px; left: 20px; }
+        .data-deco.br { bottom: 20px; right: 20px; }
         .back-link {
             position: fixed;
             top: 40px;
             left: 40px;
-            color: rgba(100, 200, 180, 0.15);
+            color: rgba(0, 255, 200, 0.3);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             z-index: 100;
-            transition: color 0.5s;
+            transition: all 0.6s;
             letter-spacing: 0.15em;
+            font-weight: 300;
         }
-        .back-link:hover { color: rgba(100, 200, 180, 0.4); }
+        .back-link:hover { color: rgba(0, 255, 200, 0.8); }
         .controls {
             position: fixed;
-            bottom: 40px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 30px;
+            gap: 20px;
             z-index: 100;
-            opacity: 0.3;
-            transition: opacity 0.5s;
         }
-        .controls:hover { opacity: 1; }
         .btn {
             background: transparent;
-            border: 1px solid rgba(100, 200, 180, 0.08);
-            color: rgba(100, 200, 180, 0.25);
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            color: rgba(0, 255, 200, 0.4);
             padding: 10px 24px;
             border-radius: 0;
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.5s ease;
+            font-size: 0.75rem;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
             letter-spacing: 0.1em;
             font-family: inherit;
+            font-weight: 300;
         }
         .btn:hover {
-            border-color: rgba(100, 200, 180, 0.18);
-            color: rgba(100, 200, 180, 0.5);
+            border-color: rgba(0, 255, 200, 0.4);
+            color: rgba(0, 255, 200, 0.8);
+            box-shadow: 0 0 20px rgba(0, 255, 200, 0.1);
         }
     </style>
 </head>
 <body>
     <div class="scan-line"></div>
+    <div class="scan-beam"></div>
     <a href="index.html" class="back-link">&larr; 返回</a>
 
-    <div class="container">
-        <div class="hologram-frame">
-            <div class="corner tr"></div>
-            <div class="corner bl"></div>
-            <div class="quote-text" id="quoteText"></div>
-            <div class="divider" id="divider"></div>
-            <div class="quote-info" id="quoteInfo">
-                <span id="author"></span> &middot; <span id="book"></span>
-            </div>
+    <div class="data-deco tl">SYS.HOLOGRAM.v2.7</div>
+    <div class="data-deco tr">RENDER: ACTIVE</div>
+    <div class="data-deco bl">COORD: 34.0522°N, 118.2437°W</div>
+    <div class="data-deco br">STATUS: ONLINE</div>
+
+    <div class="hologram-frame">
+        <div class="corner tl"></div>
+        <div class="corner br"></div>
+        <div class="quote-text glitch" id="quoteText" data-text=""></div>
+        <div class="divider" id="divider"></div>
+        <div class="quote-info" id="quoteInfo">
+            <span id="author"></span> &middot; <span id="book"></span>
         </div>
     </div>
 
@@ -191,16 +261,15 @@
 
     <script>
         const quotes = [
-            { text: "我正在成为我自己", author: "刘慈欣", book: "三体" },
-            { text: "宇宙很大，生活更大", author: "刘慈欣", book: "三体" },
-            { text: "给岁月以文明，而不是给文明以岁月", author: "刘慈欣", book: "三体" },
-            { text: "弱小和无知不是生存的障碍，傲慢才是", author: "刘慈欣", book: "三体" },
-            { text: "不要回答！不要回答！不要回答！", author: "刘慈欣", book: "三体" },
-            { text: "我们都是阴沟里的虫子，但总还是得有人仰望星空", author: "刘慈欣", book: "三体" }
+            { text: "我正在成为我自己", author: "伍尔夫", book: "达洛维夫人" },
+            { text: "未来已来，只是分布不均", author: "吉布森", book: "神经漫游者" },
+            { text: "在数字的海洋中，我们寻找人性的灯塔", author: "斯蒂格勒", book: "技术与时间" },
+            { text: "虚拟与现实的边界，正在消融", author: "鲍德里亚", book: "拟像与仿真" },
+            { text: "代码是新时代的诗歌", author: "维纳", book: "控制论" },
+            { text: "在硅基世界里，碳基生命依然闪耀", author: "库兹韦尔", book: "奇点临近" }
         ];
 
         let currentIndex = 0;
-        let autoPlayInterval = null;
 
         function showQuote() {
             const quote = quotes[currentIndex];
@@ -211,15 +280,17 @@
             textEl.classList.remove('show');
             infoEl.classList.remove('show');
             dividerEl.classList.remove('show');
+            textEl.classList.remove('active');
 
             setTimeout(() => {
                 textEl.innerHTML = '';
+                textEl.setAttribute('data-text', quote.text);
                 const chars = quote.text.split('');
                 chars.forEach((char, i) => {
                     const span = document.createElement('span');
                     span.className = 'char';
                     span.textContent = char === ' ' ? '\u00A0' : char;
-                    span.style.animationDelay = (i * 0.05) + 's';
+                    span.style.animationDelay = (i * 0.03) + 's';
                     textEl.appendChild(span);
                 });
 
@@ -227,10 +298,17 @@
                 document.getElementById('book').textContent = quote.book;
 
                 textEl.classList.add('show');
+
+                // 随机触发故障效果
+                setTimeout(() => {
+                    textEl.classList.add('active');
+                    setTimeout(() => textEl.classList.remove('active'), 300);
+                }, 800);
+
                 setTimeout(() => {
                     dividerEl.classList.add('show');
                     infoEl.classList.add('show');
-                }, 400);
+                }, 500);
             }, 400);
         }
 
@@ -244,28 +322,21 @@
             showQuote();
         }
 
-        function startAutoPlay() {
-            if (autoPlayInterval) clearInterval(autoPlayInterval);
-            autoPlayInterval = setInterval(nextQuote, 7000);
-        }
-
-        function stopAutoPlay() {
-            if (autoPlayInterval) {
-                clearInterval(autoPlayInterval);
-                autoPlayInterval = null;
-            }
-        }
-
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') { nextQuote(); stopAutoPlay(); }
-            if (e.key === 'ArrowLeft') { prevQuote(); stopAutoPlay(); }
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
         });
 
-        document.addEventListener('mouseenter', stopAutoPlay, true);
-        document.addEventListener('mouseleave', startAutoPlay, true);
+        // 随机故障效果
+        setInterval(() => {
+            const textEl = document.getElementById('quoteText');
+            if (textEl.classList.contains('show') && Math.random() > 0.7) {
+                textEl.classList.add('active');
+                setTimeout(() => textEl.classList.remove('active'), 200);
+            }
+        }, 3000);
 
         showQuote();
-        startAutoPlay();
     </script>
 </body>
 </html>
