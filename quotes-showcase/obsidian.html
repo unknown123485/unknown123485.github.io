@@ -601,35 +601,86 @@
         let currentIndex = 0;
         let isAnimating = false;
 
-        // 关键词提取
+        // 关键词提取 - 基于语义和权重
         function extractKeywords(text) {
-            // 停用词
-            const stopWords = new Set(['的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这', '那', '我们', '让', '把', '被', '给', '与', '及', '或', '但', '而', '因为', '所以', '如果', '就', '让', '向', '从', '到', '在', '把', '被', '给', '对', '关于', '的', '地', '得']);
+            // 停用词表
+            const stopWords = new Set([
+                '的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', 
+                '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这', '那', 
+                '我们', '让', '把', '被', '给', '与', '及', '或', '但', '而', '因为', '所以', '如果', 
+                '向', '从', '对', '关于', '地', '得', '能', '与', '同', '为', '它', '他', '她', '们',
+                '来', '过', '下', '中', '大', '小', '多', '少', '个', '种', '里', '外', '前', '后'
+            ]);
             
-            // 分词并统计
-            const words = [];
+            // 预定义的高权重词汇（文学/哲学类）
+            const highWeightWords = new Set([
+                '宇宙', '星空', '时间', '空间', '生命', '死亡', '永恒', '灵魂', '真理', '智慧',
+                '文明', '岁月', '时光', '世界', '人生', '命运', '自由', '孤独', '爱', '梦想',
+                '希望', '绝望', '存在', '虚无', '意义', '价值', '信仰', '怀疑', '思考', '感悟',
+                '自然', '天地', '万物', '星辰', '银河', '黑洞', '原子', '分子', '能量', '物质',
+                '知识', '力量', '勇气', '坚持', '放弃', '选择', '责任', '使命', '命运', '宿命'
+            ]);
+            
             const wordFreq = {};
+            const textLen = text.length;
             
             // 提取2-4字词组
             for (let len = 4; len >= 2; len--) {
-                for (let i = 0; i <= text.length - len; i++) {
+                for (let i = 0; i <= textLen - len; i++) {
                     const word = text.substr(i, len);
-                    // 过滤条件
-                    if (stopWords.has(word)) continue;
-                    if (/^[\u4e00-\u9fa5]+$/.test(word)) { // 纯中文
-                        wordFreq[word] = (wordFreq[word] || 0) + len;
+                    
+                    // 基本过滤
+                    if (!/[\u4e00-\u9fa5]/.test(word)) continue; // 必须包含中文
+                    if (/^[的了吗呢吧啊哦嗯哼]$/.test(word)) continue; // 过滤语气词
+                    if (len === 2 && stopWords.has(word)) continue; // 2字停用词
+                    
+                    // 计算权重
+                    let weight = len * 2; // 基础权重：长度越长权重越高
+                    
+                    // 高权重词汇加成
+                    if (highWeightWords.has(word)) {
+                        weight *= 3;
                     }
+                    
+                    // 位置权重（开头和结尾的词更重要）
+                    if (i < textLen * 0.2 || i > textLen * 0.8) {
+                        weight *= 1.5;
+                    }
+                    
+                    wordFreq[word] = (wordFreq[word] || 0) + weight;
                 }
             }
             
-            // 排序并返回前5个
-            return Object.entries(wordFreq)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5)
-                .map(([word, score]) => ({
-                    word,
-                    score: Math.min(98, Math.round(60 + score * 3))
-                }));
+            // 过滤掉包含关系的短词（如果长词已存在）
+            const sortedWords = Object.entries(wordFreq).sort((a, b) => b[1] - a[1]);
+            const result = [];
+            const usedWords = new Set();
+            
+            for (const [word, score] of sortedWords) {
+                // 检查是否已被包含
+                let isContained = false;
+                for (const used of usedWords) {
+                    if (used.includes(word) || word.includes(used)) {
+                        // 如果已存在的词包含当前词，或当前词包含已存在的词，跳过短的
+                        if (used.length >= word.length && used.includes(word)) {
+                            isContained = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!isContained && word.length >= 2) {
+                    usedWords.add(word);
+                    result.push({
+                        word,
+                        score: Math.min(98, Math.round(50 + score * 2))
+                    });
+                    
+                    if (result.length >= 5) break;
+                }
+            }
+            
+            return result;
         }
 
         // 更新关键词显示
