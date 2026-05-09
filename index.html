@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v7.6.2</title>
+    <title>Mas.reader v7.6.3</title>
     <script>
-        // 缓存控制 - v7.6.2
+        // 缓存控制 - v7.6.3
         (function() {
             var url = window.location.href;
             var hasVersion = /[?&]v=\d+/.test(url);
@@ -4416,6 +4416,18 @@
                         </div>
                         <div class="home-theme-card" data-quote-effect="inkwash" onclick="setQuoteEffect('inkwash')" style="padding:0.4rem 0.8rem;">
                             <div class="theme-label" style="font-size:0.7rem;">水墨晕染</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="neon" onclick="setQuoteEffect('neon')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">霓虹灯管</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="pageflip" onclick="setQuoteEffect('pageflip')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">翻书页</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="hologram" onclick="setQuoteEffect('hologram')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">全息投影</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="letterpress" onclick="setQuoteEffect('letterpress')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">活字印刷</div>
                         </div>
                         <div class="home-theme-card" data-quote-effect="nature" onclick="setQuoteEffect('nature')" style="padding:0.4rem 0.8rem;">
                             <div class="theme-label" style="font-size:0.7rem;">自然场景</div>
@@ -11001,8 +11013,8 @@
     </script>
 
     <!-- 书摘展示选择页面 -->
-    <div id="quote-showcase-page" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--bg-base);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;">
-        <div style="max-width:900px;margin:0 auto;padding:40px 20px;min-height:100vh;">
+    <div id="quote-showcase-page" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--bg-base);overflow-y:scroll;-webkit-overflow-scrolling:touch;touch-action:pan-y pan-x;overscroll-behavior-y:contain;">
+        <div style="max-width:900px;margin:0 auto;padding:40px 20px;min-height:100vh;overflow-y:visible;">
             <!-- 顶部返回按钮 -->
             <div style="display:flex;align-items:center;gap:15px;margin-bottom:40px;">
                 <button onclick="closeQuoteShowcase()" style="background:transparent;border:none;color:var(--text-primary);cursor:pointer;font-size:1rem;display:flex;align-items:center;gap:8px;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
@@ -11047,9 +11059,17 @@
             { id: 'cinematic', name: '电影滚动', desc: '星球大战风格的3D星空滚动', image: 'quotes-showcase/preview/cinematic.jpg' },
             { id: 'inkwash', name: '水墨晕染', desc: '中国传统水墨画风格展示', image: 'quotes-showcase/preview/inkwash.jpg' },
             { id: 'neon', name: '霓虹灯管', desc: '赛博朋克霓虹发光效果', image: 'quotes-showcase/preview/neon.jpg' },
+            { id: 'pageflip', name: '翻书页', desc: '逼真的3D翻书动画效果', image: 'quotes-showcase/preview/pageflip.jpg' },
             { id: 'nature', name: '自然场景', desc: '雨夜、雪景、星空等自然场景', image: 'quotes-showcase/preview/nature.jpg' },
             { id: 'fractal', name: '分形生长', desc: '数学分形树生长动画', image: 'quotes-showcase/preview/fractal.jpg' },
-            { id: 'hologram', name: '全息投影', desc: '科技感全息投影效果', image: 'quotes-showcase/preview/hologram.jpg' }
+            { id: 'letterpress', name: '活字印刷', desc: '传统活字印刷排版效果', image: 'quotes-showcase/preview/letterpress.jpg' },
+            { id: 'hologram', name: '全息投影', desc: '科技感全息投影效果', image: 'quotes-showcase/preview/hologram.jpg' },
+            { id: 'hourglass', name: '时光沙漏', desc: '时间流逝的沙漏动画效果', image: 'quotes-showcase/preview/hourglass.jpg' },
+            { id: 'zen', name: '禅意庭院', desc: '日式枯山水禅意展示', image: 'quotes-showcase/preview/zen.jpg' },
+            { id: 'clouds', name: '云端之上', desc: '云海漂浮梦幻效果', image: 'quotes-showcase/preview/clouds.jpg' },
+            { id: 'hud', name: '战术终端', desc: '科幻HUD界面风格', image: 'quotes-showcase/preview/hud.jpg' },
+            { id: 'memoria', name: '梦境沉浸', desc: '梦境般的沉浸式阅读体验', image: 'quotes-showcase/preview/memoria.jpg' },
+            { id: 'obsidian', name: '黑曜石核心', desc: '战术科幻终端风格', image: 'quotes-showcase/preview/obsidian.jpg' }
         ];
 
         let selectedQuoteFiles = [];
