@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电影字幕滚动 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #ffeaa7;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', 'Georgia', serif;
+            position: relative;
+        }
+        #starCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+        .crawl-container {
+            position: fixed;
+            bottom: -20vh;
+            left: 0;
+            width: 100%;
+            height: 120vh;
+            display: flex;
+            justify-content: center;
+            perspective: 400px;
+            overflow: hidden;
+            z-index: 2;
+        }
+        .crawl-content {
+            width: 100%;
+            max-width: 100vw;
+            padding: 0 5vw;
+            transform-origin: 50% 100%;
+            transform: rotateX(60deg) translateY(100vh);
+            animation: crawl 60s linear infinite;
+        }
+        @keyframes crawl {
+            0% { transform: rotateX(60deg) translateY(100vh); opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: rotateX(60deg) translateY(-300vh); opacity: 0; }
+        }
+        .quote-item {
+            text-align: center;
+            margin-bottom: 100px;
+            opacity: 1;
+            width: 100%;
+        }
+        .quote-text {
+            font-size: clamp(1.8rem, 4vw, 3.5rem);
+            line-height: 1.6;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #ffeaa7;
+            text-shadow:
+                0 0 10px rgba(255, 234, 167, 0.6),
+                0 0 30px rgba(255, 234, 167, 0.3),
+                0 0 60px rgba(255, 234, 167, 0.1);
+            width: 100%;
+            max-width: 90vw;
+            margin: 0 auto;
+        }
+        .quote-info {
+            margin-top: 25px;
+            font-size: clamp(0.9rem, 1.5vw, 1.3rem);
+            color: #fdcb6e;
+            letter-spacing: 0.15em;
+            text-align: center;
+            font-weight: 500;
+            text-shadow:
+                0 0 8px rgba(253, 203, 110, 0.4),
+                0 0 20px rgba(253, 203, 110, 0.2);
+        }
+        .book-name {
+            font-style: italic;
+            opacity: 0.85;
+        }
+        .fade-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40vh;
+            background: linear-gradient(to top, #000 0%, transparent 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .fade-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15vh;
+            background: linear-gradient(to bottom, #000 0%, transparent 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .back-link {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            color: rgba(255, 234, 167, 0.5);
+            text-decoration: none;
+            font-size: 0.8rem;
+            z-index: 100;
+            transition: all 0.6s;
+            letter-spacing: 0.15em;
+            font-weight: 300;
+        }
+        .back-link:hover { color: rgba(255, 234, 167, 0.9); }
+        .settings-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.5);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+            opacity: 0.3;
+            transition: opacity 0.5s;
+        }
+        .controls:hover { opacity: 0.8; }
+        .btn {
+            background: transparent;
+            border: 1px solid rgba(255, 234, 167, 0.2);
+            color: rgba(255, 234, 167, 0.5);
+            padding: 10px 24px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.5s ease;
+            letter-spacing: 0.1em;
+            font-family: inherit;
+            font-weight: 300;
+        }
+        .btn:hover {
+            border-color: rgba(255, 234, 167, 0.5);
+            color: rgba(255, 234, 167, 0.9);
+        }
+        /* 设置面板 */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: rgba(10,10,15,0.95);
+            backdrop-filter: blur(30px);
+            z-index: 1000;
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 80px 30px 30px;
+            overflow-y: auto;
+        }
+        .settings-panel.open { right: 0; }
+        .settings-panel h3 {
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+        .setting-item {
+            margin-bottom: 25px;
+        }
+        .setting-item label {
+            display: block;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+        .setting-item input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            outline: none;
+        }
+        .setting-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .close-settings {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .overlay.show { opacity: 1; pointer-events: auto; }
+    </style>
+</head>
+<body>
+    <canvas id="starCanvas"></canvas>
+    <div class="fade-top"></div>
+    <div class="fade-bottom"></div>
+    <a href="index.html" class="back-link">&larr; 返回</a>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <div class="overlay" id="overlay" onclick="toggleSettings()"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <button class="close-settings" onclick="toggleSettings()">×</button>
+        <h3>阅读设置</h3>
+        <div class="setting-item">
+            <label>滚动速度</label>
+            <input type="range" min="20" max="120" value="60" id="speedSlider" onchange="updateSpeed()">
+        </div>
+        <div class="setting-item">
+            <label>字号大小</label>
+            <input type="range" min="1" max="3" step="0.1" value="1.5" id="fontSizeSlider" onchange="updateFontSize()">
+        </div>
+    </div>
+
+    <div class="crawl-container">
+        <div class="crawl-content" id="crawlContent"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="speedUp()">加速</button>
+        <button class="btn" onclick="slowDown()">减速</button>
+        <button class="btn" onclick="togglePause()">暂停/继续</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光，是我莫大的荣幸。", author: "卡尔·萨根", book: "宇宙" },
+            { text: "给岁月以文明，而不是给文明以岁月。", author: "刘慈欣", book: "三体" },
+            { text: "宇宙就是一座黑暗森林，每个文明都是带枪的猎人。", author: "刘慈欣", book: "三体II：黑暗森林" },
+            { text: "人类的赞歌就是勇气的赞歌，人类的伟大就是勇气的伟大。", author: "荒木飞吕彦", book: "JOJO的奇妙冒险" },
+            { text: "世界上只有一种英雄主义，就是在认清生活真相之后依然热爱生活。", author: "罗曼·罗兰", book: "米开朗基罗传" },
+            { text: "我们都是由星尘构成的，当我们死去，我们将回归星空。", author: "尼尔·德格拉斯·泰森", book: "天体物理学" },
+            { text: "不要温和地走进那个良夜，老年应当在日暮时燃烧咆哮。", author: "狄兰·托马斯", book: "诗集" },
+            { text: "时间是一把筛子，最终会淘去一切沉渣。", author: "雨果", book: "悲惨世界" }
+        ];
+
+        let animationDuration = 60;
+        let isPaused = false;
+
+        function initStars() {
+            const canvas = document.getElementById('starCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.3,
+                    opacity: Math.random() * 0.5 + 0.1,
+                    speed: Math.random() * 0.02 + 0.005
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => {
+                    star.opacity += star.speed;
+                    const alpha = 0.3 + Math.sin(star.opacity) * 0.3;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 248, 220, ${alpha})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        function renderQuotes() {
+            const container = document.getElementById('crawlContent');
+            let html = '';
+            for (let i = 0; i < 3; i++) {
+                quotes.forEach(quote => {
+                    html += `
+                        <div class="quote-item">
+                            <div class="quote-text">${quote.text}</div>
+                            <div class="quote-info">
+                                ${quote.author} &middot; <span class="book-name">${quote.book}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            container.innerHTML = html;
+        }
+
+        function speedUp() {
+            animationDuration = Math.max(20, animationDuration - 5);
+            updateSpeed();
+        }
+
+        function slowDown() {
+            animationDuration = Math.min(120, animationDuration + 5);
+            updateSpeed();
+        }
+
+        function updateSpeed() {
+            const content = document.querySelector('.crawl-content');
+            if (content) {
+                content.style.animation = 'none';
+                content.offsetHeight;
+                content.style.animation = `crawl ${animationDuration}s linear infinite`;
+            }
+        }
+
+        function togglePause() {
+            const content = document.querySelector('.crawl-content');
+            if (!content) return;
+            content.style.animationPlayState = isPaused ? 'running' : 'paused';
+            isPaused = !isPaused;
+        }
+
+        function toggleSettings() {
+            document.getElementById('settingsPanel').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+
+        function updateFontSize() {
+            const scale = document.getElementById('fontSizeSlider').value;
+            document.querySelectorAll('.quote-text').forEach(el => {
+                el.style.fontSize = `clamp(${1.8 * scale}rem, ${4 * scale}vw, ${3.5 * scale}rem)`;
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') speedUp();
+            if (e.key === 'ArrowDown') slowDown();
+            if (e.key === ' ') {
+                e.preventDefault();
+                togglePause();
+            }
+        });
+
+        initStars();
+        renderQuotes();
+    </script>
+</body>
+</html>

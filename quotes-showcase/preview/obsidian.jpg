@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect fill="#0d0d0d" width="400" height="300"/>
+  <rect x="20" y="20" width="360" height="260" fill="none" stroke="#ff9500" stroke-width="2" opacity="0.5"/>
+  <text x="30" y="50" font-family="monospace" font-size="10" fill="#ff9500" opacity="0.8">OBSIDIAN://CORE</text>
+  <text x="30" y="70" font-family="monospace" font-size="10" fill="#ff9500" opacity="0.8">STATUS: ONLINE</text>
+  <line x1="30" y1="100" x2="370" y2="100" stroke="#ff9500" stroke-width="1" opacity="0.3"/>
+  <rect x="50" y="120" width="100" height="80" fill="none" stroke="#ff9500" stroke-width="1" opacity="0.3"/>
+  <text x="100" y="165" font-family="monospace" font-size="12" fill="#ff9500" text-anchor="middle" opacity="0.8">CORE</text>
+  <text x="200" y="220" font-family="monospace" font-size="14" fill="#ff9500" text-anchor="middle" opacity="0.9">黑曜石核心</text>
+</svg>

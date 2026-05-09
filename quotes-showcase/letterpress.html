@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活字印刷效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', 'Noto Serif SC', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 打字机整体 */
+        .typewriter {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1f1f1f 100%);
+            border-radius: 20px 20px 10px 10px;
+            padding: 40px 30px 80px;
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        /* 打字机顶部面板 */
+        .typewriter-top {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 30px;
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        }
+        /* 纸张 */
+        .paper {
+            background: #f5f0e8;
+            min-height: 300px;
+            padding: 60px 50px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            background-image:
+                url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        /* 纸张上的横线 */
+        .paper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 39px,
+                rgba(200, 190, 170, 0.3) 39px,
+                rgba(200, 190, 170, 0.3) 40px
+            );
+            pointer-events: none;
+        }
+        /* 纸张边缘 */
+        .paper::after {
+            content: '';
+            position: absolute;
+            left: 60px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 100, 100, 0.2);
+        }
+        .quote-text {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            line-height: 40px;
+            color: #2a2520;
+            letter-spacing: 0.05em;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+            min-height: 200px;
+        }
+        .quote-text .char {
+            display: inline-block;
+            opacity: 0;
+        }
+        .quote-text .char.typed {
+            opacity: 1;
+            animation: typeIn 0.05s ease;
+        }
+        @keyframes typeIn {
+            0% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        /* 光标 */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: #333;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #8a8078;
+            text-align: right;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 1;
+        }
+        /* 打字机键盘区域 */
+        .keyboard {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #252525 0%, #1a1a1a 100%);
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 0 20px;
+        }
+        .key {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+            border-radius: 4px;
+            border: 1px solid #444;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #888;
+            transition: all 0.1s;
+        }
+        .key.active {
+            transform: translateY(2px);
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+            background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 100%);
+            color: #aaa;
+        }
+        /* 滚筒 */
+        .roller {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            height: 20px;
+            background: linear-gradient(180deg, #444 0%, #333 100%);
+            border-radius: 10px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+        }
+        /* 压纸杆 */
+        .paper-holder {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 8px;
+            background: #555;
+            border-radius: 4px;
+        }
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+        .btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.4);
+            padding: 12px 32px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.6s;
+            letter-spacing: 0.15em;
+            font-family: inherit;
+        }
+        .btn:hover {
+            border-color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.8);
+        }
+        .back-link {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            color: rgba(255,255,255,0.2);
+            text-decoration: none;
+            font-size: 0.75rem;
+            z-index: 100;
+            transition: color 0.5s;
+            letter-spacing: 0.15em;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.6); }
+        .file-input {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 100;
+        }
+        .file-input input { display: none; }
+        .file-input label {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.4);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.5s;
+            letter-spacing: 0.1em;
+            display: inline-block;
+        }
+        .file-input label:hover {
+            border-color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.8);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; 返回</a>
+    <div class="file-input">
+        <input type="file" id="fileInput" accept=".txt,.json" onchange="loadFile(event)">
+        <label for="fileInput">选择书籍文件</label>
+    </div>
+
+    <div class="typewriter">
+        <div class="typewriter-top"></div>
+        <div class="roller"></div>
+        <div class="paper-holder"></div>
+        <div class="paper">
+            <div class="quote-text" id="quoteText"></div>
+            <div class="quote-info" id="quoteInfo">
+                <span id="author"></span> &middot; <span id="book"></span>
+            </div>
+        </div>
+        <div class="keyboard" id="keyboard"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        let quotes = [
+            { text: "知识就是力量，但更重要的是运用知识的智慧", author: "培根", book: "新工具" },
+            { text: "书籍是人类进步的阶梯", author: "高尔基", book: "论文学" },
+            { text: "读一本好书，就是和许多高尚的人谈话", author: "歌德", book: "格言与感想" },
+            { text: "书山有路勤为径，学海无涯苦作舟", author: "韩愈", book: "古今贤文" },
+            { text: "纸上得来终觉浅，绝知此事要躬行", author: "陆游", book: "冬夜读书示子聿" },
+            { text: "博学之，审问之，慎思之，明辨之，笃行之", author: "孔子", book: "中庸" }
+        ];
+
+        let currentIndex = 0;
+        let typingInterval = null;
+
+        // 创建键盘
+        function createKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            const keys = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+            for (let char of keys) {
+                const key = document.createElement('div');
+                key.className = 'key';
+                key.textContent = char;
+                key.id = 'key-' + char;
+                keyboard.appendChild(key);
+            }
+        }
+
+        function typeText(text) {
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            textEl.innerHTML = '';
+            infoEl.style.opacity = '0';
+
+            if (typingInterval) clearInterval(typingInterval);
+
+            let i = 0;
+            const chars = text.split('');
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+
+            typingInterval = setInterval(() => {
+                if (i >= chars.length) {
+                    clearInterval(typingInterval);
+                    textEl.appendChild(cursor);
+                    setTimeout(() => {
+                        infoEl.style.opacity = '1';
+                        infoEl.style.transition = 'opacity 1s';
+                    }, 500);
+                    return;
+                }
+
+                const char = chars[i];
+                const span = document.createElement('span');
+                span.className = 'char typed';
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                textEl.appendChild(span);
+
+                // 高亮对应的键
+                const keyChar = char.toUpperCase();
+                const key = document.getElementById('key-' + keyChar);
+                if (key) {
+                    key.classList.add('active');
+                    setTimeout(() => key.classList.remove('active'), 100);
+                }
+
+                // 打字机声音效果（视觉）
+                const paper = document.querySelector('.paper');
+                paper.style.transform = 'translateY(1px)';
+                setTimeout(() => paper.style.transform = 'translateY(0)', 50);
+
+                i++;
+            }, 100);
+        }
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            document.getElementById('author').textContent = quote.author;
+            document.getElementById('book').textContent = quote.book;
+            typeText(quote.text);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        quotes = data;
+                        currentIndex = 0;
+                        showQuote();
+                    }
+                } catch (err) {
+                    const lines = e.target.result.split('\n').filter(line => line.trim());
+                    quotes = lines.map(line => ({
+                        text: line,
+                        author: '未知',
+                        book: '自定义'
+                    }));
+                    currentIndex = 0;
+                    showQuote();
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        createKeyboard();
+        showQuote();
+    </script>
+</body>
+</html>

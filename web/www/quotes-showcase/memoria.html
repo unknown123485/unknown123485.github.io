@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>MEMORIA · 梦境书摘</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-base: #090b11;
+            --text-primary: rgba(255,255,255,0.94);
+            --text-secondary: rgba(255,255,255,0.58);
+            --glass-bg: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.08);
+        }
+
+        body {
+            background: radial-gradient(circle at center, #2a3142 0%, #161a24 45%, #090b11 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', 'Noto Serif SC', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 动态雾层 */
+        .fog-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .fog-layer {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.18;
+            mix-blend-mode: screen;
+        }
+
+        .fog-layer:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(100,120,160,0.4) 0%, transparent 70%);
+            top: -10%;
+            left: 20%;
+            animation: fogMove1 18s ease-in-out infinite alternate;
+        }
+
+        .fog-layer:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(80,90,130,0.35) 0%, transparent 70%);
+            bottom: -5%;
+            right: 15%;
+            animation: fogMove2 20s ease-in-out infinite alternate;
+            animation-delay: -5s;
+        }
+
+        .fog-layer:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(120,100,140,0.3) 0%, transparent 70%);
+            top: 40%;
+            left: -5%;
+            animation: fogMove3 22s ease-in-out infinite alternate;
+            animation-delay: -10s;
+        }
+
+        @keyframes fogMove1 {
+            0% { transform: translate(-40px, -30px) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.1); }
+        }
+
+        @keyframes fogMove2 {
+            0% { transform: translate(30px, -20px) scale(1); }
+            100% { transform: translate(-30px, 20px) scale(1.15); }
+        }
+
+        @keyframes fogMove3 {
+            0% { transform: translate(-20px, 30px) scale(1); }
+            100% { transform: translate(20px, -30px) scale(1.05); }
+        }
+
+        /* Noise Overlay */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.03;
+        }
+
+        /* 暗角层 */
+        .vignette-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, transparent 35%, rgba(0,0,0,0.45) 100%);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* Quote Carousel */
+        .quote-carousel {
+            width: 100%;
+            max-width: 920px;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 auto;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .quote-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(28px) saturate(160%);
+            -webkit-backdrop-filter: blur(28px) saturate(160%);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 72px 64px;
+            box-shadow: 0 8px 60px rgba(0,0,0,0.38), inset 0 1px 1px rgba(255,255,255,0.12);
+            position: absolute;
+            width: 100%;
+            max-width: 800px;
+            transition: all 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform, opacity, filter;
+        }
+
+        .quote-text {
+            font-size: clamp(24px, 4vw, 56px);
+            line-height: 1.4;
+            letter-spacing: -0.04em;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-family: 'Noto Serif SC', serif;
+            text-align: center;
+        }
+
+        .quote-author {
+            font-size: 15px;
+            opacity: 0.58;
+            letter-spacing: 0.08em;
+            margin-top: 32px;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .active-quote {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1) translateY(0);
+            z-index: 10;
+            animation: float 7s ease-in-out infinite alternate;
+        }
+
+        .prev-quote {
+            opacity: 0.16;
+            filter: blur(3px);
+            transform: translateX(-55%) scale(0.92);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .next-quote {
+            opacity: 0.16;
+            filter: blur(3px);
+            transform: translateX(55%) scale(0.92);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(-4px); }
+            100% { transform: translateY(4px); }
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 20;
+        }
+
+        .progress-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .progress-dot.active {
+            background: rgba(255,255,255,0.8);
+            width: 24px;
+            border-radius: 3px;
+        }
+
+        /* Minimal Controls */
+        .minimal-controls {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            z-index: 20;
+            display: flex;
+            gap: 16px;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            font-size: 18px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.9);
+            transform: scale(1.05);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Navigation arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            font-size: 20px;
+            user-select: none;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .nav-arrow.prev { left: 40px; }
+        .nav-arrow.next { right: 40px; }
+
+        /* Mouse interaction - 3D tilt */
+        .quote-card.active-quote {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Entry animation */
+        .quote-enter {
+            animation: quoteEnter 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes quoteEnter {
+            from {
+                opacity: 0;
+                filter: blur(18px);
+                transform: scale(1.04) translateY(40px);
+            }
+            to {
+                opacity: 1;
+                filter: blur(0);
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .quote-exit {
+            animation: quoteExit 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes quoteExit {
+            from {
+                opacity: 1;
+                filter: blur(0);
+                transform: scale(1) translateY(0);
+            }
+            to {
+                opacity: 0;
+                filter: blur(12px);
+                transform: scale(0.96) translateY(-20px);
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .quote-card {
+                padding: 32px;
+                border-radius: 24px;
+                max-width: 90vw;
+            }
+
+            .quote-text {
+                font-size: clamp(20px, 6vw, 32px);
+                line-height: 1.5;
+            }
+
+            .quote-author {
+                font-size: 13px;
+                margin-top: 24px;
+            }
+
+            .fog-layer {
+                filter: blur(72px);
+                opacity: 0.12;
+            }
+
+            .fog-layer:nth-child(1) { width: 300px; height: 300px; }
+            .fog-layer:nth-child(2) { width: 250px; height: 250px; }
+            .fog-layer:nth-child(3) { width: 200px; height: 200px; }
+
+            .noise-overlay {
+                opacity: 0.02;
+            }
+
+            .nav-arrow {
+                display: none;
+            }
+
+            .minimal-controls {
+                top: 20px;
+                left: 20px;
+            }
+
+            .progress-indicator {
+                bottom: 20px;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .fog-layer,
+            .quote-card,
+            .active-quote {
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Layers -->
+    <div class="fog-container">
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+    </div>
+    <div class="noise-overlay"></div>
+    <div class="vignette-overlay"></div>
+
+    <!-- Controls -->
+    <div class="minimal-controls">
+        <div class="control-btn" onclick="goBack()" title="返回">←</div>
+        <div class="control-btn" onclick="toggleAutoPlay()" title="自动播放" id="playBtn">▶</div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrow prev" onclick="prevQuote()">‹</div>
+    <div class="nav-arrow next" onclick="nextQuote()">›</div>
+
+    <!-- Quote Carousel -->
+    <div class="quote-carousel" id="carousel">
+        <div class="quote-card prev-quote" id="prevCard">
+            <div class="quote-text" id="prevText"></div>
+            <div class="quote-author" id="prevAuthor"></div>
+        </div>
+        <div class="quote-card active-quote" id="activeCard">
+            <div class="quote-text" id="activeText"></div>
+            <div class="quote-author" id="activeAuthor"></div>
+        </div>
+        <div class="quote-card next-quote" id="nextCard">
+            <div class="quote-text" id="nextText"></div>
+            <div class="quote-author" id="nextAuthor"></div>
+        </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator" id="progressIndicator"></div>
+
+    <script>
+        // Quote data
+        const quotes = [
+            { text: "在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光，是我莫大的荣幸。", author: "卡尔·萨根 · 宇宙" },
+            { text: "给岁月以文明，而不是给文明以岁月。", author: "刘慈欣 · 三体" },
+            { text: "世界上只有一种真正的英雄主义，那就是认清生活的真相后依然热爱生活。", author: "罗曼·罗兰 · 米开朗基罗传" },
+            { text: "我们都是由星尘构成的，当我们死去，我们将回归星空。", author: "尼尔·德格拉斯·泰森 · 天体物理学" },
+            { text: "不要温和地走进那个良夜，老年应当在日暮时燃烧咆哮。", author: "狄兰·托马斯 · 诗集" },
+            { text: "宇宙既不仁慈，也不恶毒，它只是对人类的悲欢无动于衷。", author: "史蒂芬·霍金 · 时间简史" },
+            { text: "你身体里的每一个原子都来自一颗爆炸了的恒星，你左手的原子与右手的原子也许来自不同的恒星。", author: "劳伦斯·克劳斯 · 一颗原子的时空之旅" },
+            { text: "我们都是星尘，但我们用双手触碰彼此，这就是宇宙中最浪漫的事。", author: "佚名" }
+        ];
+
+        let currentIndex = 0;
+        let isAutoPlaying = false;
+        let autoPlayInterval = null;
+
+        // Initialize
+        function init() {
+            createProgressDots();
+            updateCards();
+            setupMouseInteraction();
+            setupTouchInteraction();
+        }
+
+        function createProgressDots() {
+            const container = document.getElementById('progressIndicator');
+            container.innerHTML = '';
+            quotes.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot' + (i === currentIndex ? ' active' : '');
+                container.appendChild(dot);
+            });
+        }
+
+        function updateProgress() {
+            const dots = document.querySelectorAll('.progress-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        function updateCards() {
+            const prevIdx = (currentIndex - 1 + quotes.length) % quotes.length;
+            const nextIdx = (currentIndex + 1) % quotes.length;
+
+            document.getElementById('prevText').textContent = quotes[prevIdx].text;
+            document.getElementById('prevAuthor').textContent = quotes[prevIdx].author;
+
+            document.getElementById('activeText').textContent = quotes[currentIndex].text;
+            document.getElementById('activeAuthor').textContent = quotes[currentIndex].author;
+
+            document.getElementById('nextText').textContent = quotes[nextIdx].text;
+            document.getElementById('nextAuthor').textContent = quotes[nextIdx].author;
+
+            updateProgress();
+        }
+
+        function nextQuote() {
+            const activeCard = document.getElementById('activeCard');
+            activeCard.classList.add('quote-exit');
+
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % quotes.length;
+                activeCard.classList.remove('quote-exit');
+                activeCard.classList.add('quote-enter');
+                updateCards();
+
+                setTimeout(() => {
+                    activeCard.classList.remove('quote-enter');
+                }, 1400);
+            }, 700);
+        }
+
+        function prevQuote() {
+            const activeCard = document.getElementById('activeCard');
+            activeCard.classList.add('quote-exit');
+
+            setTimeout(() => {
+                currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+                activeCard.classList.remove('quote-exit');
+                activeCard.classList.add('quote-enter');
+                updateCards();
+
+                setTimeout(() => {
+                    activeCard.classList.remove('quote-enter');
+                }, 1400);
+            }, 700);
+        }
+
+        function toggleAutoPlay() {
+            isAutoPlaying = !isAutoPlaying;
+            const btn = document.getElementById('playBtn');
+            btn.textContent = isAutoPlaying ? '❚❚' : '▶';
+
+            if (isAutoPlaying) {
+                autoPlayInterval = setInterval(nextQuote, 6000);
+            } else {
+                clearInterval(autoPlayInterval);
+            }
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        // Mouse interaction with inertia
+        let mouseX = 0, mouseY = 0;
+        let currentRotateX = 0, currentRotateY = 0;
+        let targetRotateX = 0, targetRotateY = 0;
+        let rafId = null;
+
+        function setupMouseInteraction() {
+            const carousel = document.getElementById('carousel');
+            const activeCard = document.getElementById('activeCard');
+
+            carousel.addEventListener('mousemove', (e) => {
+                const rect = carousel.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                targetRotateY = x * 8;  // ±4deg
+                targetRotateX = -y * 6; // ±3deg
+            });
+
+            carousel.addEventListener('mouseleave', () => {
+                targetRotateX = 0;
+                targetRotateY = 0;
+            });
+
+            function animate() {
+                // Smooth interpolation with inertia
+                currentRotateX += (targetRotateX - currentRotateX) * 0.08;
+                currentRotateY += (targetRotateY - currentRotateY) * 0.08;
+
+                activeCard.style.transform = `perspective(1000px) rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg) scale(1)`;
+
+                rafId = requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Touch interaction for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function setupTouchInteraction() {
+            const carousel = document.getElementById('carousel');
+
+            carousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            carousel.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+        }
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextQuote();
+                } else {
+                    prevQuote();
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === ' ') {
+                e.preventDefault();
+                toggleAutoPlay();
+            }
+        });
+
+        // Initialize on load
+        init();
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (rafId) cancelAnimationFrame(rafId);
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+        });
+    </script>
+</body>
+</html>

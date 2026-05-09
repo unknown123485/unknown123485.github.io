@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打字机效果 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', 'Noto Serif SC', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 打字机外壳 */
+        .typewriter-machine {
+            position: relative;
+            width: 90vw;
+            max-width: 1000px;
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 15%, #1f1f1f 100%);
+            border-radius: 20px 20px 15px 15px;
+            padding: 50px 40px 120px;
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                inset 0 -3px 10px rgba(0,0,0,0.5);
+        }
+        /* 顶部装饰条 */
+        .typewriter-top-bar {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 8px;
+            background: linear-gradient(180deg, #555 0%, #333 100%);
+            border-radius: 4px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+        }
+        /* 纸张滚筒 */
+        .roller {
+            position: absolute;
+            top: 35px;
+            left: 60px;
+            right: 60px;
+            height: 24px;
+            background: linear-gradient(180deg, #666 0%, #444 40%, #333 100%);
+            border-radius: 12px;
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.4),
+                inset 0 1px 2px rgba(255,255,255,0.1);
+        }
+        .roller::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            right: 10px;
+            height: 2px;
+            background: rgba(0,0,0,0.3);
+            transform: translateY(-50%);
+        }
+        /* 压纸杆 */
+        .paper-bar {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: linear-gradient(180deg, #777 0%, #555 100%);
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        /* 纸张 */
+        .paper {
+            background: #f5f0e8;
+            min-height: 280px;
+            padding: 50px 40px 30px;
+            margin-top: 20px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            background-image:
+                url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        /* 横线 */
+        .paper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 38px,
+                rgba(180, 170, 150, 0.25) 38px,
+                rgba(180, 170, 150, 0.25) 39px
+            );
+            pointer-events: none;
+        }
+        /* 左边距红线 */
+        .paper::after {
+            content: '';
+            position: absolute;
+            left: 50px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 100, 100, 0.15);
+        }
+        .quote-text {
+            font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+            line-height: 39px;
+            color: #2a2520;
+            letter-spacing: 0.05em;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+            min-height: 160px;
+            font-family: 'Courier New', monospace;
+        }
+        .quote-text .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(-2px);
+        }
+        .quote-text .char.typed {
+            opacity: 1;
+            transform: translateY(0);
+            animation: keyHit 0.08s ease;
+        }
+        @keyframes keyHit {
+            0% { transform: translateY(-3px) scale(1.1); }
+            50% { transform: translateY(1px) scale(0.95); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        /* 光标 */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.3em;
+            background: #333;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 1px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .quote-info {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #8a8078;
+            text-align: right;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 1;
+        }
+        /* 键盘区域 */
+        .keyboard {
+            position: absolute;
+            bottom: 15px;
+            left: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .key-row {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+        }
+        .key {
+            width: 32px;
+            height: 28px;
+            background: linear-gradient(180deg, #4a4a4a 0%, #333 100%);
+            border-radius: 4px;
+            border: 1px solid #555;
+            box-shadow:
+                0 3px 0 #222,
+                0 4px 4px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.65rem;
+            color: #aaa;
+            transition: all 0.05s;
+            font-family: 'Courier New', monospace;
+        }
+        .key.active {
+            transform: translateY(3px);
+            box-shadow:
+                0 0 0 #222,
+                0 1px 2px rgba(0,0,0,0.3);
+            background: linear-gradient(180deg, #555 0%, #444 100%);
+            color: #ddd;
+        }
+        .key.wide { width: 50px; }
+        .key.space { width: 180px; }
+        /* 机械臂动画 */
+        .typebar {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            width: 4px;
+            height: 60px;
+            background: linear-gradient(90deg, #666, #888, #666);
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotateX(80deg);
+            opacity: 0;
+            transition: all 0.05s;
+            z-index: 5;
+        }
+        .typebar.active {
+            opacity: 0.6;
+            transform: translateX(-50%) rotateX(0deg);
+        }
+        /* 控制按钮 */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+        .btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.6);
+            padding: 12px 32px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            letter-spacing: 0.1em;
+            font-family: inherit;
+            backdrop-filter: blur(10px);
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            font-size: 0.85rem;
+            z-index: 100;
+            transition: color 0.3s;
+            letter-spacing: 0.1em;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.7); }
+        .settings-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.5);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        /* 设置面板 */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: rgba(20,20,25,0.95);
+            backdrop-filter: blur(30px);
+            z-index: 1000;
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 80px 30px 30px;
+            overflow-y: auto;
+        }
+        .settings-panel.open { right: 0; }
+        .settings-panel h3 {
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+        .setting-item {
+            margin-bottom: 25px;
+        }
+        .setting-item label {
+            display: block;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+        .setting-item input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            outline: none;
+        }
+        .setting-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .close-settings {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .overlay.show { opacity: 1; pointer-events: auto; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← 返回</a>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <div class="overlay" id="overlay" onclick="toggleSettings()"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <button class="close-settings" onclick="toggleSettings()">×</button>
+        <h3>阅读设置</h3>
+        <div class="setting-item">
+            <label>字号大小</label>
+            <input type="range" min="12" max="32" value="18" id="fontSizeSlider" onchange="updateFontSize()">
+        </div>
+        <div class="setting-item">
+            <label>打字速度</label>
+            <input type="range" min="30" max="200" value="100" id="speedSlider" onchange="updateSpeed()">
+        </div>
+        <div class="setting-item">
+            <label>行间距</label>
+            <input type="range" min="1" max="3" step="0.1" value="1.6" id="lineHeightSlider" onchange="updateLineHeight()">
+        </div>
+    </div>
+
+    <div class="typewriter-machine">
+        <div class="typewriter-top-bar"></div>
+        <div class="paper-bar"></div>
+        <div class="roller"></div>
+        <div class="paper">
+            <div class="quote-text" id="quoteText"></div>
+            <div class="quote-info" id="quoteInfo">
+                <span id="author"></span> · <span id="book"></span>
+            </div>
+        </div>
+        <div class="typebar" id="typebar"></div>
+        <div class="keyboard" id="keyboard"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="togglePause()">暂停/继续</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "知识就是力量，但更重要的是运用知识的智慧", author: "培根", book: "新工具" },
+            { text: "书籍是人类进步的阶梯", author: "高尔基", book: "论文学" },
+            { text: "读一本好书，就是和许多高尚的人谈话", author: "歌德", book: "格言与感想" },
+            { text: "书山有路勤为径，学海无涯苦作舟", author: "韩愈", book: "古今贤文" },
+            { text: "纸上得来终觉浅，绝知此事要躬行", author: "陆游", book: "冬夜读书示子聿" },
+            { text: "博学之，审问之，慎思之，明辨之，笃行之", author: "孔子", book: "中庸" }
+        ];
+
+        let currentIndex = 0;
+        let charIndex = 0;
+        let isPaused = false;
+        let typingInterval;
+        let typeSpeed = 100;
+
+        // 创建QWERTY键盘布局
+        function createKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            const rows = [
+                ['Q','W','E','R','T','Y','U','I','O','P'],
+                ['A','S','D','F','G','H','J','K','L'],
+                ['Z','X','C','V','B','N','M']
+            ];
+
+            rows.forEach(rowChars => {
+                const row = document.createElement('div');
+                row.className = 'key-row';
+                rowChars.forEach(char => {
+                    const key = document.createElement('div');
+                    key.className = 'key';
+                    key.textContent = char;
+                    key.id = 'key-' + char;
+                    row.appendChild(key);
+                });
+                keyboard.appendChild(row);
+            });
+
+            // 空格键
+            const spaceRow = document.createElement('div');
+            spaceRow.className = 'key-row';
+            const spaceKey = document.createElement('div');
+            spaceKey.className = 'key space';
+            spaceKey.id = 'key-SPACE';
+            spaceRow.appendChild(spaceKey);
+            keyboard.appendChild(spaceRow);
+        }
+
+        function typeChar() {
+            if (isPaused) return;
+
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+
+            if (charIndex < quote.text.length) {
+                const char = quote.text[charIndex];
+                const span = document.createElement('span');
+                span.className = 'char typed';
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                textEl.appendChild(span);
+
+                // 高亮对应按键
+                const keyChar = char.toUpperCase();
+                const key = document.getElementById('key-' + (char === ' ' ? 'SPACE' : keyChar));
+                if (key) {
+                    key.classList.add('active');
+                    setTimeout(() => key.classList.remove('active'), 80);
+                }
+
+                // 机械臂动画
+                const typebar = document.getElementById('typebar');
+                typebar.classList.add('active');
+                setTimeout(() => typebar.classList.remove('active'), 80);
+
+                // 纸张震动
+                const paper = document.querySelector('.paper');
+                paper.style.transform = 'translateY(1px)';
+                setTimeout(() => paper.style.transform = 'translateY(0)', 50);
+
+                charIndex++;
+                typingInterval = setTimeout(typeChar, typeSpeed + Math.random() * 50);
+            } else {
+                // 显示光标
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+                textEl.appendChild(cursor);
+
+                // 显示作者信息
+                document.getElementById('author').textContent = quote.author;
+                document.getElementById('book').textContent = quote.book;
+                document.getElementById('quoteInfo').style.opacity = '1';
+
+                // 3秒后自动切换
+                setTimeout(() => {
+                    if (!isPaused) nextQuote();
+                }, 4000);
+            }
+        }
+
+        function startTyping() {
+            clearTimeout(typingInterval);
+            const textEl = document.getElementById('quoteText');
+            textEl.innerHTML = '';
+            document.getElementById('quoteInfo').style.opacity = '0';
+            charIndex = 0;
+            typeChar();
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            startTyping();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            startTyping();
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            if (!isPaused) typeChar();
+        }
+
+        function toggleSettings() {
+            document.getElementById('settingsPanel').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+
+        function updateFontSize() {
+            const size = document.getElementById('fontSizeSlider').value;
+            document.getElementById('quoteText').style.fontSize = size + 'px';
+        }
+
+        function updateSpeed() {
+            typeSpeed = 230 - document.getElementById('speedSlider').value;
+        }
+
+        function updateLineHeight() {
+            const lh = document.getElementById('lineHeightSlider').value;
+            document.getElementById('quoteText').style.lineHeight = lh;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === ' ') {
+                e.preventDefault();
+                togglePause();
+            }
+        });
+
+        createKeyboard();
+        startTyping();
+    </script>
+</body>
+</html>

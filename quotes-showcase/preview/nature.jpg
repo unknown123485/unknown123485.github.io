@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#2d4a3e"/>
+    </linearGradient>
+  </defs>
+  <rect fill="url(#sky)" width="400" height="300"/>
+  <circle cx="320" cy="60" r="30" fill="#ffd700" opacity="0.8"/>
+  <g opacity="0.6">
+    <circle cx="50" cy="100" r="2" fill="#fff"/>
+    <circle cx="100" cy="80" r="1.5" fill="#fff"/>
+    <circle cx="150" cy="120" r="2" fill="#fff"/>
+    <circle cx="200" cy="60" r="1" fill="#fff"/>
+    <circle cx="250" cy="100" r="2" fill="#fff"/>
+    <circle cx="300" cy="140" r="1.5" fill="#fff"/>
+  </g>
+  <text x="200" y="200" font-family="sans-serif" font-size="16" fill="#87ceeb" text-anchor="middle">自然场景</text>
+</svg>

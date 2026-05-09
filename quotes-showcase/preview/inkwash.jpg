@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <radialGradient id="paper" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#f5f0e6"/>
+      <stop offset="100%" style="stop-color:#e8e0d4"/>
+    </radialGradient>
+  </defs>
+  <rect fill="url(#paper)" width="400" height="300"/>
+  <text x="200" y="140" font-family="serif" font-size="20" fill="#2d2d2d" text-anchor="middle" opacity="0.8">水墨晕染</text>
+  <circle cx="200" cy="180" r="60" fill="none" stroke="#333" stroke-width="2" opacity="0.3">
+    <animate attributeName="r" values="60;80;60" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.1;0.3" dur="3s" repeatCount="indefinite"/>
+  </circle>
+</svg>
