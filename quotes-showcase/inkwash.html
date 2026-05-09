@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水墨书香 - 书摘展示</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f0e6;
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .paper-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #inkCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.3;
+        }
+
+        .brush-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .brush-border::before,
+        .brush-border::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(90deg, 
+                rgba(60, 50, 40, 0.15) 0%,
+                rgba(60, 50, 40, 0.08) 50%,
+                rgba(60, 50, 40, 0.15) 100%);
+        }
+
+        .brush-border::before {
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+        }
+
+        .brush-border::after {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 30px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 4rem;
+            color: #3a3530;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 0.3em;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::before,
+        .title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b7355, transparent);
+        }
+
+        .title::before {
+            right: 100%;
+            margin-right: 20px;
+        }
+
+        .title::after {
+            left: 100%;
+            margin-left: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #7a6a5a;
+            letter-spacing: 0.5em;
+        }
+
+        .quote-container {
+            position: relative;
+            padding: 60px 50px;
+            margin-bottom: 40px;
+            background: rgba(255, 252, 245, 0.85);
+            border-radius: 4px;
+            box-shadow: 
+                0 2px 20px rgba(0, 0, 0, 0.05),
+                inset 0 0 60px rgba(139, 115, 85, 0.03);
+        }
+
+        .quote-container::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 8rem;
+            color: rgba(139, 115, 85, 0.15);
+            line-height: 1;
+        }
+
+        .quote-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to top, rgba(255,252,245,0.9), transparent);
+            pointer-events: none;
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            line-height: 2.2;
+            color: #4a4540;
+            text-align: justify;
+            position: relative;
+            z-index: 1;
+            max-height: 400px;
+            overflow: hidden;
+            transition: max-height 0.8s ease;
+        }
+
+        .quote-text.expanded {
+            max-height: 2000px;
+        }
+
+        .quote-text::first-letter {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 3.5rem;
+            float: left;
+            margin-right: 10px;
+            line-height: 1.2;
+            color: #5a4a3a;
+        }
+
+        .book-info {
+            text-align: right;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(139, 115, 85, 0.2);
+        }
+
+        .book-title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.4rem;
+            color: #6a5a4a;
+            margin-bottom: 5px;
+        }
+
+        .book-author {
+            font-size: 0.95rem;
+            color: #8a7a6a;
+        }
+
+        .seal {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            border: 2px solid #c44;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.8rem;
+            color: #c44;
+            transform: rotate(-5deg);
+            opacity: 0.8;
+        }
+
+        .seal::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border: 1px solid #c44;
+            border-radius: 2px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .nav-btn {
+            background: rgba(139, 115, 85, 0.1);
+            border: 1px solid rgba(139, 115, 85, 0.3);
+            color: #5a4a3a;
+            padding: 12px 30px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 115, 85, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            background: rgba(139, 115, 85, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-indicator {
+            color: #8a7a6a;
+            font-size: 0.9rem;
+        }
+
+        .expand-btn {
+            display: block;
+            margin: 20px auto 0;
+            background: transparent;
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            color: #6a5a4a;
+            padding: 10px 25px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            background: rgba(139, 115, 85, 0.1);
+        }
+
+        .decorative-line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b7355, transparent);
+            margin: 40px auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .title {
+                font-size: 2.5rem;
+                letter-spacing: 0.15em;
+            }
+
+            .title::before,
+            .title::after {
+                display: none;
+            }
+
+            .quote-container {
+                padding: 40px 30px;
+            }
+
+            .quote-text {
+                font-size: 1.2rem;
+                line-height: 2;
+            }
+
+            .quote-text::first-letter {
+                font-size: 2.5rem;
+            }
+
+            .seal {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+                bottom: 15px;
+                right: 20px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="paperTexture" class="paper-texture"></canvas>
+    <canvas id="inkCanvas"></canvas>
+    <div class="brush-border"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">水墨书香</h1>
+            <p class="subtitle">墨染心语 · 纸载春秋</p>
+        </header>
+
+        <div class="decorative-line"></div>
+
+        <article class="quote-container">
+            <div class="quote-text" id="quoteText"></div>
+            <div class="book-info">
+                <p class="book-title" id="bookTitle"></p>
+                <p class="book-author" id="bookAuthor"></p>
+            </div>
+            <div class="seal">书</div>
+            <button class="expand-btn" id="expandBtn" onclick="toggleExpand()">展开全文</button>
+        </article>
+
+        <div class="navigation">
+            <button class="nav-btn" onclick="prevQuote()">← 上一篇</button>
+            <span class="nav-indicator"><span id="currentIndex">1</span> / <span id="totalCount">1</span></span>
+            <button class="nav-btn" onclick="nextQuote()">下一篇 →</button>
+        </header>
+    </div>
+
+    <script>
+        const quotes = [
+            {
+                text: "人生天地之间，若白驹之过隙，忽然而已。注然勃然，莫不出焉；油然寥然，莫之令止。吾生也有涯，而知也无涯。以有涯随无涯，殆已！已而为知者，殆而已矣！",
+                book: "《庄子·内篇》",
+                author: "庄周"
+            },
+            {
+                text: "宠辱若惊，贵大患若身。何谓宠辱若惊？宠为下，得之若惊，失之若惊，是谓宠辱若惊。何谓贵大患若身？吾所以有大患者，为吾有身，及吾无身，吾有何患？",
+                book: "《道德经》",
+                author: "老子"
+            },
+            {
+                text: "大学之道，在明明德，在亲民，在止于至善。知止而后有定，定而后能静，静而后能安，安而后能虑，虑而后能得。物有本末，事有终始，知所先后，则近道矣。",
+                book: "《礼记·大学》",
+                author: "曾子"
+            },
+            {
+                text: "古之欲明明德于天下者，先治其国；欲治其国者，先齐其家；欲齐其家者，先修其身；欲修其身者，先正其心；欲正其心者，先诚其意；欲诚其意者，先致其知，致知在格物。",
+                book: "《礼记·大学》",
+                author: "曾子"
+            },
+            {
+                text: "天行健，君子以自强不息。地势坤，君子以厚德载物。",
+                book: "《周易》",
+                author: "伏羲 周文王"
+            }
+        ];
+
+        let currentQuoteIndex = 0;
+
+        function displayQuote(index) {
+            document.getElementById('quoteText').textContent = quotes[index].text;
+            document.getElementById('quoteText').classList.remove('expanded');
+            document.getElementById('bookTitle').textContent = quotes[index].book;
+            document.getElementById('bookAuthor').textContent = '— ' + quotes[index].author;
+            document.getElementById('currentIndex').textContent = index + 1;
+            document.getElementById('totalCount').textContent = quotes.length;
+            document.getElementById('expandBtn').textContent = '展开全文';
+            createInkSplatter();
+        }
+
+        function toggleExpand() {
+            const textEl = document.getElementById('quoteText');
+            const btn = document.getElementById('expandBtn');
+            textEl.classList.toggle('expanded');
+            btn.textContent = textEl.classList.contains('expanded') ? '收起' : '展开全文';
+        }
+
+        function prevQuote() {
+            currentQuoteIndex = (currentQuoteIndex - 1 + quotes.length) % quotes.length;
+            displayQuote(currentQuoteIndex);
+        }
+
+        function nextQuote() {
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+            displayQuote(currentQuoteIndex);
+        }
+
+        function initPaperTexture() {
+            const canvas = document.getElementById('paperTexture');
+            const ctx = canvas.getContext('2d');
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                drawPaperTexture();
+            }
+
+            function drawPaperTexture() {
+                ctx.fillStyle = '#f5f0e6';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < 5000; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const alpha = Math.random() * 0.03;
+                    ctx.fillStyle = `rgba(180, 160, 140, ${alpha})`;
+                    ctx.fillRect(x, y, 1, 1);
+                }
+
+                for (let i = 0; i < 100; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const radius = Math.random() * 30 + 5;
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                    gradient.addColorStop(0, 'rgba(200, 180, 160, 0.02)');
+                    gradient.addColorStop(1, 'rgba(200, 180, 160, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+                }
+
+                ctx.fillStyle = 'rgba(220, 200, 180, 0.03)';
+                for (let i = 0; i < 20; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    ctx.beginPath();
+                    ctx.ellipse(x, y, Math.random() * 100 + 50, Math.random() * 30 + 10, Math.random() * Math.PI, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+        }
+
+        function initInkCanvas() {
+            const canvas = document.getElementById('inkCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+        }
+
+        function createInkSplatter() {
+            const canvas = document.getElementById('inkCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            const splatters = [];
+            const count = Math.floor(Math.random() * 3) + 2;
+
+            for (let i = 0; i < count; i++) {
+                splatters.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 80 + 30,
+                    alpha: Math.random() * 0.15 + 0.05
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                splatters.forEach(splatter => {
+                    const gradient = ctx.createRadialGradient(
+                        splatter.x, splatter.y, 0,
+                        splatter.x, splatter.y, splatter.radius
+                    );
+                    gradient.addColorStop(0, `rgba(60, 50, 40, ${splatter.alpha})`);
+                    gradient.addColorStop(0.5, `rgba(80, 70, 60, ${splatter.alpha * 0.5})`);
+                    gradient.addColorStop(1, 'rgba(80, 70, 60, 0)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(splatter.x, splatter.y, splatter.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for (let j = 0; j < 5; j++) {
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = Math.random() * splatter.radius * 1.5;
+                        const dotX = splatter.x + Math.cos(angle) * distance;
+                        const dotY = splatter.y + Math.sin(angle) * distance;
+                        const dotRadius = Math.random() * 15 + 5;
+                        
+                        const dotGradient = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, dotRadius);
+                        dotGradient.addColorStop(0, `rgba(60, 50, 40, ${splatter.alpha * 0.5})`);
+                        dotGradient.addColorStop(1, 'rgba(60, 50, 40, 0)');
+                        
+                        ctx.fillStyle = dotGradient;
+                        ctx.beginPath();
+                        ctx.arc(dotX, dotY, dotRadius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                });
+
+                canvas.style.opacity = 0.3;
+            }
+
+            animate();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === 'ArrowRight') nextQuote();
+        });
+
+        initPaperTexture();
+        initInkCanvas();
+        displayQuote(0);
+    </script>
+</body>
+</html>

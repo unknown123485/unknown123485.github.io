@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战术终端 HUD - 书摘展示</title>
+    <style>
+        :root {
+            --amber: #FF9F00;
+            --amber-dim: rgba(255, 159, 0, 0.3);
+            --amber-glow: rgba(255, 159, 0, 0.15);
+            --bg: #0a0a0f;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            min-height: 100vh;
+            font-family: 'Courier New', 'Noto Sans SC', monospace;
+            color: var(--amber);
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.15) 2px, rgba(0, 0, 0, 0.15) 4px);
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 159, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 159, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+        }
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(10, 10, 15, 0.9);
+            border-bottom: 1px solid var(--amber-dim);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 100;
+        }
+        .nav-brand { font-size: 1.2rem; font-weight: bold; color: var(--amber); text-shadow: 0 0 10px var(--amber); }
+        .nav-sub { font-size: 0.7rem; color: var(--amber-dim); margin-left: 10px; }
+        .nav-right { display: flex; align-items: center; gap: 20px; font-size: 0.75rem; }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            bottom: 0;
+            width: 200px;
+            background: rgba(10, 10, 15, 0.95);
+            border-right: 1px solid var(--amber-dim);
+            padding: 20px 0;
+            z-index: 90;
+            overflow-y: auto;
+        }
+        .sidebar-item {
+            padding: 12px 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 6px solid transparent;
+            transition: all 0.3s;
+        }
+        .sidebar-item:hover { background: rgba(255, 159, 0, 0.1); }
+        .sidebar-item:hover::before { border-left-color: var(--amber); }
+        .sidebar-item.active { background: rgba(255, 159, 0, 0.15); border-left-color: var(--amber); }
+        .sidebar-item.active::before { border-left-color: var(--amber); }
+        .sidebar-item.active::after { content: '●'; position: absolute; right: 15px; font-size: 0.6rem; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .sidebar-status { padding: 10px 20px; margin: 10px; background: rgba(255, 159, 0, 0.05); border: 1px solid var(--amber-dim); font-size: 0.7rem; }
+        .sidebar-status-title { color: var(--amber); margin-bottom: 8px; letter-spacing: 0.1em; }
+        .sidebar-status-value { color: #FFF3E0; font-size: 1.2rem; font-weight: bold; }
+        .main-content { margin-left: 200px; margin-top: 60px; padding: 30px; min-height: calc(100vh - 60px); position: relative; z-index: 10; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .tactical-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--amber-dim); position: relative; overflow: hidden; }
+        .tactical-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--amber), transparent); opacity: 0.5; }
+        .card-header { padding: 15px 20px; border-bottom: 1px solid var(--amber-dim); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+        .card-title { font-weight: bold; letter-spacing: 0.1em; }
+        .card-badge { background: var(--amber); color: #000; padding: 2px 8px; font-size: 0.65rem; font-weight: bold; animation: badgeBlink 2s ease-in-out infinite; }
+        @keyframes badgeBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .card-body { padding: 20px; }
+        .keyword-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 15px; }
+        .keyword-tag {
+            background: rgba(255, 159, 0, 0.1);
+            border: 1px solid var(--amber-dim);
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            animation: keywordAppear 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        @keyframes keywordAppear { to { opacity: 1; transform: translateY(0); } }
+        .keyword-tag:hover { background: var(--amber); color: #000; }
+        .keyword-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: keywordShine 3s ease-in-out infinite;
+        }
+        @keyframes keywordShine { 0% { left: -100%; } 50%, 100% { left: 100%; } }
+        .keyword-weight { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; animation: keywordPulse 1.5s ease-in-out infinite; }
+        @keyframes keywordPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
+        .quote-display { text-align: center; padding: 40px; }
+        .quote-text {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            line-height: 1.8;
+            color: #FFF3E0;
+            text-shadow: 0 0 2px #FF9F00, 0 0 8px #FF9F00, 0 0 20px rgba(255, 159, 0, 0.5);
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+            opacity: 0;
+            min-height: 100px;
+        }
+        .quote-text.show { animation: flickerIn 0.5s steps(5) forwards; }
+        @keyframes flickerIn { 0% { opacity: 0; } 20% { opacity: 1; } 40% { opacity: 0.3; } 60% { opacity: 0.8; } 80% { opacity: 0.4; } 100% { opacity: 1; } }
+        .quote-info { font-size: 0.8rem; color: var(--amber); letter-spacing: 0.2em; opacity: 0; }
+        .quote-info.show { animation: flickerIn 0.3s steps(3) 0.5s forwards; }
+        .nav-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 30px; align-items: center; }
+        .hud-btn { background: transparent; border: 1px solid var(--amber-dim); color: var(--amber); padding: 8px 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.3s; font-family: inherit; letter-spacing: 0.1em; }
+        .hud-btn:hover { background: var(--amber); color: #000; }
+        .hud-btn.active { background: var(--amber); color: #000; box-shadow: 0 0 15px var(--amber-glow); }
+        .hud-btn.playing { animation: playBlink 1s ease-in-out infinite; }
+        @keyframes playBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .auto-play-settings { display: flex; align-items: center; gap: 10px; margin-left: 20px; padding-left: 20px; border-left: 1px solid var(--amber-dim); }
+        .auto-play-label { font-size: 0.7rem; color: var(--amber-dim); }
+        .auto-play-slider { width: 80px; height: 4px; -webkit-appearance: none; background: var(--amber-dim); border-radius: 2px; cursor: pointer; }
+        .auto-play-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--amber); border-radius: 50%; cursor: pointer; }
+        .auto-play-value { font-size: 0.7rem; color: var(--amber); min-width: 40px; }
+        .bottom-bar { position: fixed; bottom: 0; left: 200px; right: 0; height: 40px; background: rgba(10, 10, 15, 0.95); border-top: 1px solid var(--amber-dim); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; font-size: 0.7rem; z-index: 100; }
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); animation: statusPulse 2s ease-in-out infinite; }
+        @keyframes statusPulse { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--amber); } 50% { opacity: 0.5; box-shadow: none; } }
+        @media (max-width: 768px) { .sidebar { width: 60px; } .sidebar-item span { display: none; } .sidebar-status { display: none; } .main-content { margin-left: 60px; } .bottom-bar { left: 60px; } .card-grid { grid-template-columns: 1fr; } }
+        .blink { animation: blink 1s steps(2) infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="top-nav">
+        <div><span class="nav-brand">MAS.READER</span><span class="nav-sub">// TACTICAL_DISPLAY</span></div>
+        <div class="nav-right">
+            <div class="status-indicator"><span class="blink" style="color: var(--amber);">●</span><span>ONLINE</span></div>
+            <div class="nav-time" id="clock">00:00:00</div>
+        </div>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-item active" data-section="quote" onclick="scrollToSection('quote')"><span>◆</span><span>书摘终端</span></div>
+        <div class="sidebar-item" data-section="keywords" onclick="scrollToSection('keywords')"><span>◎</span><span>关键词分析</span></div>
+        <div class="sidebar-item" data-section="stats" onclick="scrollToSection('stats')"><span>▣</span><span>数据面板</span></div>
+        <div class="sidebar-item" onclick="window.location.href='index.html'"><span>←</span><span>返回主页</span></div>
+        <div class="sidebar-status"><div class="sidebar-status-title">当前状态</div><div class="sidebar-status-value" id="sidebarStatus">分析中</div></div>
+        <div class="sidebar-status"><div class="sidebar-status-title">关键词数量</div><div class="sidebar-status-value" id="keywordCount">0</div></div>
+        <div class="sidebar-status"><div class="sidebar-status-title">播放状态</div><div class="sidebar-status-value" id="playStatus">等待中</div></div>
+    </div>
+    <div class="main-content">
+        <div class="tactical-card" id="quote">
+            <div class="card-header"><span class="card-title">书摘数据流</span><span class="card-badge">LIVE</span></div>
+            <div class="card-body">
+                <div class="quote-display">
+                    <div class="quote-text" id="quoteText"></div>
+                    <div class="quote-info" id="quoteInfo"></div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="hud-btn" onclick="prevQuote()">◄ 上一条</button>
+                    <button class="hud-btn" id="playBtn" onclick="toggleAutoPlay()">▶ 播放</button>
+                    <button class="hud-btn" onclick="nextQuote()">下一条 ►</button>
+                    <div class="auto-play-settings">
+                        <span class="auto-play-label">间隔:</span>
+                        <input type="range" class="auto-play-slider" id="intervalSlider" min="2" max="10" value="5" onchange="updateInterval()">
+                        <span class="auto-play-value" id="intervalValue">5s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tactical-card" id="keywords" style="margin-top: 20px;">
+            <div class="card-header"><span class="card-title">关键词提取</span><span class="card-badge">实时分析</span></div>
+            <div class="card-body"><div class="keyword-container" id="keywordContainer"></div></div>
+        </div>
+        <div class="card-grid" id="stats" style="margin-top: 20px;">
+            <div class="tactical-card">
+                <div class="card-header"><span class="card-title">文本分析</span><span class="card-badge">统计</span></div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div><div class="data-text">字符数</div><div style="color: #FFF3E0; font-size: 1.5rem; font-weight: bold;" id="charCount">0</div></div>
+                        <div><div class="data-text">词数</div><div style="color: #FFF3E0; font-size: 1.5rem; font-weight: bold;" id="wordCount">0</div></div>
+                        <div><div class="data-text">关键词数</div><div style="color: #FFF3E0; font-size: 1.5rem; font-weight: bold;" id="keywordNum">0</div></div>
+                        <div><div class="data-text">情感倾向</div><div style="color: #FFF3E0; font-size: 1.5rem; font-weight: bold;" id="sentiment">中性</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tactical-card">
+                <div class="card-header"><span class="card-title">阅读进度</span><span class="card-badge">追踪</span></div>
+                <div class="card-body">
+                    <div class="data-text" style="margin-bottom: 15px;">当前进度<div style="color: #FFF3E0; font-size: 1.5rem; font-weight: bold;" id="progressPercent">0%</div></div>
+                    <div style="background: rgba(255, 159, 0, 0.1); height: 6px; border-radius: 3px; overflow: hidden;"><div id="progressBar" style="width: 0%; height: 100%; background: var(--amber); transition: width 0.5s;"></div></div>
+                    <div class="data-text" style="margin-top: 10px;" id="progressText">0 / 6 条书摘</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-bar">
+        <div class="status-item"><div class="status-dot"></div><span>系统运行中</span></div>
+        <div>SECTOR: ALPHA-7</div>
+        <div>关键词提取: <span id="bottomKeywords">就绪</span></div>
+        <div>VER: 7.6.4</div>
+    </div>
+    <script>
+        const quotes = [
+            { text: "科技是人类的延伸，也是人类的镜子，映射出我们内心的渴望与恐惧", author: "马歇尔·麦克卢汉", book: "理解媒介" },
+            { text: "未来已来，只是分布不均。我们每个人都在用自己的方式迎接它", author: "威廉·吉布森", book: "神经漫游者" },
+            { text: "在数字世界中，信息就是力量，而力量需要被谨慎使用", author: "尼尔·斯蒂芬森", book: "雪崩" },
+            { text: "代码即法律，但法律的制定者应该是全体公民，而不仅仅是技术人员", author: "劳伦斯·莱斯格", book: "代码2.0" },
+            { text: "人工智能是人类发明的最后一项发明，也是最具挑战性的创造", author: "尼克·博斯特罗姆", book: "超级智能" },
+            { text: "虚拟现实将成为最终的交流平台，突破物理世界的限制", author: "马克·扎克伯格", book: "连线采访" }
+        ];
+        const stopWords = new Set(['的', '是', '在', '和', '了', '有', '我', '你', '他', '她', '它', '们', '这', '那', '个', '以', '及', '与', '或', '但', '而', '如果', '因为', '所以', '虽然', '然而', '并且', '而且', '只是', '只有', '就是', '也是', '正在', '已经', '曾经', '将会', '将要', '可以', '能够', '应该', '必须', '需要', '希望', '想要', '觉得', '认为', '知道', '了解', '理解', '明白', '发现']);
+        let currentIndex = 0;
+        let isPlaying = false;
+        let autoPlayInterval = null;
+        let intervalTime = 5000;
+        function updateClock() { const now = new Date(); document.getElementById('clock').textContent = now.toTimeString().split(' ')[0]; }
+        setInterval(updateClock, 1000);
+        updateClock();
+        function extractKeywords(text) {
+            let cleanText = text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, ' ');
+            let words = cleanText.split(/\s+/).filter(w => w.length >= 2);
+            let wordCount = {};
+            words.forEach(word => { if (!stopWords.has(word) && word.length >= 2) { wordCount[word] = (wordCount[word] || 0) + 1; } });
+            let sortedWords = Object.entries(wordCount).sort((a, b) => b[1] - a[1]).slice(0, 6);
+            let maxCount = sortedWords.length > 0 ? sortedWords[0][1] : 1;
+            return sortedWords.map(([word, count], index) => ({ word, weight: count / maxCount, delay: index * 150 }));
+        }
+        function displayKeywords(keywords) {
+            const container = document.getElementById('keywordContainer');
+            container.innerHTML = '';
+            keywords.forEach((item, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'keyword-tag';
+                tag.style.animationDelay = `${item.delay}ms`;
+                tag.innerHTML = `${item.word}<div class="keyword-weight" style="opacity: ${0.5 + item.weight * 0.5}"></div>`;
+                const fontSize = 0.7 + item.weight * 0.3;
+                tag.style.fontSize = `${fontSize}rem`;
+                if (item.weight > 0.8) { tag.style.borderColor = '#FFF'; tag.style.boxShadow = '0 0 10px rgba(255, 159, 0, 0.5)'; }
+                container.appendChild(tag);
+            });
+            document.getElementById('keywordCount').textContent = keywords.length;
+            document.getElementById('keywordNum').textContent = keywords.length;
+            document.getElementById('bottomKeywords').textContent = keywords.length > 0 ? keywords.slice(0, 3).map(k => k.word).join(', ') : '分析中';
+        }
+        function analyzeText(text) {
+            document.getElementById('charCount').textContent = text.length;
+            const words = text.split(/[\s,\.!，。！]/).filter(w => w.length > 0);
+            document.getElementById('wordCount').textContent = words.length;
+            const keywords = extractKeywords(text);
+            displayKeywords(keywords);
+            const positiveWords = ['美', '好', '爱', '希', '望', '乐', '喜'];
+            const negativeWords = ['恐', '惧', '危', '难', '悲', '痛', '死'];
+            let positiveCount = 0, negativeCount = 0;
+            positiveWords.forEach(w => { if (text.includes(w)) positiveCount++; });
+            negativeWords.forEach(w => { if (text.includes(w)) negativeCount++; });
+            let sentiment = '中性';
+            if (positiveCount > negativeCount) sentiment = '积极';
+            else if (negativeCount > positiveCount) sentiment = '消极';
+            document.getElementById('sentiment').textContent = sentiment;
+        }
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+            document.getElementById('sidebarStatus').textContent = '分析中...';
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                infoEl.innerHTML = `${quote.author} // ${quote.book}`;
+                textEl.classList.add('show');
+                infoEl.classList.add('show');
+                analyzeText(quote.text);
+                const progress = ((currentIndex + 1) / quotes.length) * 100;
+                document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+                document.getElementById('progressBar').style.width = progress + '%';
+                document.getElementById('progressText').textContent = `${currentIndex + 1} / ${quotes.length} 条书摘`;
+                document.getElementById('sidebarStatus').textContent = '分析完成';
+                setTimeout(() => { document.getElementById('sidebarStatus').textContent = '就绪'; }, 2000);
+            }, 100);
+        }
+        function nextQuote() { currentIndex = (currentIndex + 1) % quotes.length; showQuote(); }
+        function prevQuote() { currentIndex = (currentIndex - 1 + quotes.length) % quotes.length; showQuote(); }
+        function toggleAutoPlay() {
+            const playBtn = document.getElementById('playBtn');
+            const playStatus = document.getElementById('playStatus');
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playBtn.textContent = '❚❚ 暂停';
+                playBtn.classList.add('active', 'playing');
+                playStatus.textContent = '播放中';
+                autoPlayInterval = setInterval(() => { nextQuote(); }, intervalTime);
+            } else {
+                playBtn.textContent = '▶ 播放';
+                playBtn.classList.remove('active', 'playing');
+                playStatus.textContent = '已暂停';
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+        }
+        function updateInterval() {
+            const slider = document.getElementById('intervalSlider');
+            intervalTime = parseInt(slider.value) * 1000;
+            document.getElementById('intervalValue').textContent = slider.value + 's';
+            if (isPlaying) { clearInterval(autoPlayInterval); autoPlayInterval = setInterval(() => { nextQuote(); }, intervalTime); }
+        }
+        function scrollToSection(sectionId) {
+            document.querySelectorAll('.sidebar-item').forEach(item => { item.classList.remove('active'); });
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+        document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') nextQuote(); if (e.key === 'ArrowLeft') prevQuote(); if (e.key === ' ') { e.preventDefault(); toggleAutoPlay(); } });
+        showQuote();
+    </script>
+</body>
+</html>

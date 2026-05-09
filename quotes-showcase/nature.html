@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自然之境 - 书摘展示</title>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 220px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1.2rem;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .setting-group {
+            margin-bottom: 16px;
+        }
+
+        .setting-label {
+            display: block;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .setting-select {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .setting-select:hover,
+        .setting-select:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .setting-select option {
+            background: #2a2a3a;
+            color: #fff;
+        }
+
+        .setting-range {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .setting-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .setting-range::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 30px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.2em;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 15px;
+            letter-spacing: 0.3em;
+        }
+
+        .quote-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 50px 40px;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            font-size: 4rem;
+            opacity: 0.1;
+            font-family: Georgia, serif;
+            color: #fff;
+        }
+
+        .quote-text {
+            font-size: 1.35rem;
+            line-height: 2.1;
+            color: rgba(255, 255, 255, 0.95);
+            text-align: justify;
+            position: relative;
+            z-index: 1;
+            max-height: 380px;
+            overflow: hidden;
+            transition: max-height 0.6s ease;
+        }
+
+        .quote-text.expanded {
+            max-height: 2000px;
+        }
+
+        .book-info {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: right;
+        }
+
+        .book-title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 5px;
+        }
+
+        .book-author {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .expand-btn {
+            display: block;
+            margin: 25px auto 0;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 12px 30px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 0.9rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 12px 28px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 0.95rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .nav-indicator {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 60px 20px;
+            }
+
+            .title {
+                font-size: 2.2rem;
+            }
+
+            .quote-card {
+                padding: 35px 25px;
+            }
+
+            .quote-text {
+                font-size: 1.15rem;
+                line-height: 1.9;
+            }
+
+            .settings-panel {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="settings-panel">
+        <h3 class="settings-title">场景设置</h3>
+        <div class="setting-group">
+            <label class="setting-label">选择场景</label>
+            <select class="setting-select" id="sceneSelect" onchange="changeScene(this.value)">
+                <option value="rain">雨夜</option>
+                <option value="snow">雪景</option>
+                <option value="stars">星空</option>
+                <option value="sakura">樱花</option>
+                <option value="forest">森林</option>
+                <option value="sunset">夕阳</option>
+                <option value="ocean">海洋</option>
+                <option value="fog">迷雾</option>
+            </select>
+        </div>
+        <div class="setting-group">
+            <label class="setting-label">粒子密度: <span id="densityValue">50</span>%</label>
+            <input type="range" class="setting-range" id="densityRange" min="10" max="100" value="50" onchange="changeDensity(this.value)">
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">自然之境</h1>
+            <p class="subtitle">聆听万物之声</p>
+        </header>
+
+        <article class="quote-card">
+            <span class="quote-icon">"</span>
+            <div class="quote-text" id="quoteText"></div>
+            <div class="book-info">
+                <p class="book-title" id="bookTitle"></p>
+                <p class="book-author" id="bookAuthor"></p>
+            </div>
+            <button class="expand-btn" id="expandBtn" onclick="toggleExpand()">展开全文</button>
+        </article>
+
+        <div class="navigation">
+            <button class="nav-btn" onclick="prevQuote()">← 上一篇</button>
+            <span class="nav-indicator"><span id="currentIndex">1</span> / <span id="totalCount">1</span></span>
+            <button class="nav-btn" onclick="nextQuote()">下一篇 →</button>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            {
+                text: "落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨；雁阵惊寒，声断衡阳之浦。",
+                book: "《滕王阁序》",
+                author: "王勃"
+            },
+            {
+                text: "空山新雨后，天气晚来秋。明月松间照，清泉石上流。竹喧归浣女，莲动下渔舟。随意春芳歇，王孙自可留。",
+                book: "《山居秋暝》",
+                author: "王维"
+            },
+            {
+                text: "采菊东篱下，悠然见南山。山气日夕佳，飞鸟相与还。此中有真意，欲辨已忘言。",
+                book: "《饮酒·其五》",
+                author: "陶渊明"
+            },
+            {
+                text: "明月几时有？把酒问青天。不知天上宫阙，今夕是何年？我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间？",
+                book: "《水调歌头》",
+                author: "苏轼"
+            },
+            {
+                text: "春江潮水连海平，海上明月共潮生。滟滟随波千万里，何处春江无月明！",
+                book: "《春江花月夜》",
+                author: "张若虚"
+            }
+        ];
+
+        let currentQuoteIndex = 0;
+        let currentScene = 'rain';
+        let particleDensity = 0.5;
+
+        const scenes = {
+            rain: { bg1: '#1a1a2e', bg2: '#16213e', accent: '#4a90a4' },
+            snow: { bg1: '#2c3e50', bg2: '#34495e', accent: '#ecf0f1' },
+            stars: { bg1: '#0f0f23', bg2: '#1a1a3e', accent: '#ffd700' },
+            sakura: { bg1: '#2d1b2e', bg2: '#4a2c4a', accent: '#ffb7c5' },
+            forest: { bg1: '#1a2f1a', bg2: '#2d4a2d', accent: '#90c090' },
+            sunset: { bg1: '#ff6b35', bg2: '#f7c59f', accent: '#ff4500' },
+            ocean: { bg1: '#0077b6', bg2: '#00b4d8', accent: '#90e0ef' },
+            fog: { bg1: '#4a5568', bg2: '#718096', accent: '#e2e8f0' }
+        };
+
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        const particleCanvas = document.getElementById('particleCanvas');
+        const particleCtx = particleCanvas.getContext('2d');
+
+        let particles = [];
+        let moon = { x: 0, y: 0, radius: 0 };
+        let waves = [];
+
+        function resizeCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+            
+            moon = {
+                x: bgCanvas.width * 0.8,
+                y: bgCanvas.height * 0.15,
+                radius: Math.min(bgCanvas.width, bgCanvas.height) * 0.06
+            };
+
+            waves = [
+                { y: bgCanvas.height * 0.85, amplitude: 20, frequency: 0.02, speed: 0.02, phase: 0 },
+                { y: bgCanvas.height * 0.88, amplitude: 15, frequency: 0.025, speed: 0.025, phase: Math.PI / 3 },
+                { y: bgCanvas.height * 0.91, amplitude: 10, frequency: 0.03, speed: 0.03, phase: Math.PI / 2 }
+            ];
+        }
+
+        function drawBackground() {
+            const scene = scenes[currentScene];
+            const gradient = bgCtx.createLinearGradient(0, 0, 0, bgCanvas.height);
+            gradient.addColorStop(0, scene.bg1);
+            gradient.addColorStop(1, scene.bg2);
+            bgCtx.fillStyle = gradient;
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+            if (currentScene === 'sunset') {
+                const sunGradient = bgCtx.createRadialGradient(
+                    bgCanvas.width * 0.5, bgCanvas.height * 0.6, 0,
+                    bgCanvas.width * 0.5, bgCanvas.height * 0.6, bgCanvas.height * 0.4
+                );
+                sunGradient.addColorStop(0, 'rgba(255, 200, 100, 0.6)');
+                sunGradient.addColorStop(0.5, 'rgba(255, 150, 50, 0.3)');
+                sunGradient.addColorStop(1, 'rgba(255, 100, 50, 0)');
+                bgCtx.fillStyle = sunGradient;
+                bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            }
+
+            if (currentScene === 'stars' || currentScene === 'fog') {
+                bgCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                for (let i = 0; i < 100; i++) {
+                    const x = (Math.sin(i * 123.456) * 0.5 + 0.5) * bgCanvas.width;
+                    const y = (Math.cos(i * 789.012) * 0.5 + 0.5) * bgCanvas.height * 0.7;
+                    const size = (Math.sin(i * 345.678 + Date.now() * 0.001) * 0.5 + 0.5) * 2 + 0.5;
+                    bgCtx.beginPath();
+                    bgCtx.arc(x, y, size, 0, Math.PI * 2);
+                    bgCtx.fill();
+                }
+            }
+
+            if (currentScene === 'ocean') {
+                waves.forEach((wave, index) => {
+                    bgCtx.beginPath();
+                    bgCtx.moveTo(0, bgCanvas.height);
+                    
+                    for (let x = 0; x <= bgCanvas.width; x += 5) {
+                        const y = wave.y + Math.sin(x * wave.frequency + wave.phase) * wave.amplitude;
+                        bgCtx.lineTo(x, y);
+                    }
+                    
+                    bgCtx.lineTo(bgCanvas.width, bgCanvas.height);
+                    bgCtx.closePath();
+                    
+                    const waveGradient = bgCtx.createLinearGradient(0, wave.y - wave.amplitude, 0, bgCanvas.height);
+                    waveGradient.addColorStop(0, `rgba(144, 224, 239, ${0.3 - index * 0.08})`);
+                    waveGradient.addColorStop(1, `rgba(0, 119, 182, ${0.5 - index * 0.1})`);
+                    bgCtx.fillStyle = waveGradient;
+                    bgCtx.fill();
+                });
+            }
+
+            if (currentScene !== 'rain' && currentScene !== 'snow' && currentScene !== 'ocean') {
+                bgCtx.beginPath();
+                bgCtx.arc(moon.x, moon.y, moon.radius, 0, Math.PI * 2);
+                const moonGradient = bgCtx.createRadialGradient(
+                    moon.x - moon.radius * 0.3, moon.y - moon.radius * 0.3, 0,
+                    moon.x, moon.y, moon.radius
+                );
+                moonGradient.addColorStop(0, 'rgba(255, 255, 230, 0.9)');
+                moonGradient.addColorStop(1, 'rgba(200, 200, 180, 0.6)');
+                bgCtx.fillStyle = moonGradient;
+                bgCtx.fill();
+
+                bgCtx.beginPath();
+                bgCtx.arc(moon.x, moon.y, moon.radius * 1.5, 0, Math.PI * 2);
+                const glowGradient = bgCtx.createRadialGradient(
+                    moon.x, moon.y, moon.radius * 0.5,
+                    moon.x, moon.y, moon.radius * 1.5
+                );
+                glowGradient.addColorStop(0, 'rgba(255, 255, 200, 0.15)');
+                glowGradient.addColorStop(1, 'rgba(255, 255, 200, 0)');
+                bgCtx.fillStyle = glowGradient;
+                bgCtx.fill();
+            }
+        }
+
+        class Particle {
+            constructor(type) {
+                this.type = type;
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = -10;
+                this.size = Math.random() * 3 + 1;
+                this.speed = Math.random() * 3 + 2;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.angle = Math.random() * 0.1 - 0.05;
+
+                switch (this.type) {
+                    case 'rain':
+                        this.size = Math.random() * 2 + 1;
+                        this.speed = Math.random() * 10 + 15;
+                        this.length = Math.random() * 20 + 10;
+                        break;
+                    case 'snow':
+                        this.size = Math.random() * 4 + 2;
+                        this.speed = Math.random() * 1 + 0.5;
+                        this.sway = Math.random() * 2 - 1;
+                        this.swaySpeed = Math.random() * 0.02 + 0.01;
+                        this.y = Math.random() * particleCanvas.height;
+                        break;
+                    case 'star':
+                        this.size = Math.random() * 2 + 1;
+                        this.twinkle = Math.random() * Math.PI;
+                        this.twinkleSpeed = Math.random() * 0.05 + 0.02;
+                        this.y = Math.random() * particleCanvas.height * 0.6;
+                        break;
+                    case 'petal':
+                        this.size = Math.random() * 8 + 4;
+                        this.speed = Math.random() * 1 + 0.5;
+                        this.rotation = Math.random() * Math.PI * 2;
+                        this.rotationSpeed = Math.random() * 0.05 - 0.025;
+                        this.swayAmplitude = Math.random() * 2 + 1;
+                        this.swaySpeed = Math.random() * 0.03 + 0.01;
+                        this.y = -20;
+                        break;
+                    case 'firefly':
+                        this.size = Math.random() * 3 + 2;
+                        this.x = Math.random() * particleCanvas.width;
+                        this.y = Math.random() * particleCanvas.height;
+                        this.baseX = this.x;
+                        this.baseY = this.y;
+                        this.floatRadius = Math.random() * 50 + 20;
+                        this.floatSpeed = Math.random() * 0.02 + 0.01;
+                        this.glowPhase = Math.random() * Math.PI * 2;
+                        this.speed = 0;
+                        break;
+                    case 'leaf':
+                        this.size = Math.random() * 10 + 5;
+                        this.speed = Math.random() * 2 + 1;
+                        this.rotation = Math.random() * Math.PI * 2;
+                        this.rotationSpeed = Math.random() * 0.05 - 0.025;
+                        this.sway = Math.random() * 3 - 1.5;
+                        break;
+                    case 'mist':
+                        this.x = Math.random() * particleCanvas.width * 1.5 - particleCanvas.width * 0.25;
+                        this.y = Math.random() * particleCanvas.height;
+                        this.size = Math.random() * 100 + 50;
+                        this.speed = Math.random() * 0.3 + 0.1;
+                        this.opacity = Math.random() * 0.1 + 0.05;
+                        break;
+                }
+            }
+
+            update() {
+                switch (this.type) {
+                    case 'rain':
+                        this.y += this.speed;
+                        this.x += this.angle * this.speed;
+                        if (this.y > particleCanvas.height) this.reset();
+                        break;
+                    case 'snow':
+                        this.y += this.speed;
+                        this.x += Math.sin(this.y * this.swaySpeed) * this.sway;
+                        if (this.y > particleCanvas.height) this.reset();
+                        break;
+                    case 'star':
+                        this.twinkle += this.twinkleSpeed;
+                        if (Math.random() < 0.001) this.reset();
+                        break;
+                    case 'petal':
+                        this.y += this.speed;
+                        this.x += Math.sin(this.y * this.swaySpeed) * this.swayAmplitude;
+                        this.rotation += this.rotationSpeed;
+                        if (this.y > particleCanvas.height + 20) this.reset();
+                        break;
+                    case 'firefly':
+                        this.glowPhase += 0.05;
+                        this.x = this.baseX + Math.sin(Date.now() * this.floatSpeed) * this.floatRadius;
+                        this.y = this.baseY + Math.cos(Date.now() * this.floatSpeed * 0.7) * this.floatRadius * 0.6;
+                        if (Math.random() < 0.005) {
+                            this.baseX = Math.random() * particleCanvas.width;
+                            this.baseY = Math.random() * particleCanvas.height;
+                        }
+                        break;
+                    case 'leaf':
+                        this.y += this.speed;
+                        this.x += Math.sin(this.y * 0.02) * this.sway;
+                        this.rotation += this.rotationSpeed;
+                        if (this.y > particleCanvas.height) this.reset();
+                        break;
+                    case 'mist':
+                        this.x += this.speed;
+                        if (this.x > particleCanvas.width + this.size) {
+                            this.x = -this.size;
+                        }
+                        break;
+                }
+            }
+
+            draw(ctx) {
+                switch (this.type) {
+                    case 'rain':
+                        ctx.strokeStyle = `rgba(174, 194, 224, ${this.opacity})`;
+                        ctx.lineWidth = this.size;
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, this.y);
+                        ctx.lineTo(this.x + this.angle * this.length, this.y + this.length);
+                        ctx.stroke();
+                        break;
+                    case 'snow':
+                        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                    case 'star':
+                        const twinkleOpacity = (Math.sin(this.twinkle) * 0.5 + 0.5) * 0.8 + 0.2;
+                        ctx.fillStyle = `rgba(255, 255, 200, ${twinkleOpacity})`;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                    case 'petal':
+                        ctx.save();
+                        ctx.translate(this.x, this.y);
+                        ctx.rotate(this.rotation);
+                        ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`;
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                        break;
+                    case 'firefly':
+                        const glow = Math.sin(this.glowPhase) * 0.5 + 0.5;
+                        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3);
+                        gradient.addColorStop(0, `rgba(200, 255, 150, ${glow * 0.8})`);
+                        gradient.addColorStop(0.5, `rgba(150, 255, 100, ${glow * 0.3})`);
+                        gradient.addColorStop(1, 'rgba(100, 255, 50, 0)');
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.fillStyle = `rgba(255, 255, 200, ${glow})`;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size * 0.5, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                    case 'leaf':
+                        ctx.save();
+                        ctx.translate(this.x, this.y);
+                        ctx.rotate(this.rotation);
+                        ctx.fillStyle = `rgba(100, 180, 100, ${this.opacity})`;
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, this.size, this.size * 0.4, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = `rgba(50, 100, 50, ${this.opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(-this.size, 0);
+                        ctx.lineTo(this.size, 0);
+                        ctx.stroke();
+                        ctx.restore();
+                        break;
+                    case 'mist':
+                        const mistGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                        mistGradient.addColorStop(0, `rgba(200, 200, 200, ${this.opacity})`);
+                        mistGradient.addColorStop(1, 'rgba(200, 200, 200, 0)');
+                        ctx.fillStyle = mistGradient;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                }
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const baseCount = Math.floor(100 * particleDensity);
+
+            switch (currentScene) {
+                case 'rain':
+                    for (let i = 0; i < baseCount; i++) particles.push(new Particle('rain'));
+                    break;
+                case 'snow':
+                    for (let i = 0; i < baseCount; i++) particles.push(new Particle('snow'));
+                    break;
+                case 'stars':
+                    for (let i = 0; i < baseCount; i++) particles.push(new Particle('star'));
+                    break;
+                case 'sakura':
+                    for (let i = 0; i < baseCount * 0.6; i++) particles.push(new Particle('petal'));
+                    for (let i = 0; i < baseCount * 0.4; i++) particles.push(new Particle('firefly'));
+                    break;
+                case 'forest':
+                    for (let i = 0; i < baseCount * 0.7; i++) particles.push(new Particle('firefly'));
+                    for (let i = 0; i < baseCount * 0.3; i++) particles.push(new Particle('leaf'));
+                    break;
+                case 'sunset':
+                    for (let i = 0; i < baseCount * 0.5; i++) particles.push(new Particle('firefly'));
+                    break;
+                case 'ocean':
+                    for (let i = 0; i < baseCount * 0.3; i++) particles.push(new Particle('mist'));
+                    break;
+                case 'fog':
+                    for (let i = 0; i < baseCount * 0.5; i++) particles.push(new Particle('mist'));
+                    for (let i = 0; i < baseCount * 0.3; i++) particles.push(new Particle('star'));
+                    break;
+            }
+        }
+
+        function animate() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+            drawBackground();
+
+            if (currentScene === 'ocean') {
+                waves.forEach(wave => {
+                    wave.phase += wave.speed;
+                });
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw(particleCtx);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        function changeScene(scene) {
+            currentScene = scene;
+            initParticles();
+        }
+
+        function changeDensity(value) {
+            particleDensity = value / 100;
+            document.getElementById('densityValue').textContent = value;
+            initParticles();
+        }
+
+        function displayQuote(index) {
+            document.getElementById('quoteText').textContent = quotes[index].text;
+            document.getElementById('quoteText').classList.remove('expanded');
+            document.getElementById('bookTitle').textContent = quotes[index].book;
+            document.getElementById('bookAuthor').textContent = '— ' + quotes[index].author;
+            document.getElementById('currentIndex').textContent = index + 1;
+            document.getElementById('totalCount').textContent = quotes.length;
+            document.getElementById('expandBtn').textContent = '展开全文';
+        }
+
+        function toggleExpand() {
+            const textEl = document.getElementById('quoteText');
+            const btn = document.getElementById('expandBtn');
+            textEl.classList.toggle('expanded');
+            btn.textContent = textEl.classList.contains('expanded') ? '收起' : '展开全文';
+        }
+
+        function prevQuote() {
+            currentQuoteIndex = (currentQuoteIndex - 1 + quotes.length) % quotes.length;
+            displayQuote(currentQuoteIndex);
+        }
+
+        function nextQuote() {
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+            displayQuote(currentQuoteIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevQuote();
+            if (e.key === 'ArrowRight') nextQuote();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        resizeCanvas();
+        initParticles();
+        animate();
+        displayQuote(0);
+    </script>
+</body>
+</html>

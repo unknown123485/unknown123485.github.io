@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时光书卷 - 书摘展示</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c1810 0%, #4a3728 50%, #2c1810 100%);
+            font-family: 'Noto Serif SC', serif;
+            overflow: hidden;
+            perspective: 2000px;
+        }
+
+        #paperTexture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .book-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+        }
+
+        .book {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            max-height: 600px;
+            transform-style: preserve-3d;
+            transform: rotateX(5deg);
+        }
+
+        .page {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, #f8f4e8 0%, #fffef9 50%, #f5f0e3 100%);
+            box-shadow: 
+                5px 5px 20px rgba(0, 0, 0, 0.3),
+                inset 0 0 50px rgba(139, 115, 85, 0.05);
+            border-radius: 0 8px 8px 0;
+            overflow: hidden;
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 30px,
+                    rgba(139, 115, 85, 0.03) 30px,
+                    rgba(139, 115, 85, 0.03) 31px
+                );
+            pointer-events: none;
+        }
+
+        .page-left {
+            left: 0;
+            border-radius: 8px 0 0 8px;
+            transform-origin: right center;
+            z-index: 10;
+            box-shadow: 
+                -5px 5px 20px rgba(0, 0, 0, 0.2),
+                inset 0 0 50px rgba(139, 115, 85, 0.05);
+        }
+
+        .page-right {
+            right: 0;
+            z-index: 5;
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .page-front,
+        .page-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            overflow: hidden;
+        }
+
+        .page-front {
+            background: linear-gradient(90deg, #f5f0e3 0%, #fffef9 50%, #f8f4e8 100%);
+        }
+
+        .page-back {
+            background: linear-gradient(90deg, #f8f4e8 0%, #fffef9 50%, #f5f0e3 100%);
+            transform: rotateY(180deg);
+        }
+
+        .page-content {
+            padding: 50px 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .page-back .page-content {
+            padding: 50px 40px;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: #8a7a6a;
+        }
+
+        .page-front .page-number {
+            right: 20px;
+        }
+
+        .page-back .page-number {
+            left: 20px;
+        }
+
+        .book-title-page {
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .book-title-page h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: #3a3530;
+            margin-bottom: 30px;
+            letter-spacing: 0.15em;
+        }
+
+        .book-title-page .decorative-line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b7355, transparent);
+            margin: 30px auto;
+        }
+
+        .quote-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .quote-text {
+            font-size: 1.25rem;
+            line-height: 2;
+            color: #4a4540;
+            text-align: justify;
+            position: relative;
+        }
+
+        .quote-mark {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: rgba(139, 115, 85, 0.2);
+            position: absolute;
+        }
+
+        .quote-mark.open {
+            top: -20px;
+            left: -10px;
+        }
+
+        .quote-mark.close {
+            bottom: -40px;
+            right: 10px;
+        }
+
+        .book-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(139, 115, 85, 0.2);
+            text-align: right;
+        }
+
+        .book-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: #5a4a3a;
+            margin-bottom: 5px;
+        }
+
+        .book-author {
+            font-size: 0.9rem;
+            color: #7a6a5a;
+        }
+
+        .corner-fold {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.05) 50%);
+            pointer-events: none;
+        }
+
+        .book-spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                #1a1a1a 0%, 
+                #3a3a3a 20%, 
+                #4a4a4a 50%, 
+                #3a3a3a 80%, 
+                #1a1a1a 100%);
+            transform: translateX(-50%);
+            border-radius: 5px;
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.5),
+                inset 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 20;
+        }
+
+        .book-spine::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b7355, transparent);
+        }
+
+        .book-spine::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b7355, transparent);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            z-index: 100;
+            background: rgba(44, 24, 16, 0.9);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f8f4e8;
+            padding: 10px 20px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+        }
+
+        .speed-control input {
+            width: 80px;
+            accent-color: #8b7355;
+        }
+
+        .page-indicator {
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(44, 24, 16, 0.9);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .settings-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: #f8f4e8;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .setting-item {
+            margin-bottom: 12px;
+        }
+
+        .setting-label {
+            display: block;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+
+        .setting-select {
+            width: 100%;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #f8f4e8;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .setting-select option {
+            background: #2c1810;
+        }
+
+        .expand-btn {
+            display: block;
+            margin: 15px auto 0;
+            background: rgba(139, 115, 85, 0.2);
+            border: 1px solid rgba(139, 115, 85, 0.4);
+            color: #5a4a3a;
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            background: rgba(139, 115, 85, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .book {
+                width: 95%;
+                height: 70vh;
+            }
+
+            .page-content {
+                padding: 30px 25px;
+            }
+
+            .quote-text {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+
+            .book-title-page {
+                padding-top: 40px;
+            }
+
+            .book-title-page h2 {
+                font-size: 1.4rem;
+            }
+
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 12px 20px;
+                gap: 10px;
+            }
+
+            .settings-panel {
+                top: auto;
+                bottom: 120px;
+                right: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="paperTexture"></canvas>
+
+    <div class="settings-panel">
+        <h3 class="settings-title">书籍设置</h3>
+        <div class="setting-item">
+            <label class="setting-label">书籍封面</label>
+            <select class="setting-select" id="coverStyle">
+                <option value="classic">经典棕色</option>
+                <option value="navy">深蓝学院</option>
+                <option value="burgundy">酒红复古</option>
+                <option value="forest">森林绿</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="book-container">
+        <div class="book">
+            <div class="book-spine"></div>
+            
+            <div class="page page-left" id="pageLeft">
+                <div class="page-front">
+                    <div class="page-content book-title-page">
+                        <h2>时光书卷</h2>
+                        <div class="decorative-line"></div>
+                        <p style="color: #7a6a5a; font-size: 0.95rem; margin-top: 20px;">经典文学摘录</p>
+                    </div>
+                    <span class="page-number">I</span>
+                    <div class="corner-fold"></div>
+                </div>
+                <div class="page-back">
+                    <div class="page-content quote-wrapper">
+                        <div class="quote-text" id="quoteText1"></div>
+                        <div class="quote-mark open">"</div>
+                        <div class="quote-mark close">"</div>
+                        <div class="book-info">
+                            <p class="book-name" id="bookTitle1"></p>
+                            <p class="book-author" id="bookAuthor1"></p>
+                        </div>
+                    </div>
+                    <span class="page-number">II</span>
+                </div>
+            </div>
+
+            <div class="page page-right" id="pageRight">
+                <div class="page-front">
+                    <div class="page-content quote-wrapper">
+                        <div class="quote-text" id="quoteText2"></div>
+                        <div class="quote-mark open">"</div>
+                        <div class="quote-mark close">"</div>
+                        <div class="book-info">
+                            <p class="book-name" id="bookTitle2"></p>
+                            <p class="book-author" id="bookAuthor2"></p>
+                        </div>
+                    </div>
+                    <span class="page-number">III</span>
+                    <div class="corner-fold"></div>
+                </div>
+                <div class="page-back">
+                    <div class="page-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                        <div class="decorative-line"></div>
+                        <p style="color: #7a6a5a; font-size: 1rem; line-height: 2; margin: 30px 0;">
+                            愿这些文字<br>
+                            能触动你的心弦
+                        </p>
+                        <div class="decorative-line"></div>
+                        <p style="color: #8a7a6a; font-size: 0.85rem; margin-top: 40px;">
+                            The End
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" onclick="prevPage()">← 上一页</button>
+        <div class="page-indicator">
+            <span id="currentPage">1</span> / <span id="totalPages">3</span>
+        </div>
+        <button class="control-btn" onclick="nextPage()">下一页 →</button>
+        <div class="speed-control">
+            <label>翻页速度:</label>
+            <input type="range" id="speedRange" min="0.3" max="1.5" step="0.1" value="0.8" onchange="updateSpeed(this.value)">
+            <span id="speedValue">0.8s</span>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            {
+                text: "人生天地之间，若白驹之过隙，忽然而已。吾生也有涯，而知也无涯。以有涯随无涯，殆已！已而为知者，殆而已矣！",
+                book: "《庄子·内篇》",
+                author: "庄周"
+            },
+            {
+                text: "宠辱若惊，贵大患若身。何谓宠辱若惊？宠为下，得之若惊，失之若惊，是谓宠辱若惊。",
+                book: "《道德经》",
+                author: "老子"
+            },
+            {
+                text: "大学之道，在明明德，在亲民，在止于至善。知止而后有定，定而后能静，静而后能安，安而后能虑，虑而后能得。",
+                book: "《礼记·大学》",
+                author: "曾子"
+            },
+            {
+                text: "天行健，君子以自强不息。地势坤，君子以厚德载物。",
+                book: "《周易》",
+                author: "伏羲 周文王"
+            },
+            {
+                text: "落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨。",
+                book: "《滕王阁序》",
+                author: "王勃"
+            }
+        ];
+
+        let currentPage = 0;
+        let totalPages = Math.ceil(quotes.length / 2) + 1;
+        let pageTransitionSpeed = 0.8;
+
+        const pageLeft = document.getElementById('pageLeft');
+        const pageRight = document.getElementById('pageRight');
+
+        function initPaperTexture() {
+            const canvas = document.getElementById('paperTexture');
+            const ctx = canvas.getContext('2d');
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                drawTexture();
+            }
+
+            function drawTexture() {
+                ctx.fillStyle = '#2c1810';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < 3000; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.02})`;
+                    ctx.fillRect(x, y, 1, 1);
+                }
+
+                for (let i = 0; i < 50; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, Math.random() * 100 + 30);
+                    gradient.addColorStop(0, 'rgba(74, 55, 40, 0.1)');
+                    gradient.addColorStop(1, 'rgba(74, 55, 40, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x - 100, y - 100, 200, 200);
+                }
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+        }
+
+        function updateContent() {
+            const quoteIndex1 = currentPage * 2;
+            const quoteIndex2 = currentPage * 2 + 1;
+
+            if (quotes[quoteIndex1]) {
+                document.getElementById('quoteText1').textContent = quotes[quoteIndex1].text;
+                document.getElementById('bookTitle1').textContent = quotes[quoteIndex1].book;
+                document.getElementById('bookAuthor1').textContent = '— ' + quotes[quoteIndex1].author;
+            }
+
+            if (quotes[quoteIndex2]) {
+                document.getElementById('quoteText2').textContent = quotes[quoteIndex2].text;
+                document.getElementById('bookTitle2').textContent = quotes[quoteIndex2].book;
+                document.getElementById('bookAuthor2').textContent = '— ' + quotes[quoteIndex2].author;
+            }
+
+            document.getElementById('currentPage').textContent = currentPage + 1;
+            document.getElementById('totalPages').textContent = totalPages;
+        }
+
+        function updateSpeed(value) {
+            pageTransitionSpeed = parseFloat(value);
+            document.getElementById('speedValue').textContent = value + 's';
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.style.transition = `transform ${pageTransitionSpeed}s cubic-bezier(0.645, 0.045, 0.355, 1)`;
+            });
+        }
+
+        function flipTo(pageIndex) {
+            if (pageIndex < 0 || pageIndex >= totalPages) return;
+            
+            currentPage = pageIndex;
+
+            if (pageIndex % 2 === 0) {
+                pageLeft.classList.remove('flipped');
+                pageRight.classList.remove('flipped');
+            } else {
+                pageLeft.classList.add('flipped');
+                pageRight.classList.remove('flipped');
+            }
+
+            updateContent();
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                flipTo(currentPage + 1);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                flipTo(currentPage - 1);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextPage();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevPage();
+            }
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextPage();
+                } else {
+                    prevPage();
+                }
+            }
+        }
+
+        document.getElementById('coverStyle').addEventListener('change', function() {
+            const colors = {
+                classic: { bg1: '#2c1810', bg2: '#4a3728', accent: '#8b7355' },
+                navy: { bg1: '#1a2634', bg2: '#2d3e50', accent: '#4a6fa5' },
+                burgundy: { bg1: '#4a1c2c', bg2: '#6b3040', accent: '#a85a6b' },
+                forest: { bg1: '#1a2f1a', bg2: '#2d4a2d', accent: '#5a8a5a' }
+            };
+            
+            const style = colors[this.value];
+            document.body.style.background = `linear-gradient(135deg, ${style.bg1} 0%, ${style.bg2} 50%, ${style.bg1} 100%)`;
+        });
+
+        initPaperTexture();
+        updateContent();
+        updateSpeed(0.8);
+    </script>
+</body>
+</html>
