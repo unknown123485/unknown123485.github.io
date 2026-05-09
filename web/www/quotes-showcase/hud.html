@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战术终端 HUD - 书摘展示</title>
+    <style>
+        :root {
+            --amber: #FF9F00;
+            --amber-dim: rgba(255, 159, 0, 0.3);
+            --amber-glow: rgba(255, 159, 0, 0.15);
+            --bg: #0a0a0f;
+            --grid: rgba(255, 159, 0, 0.05);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Courier New', 'Noto Sans SC', monospace;
+            position: relative;
+            color: var(--amber);
+        }
+        /* CRT扫描线 */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.15) 2px,
+                rgba(0, 0, 0, 0.15) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 8s linear infinite;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+        /* 网格背景 */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        /* 主容器 - 战术切角 */
+        .hud-container {
+            position: fixed;
+            inset: 40px;
+            border: 1px solid var(--amber-dim);
+            clip-path: polygon(
+                0 0,
+                calc(100% - 20px) 0,
+                100% 20px,
+                100% calc(100% - 20px),
+                calc(100% - 20px) 100%,
+                20px 100%,
+                0 calc(100% - 20px)
+            );
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 边角锚点 */
+        .corner-anchor {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--amber);
+            z-index: 11;
+        }
+        .corner-anchor.tl { top: -4px; left: -4px; }
+        .corner-anchor.tr { top: -4px; right: -4px; }
+        .corner-anchor.bl { bottom: -4px; left: -4px; }
+        .corner-anchor.br { bottom: -4px; right: -4px; }
+        /* 十字准星 */
+        .crosshair {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            z-index: 11;
+        }
+        .crosshair::before,
+        .crosshair::after {
+            content: '';
+            position: absolute;
+            background: var(--amber);
+            opacity: 0.6;
+        }
+        .crosshair::before {
+            width: 1px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .crosshair::after {
+            width: 100%;
+            height: 1px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .crosshair.tl { top: 20px; left: 20px; }
+        .crosshair.tr { top: 20px; right: 20px; }
+        .crosshair.bl { bottom: 20px; left: 20px; }
+        .crosshair.br { bottom: 20px; right: 20px; }
+        /* 顶部状态栏 */
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--amber-dim);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+        }
+        .hud-header .sys-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .hud-header .sys-status {
+            display: flex;
+            gap: 20px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--amber);
+            animation: blink 1s steps(2) infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        /* 主内容区 */
+        .hud-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+        }
+        /* 数据框 */
+        .data-frame {
+            position: relative;
+            padding: 60px 80px;
+            border: 1px solid var(--amber-dim);
+            clip-path: polygon(
+                0 0,
+                calc(100% - 15px) 0,
+                100% 15px,
+                100% calc(100% - 15px),
+                calc(100% - 15px) 100%,
+                15px 100%,
+                0 calc(100% - 15px)
+            );
+            background: rgba(255, 159, 0, 0.02);
+        }
+        .data-frame::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 30px;
+            right: 30px;
+            height: 1px;
+            background: var(--amber);
+            opacity: 0.5;
+        }
+        .data-frame::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 30px;
+            right: 30px;
+            height: 1px;
+            background: var(--amber);
+            opacity: 0.5;
+        }
+        /* 角标 */
+        .frame-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--amber);
+            opacity: 0.6;
+        }
+        .frame-corner.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .frame-corner.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .frame-corner.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .frame-corner.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+        /* 引用文字 */
+        .quote-text {
+            font-size: clamp(1.2rem, 2.5vw, 2rem);
+            line-height: 1.8;
+            text-align: center;
+            max-width: 70vw;
+            color: #FFF3E0;
+            text-shadow:
+                0 0 2px #FF9F00,
+                0 0 8px #FF9F00,
+                0 0 20px rgba(255, 159, 0, 0.5);
+            letter-spacing: 0.1em;
+            font-weight: 400;
+            opacity: 0;
+        }
+        .quote-text.show {
+            animation: flickerIn 0.5s steps(5) forwards;
+        }
+        @keyframes flickerIn {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            40% { opacity: 0.3; }
+            60% { opacity: 0.8; }
+            80% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: var(--amber);
+            letter-spacing: 0.2em;
+            opacity: 0;
+            text-shadow: 0 0 5px var(--amber);
+        }
+        .quote-info.show {
+            animation: flickerIn 0.3s steps(3) 0.5s forwards;
+        }
+        .book-name {
+            opacity: 0.6;
+        }
+        /* 底部信息栏 */
+        .hud-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            border-top: 1px solid var(--amber-dim);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+        }
+        .hud-footer .coords {
+            font-family: 'Courier New', monospace;
+        }
+        /* 侧边数据条 */
+        .side-bar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .data-bar {
+            width: 3px;
+            height: 30px;
+            background: var(--amber-dim);
+            position: relative;
+        }
+        .data-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--fill, 50%);
+            background: var(--amber);
+            animation: barPulse 2s ease-in-out infinite;
+        }
+        @keyframes barPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        /* 控制按钮 - 零延迟 */
+        .controls {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+        .btn {
+            background: transparent;
+            border: 1px solid var(--amber-dim);
+            color: var(--amber);
+            padding: 10px 28px;
+            clip-path: polygon(
+                0 0,
+                calc(100% - 8px) 0,
+                100% 8px,
+                100% calc(100% - 8px),
+                calc(100% - 8px) 100%,
+                0 100%
+            );
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            font-family: inherit;
+            transition: all 0s;
+            text-transform: uppercase;
+        }
+        .btn:hover {
+            background: var(--amber);
+            color: #000;
+            border-color: var(--amber);
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .back-link {
+            position: fixed;
+            top: 50px;
+            left: 50px;
+            color: var(--amber-dim);
+            text-decoration: none;
+            font-size: 0.75rem;
+            z-index: 100;
+            letter-spacing: 0.15em;
+            transition: all 0s;
+            border: 1px solid var(--amber-dim);
+            padding: 8px 16px;
+            clip-path: polygon(
+                0 0,
+                calc(100% - 6px) 0,
+                100% 6px,
+                100% 100%,
+                0 100%
+            );
+        }
+        .back-link:hover {
+            background: var(--amber);
+            color: #000;
+            border-color: var(--amber);
+        }
+        /* 随机数据跳动 */
+        .data-jitter {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Courier New', monospace;
+            font-size: 0.65rem;
+            color: var(--amber-dim);
+            writing-mode: vertical-rl;
+            letter-spacing: 0.3em;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <a href="index.html" class="back-link">← 返回</a>
+
+    <div class="hud-container">
+        <div class="corner-anchor tl"></div>
+        <div class="corner-anchor tr"></div>
+        <div class="corner-anchor bl"></div>
+        <div class="corner-anchor br"></div>
+
+        <div class="crosshair tl"></div>
+        <div class="crosshair tr"></div>
+        <div class="crosshair bl"></div>
+        <div class="crosshair br"></div>
+
+        <div class="hud-header">
+            <div class="sys-name">MAS.READER // TACTICAL_DISPLAY</div>
+            <div class="sys-status">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>ONLINE</span>
+                </div>
+                <span id="clock">00:00:00</span>
+            </div>
+        </div>
+
+        <div class="hud-content">
+            <div class="side-bar">
+                <div class="data-bar" style="--fill: 70%"></div>
+                <div class="data-bar" style="--fill: 45%"></div>
+                <div class="data-bar" style="--fill: 80%"></div>
+                <div class="data-bar" style="--fill: 30%"></div>
+            </div>
+
+            <div class="data-frame">
+                <div class="frame-corner tl"></div>
+                <div class="frame-corner tr"></div>
+                <div class="frame-corner bl"></div>
+                <div class="frame-corner br"></div>
+
+                <div class="quote-text" id="quoteText"></div>
+                <div class="quote-info" id="quoteInfo"></div>
+            </div>
+
+            <div class="data-jitter" id="dataJitter">
+                SYS.ANALYSIS<br>
+                PROCESSING...
+            </div>
+        </div>
+
+        <div class="hud-footer">
+            <div class="coords">COORD: <span id="coords">34.0522°N, 118.2437°W</span></div>
+            <div>SECTOR: <span id="sector">ALPHA-7</span></div>
+            <div>VER: 7.4.0</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">&lt; PREV</button>
+        <button class="btn" onclick="nextQuote()">NEXT &gt;</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "科技是人类的延伸，也是人类的镜子", author: "马歇尔·麦克卢汉", book: "理解媒介" },
+            { text: "未来已来，只是分布不均", author: "威廉·吉布森", book: "神经漫游者" },
+            { text: "在数字世界中，信息就是力量", author: "尼尔·斯蒂芬森", book: "雪崩" },
+            { text: "代码即法律", author: "劳伦斯·莱斯格", book: "代码2.0" },
+            { text: "人工智能是人类发明的最后一项发明", author: "尼克·博斯特罗姆", book: "超级智能" },
+            { text: "虚拟现实将成为最终的交流平台", author: "马克·扎克伯格", book: "连线采访" }
+        ];
+
+        let currentIndex = 0;
+
+        function updateClock() {
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0];
+            document.getElementById('clock').textContent = time;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function updateCoords() {
+            const lat = (34 + Math.random() * 0.01).toFixed(4);
+            const lng = (118 + Math.random() * 0.01).toFixed(4);
+            document.getElementById('coords').textContent = `${lat}°N, ${lng}°W`;
+        }
+        setInterval(updateCoords, 5000);
+
+        function jitterData() {
+            const chars = 'ABCDEF0123456789';
+            let result = 'SYS.ANALYSIS<br>';
+            for (let i = 0; i < 3; i++) {
+                let line = '';
+                for (let j = 0; j < 8; j++) {
+                    line += chars[Math.floor(Math.random() * chars.length)];
+                }
+                result += line + '<br>';
+            }
+            document.getElementById('dataJitter').innerHTML = result;
+        }
+        setInterval(jitterData, 2000);
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                infoEl.innerHTML = `${quote.author} // <span class="book-name">${quote.book}</span>`;
+                textEl.classList.add('show');
+                infoEl.classList.add('show');
+            }, 100);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        showQuote();
+    </script>
+</body>
+</html>
