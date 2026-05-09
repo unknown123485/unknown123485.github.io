@@ -32,7 +32,9 @@
             z-index: 2;
         }
         .crawl-content {
-            width: 90%;
+            width: 100%;
+            max-width: 100vw;
+            padding: 0 5vw;
             transform-origin: 50% 100%;
             transform: rotateX(60deg) translateY(100vh);
             animation: crawl 60s linear infinite;
@@ -43,27 +45,30 @@
             100% { transform: rotateX(60deg) translateY(-300vh); opacity: 0; }
         }
         .quote-item {
-            text-align: justify;
-            text-align-last: center;
-            margin-bottom: 120px;
+            text-align: center;
+            margin-bottom: 100px;
             opacity: 1;
+            width: 100%;
         }
         .quote-text {
-            font-size: clamp(1.4rem, 2.5vw, 2.8rem);
-            line-height: 1.8;
+            font-size: clamp(1.8rem, 4vw, 3.5rem);
+            line-height: 1.6;
             font-weight: 700;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             color: #ffeaa7;
             text-shadow:
                 0 0 10px rgba(255, 234, 167, 0.6),
                 0 0 30px rgba(255, 234, 167, 0.3),
                 0 0 60px rgba(255, 234, 167, 0.1);
+            width: 100%;
+            max-width: 90vw;
+            margin: 0 auto;
         }
         .quote-info {
-            margin-top: 30px;
-            font-size: clamp(0.8rem, 1.2vw, 1.1rem);
+            margin-top: 25px;
+            font-size: clamp(0.9rem, 1.5vw, 1.3rem);
             color: #fdcb6e;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.15em;
             text-align: center;
             font-weight: 500;
             text-shadow:
@@ -363,7 +368,7 @@
         function updateFontSize() {
             const scale = document.getElementById('fontSizeSlider').value;
             document.querySelectorAll('.quote-text').forEach(el => {
-                el.style.fontSize = `clamp(${1.4 * scale}rem, ${2.5 * scale}vw, ${2.8 * scale}rem)`;
+                el.style.fontSize = `clamp(${1.8 * scale}rem, ${4 * scale}vw, ${3.5 * scale}rem)`;
             });
         }
 

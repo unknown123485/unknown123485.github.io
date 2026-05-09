@@ -9,9 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Mas.reader v7.3.0</title>
+    <title>Mas.reader v7.6.2</title>
     <script>
-        // 缓存控制 - v7.3.0
+        // 缓存控制 - v7.6.2
         (function() {
             var url = window.location.href;
             var hasVersion = /[?&]v=\d+/.test(url);
@@ -4417,23 +4417,29 @@
                         <div class="home-theme-card" data-quote-effect="inkwash" onclick="setQuoteEffect('inkwash')" style="padding:0.4rem 0.8rem;">
                             <div class="theme-label" style="font-size:0.7rem;">水墨晕染</div>
                         </div>
-                        <div class="home-theme-card" data-quote-effect="particles" onclick="setQuoteEffect('particles')" style="padding:0.4rem 0.8rem;">
-                            <div class="theme-label" style="font-size:0.7rem;">粒子重组</div>
-                        </div>
-                        <div class="home-theme-card" data-quote-effect="neon" onclick="setQuoteEffect('neon')" style="padding:0.4rem 0.8rem;">
-                            <div class="theme-label" style="font-size:0.7rem;">霓虹灯管</div>
-                        </div>
                         <div class="home-theme-card" data-quote-effect="nature" onclick="setQuoteEffect('nature')" style="padding:0.4rem 0.8rem;">
                             <div class="theme-label" style="font-size:0.7rem;">自然场景</div>
-                        </div>
-                        <div class="home-theme-card" data-quote-effect="letterpress" onclick="setQuoteEffect('letterpress')" style="padding:0.4rem 0.8rem;">
-                            <div class="theme-label" style="font-size:0.7rem;">活字印刷</div>
                         </div>
                         <div class="home-theme-card" data-quote-effect="fractal" onclick="setQuoteEffect('fractal')" style="padding:0.4rem 0.8rem;">
                             <div class="theme-label" style="font-size:0.7rem;">分形生长</div>
                         </div>
-                        <div class="home-theme-card" data-quote-effect="hologram" onclick="setQuoteEffect('hologram')" style="padding:0.4rem 0.8rem;">
-                            <div class="theme-label" style="font-size:0.7rem;">全息投影</div>
+                        <div class="home-theme-card" data-quote-effect="hourglass" onclick="setQuoteEffect('hourglass')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">时光沙漏</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="zen" onclick="setQuoteEffect('zen')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">禅意庭院</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="clouds" onclick="setQuoteEffect('clouds')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">云端之上</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="hud" onclick="setQuoteEffect('hud')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">战术终端</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="memoria" onclick="setQuoteEffect('memoria')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">梦境沉浸</div>
+                        </div>
+                        <div class="home-theme-card" data-quote-effect="obsidian" onclick="setQuoteEffect('obsidian')" style="padding:0.4rem 0.8rem;">
+                            <div class="theme-label" style="font-size:0.7rem;">黑曜石核心</div>
                         </div>
                     </div>
                 </div>
@@ -10995,8 +11001,8 @@
     </script>
 
     <!-- 书摘展示选择页面 -->
-    <div id="quote-showcase-page" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--bg-base);overflow-y:auto;">
-        <div style="max-width:900px;margin:0 auto;padding:40px 20px;">
+    <div id="quote-showcase-page" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--bg-base);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;">
+        <div style="max-width:900px;margin:0 auto;padding:40px 20px;min-height:100vh;">
             <!-- 顶部返回按钮 -->
             <div style="display:flex;align-items:center;gap:15px;margin-bottom:40px;">
                 <button onclick="closeQuoteShowcase()" style="background:transparent;border:none;color:var(--text-primary);cursor:pointer;font-size:1rem;display:flex;align-items:center;gap:8px;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
