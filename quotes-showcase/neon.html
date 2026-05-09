@@ -7,180 +7,186 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #0a0a0f;
+            background: #0a0a0a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', 'Georgia', serif;
+            font-family: 'Noto Serif SC', serif;
             overflow: hidden;
             position: relative;
         }
-        /* 背景霓虹光晕 */
-        .neon-bg {
+        /* 砖墙背景 */
+        .wall {
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(0, 255, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(128, 0, 255, 0.1) 0%, transparent 50%),
-                #0a0a0f;
+            background:
+                linear-gradient(90deg, rgba(20,20,20,0.9) 0%, rgba(10,10,10,0.95) 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(30,30,30,0.5) 40px,
+                    rgba(30,30,30,0.5) 42px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 80px,
+                    rgba(30,30,30,0.5) 80px,
+                    rgba(30,30,30,0.5) 82px
+                );
             z-index: 0;
         }
-        /* 霓虹灯管边框效果 */
         .neon-container {
             position: relative;
-            padding: 80px 100px;
             z-index: 10;
+            text-align: center;
+            padding: 60px;
+            max-width: 90vw;
         }
-        .neon-border {
-            position: absolute;
-            inset: 0;
-            border: 2px solid rgba(255, 0, 128, 0.3);
+        /* 霓虹灯管边框 */
+        .neon-frame {
+            position: relative;
+            padding: 80px 60px;
+            border: 3px solid #ff006e;
             border-radius: 20px;
-            box-shadow: 
-                0 0 20px rgba(255, 0, 128, 0.2),
-                inset 0 0 20px rgba(255, 0, 128, 0.1);
-            animation: borderPulse 3s ease-in-out infinite;
+            box-shadow:
+                0 0 10px #ff006e,
+                0 0 20px #ff006e,
+                0 0 40px #ff006e,
+                inset 0 0 20px rgba(255,0,110,0.1);
+            animation: neonFlicker 4s infinite alternate;
         }
-        @keyframes borderPulse {
-            0%, 100% { 
-                border-color: rgba(255, 0, 128, 0.3);
-                box-shadow: 0 0 20px rgba(255, 0, 128, 0.2), inset 0 0 20px rgba(255, 0, 128, 0.1);
+        @keyframes neonFlicker {
+            0%, 100% {
+                border-color: #ff006e;
+                box-shadow:
+                    0 0 10px #ff006e,
+                    0 0 20px #ff006e,
+                    0 0 40px #ff006e,
+                    inset 0 0 20px rgba(255,0,110,0.1);
             }
-            33% { 
-                border-color: rgba(0, 255, 255, 0.3);
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            33% {
+                border-color: #00f5ff;
+                box-shadow:
+                    0 0 10px #00f5ff,
+                    0 0 20px #00f5ff,
+                    0 0 40px #00f5ff,
+                    inset 0 0 20px rgba(0,245,255,0.1);
             }
-            66% { 
-                border-color: rgba(128, 0, 255, 0.3);
-                box-shadow: 0 0 20px rgba(128, 0, 255, 0.2), inset 0 0 20px rgba(128, 0, 255, 0.1);
+            66% {
+                border-color: #ffea00;
+                box-shadow:
+                    0 0 10px #ffea00,
+                    0 0 20px #ffea00,
+                    0 0 40px #ffea00,
+                    inset 0 0 20px rgba(255,234,0,0.1);
             }
         }
         /* 角落霓虹灯 */
-        .neon-corner {
+        .corner-light {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            z-index: 11;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ff006e;
+            box-shadow:
+                0 0 10px #ff006e,
+                0 0 30px #ff006e,
+                0 0 60px #ff006e;
+            animation: cornerPulse 2s ease-in-out infinite;
         }
-        .neon-corner::before,
-        .neon-corner::after {
-            content: '';
-            position: absolute;
-            background: #ff0080;
-            box-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080, 0 0 30px #ff0080;
-            animation: cornerColor 3s ease-in-out infinite;
+        .corner-light.tl { top: -15px; left: -15px; }
+        .corner-light.tr { top: -15px; right: -15px; animation-delay: 0.5s; }
+        .corner-light.bl { bottom: -15px; left: -15px; animation-delay: 1s; }
+        .corner-light.br { bottom: -15px; right: -15px; animation-delay: 1.5s; }
+        @keyframes cornerPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
         }
-        @keyframes cornerColor {
-            0%, 100% { background: #ff0080; box-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080; }
-            33% { background: #00ffff; box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
-            66% { background: #8000ff; box-shadow: 0 0 10px #8000ff, 0 0 20px #8000ff; }
-        }
-        .neon-corner.tl { top: -5px; left: -5px; }
-        .neon-corner.tl::before { top: 0; left: 0; width: 30px; height: 3px; }
-        .neon-corner.tl::after { top: 0; left: 0; width: 3px; height: 30px; }
-        .neon-corner.tr { top: -5px; right: -5px; }
-        .neon-corner.tr::before { top: 0; right: 0; width: 30px; height: 3px; }
-        .neon-corner.tr::after { top: 0; right: 0; width: 3px; height: 30px; }
-        .neon-corner.bl { bottom: -5px; left: -5px; }
-        .neon-corner.bl::before { bottom: 0; left: 0; width: 30px; height: 3px; }
-        .neon-corner.bl::after { bottom: 0; left: 0; width: 3px; height: 30px; }
-        .neon-corner.br { bottom: -5px; right: -5px; }
-        .neon-corner.br::before { bottom: 0; right: 0; width: 30px; height: 3px; }
-        .neon-corner.br::after { bottom: 0; right: 0; width: 3px; height: 30px; }
-        
         .quote-text {
-            font-size: clamp(1.8rem, 4vw, 3.2rem);
-            line-height: 1.6;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            line-height: 1.8;
             color: #fff;
+            text-shadow:
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px #ff006e,
+                0 0 40px #ff006e,
+                0 0 80px #ff006e;
             letter-spacing: 0.15em;
             font-weight: 300;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
-            /* 多层霓虹发光 */
-            text-shadow:
-                0 0 5px rgba(255, 0, 128, 0.8),
-                0 0 10px rgba(255, 0, 128, 0.6),
-                0 0 20px rgba(255, 0, 128, 0.4),
-                0 0 40px rgba(255, 0, 128, 0.2),
-                0 0 80px rgba(255, 0, 128, 0.1);
-            animation: neonColor 3s ease-in-out infinite;
+            animation: textGlow 3s ease-in-out infinite alternate;
         }
-        @keyframes neonColor {
-            0%, 100% { 
-                text-shadow: 0 0 5px rgba(255, 0, 128, 0.8), 0 0 10px rgba(255, 0, 128, 0.6), 0 0 20px rgba(255, 0, 128, 0.4), 0 0 40px rgba(255, 0, 128, 0.2);
+        @keyframes textGlow {
+            from {
+                text-shadow:
+                    0 0 5px #fff,
+                    0 0 10px #fff,
+                    0 0 20px #ff006e,
+                    0 0 40px #ff006e;
             }
-            33% { 
-                text-shadow: 0 0 5px rgba(0, 255, 255, 0.8), 0 0 10px rgba(0, 255, 255, 0.6), 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.2);
+            to {
+                text-shadow:
+                    0 0 10px #fff,
+                    0 0 20px #fff,
+                    0 0 40px #ff006e,
+                    0 0 80px #ff006e,
+                    0 0 120px #ff006e;
             }
-            66% { 
-                text-shadow: 0 0 5px rgba(128, 0, 255, 0.8), 0 0 10px rgba(128, 0, 255, 0.6), 0 0 20px rgba(128, 0, 255, 0.4), 0 0 40px rgba(128, 0, 255, 0.2);
-            }
-        }
-        .quote-text.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .quote-text .char {
-            display: inline-block;
-            opacity: 0;
-            animation: charReveal 0.6s ease forwards;
-        }
-        @keyframes charReveal {
-            to { opacity: 1; }
-        }
-        .divider {
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ff0080, transparent);
-            margin: 40px auto 25px;
-            opacity: 0;
-            transition: opacity 1.5s ease 0.8s;
-            box-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080;
-            animation: dividerColor 3s ease-in-out infinite;
-        }
-        @keyframes dividerColor {
-            0%, 100% { background: linear-gradient(90deg, transparent, #ff0080, transparent); box-shadow: 0 0 10px #ff0080; }
-            33% { background: linear-gradient(90deg, transparent, #00ffff, transparent); box-shadow: 0 0 10px #00ffff; }
-            66% { background: linear-gradient(90deg, transparent, #8000ff, transparent); box-shadow: 0 0 10px #8000ff; }
-        }
-        .divider.show {
-            opacity: 1;
         }
         .quote-info {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 0.3em;
-            opacity: 0;
-            transition: opacity 1.5s ease 1.2s;
-            font-weight: 300;
-            text-align: center;
-        }
-        .quote-info.show {
-            opacity: 1;
-        }
-        .back-link {
-            position: fixed;
-            top: 40px;
-            left: 40px;
-            color: rgba(255, 255, 255, 0.3);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: all 0.6s;
-            z-index: 100;
+            margin-top: 40px;
+            font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+            color: #00f5ff;
+            text-shadow:
+                0 0 5px #00f5ff,
+                0 0 10px #00f5ff,
+                0 0 20px #00f5ff;
             letter-spacing: 0.2em;
         }
-        .back-link:hover {
-            color: #ff0080;
-            text-shadow: 0 0 10px #ff0080;
+        .book-name {
+            color: #ffea00;
+            text-shadow:
+                0 0 5px #ffea00,
+                0 0 10px #ffea00;
+            font-style: italic;
         }
+        /* 霓虹样式切换 */
+        .style-selector {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+        .style-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .style-btn:hover { transform: scale(1.2); }
+        .style-btn.active {
+            border-color: #fff;
+            box-shadow: 0 0 15px currentColor;
+        }
+        .style-btn.pink { background: #ff006e; }
+        .style-btn.cyan { background: #00f5ff; }
+        .style-btn.yellow { background: #ffea00; }
+        .style-btn.green { background: #39ff14; }
+        .style-btn.purple { background: #bf00ff; }
+        /* 控制按钮 */
         .controls {
             position: fixed;
-            bottom: 50px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -188,42 +194,163 @@
             z-index: 100;
         }
         .btn {
-            background: transparent;
-            border: 1px solid rgba(255, 0, 128, 0.3);
-            color: rgba(255, 255, 255, 0.5);
-            padding: 14px 36px;
-            border-radius: 0;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            padding: 12px 32px;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.6s;
-            letter-spacing: 0.2em;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            letter-spacing: 0.1em;
             font-family: inherit;
-            position: relative;
-            overflow: hidden;
+            backdrop-filter: blur(10px);
         }
         .btn:hover {
-            border-color: #ff0080;
+            background: rgba(255,255,255,0.1);
             color: #fff;
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
-            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            font-size: 0.85rem;
+            z-index: 100;
+            transition: color 0.3s;
+            letter-spacing: 0.1em;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.7); }
+        .settings-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.5);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        /* 设置面板 */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(30px);
+            z-index: 1000;
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 80px 30px 30px;
+            overflow-y: auto;
+        }
+        .settings-panel.open { right: 0; }
+        .settings-panel h3 {
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+        .setting-item {
+            margin-bottom: 25px;
+        }
+        .setting-item label {
+            display: block;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+        .setting-item input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            outline: none;
+        }
+        .setting-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .close-settings {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .overlay.show { opacity: 1; pointer-events: auto; }
     </style>
 </head>
 <body>
-    <div class="neon-bg"></div>
-    <a href="index.html" class="back-link">&larr; 返回</a>
+    <div class="wall"></div>
+    <a href="index.html" class="back-link">← 返回</a>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <div class="overlay" id="overlay" onclick="toggleSettings()"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <button class="close-settings" onclick="toggleSettings()">×</button>
+        <h3>阅读设置</h3>
+        <div class="setting-item">
+            <label>字号大小</label>
+            <input type="range" min="12" max="32" value="20" id="fontSizeSlider" onchange="updateFontSize()">
+        </div>
+        <div class="setting-item">
+            <label>发光强度</label>
+            <input type="range" min="1" max="3" step="0.1" value="1.5" id="glowSlider" onchange="updateGlow()">
+        </div>
+    </div>
 
     <div class="neon-container">
-        <div class="neon-border"></div>
-        <div class="neon-corner tl"></div>
-        <div class="neon-corner tr"></div>
-        <div class="neon-corner bl"></div>
-        <div class="neon-corner br"></div>
-        <div class="quote-text" id="quoteText"></div>
-        <div class="divider" id="divider"></div>
-        <div class="quote-info" id="quoteInfo">
-            <span id="author"></span> &middot; <span id="book"></span>
+        <div class="neon-frame" id="neonFrame">
+            <div class="corner-light tl"></div>
+            <div class="corner-light tr"></div>
+            <div class="corner-light bl"></div>
+            <div class="corner-light br"></div>
+            <div class="quote-text" id="quoteText"></div>
+            <div class="quote-info" id="quoteInfo"></div>
         </div>
+    </div>
+
+    <div class="style-selector">
+        <div class="style-btn pink active" onclick="setNeonStyle('pink')"></div>
+        <div class="style-btn cyan" onclick="setNeonStyle('cyan')"></div>
+        <div class="style-btn yellow" onclick="setNeonStyle('yellow')"></div>
+        <div class="style-btn green" onclick="setNeonStyle('green')"></div>
+        <div class="style-btn purple" onclick="setNeonStyle('purple')"></div>
     </div>
 
     <div class="controls">
@@ -233,45 +360,29 @@
 
     <script>
         const quotes = [
-            { text: "霓虹之下，我们都是孤独的舞者", author: "村上春树", book: "挪威的森林" },
-            { text: "城市是一座巨大的迷宫", author: "博尔赫斯", book: "迷宫" },
-            { text: "黑夜给了我黑色的眼睛", author: "顾城", book: "一代人" },
-            { text: "在赛博朋克的世界里", author: "威廉·吉布森", book: "神经漫游者" },
-            { text: "霓虹灯下的阴影里", author: "菲茨杰拉德", book: "了不起的盖茨比" }
+            { text: "城市在霓虹中迷失，我们在光影中寻找", author: "村上春树", book: "挪威的森林" },
+            { text: "黑夜给了我黑色的眼睛，我却用它寻找光明", author: "顾城", book: "一代人" },
+            { text: "每个城市都有属于自己的光", author: "张爱玲", book: "倾城之恋" },
+            { text: "在霓虹闪烁的街头，孤独是最亮的灯", author: "太宰治", book: "人间失格" },
+            { text: "光与影的交错，是城市最美的诗", author: "川端康成", book: "雪国" }
         ];
 
+        const styles = {
+            pink: { main: '#ff006e', secondary: '#00f5ff', accent: '#ffea00' },
+            cyan: { main: '#00f5ff', secondary: '#ff006e', accent: '#ffea00' },
+            yellow: { main: '#ffea00', secondary: '#ff006e', accent: '#00f5ff' },
+            green: { main: '#39ff14', secondary: '#00f5ff', accent: '#ffea00' },
+            purple: { main: '#bf00ff', secondary: '#00f5ff', accent: '#ff006e' }
+        };
+
         let currentIndex = 0;
+        let currentStyle = 'pink';
 
         function showQuote() {
             const quote = quotes[currentIndex];
-            const textEl = document.getElementById('quoteText');
-            const infoEl = document.getElementById('quoteInfo');
-            const dividerEl = document.getElementById('divider');
-
-            textEl.classList.remove('show');
-            infoEl.classList.remove('show');
-            dividerEl.classList.remove('show');
-
-            setTimeout(() => {
-                textEl.innerHTML = '';
-                const chars = quote.text.split('');
-                chars.forEach((char, i) => {
-                    const span = document.createElement('span');
-                    span.className = 'char';
-                    span.textContent = char === ' ' ? '\u00A0' : char;
-                    span.style.animationDelay = (i * 0.08) + 's';
-                    textEl.appendChild(span);
-                });
-
-                document.getElementById('author').textContent = quote.author;
-                document.getElementById('book').textContent = quote.book;
-
-                textEl.classList.add('show');
-                setTimeout(() => {
-                    dividerEl.classList.add('show');
-                    infoEl.classList.add('show');
-                }, 600);
-            }, 500);
+            document.getElementById('quoteText').textContent = quote.text;
+            document.getElementById('quoteInfo').innerHTML =
+                `${quote.author} · <span class="book-name">${quote.book}</span>`;
         }
 
         function nextQuote() {
@@ -282,6 +393,70 @@
         function prevQuote() {
             currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
             showQuote();
+        }
+
+        function setNeonStyle(style) {
+            currentStyle = style;
+            const colors = styles[style];
+            const frame = document.getElementById('neonFrame');
+            const text = document.getElementById('quoteText');
+
+            // 更新边框颜色
+            frame.style.borderColor = colors.main;
+            frame.style.boxShadow = `
+                0 0 10px ${colors.main},
+                0 0 20px ${colors.main},
+                0 0 40px ${colors.main},
+                inset 0 0 20px ${colors.main}20
+            `;
+
+            // 更新文字发光
+            text.style.textShadow = `
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px ${colors.main},
+                0 0 40px ${colors.main},
+                0 0 80px ${colors.main}
+            `;
+
+            // 更新角落灯
+            document.querySelectorAll('.corner-light').forEach(light => {
+                light.style.background = colors.main;
+                light.style.boxShadow = `
+                    0 0 10px ${colors.main},
+                    0 0 30px ${colors.main},
+                    0 0 60px ${colors.main}
+                `;
+            });
+
+            // 更新按钮状态
+            document.querySelectorAll('.style-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.style-btn.' + style).classList.add('active');
+        }
+
+        function toggleSettings() {
+            document.getElementById('settingsPanel').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+
+        function updateFontSize() {
+            const size = document.getElementById('fontSizeSlider').value;
+            document.getElementById('quoteText').style.fontSize = size + 'px';
+        }
+
+        function updateGlow() {
+            const intensity = document.getElementById('glowSlider').value;
+            const colors = styles[currentStyle];
+            const text = document.getElementById('quoteText');
+            text.style.textShadow = `
+                0 0 ${5 * intensity}px #fff,
+                0 0 ${10 * intensity}px #fff,
+                0 0 ${20 * intensity}px ${colors.main},
+                0 0 ${40 * intensity}px ${colors.main},
+                0 0 ${80 * intensity}px ${colors.main}
+            `;
         }
 
         document.addEventListener('keydown', (e) => {

@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #1a1814 0%, #2d2924 50%, #1a1814 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -15,15 +15,14 @@
             align-items: center;
             font-family: 'Noto Serif SC', 'Georgia', serif;
             overflow: hidden;
-            perspective: 2000px;
         }
-        .scene {
+        .book-container {
             width: 90vw;
-            max-width: 1000px;
-            height: 75vh;
-            max-height: 700px;
+            max-width: 1200px;
+            height: 80vh;
+            max-height: 800px;
             position: relative;
-            transform-style: preserve-3d;
+            perspective: 3000px;
             z-index: 10;
         }
         .book {
@@ -31,235 +30,542 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            background: #3d3328;
+            border-radius: 12px;
+            box-shadow:
+                0 30px 100px rgba(0,0,0,0.8),
+                0 0 0 10px #3d3328,
+                0 0 0 12px #2a2520,
+                inset 0 0 60px rgba(0,0,0,0.5);
         }
-        .page {
+        .spread {
             position: absolute;
+            inset: 0;
+            display: flex;
+            transform-style: preserve-3d;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .spread.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .page-side {
+            position: relative;
             width: 50%;
             height: 100%;
-            top: 0;
-            background: linear-gradient(to right, #f5f0e8 0%, #f0ebe0 100%);
-            transform-origin: left center;
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-            backface-visibility: hidden;
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            box-shadow: inset -5px 0 15px rgba(0,0,0,0.1);
+            background: #f7f3eb;
+            transform-style: preserve-3d;
             overflow: hidden;
+            backface-visibility: hidden;
         }
-        .page::before {
+        .page-side.left {
+            border-radius: 12px 0 0 12px;
+            border-right: 2px solid rgba(0,0,0,0.08);
+            transform-origin: right center;
+        }
+        .page-side.right {
+            border-radius: 0 12px 12px 0;
+            border-left: 2px solid rgba(0,0,0,0.08);
+            transform-origin: left center;
+        }
+        /* 纸张纹理 */
+        .page-side::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+            background:
+                linear-gradient(90deg, rgba(0,0,0,0.04) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.04) 100%);
             pointer-events: none;
+            z-index: 1;
         }
-        .page.right {
-            left: 50%;
-            transform-origin: left center;
-            background: linear-gradient(to left, #f5f0e8 0%, #f0ebe0 100%);
-            box-shadow: inset 5px 0 15px rgba(0,0,0,0.1);
-        }
-        .page.flipped {
-            transform: rotateY(-180deg);
-        }
-        .page-back {
-            position: absolute;
-            width: 100%;
+        .page-content {
+            position: relative;
+            z-index: 2;
+            padding: 60px 50px;
             height: 100%;
-            top: 0;
-            left: 0;
-            background: linear-gradient(to left, #f0ebe0 0%, #e8e3d8 100%);
-            transform: rotateY(180deg);
-            backface-visibility: hidden;
-            padding: 50px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            box-shadow: inset 5px 0 15px rgba(0,0,0,0.1);
         }
+        .page-side.left .page-content {
+            padding-right: 40px;
+        }
+        .page-side.right .page-content {
+            padding-left: 40px;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.85rem;
+            color: #aaa;
+            font-family: 'Georgia', serif;
+            z-index: 3;
+        }
+        .page-side.left .page-number { right: 40px; }
+        .page-side.right .page-number { left: 40px; }
         .quote-text {
-            font-size: clamp(1.1rem, 2.2vw, 1.8rem);
-            line-height: 1.9;
-            color: #2a2520;
-            margin-bottom: 25px;
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            line-height: 2;
+            color: #3a3530;
             letter-spacing: 0.05em;
+            text-align: justify;
+            position: relative;
             font-weight: 400;
         }
+        .quote-text::before {
+            content: '"';
+            font-size: 5rem;
+            color: #c9a84c;
+            position: absolute;
+            top: -40px;
+            left: -25px;
+            font-family: 'Georgia', serif;
+            opacity: 0.5;
+            line-height: 1;
+        }
         .quote-info {
-            font-size: clamp(0.75rem, 1.3vw, 0.9rem);
-            color: #8a8078;
+            margin-top: 40px;
+            font-size: 0.95rem;
+            color: #777;
+        }
+        .page-side.left .quote-info {
             text-align: right;
+        }
+        .page-side.right .quote-info {
+            text-align: left;
+        }
+        .author {
+            font-weight: 600;
+            color: #4a4540;
             letter-spacing: 0.1em;
         }
+        .book-name {
+            font-style: italic;
+            color: #999;
+            margin-top: 8px;
+            letter-spacing: 0.05em;
+        }
+        /* 书脊 */
+        .book-spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to right,
+                rgba(0,0,0,0.3) 0%,
+                rgba(0,0,0,0.1) 30%,
+                rgba(0,0,0,0.05) 50%,
+                rgba(0,0,0,0.1) 70%,
+                rgba(0,0,0,0.3) 100%);
+            transform: translateX(-50%);
+            z-index: 5;
+            pointer-events: none;
+        }
+        /* 翻页动画 */
+        .spread.turning-next .page-side.right {
+            animation: turnPageRight 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+        }
+        .spread.turning-prev .page-side.left {
+            animation: turnPageLeft 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+        }
+        @keyframes turnPageRight {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(-180deg); }
+        }
+        @keyframes turnPageLeft {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(180deg); }
+        }
+        /* 书角折叠 */
+        .corner-fold {
+            position: absolute;
+            bottom: 0;
+            width: 35px;
+            height: 35px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .page-side.left .corner-fold {
+            right: 0;
+            background: linear-gradient(135deg, transparent 50%, #e8e0d4 50%);
+        }
+        .page-side.right .corner-fold {
+            left: 0;
+            background: linear-gradient(225deg, transparent 50%, #e8e0d4 50%);
+        }
+        /* 控制按钮 */
         .controls {
             position: fixed;
-            bottom: 50px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            gap: 30px;
             z-index: 100;
+            align-items: center;
         }
-        .btn {
-            background: transparent;
+        .nav-btn {
+            background: rgba(255,255,255,0.08);
             border: 1px solid rgba(255,255,255,0.15);
-            color: rgba(255,255,255,0.6);
-            padding: 12px 32px;
-            border-radius: 0;
+            color: #d0c8b8;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.5s ease;
-            letter-spacing: 0.1em;
-            font-family: inherit;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
         }
-        .btn:hover {
-            border-color: rgba(255,255,255,0.4);
-            color: rgba(255,255,255,0.9);
-            background: rgba(255,255,255,0.05);
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.1);
+        }
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+        .page-indicator {
+            color: #b0a898;
+            font-size: 0.9rem;
+            opacity: 0.6;
+            min-width: 80px;
+            text-align: center;
+            letter-spacing: 0.1em;
         }
         .back-link {
             position: fixed;
-            top: 40px;
-            left: 40px;
-            color: rgba(255,255,255,0.4);
+            top: 30px;
+            left: 30px;
+            color: #b0a898;
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            opacity: 0.5;
+            transition: opacity 0.3s;
             z-index: 100;
-            transition: color 0.5s;
             letter-spacing: 0.1em;
         }
-        .back-link:hover { color: rgba(255,255,255,0.8); }
-        .page-num {
-            position: absolute;
-            bottom: 20px;
-            font-size: 0.7rem;
-            color: #aaa;
+        .back-link:hover { opacity: 0.9; }
+        .settings-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.5);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
         }
-        .page-num.left { left: 30px; }
-        .page-num.right { right: 30px; }
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .hint {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #b0a898;
+            font-size: 0.8rem;
+            opacity: 0.3;
+            z-index: 100;
+            letter-spacing: 0.1em;
+        }
+        /* 设置面板 */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: rgba(30,25,20,0.95);
+            backdrop-filter: blur(30px);
+            z-index: 1000;
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 80px 30px 30px;
+            overflow-y: auto;
+        }
+        .settings-panel.open { right: 0; }
+        .settings-panel h3 {
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+        .setting-item {
+            margin-bottom: 25px;
+        }
+        .setting-item label {
+            display: block;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+        .setting-item input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            outline: none;
+        }
+        .setting-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .close-settings {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .overlay.show { opacity: 1; pointer-events: auto; }
+        @media (max-width: 768px) {
+            .book-container {
+                width: 95vw;
+                height: 85vh;
+            }
+            .quote-text {
+                font-size: 1.15rem;
+                line-height: 1.9;
+            }
+            .page-content {
+                padding: 45px 30px;
+            }
+            .page-side.left .page-content {
+                padding-right: 25px;
+            }
+            .page-side.right .page-content {
+                padding-left: 25px;
+            }
+            .quote-text::before {
+                font-size: 3rem;
+                top: -25px;
+                left: -15px;
+            }
+            .quote-info {
+                margin-top: 30px;
+            }
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">&larr; 返回</a>
+    <a href="index.html" class="back-link">← 返回目录</a>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
 
-    <div class="scene">
-        <div class="book" id="book">
-            <div class="page" id="leftPage">
-                <div class="quote-text" id="leftText"></div>
-                <div class="quote-info">
-                    <span id="leftAuthor"></span> &middot; <span id="leftBook"></span>
-                </div>
-                <div class="page-num left" id="leftNum"></div>
-            </div>
-            <div class="page right" id="rightPage">
-                <div class="quote-text" id="rightText"></div>
-                <div class="quote-info">
-                    <span id="rightAuthor"></span> &middot; <span id="rightBook"></span>
-                </div>
-                <div class="page-num right" id="rightNum"></div>
-                <div class="page-back">
-                    <div class="quote-text" id="backText"></div>
-                    <div class="quote-info">
-                        <span id="backAuthor"></span> &middot; <span id="backBook"></span>
-                    </div>
-                </div>
-            </div>
+    <div class="overlay" id="overlay" onclick="toggleSettings()"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <button class="close-settings" onclick="toggleSettings()">×</button>
+        <h3>阅读设置</h3>
+        <div class="setting-item">
+            <label>字号大小</label>
+            <input type="range" min="12" max="28" value="18" id="fontSizeSlider" onchange="updateFontSize()">
+        </div>
+        <div class="setting-item">
+            <label>行间距</label>
+            <input type="range" min="1.4" max="2.5" step="0.1" value="2" id="lineHeightSlider" onchange="updateLineHeight()">
         </div>
     </div>
 
+    <div class="book-container">
+        <div class="book" id="book">
+            <div class="book-spine"></div>
+        </div>
+    </div>
+
+    <div class="hint">点击书页或使用键盘方向键翻页</div>
+
     <div class="controls">
-        <button class="btn" onclick="prevPage()">上一页</button>
-        <button class="btn" onclick="flipPage()">翻页</button>
-        <button class="btn" onclick="nextPage()">下一页</button>
+        <button class="nav-btn" onclick="prevSpread()">◀</button>
+        <span class="page-indicator" id="pageIndicator">1 / 5</span>
+        <button class="nav-btn" onclick="nextSpread()">▶</button>
     </div>
 
     <script>
         const quotes = [
-            { text: "人是一根有思想的芦苇", author: "帕斯卡", book: "思想录" },
-            { text: "我思故我在", author: "笛卡尔", book: "第一哲学沉思集" },
-            { text: "未经审视的人生不值得过", author: "苏格拉底", book: "申辩篇" },
-            { text: "世界上只有一种真正的英雄主义", author: "罗曼·罗兰", book: "米开朗基罗传" },
-            { text: "人生而自由，却无往不在枷锁之中", author: "卢梭", book: "社会契约论" },
-            { text: "存在即合理", author: "黑格尔", book: "法哲学原理" },
-            { text: "知识就是力量", author: "培根", book: "新工具" },
-            { text: "我唯一知道的就是我一无所知", author: "苏格拉底", book: "申辩篇" }
+            { text: "人是一根有思想的芦苇。", author: "帕斯卡", book: "思想录" },
+            { text: "我思故我在。", author: "笛卡尔", book: "第一哲学沉思集" },
+            { text: "未经审视的人生不值得过。", author: "苏格拉底", book: "申辩篇" },
+            { text: "世界上只有一种真正的英雄主义，那就是认清生活的真相后依然热爱生活。", author: "罗曼·罗兰", book: "米开朗基罗传" },
+            { text: "你担心什么，什么就控制你。", author: "约翰·洛克", book: "政府论" },
+            { text: "人生而自由，却无往不在枷锁之中。", author: "卢梭", book: "社会契约论" },
+            { text: "存在即合理。", author: "黑格尔", book: "法哲学原理" },
+            { text: "他人即地狱。", author: "萨特", book: "禁闭" },
+            { text: "一个人知道自己为什么而活，就可以忍受任何一种生活。", author: "尼采", book: "查拉图斯特拉如是说" },
+            { text: "我们听到的一切都是一个观点，不是事实。我们看见的一切都是一个视角，不是真相。", author: "马可·奥勒留", book: "沉思录" }
         ];
 
-        let currentPage = 0;
-        let isFlipped = false;
+        let currentSpread = 0;
+        const quotesPerSpread = 2;
+        const totalSpreads = Math.ceil(quotes.length / quotesPerSpread);
+        let isAnimating = false;
 
-        function showPages() {
-            const leftIdx = currentPage * 2;
-            const rightIdx = leftIdx + 1;
+        function initBook() {
+            const book = document.getElementById('book');
 
-            const leftQuote = quotes[leftIdx] || { text: "", author: "", book: "" };
-            const rightQuote = quotes[rightIdx] || { text: "", author: "", book: "" };
+            for (let i = 0; i < totalSpreads; i++) {
+                const spread = document.createElement('div');
+                spread.className = 'spread' + (i === 0 ? ' active' : '');
+                spread.id = 'spread-' + i;
 
-            document.getElementById('leftText').textContent = leftQuote.text;
-            document.getElementById('leftAuthor').textContent = leftQuote.author;
-            document.getElementById('leftBook').textContent = leftQuote.book;
-            document.getElementById('leftNum').textContent = leftIdx + 1;
+                const leftIndex = i * quotesPerSpread;
+                const rightIndex = leftIndex + 1;
 
-            document.getElementById('rightText').textContent = rightQuote.text;
-            document.getElementById('rightAuthor').textContent = rightQuote.author;
-            document.getElementById('rightBook').textContent = rightQuote.book;
-            document.getElementById('rightNum').textContent = rightIdx + 1;
+                // 左页
+                const leftPage = document.createElement('div');
+                leftPage.className = 'page-side left';
+                leftPage.innerHTML = `
+                    <div class="corner-fold"></div>
+                    <div class="page-content">
+                        <div class="quote-text">${quotes[leftIndex] ? quotes[leftIndex].text : ''}</div>
+                        <div class="quote-info">
+                            <div class="author">${quotes[leftIndex] ? quotes[leftIndex].author : ''}</div>
+                            <div class="book-name">${quotes[leftIndex] ? quotes[leftIndex].book : ''}</div>
+                        </div>
+                    </div>
+                    <span class="page-number">${leftIndex + 1}</span>
+                `;
 
-            // 预加载背面内容（下一页）
-            const nextLeftIdx = (currentPage + 1) * 2;
-            const nextLeftQuote = quotes[nextLeftIdx] || { text: "", author: "", book: "" };
-            document.getElementById('backText').textContent = nextLeftQuote.text;
-            document.getElementById('backAuthor').textContent = nextLeftQuote.author;
-            document.getElementById('backBook').textContent = nextLeftQuote.book;
-        }
+                // 右页
+                const rightPage = document.createElement('div');
+                rightPage.className = 'page-side right';
+                if (quotes[rightIndex]) {
+                    rightPage.innerHTML = `
+                        <div class="corner-fold"></div>
+                        <div class="page-content">
+                            <div class="quote-text">${quotes[rightIndex].text}</div>
+                            <div class="quote-info">
+                                <div class="author">${quotes[rightIndex].author}</div>
+                                <div class="book-name">${quotes[rightIndex].book}</div>
+                            </div>
+                        </div>
+                        <span class="page-number">${rightIndex + 1}</span>
+                    `;
+                } else {
+                    rightPage.innerHTML = `
+                        <div class="corner-fold"></div>
+                        <div class="page-content">
+                            <div class="quote-text" style="opacity:0.3;font-style:italic;">—— 本书摘到此结束 ——</div>
+                        </div>
+                        <span class="page-number">${rightIndex + 1}</span>
+                    `;
+                }
 
-        function flipPage() {
-            const rightPage = document.getElementById('rightPage');
-            if (!isFlipped) {
-                rightPage.classList.add('flipped');
-                isFlipped = true;
-            } else {
-                currentPage++;
-                if (currentPage * 2 >= quotes.length) currentPage = 0;
-                showPages();
-                rightPage.classList.remove('flipped');
-                isFlipped = false;
+                spread.appendChild(leftPage);
+                spread.appendChild(rightPage);
+                book.appendChild(spread);
             }
+
+            updateIndicator();
         }
 
-        function nextPage() {
-            if (isFlipped) {
-                currentPage++;
-                if (currentPage * 2 >= quotes.length) currentPage = 0;
-                showPages();
-                document.getElementById('rightPage').classList.remove('flipped');
-                isFlipped = false;
-            } else {
-                flipPage();
-            }
+        function nextSpread() {
+            if (isAnimating || currentSpread >= totalSpreads - 1) return;
+            isAnimating = true;
+
+            const currentEl = document.getElementById('spread-' + currentSpread);
+            currentEl.classList.add('turning-next');
+
+            setTimeout(() => {
+                currentEl.classList.remove('active', 'turning-next');
+                currentSpread++;
+                const nextEl = document.getElementById('spread-' + currentSpread);
+                nextEl.classList.add('active');
+                updateIndicator();
+                isAnimating = false;
+            }, 800);
         }
 
-        function prevPage() {
-            currentPage--;
-            if (currentPage < 0) currentPage = Math.floor((quotes.length - 1) / 2);
-            showPages();
-            document.getElementById('rightPage').classList.remove('flipped');
-            isFlipped = false;
+        function prevSpread() {
+            if (isAnimating || currentSpread <= 0) return;
+            isAnimating = true;
+
+            const currentEl = document.getElementById('spread-' + currentSpread);
+            currentEl.classList.remove('active');
+
+            currentSpread--;
+            const prevEl = document.getElementById('spread-' + currentSpread);
+            prevEl.classList.add('active', 'turning-prev');
+
+            setTimeout(() => {
+                prevEl.classList.remove('turning-prev');
+                updateIndicator();
+                isAnimating = false;
+            }, 800);
+        }
+
+        function updateIndicator() {
+            document.getElementById('pageIndicator').textContent =
+                `${currentSpread + 1} / ${totalSpreads}`;
+        }
+
+        function toggleSettings() {
+            document.getElementById('settingsPanel').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+
+        function updateFontSize() {
+            const size = document.getElementById('fontSizeSlider').value;
+            document.querySelectorAll('.quote-text').forEach(el => {
+                el.style.fontSize = size + 'px';
+            });
+        }
+
+        function updateLineHeight() {
+            const lh = document.getElementById('lineHeightSlider').value;
+            document.querySelectorAll('.quote-text').forEach(el => {
+                el.style.lineHeight = lh;
+            });
         }
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextPage();
-            if (e.key === 'ArrowLeft') prevPage();
-            if (e.key === ' ') {
-                e.preventDefault();
-                flipPage();
+            if (e.key === 'ArrowRight') nextSpread();
+            if (e.key === 'ArrowLeft') prevSpread();
+        });
+
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        document.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? nextSpread() : prevSpread();
             }
         });
 
-        showPages();
+        initBook();
     </script>
 </body>
 </html>
