@@ -19,37 +19,37 @@
             z-index: 0;
             transition: opacity 1.5s ease;
         }
-        /* 雨夜场景 */
+        /* 雨夜场景 - 真实的雷雨夜 */
         .scene-rain {
-            background: linear-gradient(180deg, #0a0e17 0%, #1a1f2e 40%, #2a3040 100%);
+            background: linear-gradient(180deg, #0c1020 0%, #1a2035 30%, #2a3550 70%, #1a2840 100%);
         }
         /* 雪景场景 */
         .scene-snow {
-            background: linear-gradient(180deg, #1a1a2e 0%, #2a2a4a 40%, #3a3a5a 100%);
+            background: linear-gradient(180deg, #1e2335 0%, #2a3550 40%, #3a4565 100%);
         }
-        /* 星空场景 */
+        /* 星空场景 - 更亮的星空 */
         .scene-starry {
-            background: linear-gradient(180deg, #050510 0%, #0a0a20 40%, #151535 100%);
+            background: linear-gradient(180deg, #080818 0%, #151530 40%, #252545 100%);
         }
         /* 樱花场景 */
         .scene-sakura {
-            background: linear-gradient(180deg, #1a0a15 0%, #2a1520 40%, #3a2030 100%);
+            background: linear-gradient(180deg, #2a1525 0%, #3a2535 40%, #4a3545 100%);
         }
-        /* 森林场景 */
+        /* 森林场景 - 更有层次 */
         .scene-forest {
-            background: linear-gradient(180deg, #0a1a0a 0%, #152a15 40%, #203a20 100%);
+            background: linear-gradient(180deg, #0d1f0d 0%, #1a3a1a 30%, #2a4a2a 60%, #1a3a2a 100%);
         }
-        /* 夕阳场景 */
+        /* 夕阳场景 - 更真实的夕阳 */
         .scene-sunset {
-            background: linear-gradient(180deg, #2a1510 0%, #4a3020 30%, #6a4530 60%, #8a6040 100%);
+            background: linear-gradient(180deg, #2a1a3a 0%, #5a2a4a 20%, #8a4a3a 50%, #c47a4a 70%, #e8a060 100%);
         }
-        /* 海洋场景 */
+        /* 海洋场景 - 深海效果 */
         .scene-ocean {
-            background: linear-gradient(180deg, #0a1520 0%, #152a3a 40%, #204050 100%);
+            background: linear-gradient(180deg, #0a1a2a 0%, #0d3a5a 30%, #1a5a7a 60%, #2a7a8a 100%);
         }
         /* 雾气场景 */
         .scene-fog {
-            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 40%, #3a3a3a 100%);
+            background: linear-gradient(180deg, #2a2a3a 0%, #3a3a4a 40%, #4a4a5a 100%);
         }
         /* 粒子画布 */
         #particleCanvas {
@@ -57,6 +57,25 @@
             inset: 0;
             z-index: 1;
             pointer-events: none;
+        }
+        /* 闪电效果 */
+        .lightning {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.3);
+            z-index: 2;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .lightning.flash {
+            animation: lightningFlash 0.2s ease-out;
+        }
+        @keyframes lightningFlash {
+            0% { opacity: 0; }
+            10% { opacity: 0.8; }
+            20% { opacity: 0; }
+            30% { opacity: 0.5; }
+            100% { opacity: 0; }
         }
         .quote-container {
             position: fixed;
@@ -257,6 +276,7 @@
 </head>
 <body>
     <div class="scene-bg scene-rain" id="sceneBg"></div>
+    <div class="lightning" id="lightning"></div>
     <canvas id="particleCanvas"></canvas>
 
     <a href="index.html" class="back-link">← 返回</a>
@@ -312,14 +332,14 @@
         ];
 
         const scenes = {
-            rain: { class: 'scene-rain', particleType: 'rain', color: 'rgba(200,200,255,0.3)' },
-            snow: { class: 'scene-snow', particleType: 'snow', color: 'rgba(255,255,255,0.8)' },
-            starry: { class: 'scene-starry', particleType: 'star', color: 'rgba(255,255,200,0.9)' },
-            sakura: { class: 'scene-sakura', particleType: 'petal', color: 'rgba(255,200,220,0.7)' },
-            forest: { class: 'scene-forest', particleType: 'firefly', color: 'rgba(200,255,100,0.6)' },
-            sunset: { class: 'scene-sunset', particleType: 'ember', color: 'rgba(255,150,50,0.5)' },
-            ocean: { class: 'scene-ocean', particleType: 'bubble', color: 'rgba(200,230,255,0.4)' },
-            fog: { class: 'scene-fog', particleType: 'mist', color: 'rgba(255,255,255,0.15)' }
+            rain: { class: 'scene-rain', particleType: 'rain', color: 'rgba(180,200,255,0.4)', hasLightning: true },
+            snow: { class: 'scene-snow', particleType: 'snow', color: 'rgba(255,255,255,0.9)', hasLightning: false },
+            starry: { class: 'scene-starry', particleType: 'star', color: 'rgba(255,255,220,0.9)', hasLightning: false },
+            sakura: { class: 'scene-sakura', particleType: 'petal', color: 'rgba(255,200,220,0.7)', hasLightning: false },
+            forest: { class: 'scene-forest', particleType: 'firefly', color: 'rgba(200,255,100,0.6)', hasLightning: false },
+            sunset: { class: 'scene-sunset', particleType: 'ember', color: 'rgba(255,180,80,0.6)', hasLightning: false },
+            ocean: { class: 'scene-ocean', particleType: 'bubble', color: 'rgba(200,230,255,0.4)', hasLightning: false },
+            fog: { class: 'scene-fog', particleType: 'mist', color: 'rgba(255,255,255,0.15)', hasLightning: false }
         };
 
         let currentIndex = 0;
@@ -327,6 +347,7 @@
         let particles = [];
         let particleCount = 200;
         let animationId;
+        let lightningTimer;
 
         function initParticles() {
             const canvas = document.getElementById('particleCanvas');
@@ -354,6 +375,13 @@
 
             if (animationId) cancelAnimationFrame(animationId);
             animate();
+
+            // 闪电效果
+            if (scene.hasLightning) {
+                startLightning();
+            } else {
+                stopLightning();
+            }
         }
 
         function createParticle(type, w, h) {
@@ -431,7 +459,6 @@
                 p.opacity = 0.3 + Math.sin(p.life * 0.05) * 0.3;
             }
 
-            // 边界检查
             const canvas = document.getElementById('particleCanvas');
             if (p.y > canvas.height + 50 || p.y < -50 ||
                 p.x > canvas.width + 50 || p.x < -50) {
@@ -486,6 +513,24 @@
             ctx.restore();
         }
 
+        function startLightning() {
+            stopLightning();
+            lightningTimer = setInterval(() => {
+                if (Math.random() < 0.3) {
+                    const lightning = document.getElementById('lightning');
+                    lightning.classList.add('flash');
+                    setTimeout(() => lightning.classList.remove('flash'), 200);
+                }
+            }, 3000);
+        }
+
+        function stopLightning() {
+            if (lightningTimer) {
+                clearInterval(lightningTimer);
+                lightningTimer = null;
+            }
+        }
+
         function showQuote() {
             const quote = quotes[currentIndex];
             const textEl = document.getElementById('quoteText');
@@ -517,16 +562,13 @@
             const bg = document.getElementById('sceneBg');
             const scene = scenes[sceneName];
 
-            // 更新背景
             bg.className = 'scene-bg ' + scene.class;
 
-            // 更新按钮状态
             document.querySelectorAll('.scene-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
 
-            // 重新初始化粒子
             initParticles();
         }
 
