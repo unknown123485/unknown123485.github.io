@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>OBSIDIAN CORE · 战术终端</title>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>TheGreatHe · 书摘控制台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,526 +14,544 @@
         }
 
         :root {
-            --bg-base: rgb(5,5,5);
-            --accent-primary: #ffb347;
-            --accent-secondary: rgba(255,179,71,0.32);
-            --border-primary: rgba(255,179,71,0.28);
-            --text-primary: rgba(255,255,255,0.9);
-            --text-secondary: rgba(255,255,255,0.5);
-            --panel-bg: rgba(10,10,15,0.7);
-            --glow-weak: 0 0 0 1px rgba(255,179,71,0.08), 0 0 18px rgba(255,179,71,0.06);
-            --glow-hover: 0 0 22px rgba(255,179,71,0.12);
+            --bg-primary: #0a0a0a;
+            --bg-card: #111111;
+            --bg-card-hover: #161616;
+            --border-gold: rgba(212, 175, 55, 0.35);
+            --border-gold-bright: rgba(212, 175, 55, 0.6);
+            --gold: #d4af37;
+            --gold-bright: #e8c547;
+            --gold-dim: rgba(212, 175, 55, 0.5);
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-muted: rgba(255, 255, 255, 0.3);
+            --accent-green: #4ade80;
+            --accent-orange: #fb923c;
         }
 
         body {
-            background-color: var(--bg-base);
-            background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
-            background-size: 80px 80px;
+            background: var(--bg-primary);
             color: var(--text-primary);
-            font-family: 'IBM Plex Sans', 'Space Grotesk', 'Noto Sans SC', sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+            overflow: hidden;
+            font-size: 13px;
         }
 
-        /* Scan Line Animation */
-        .scan-line {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(transparent, rgba(255,179,71,0.06), transparent);
-            animation: scan 6s linear infinite;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-
-        /* App Container */
-        .app-container {
+        /* 主布局 */
+        .app-layout {
             display: grid;
-            grid-template-columns: 70px 1fr 320px;
-            grid-template-rows: 1fr 60px;
+            grid-template-columns: 200px 1fr 300px;
+            grid-template-rows: 48px 1fr;
             height: 100vh;
-            position: relative;
+            gap: 1px;
+            background: var(--bg-primary);
         }
 
-        /* Navigation Rail */
-        .nav-rail {
-            border-right: 1px solid var(--border-primary);
+        /* 顶部栏 */
+        .top-bar {
+            grid-column: 1 / -1;
+            background: var(--bg-card);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 20px 0;
-            background: rgba(5,5,5,0.95);
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-gold);
             position: relative;
         }
 
-        .nav-rail::before {
+        .top-bar::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: -1px;
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-            opacity: 0.3;
-        }
-
-        .nav-item {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            color: var(--text-secondary);
-            transition: all 0s;
-            position: relative;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .nav-item:hover {
-            background: var(--accent-primary);
-            color: #000;
-        }
-
-        .nav-item.active {
-            background: rgba(255,179,71,0.12);
-            color: var(--accent-primary);
-        }
-
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            left: -12px;
-            width: 3px;
-            height: 20px;
-            background: var(--accent-primary);
-            border-radius: 0 3px 3px 0;
-        }
-
-        .nav-label {
-            font-size: 9px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-top: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
             opacity: 0.5;
         }
 
-        /* Main Panel */
-        .main-panel {
-            padding: 30px;
-            overflow-y: auto;
-            position: relative;
+        .logo {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.05em;
         }
 
-        .main-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-            opacity: 0.2;
+        .logo-sub {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-left: 8px;
+            font-weight: 400;
         }
 
-        /* Panel Card */
-        .panel-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-primary);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.05s;
-            box-shadow: var(--glow-weak);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .panel-card:hover {
-            border-color: rgba(255,179,71,0.6);
-            box-shadow: var(--glow-hover);
-        }
-
-        /* HUD Corner Decoration */
-        .panel-card::before,
-        .panel-card::after {
-            content: '';
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-color: var(--accent-primary);
-            border-style: solid;
-            opacity: 0.6;
-        }
-
-        .panel-card::before {
-            top: 8px;
-            left: 8px;
-            border-width: 1px 0 0 1px;
-        }
-
-        .panel-card::after {
-            top: 8px;
-            right: 8px;
-            border-width: 1px 1px 0 0;
-        }
-
-        .panel-card-corner-bl,
-        .panel-card-corner-br {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-color: var(--accent-primary);
-            border-style: solid;
-            opacity: 0.6;
-        }
-
-        .panel-card-corner-bl {
-            bottom: 8px;
-            left: 8px;
-            border-width: 0 0 1px 1px;
-        }
-
-        .panel-card-corner-br {
-            bottom: 8px;
-            right: 8px;
-            border-width: 0 1px 1px 0;
-        }
-
-        /* Panel Header */
-        .panel-header {
-            font-size: 11px;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--accent-primary);
-            margin-bottom: 15px;
+        .top-nav {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 500;
+            gap: 4px;
+            margin-left: 40px;
         }
 
-        .panel-header::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, var(--border-primary), transparent);
-            margin-left: 12px;
-        }
-
-        .panel-badge {
-            font-size: 9px;
-            padding: 2px 8px;
-            border: 1px solid var(--border-primary);
+        .top-nav-item {
+            padding: 6px 16px;
             border-radius: 4px;
-            color: var(--accent-primary);
-            letter-spacing: 0.1em;
-        }
-
-        /* Quote Display */
-        .quote-display {
-            font-size: 20px;
-            line-height: 1.8;
-            color: var(--text-primary);
-            font-family: 'Noto Sans SC', sans-serif;
-            min-height: 120px;
-        }
-
-        .highlight-text {
-            color: #ffcf76;
-        }
-
-        .quote-author {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
-            margin-top: 16px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
         }
 
-        /* Reading Stats */
-        .reading-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+        .top-nav-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
         }
 
-        .stat-item {
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            padding: 15px;
-            border: 1px solid rgba(255,179,71,0.1);
-            position: relative;
+        .top-nav-item.active {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold);
+            border-color: var(--border-gold);
         }
 
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: 5px;
-            font-family: 'Space Grotesk', monospace;
-            text-shadow: 0 0 10px rgba(255,179,71,0.3);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        /* Progress Bar */
-        .progress-bar-container {
-            margin-top: 10px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-primary), #ffcf76);
-            border-radius: 2px;
-            transition: width 0.3s;
-            box-shadow: 0 0 10px rgba(255,179,71,0.3);
-        }
-
-        /* Metrics Panel */
-        .metrics-panel {
-            border-left: 1px solid var(--border-primary);
-            padding: 30px;
-            overflow-y: auto;
-            background: rgba(5,5,5,0.95);
-            position: relative;
-        }
-
-        .metrics-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-            opacity: 0.2;
-        }
-
-        /* Timeline Panel */
-        .timeline-panel {
-            grid-column: 1 / -1;
-            border-top: 1px solid var(--border-primary);
-            padding: 0 30px;
+        .top-right {
+            margin-left: auto;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: rgba(5,5,5,0.98);
-            position: relative;
-        }
-
-        .timeline-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, var(--accent-primary), transparent, var(--accent-primary));
-            opacity: 0.3;
-        }
-
-        .timeline-info {
-            display: flex;
-            gap: 30px;
+            gap: 16px;
             font-size: 11px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-secondary);
+            color: var(--text-muted);
         }
 
-        .timeline-info span {
+        .status-indicator {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .timeline-info .label {
-            color: var(--accent-primary);
-            opacity: 0.8;
+            gap: 6px;
         }
 
         .status-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--accent-primary);
-            animation: blink 2s steps(2) infinite;
-            box-shadow: 0 0 8px rgba(255,179,71,0.5);
+            background: var(--accent-green);
+            box-shadow: 0 0 6px var(--accent-green);
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes blink {
+        @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            50% { opacity: 0.5; }
         }
 
-        /* Navigation Buttons */
-        .nav-buttons {
+        /* 左侧边栏 */
+        .sidebar {
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-gold);
+            padding: 16px 12px;
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .hud-btn {
-            background: transparent;
-            border: 1px solid var(--border-primary);
-            color: var(--accent-primary);
-            padding: 8px 20px;
-            font-size: 12px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0s;
-            font-family: 'IBM Plex Sans', sans-serif;
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hud-btn:hover {
-            background: var(--accent-primary);
-            color: #000;
-            border-color: var(--accent-primary);
-        }
-
-        .hud-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Chart placeholder */
-        .chart-container {
-            height: 120px;
-            display: flex;
-            align-items: flex-end;
+            flex-direction: column;
             gap: 4px;
-            padding: 10px 0;
+            overflow-y: auto;
         }
 
-        .chart-bar {
-            flex: 1;
-            background: linear-gradient(to top, rgba(255,179,71,0.4), rgba(255,179,71,0.1));
-            border-radius: 2px 2px 0 0;
-            min-height: 10px;
-            transition: height 0.3s;
+        .sidebar-section {
+            margin-bottom: 16px;
         }
 
-        .chart-bar:hover {
-            background: linear-gradient(to top, rgba(255,179,71,0.6), rgba(255,179,71,0.2));
-        }
-
-        /* Data grid */
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .data-cell {
-            text-align: center;
-            padding: 10px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 6px;
-            border: 1px solid rgba(255,179,71,0.08);
-        }
-
-        .data-cell-value {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--accent-primary);
-            font-family: 'Space Grotesk', monospace;
-        }
-
-        .data-cell-label {
+        .sidebar-title {
             font-size: 10px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-            letter-spacing: 0.05em;
+            color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            padding: 0 8px;
         }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .app-container {
-                grid-template-columns: 50px 1fr;
-                grid-template-rows: 1fr 50px;
-            }
-
-            .metrics-panel {
-                display: none;
-            }
-
-            .nav-rail {
-                width: 50px;
-                padding: 15px 0;
-            }
-
-            .nav-item {
-                width: 36px;
-                height: 36px;
-                font-size: 14px;
-            }
-
-            .main-panel {
-                padding: 20px;
-            }
-
-            .quote-display {
-                font-size: 16px;
-            }
-
-            .timeline-panel {
-                padding: 0 15px;
-            }
-
-            .timeline-info {
-                gap: 15px;
-                font-size: 9px;
-            }
-
-            .reading-stats {
-                grid-template-columns: 1fr;
-            }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+            font-size: 12px;
+            position: relative;
         }
 
-        /* Focus mode */
-        .focus-mode .metrics-panel,
-        .focus-mode .timeline-panel,
-        .focus-mode .nav-rail {
-            opacity: 0.18;
-            transform: scale(0.98);
+        .sidebar-item:hover {
+            background: rgba(212, 175, 55, 0.08);
+            color: var(--text-primary);
+        }
+
+        .sidebar-item.active {
+            background: rgba(212, 175, 55, 0.12);
+            color: var(--gold);
+        }
+
+        .sidebar-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 16px;
+            background: var(--gold);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .sidebar-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+            margin: 12px 8px;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            background: var(--bg-primary);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* 卡片样式 - 精确复刻 */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
             transition: all 0.3s;
         }
 
-        .focus-mode .main-panel {
-            filter: brightness(1.1);
+        .card:hover {
+            border-color: var(--border-gold-bright);
+            background: var(--bg-card-hover);
         }
 
-        /* Scrollbar styling */
+        /* 卡片角标 */
+        .card::before,
+        .card::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-color: var(--gold);
+            border-style: solid;
+            opacity: 0.6;
+        }
+
+        .card::before {
+            top: 6px;
+            left: 6px;
+            border-width: 1px 0 0 1px;
+        }
+
+        .card::after {
+            top: 6px;
+            right: 6px;
+            border-width: 1px 1px 0 0;
+        }
+
+        .card-corner-bl,
+        .card-corner-br {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-color: var(--gold);
+            border-style: solid;
+            opacity: 0.6;
+        }
+
+        .card-corner-bl {
+            bottom: 6px;
+            left: 6px;
+            border-width: 0 0 1px 1px;
+        }
+
+        .card-corner-br {
+            bottom: 6px;
+            right: 6px;
+            border-width: 0 1px 1px 0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 11px;
+            color: var(--gold);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .card-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border: 1px solid var(--border-gold);
+            border-radius: 4px;
+            color: var(--gold-dim);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        /* 书摘展示区 */
+        .quote-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+        }
+
+        .quote-main {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quote-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-primary);
+            flex: 1;
+            padding: 12px 0;
+        }
+
+        .quote-text .highlight {
+            color: var(--gold-bright);
+            font-weight: 500;
+        }
+
+        .quote-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .quote-author {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .quote-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 14px;
+            border: 1px solid var(--border-gold);
+            background: transparent;
+            color: var(--gold-dim);
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-small:hover {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 4px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* 进度条 */
+        .progress-item {
+            margin-bottom: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        .progress-name {
+            color: var(--text-secondary);
+        }
+
+        .progress-value {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .progress-track {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+            border-radius: 2px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        /* 右侧边栏 */
+        .right-panel {
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-gold);
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* 雷达图容器 */
+        .radar-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        /* 六边形能力图 */
+        .hex-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .hex-item {
+            width: 70px;
+            height: 70px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .hex-item:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        .hex-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .hex-label {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* 标签列表 */
+        .tag-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tag-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+        }
+
+        .tag-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .tag-percent {
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* 底部信息栏 */
+        .bottom-bar {
+            grid-column: 1 / -1;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-gold);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .bottom-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .bottom-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bottom-label {
+            color: var(--gold-dim);
+        }
+
+        /* 滚动条 */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -543,203 +561,356 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,179,71,0.2);
+            background: var(--border-gold);
             border-radius: 2px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,179,71,0.4);
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .app-layout {
+                grid-template-columns: 60px 1fr 200px;
+            }
+            .sidebar {
+                width: 60px;
+                padding: 16px 8px;
+            }
+            .sidebar-item span {
+                display: none;
+            }
+            .quote-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: 48px 1fr 40px;
+            }
+            .sidebar, .right-panel {
+                display: none;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="scan-line"></div>
-
-    <div class="app-container" id="appContainer">
-        <!-- Navigation Rail -->
-        <div class="nav-rail">
-            <div class="nav-item active" title="书摘终端">◆</div>
-            <div class="nav-item" title="数据面板">◎</div>
-            <div class="nav-item" title="系统状态">▣</div>
-            <div style="flex:1"></div>
-            <div class="nav-item" onclick="goBack()" title="返回主页">←</div>
+    <div class="app-layout">
+        <!-- 顶部栏 -->
+        <div class="top-bar">
+            <div class="logo">TheGreatHe</div>
+            <div class="logo-sub">v1.3 · CONTROL</div>
+            <div class="top-nav">
+                <div class="top-nav-item active">概览</div>
+                <div class="top-nav-item">书摘</div>
+                <div class="top-nav-item">数据</div>
+            </div>
+            <div class="top-right">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>系统正常</span>
+                </div>
+                <span id="clock">00:00:00</span>
+            </div>
         </div>
 
-        <!-- Main Panel -->
-        <div class="main-panel">
-            <!-- Quote Display Card -->
-            <div class="panel-card">
-                <div class="panel-card-corner-bl"></div>
-                <div class="panel-card-corner-br"></div>
-                <div class="panel-header">
-                    <span>书摘数据流</span>
-                    <span class="panel-badge">LIVE</span>
+        <!-- 左侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-item active">
+                    <div class="sidebar-icon">◆</div>
+                    <span>概览</span>
                 </div>
-                <div class="quote-display" id="quoteText">
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">◎</div>
+                    <span>智能分析</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">▣</div>
+                    <span>书库</span>
+                </div>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">数据</div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">◈</div>
+                    <span>阅读报告</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">◉</div>
+                    <span>趋势分析</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">◊</div>
+                    <span>排行榜</span>
+                </div>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section">
+                <div class="sidebar-item" onclick="goBack()">
+                    <div class="sidebar-icon">←</div>
+                    <span>返回</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 书摘展示卡片 -->
+            <div class="card quote-main">
+                <div class="card-corner-bl"></div>
+                <div class="card-corner-br"></div>
+                <div class="card-header">
+                    <div class="card-title">本月目标</div>
+                    <div style="display:flex;gap:8px;">
+                        <div class="card-badge">周度</div>
+                        <div class="card-badge" style="background:rgba(212,175,55,0.15);color:var(--gold);">月度</div>
+                        <div class="card-badge">年度</div>
+                    </div>
+                </div>
+                <div class="quote-text" id="quoteText">
                     在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光，是我莫大的荣幸。
                 </div>
-                <div class="quote-author" id="quoteInfo">卡尔·萨根 · 宇宙</div>
-                <div class="nav-buttons">
-                    <button class="hud-btn" onclick="prevQuote()">&lt; 上一条</button>
-                    <button class="hud-btn" onclick="nextQuote()">下一条 &gt;</button>
-                    <button class="hud-btn" onclick="toggleFocus()">聚焦模式</button>
-                </div>
-            </div>
-
-            <!-- Reading Stats -->
-            <div class="panel-card">
-                <div class="panel-card-corner-bl"></div>
-                <div class="panel-card-corner-br"></div>
-                <div class="panel-header">
-                    <span>阅读统计</span>
-                    <span class="panel-badge">实时</span>
-                </div>
-                <div class="reading-stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="readTime">24h</div>
-                        <div class="stat-label">本周阅读</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="streak">9天</div>
-                        <div class="stat-label">连续打卡</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="notes">5</div>
-                        <div class="stat-label">今日笔记</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="books">6/25</div>
-                        <div class="stat-label">本月进度</div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 24%"></div>
-                            </div>
-                        </div>
+                <div class="quote-meta">
+                    <div class="quote-author" id="quoteInfo">卡尔·萨根 · 宇宙</div>
+                    <div class="quote-nav">
+                        <button class="btn-small" onclick="prevQuote()">← 上一条</button>
+                        <button class="btn-small" onclick="nextQuote()">下一条 →</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Weekly Chart -->
-            <div class="panel-card">
-                <div class="panel-card-corner-bl"></div>
-                <div class="panel-card-corner-br"></div>
-                <div class="panel-header">
-                    <span>阅读趋势</span>
-                    <span class="panel-badge">7D</span>
+            <!-- 统计卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat1">24%</div>
+                    <div class="stat-label">本月进度</div>
                 </div>
-                <div class="chart-container" id="chartContainer">
-                    <div class="chart-bar" style="height: 40%"></div>
-                    <div class="chart-bar" style="height: 65%"></div>
-                    <div class="chart-bar" style="height: 30%"></div>
-                    <div class="chart-bar" style="height: 80%"></div>
-                    <div class="chart-bar" style="height: 55%"></div>
-                    <div class="chart-bar" style="height: 90%"></div>
-                    <div class="chart-bar" style="height: 70%"></div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat2">0</div>
+                    <div class="stat-label">今日笔记</div>
                 </div>
-                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-secondary);margin-top:5px;">
-                    <span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat3">5</div>
+                    <div class="stat-label">连续天数</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Metrics Panel -->
-        <div class="metrics-panel">
-            <div class="panel-card">
-                <div class="panel-card-corner-bl"></div>
-                <div class="panel-card-corner-br"></div>
-                <div class="panel-header">
-                    <span>系统状态</span>
-                    <span class="panel-badge">正常</span>
+            <!-- 阅读周报 -->
+            <div class="card">
+                <div class="card-corner-bl"></div>
+                <div class="card-corner-br"></div>
+                <div class="card-header">
+                    <div class="card-title">阅读周报</div>
+                    <div class="card-badge">weekly rollup</div>
                 </div>
-                <div style="text-align:center;padding:20px 0;">
-                    <div style="font-size:48px;font-weight:700;color:var(--accent-primary);font-family:'Space Grotesk',monospace;text-shadow:0 0 20px rgba(255,179,71,0.3);">98%</div>
-                    <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;letter-spacing:0.1em;text-transform:uppercase;">系统运行效率</div>
-                </div>
-                <div class="data-grid">
-                    <div class="data-cell">
-                        <div class="data-cell-value">42</div>
-                        <div class="data-cell-label">CPU</div>
-                    </div>
-                    <div class="data-cell">
-                        <div class="data-cell-value">1.2</div>
-                        <div class="data-cell-label">MEM</div>
-                    </div>
-                    <div class="data-cell">
-                        <div class="data-cell-value">0.3</div>
-                        <div class="data-cell-label">NET</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
+                    <div style="color:var(--gold);font-weight:500;margin-bottom:8px;">第18周 · 4月24日 - 5月1日</div>
+                    <div>完成伟大的APP 8.3版本的更新，处理AI反应慢的问题</div>
+                    <div style="margin-top:8px;color:var(--text-muted);">
+                        本周已读：本周发布16+篇公众号推送，新UI基本定型。在多个平台上，内容运营对AI反应速度优化，
+                        增加文本解析的准确率。多模态搜索功能内测一个版本上线...
                     </div>
                 </div>
             </div>
 
-            <div class="panel-card">
-                <div class="panel-card-corner-bl"></div>
-                <div class="panel-card-corner-br"></div>
-                <div class="panel-header">
-                    <span>本月目标</span>
-                    <span class="panel-badge">进行中</span>
+            <!-- 进度追踪 -->
+            <div class="card">
+                <div class="card-corner-bl"></div>
+                <div class="card-corner-br"></div>
+                <div class="card-header">
+                    <div class="card-title">阅读进度</div>
+                    <div class="card-badge">实时</div>
                 </div>
-                <div style="margin-bottom:15px;">
-                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;">
-                        <span style="color:var(--text-secondary);">阅读进度</span>
-                        <span style="color:var(--accent-primary);font-weight:600;">24%</span>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-name">科幻类</span>
+                        <span class="progress-value">32%</span>
                     </div>
-                    <div class="progress-bar">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:32%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-name">哲学类</span>
+                        <span class="progress-value">24%</span>
+                    </div>
+                    <div class="progress-track">
                         <div class="progress-fill" style="width:24%"></div>
                     </div>
                 </div>
-                <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
-                    <div>已读完: <span class="highlight-text">6</span> / 25 本书籍</div>
-                    <div>剩余天数: <span class="highlight-text">18</span> 天</div>
-                    <div>日均阅读: <span class="highlight-text">2.3</span> 小时</div>
-                </div>
-            </div>
-
-            <div class="panel-card">
-                <div class="panel-card-corner-bl"></div>
-                <div class="panel-card-corner-br"></div>
-                <div class="panel-header">
-                    <span>标签分布</span>
-                    <span class="panel-badge">TOP5</span>
-                </div>
-                <div style="font-size:12px;line-height:2;">
-                    <div style="display:flex;justify-content:space-between;">
-                        <span style="color:var(--text-secondary);">科幻</span>
-                        <span style="color:var(--accent-primary);">32%</span>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-name">文学类</span>
+                        <span class="progress-value">18%</span>
                     </div>
-                    <div style="display:flex;justify-content:space-between;">
-                        <span style="color:var(--text-secondary);">哲学</span>
-                        <span style="color:var(--accent-primary);">24%</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;">
-                        <span style="color:var(--text-secondary);">文学</span>
-                        <span style="color:var(--accent-primary);">18%</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;">
-                        <span style="color:var(--text-secondary);">历史</span>
-                        <span style="color:var(--accent-primary);">15%</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;">
-                        <span style="color:var(--text-secondary);">诗歌</span>
-                        <span style="color:var(--accent-primary);">11%</span>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:18%"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Timeline Panel -->
-        <div class="timeline-panel">
-            <div class="timeline-info">
-                <span><span class="label">COORD:</span> <span id="coords">34.0522°N, 118.2437°W</span></span>
-                <span><span class="label">SECTOR:</span> ALPHA-7</span>
-                <span><span class="label">VER:</span> 7.5.1</span>
-                <span><span class="status-dot"></span> ONLINE</span>
+        <!-- 右侧面板 -->
+        <div class="right-panel">
+            <!-- 系统状态 -->
+            <div class="card">
+                <div class="card-corner-bl"></div>
+                <div class="card-corner-br"></div>
+                <div class="card-header">
+                    <div class="card-title">系统状态</div>
+                    <div class="card-badge">正常</div>
+                </div>
+                <div style="text-align:center;padding:16px 0;">
+                    <div style="font-size:36px;font-weight:700;color:var(--gold);text-shadow:0 0 15px rgba(212,175,55,0.3);">98%</div>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">系统运行效率</div>
+                </div>
+                <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);gap:8px;">
+                    <div style="text-align:center;padding:8px;background:var(--bg-primary);border-radius:6px;">
+                        <div style="font-size:16px;font-weight:600;color:var(--gold);">42</div>
+                        <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">CPU</div>
+                    </div>
+                    <div style="text-align:center;padding:8px;background:var(--bg-primary);border-radius:6px;">
+                        <div style="font-size:16px;font-weight:600;color:var(--gold);">1.2</div>
+                        <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">MEM</div>
+                    </div>
+                    <div style="text-align:center;padding:8px;background:var(--bg-primary);border-radius:6px;">
+                        <div style="font-size:16px;font-weight:600;color:var(--gold);">0.3</div>
+                        <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">NET</div>
+                    </div>
+                </div>
             </div>
-            <div style="font-size:11px;color:var(--text-secondary);letter-spacing:0.1em;" id="clock">00:00:00</div>
+
+            <!-- 本月目标 -->
+            <div class="card">
+                <div class="card-corner-bl"></div>
+                <div class="card-corner-br"></div>
+                <div class="card-header">
+                    <div class="card-title">本月目标</div>
+                    <div class="card-badge">进行中</div>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;">
+                        <span style="color:var(--text-secondary);">阅读进度</span>
+                        <span style="color:var(--gold);font-weight:600;">24%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:24%"></div>
+                    </div>
+                </div>
+                <div style="font-size:11px;color:var(--text-secondary);line-height:1.8;">
+                    <div style="display:flex;justify-content:space-between;">
+                        <span>已读完</span>
+                        <span style="color:var(--gold);">6 / 25 本</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;">
+                        <span>剩余天数</span>
+                        <span style="color:var(--gold);">18 天</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;">
+                        <span>日均阅读</span>
+                        <span style="color:var(--gold);">2.3 小时</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 能力矩阵 -->
+            <div class="card">
+                <div class="card-corner-bl"></div>
+                <div class="card-corner-br"></div>
+                <div class="card-header">
+                    <div class="card-title">能力矩阵</div>
+                    <div class="card-badge">6维</div>
+                </div>
+                <div class="hex-grid">
+                    <div class="hex-item">
+                        <div class="hex-value">34</div>
+                        <div class="hex-label">执行力</div>
+                    </div>
+                    <div class="hex-item">
+                        <div class="hex-value">64</div>
+                        <div class="hex-label">思考力</div>
+                    </div>
+                    <div class="hex-item">
+                        <div class="hex-value">58</div>
+                        <div class="hex-label">创造力</div>
+                    </div>
+                    <div class="hex-item">
+                        <div class="hex-value">42</div>
+                        <div class="hex-label">阅读力</div>
+                    </div>
+                    <div class="hex-item">
+                        <div class="hex-value">71</div>
+                        <div class="hex-label">写作力</div>
+                    </div>
+                    <div class="hex-item">
+                        <div class="hex-value">39</div>
+                        <div class="hex-label">表达力</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 标签分布 -->
+            <div class="card">
+                <div class="card-corner-bl"></div>
+                <div class="card-corner-br"></div>
+                <div class="card-header">
+                    <div class="card-title">标签分布</div>
+                    <div class="card-badge">TOP5</div>
+                </div>
+                <div class="tag-list">
+                    <div class="tag-item">
+                        <span class="tag-name">科幻</span>
+                        <span class="tag-percent">32%</span>
+                    </div>
+                    <div class="tag-item">
+                        <span class="tag-name">哲学</span>
+                        <span class="tag-percent">24%</span>
+                    </div>
+                    <div class="tag-item">
+                        <span class="tag-name">文学</span>
+                        <span class="tag-percent">18%</span>
+                    </div>
+                    <div class="tag-item">
+                        <span class="tag-name">历史</span>
+                        <span class="tag-percent">15%</span>
+                    </div>
+                    <div class="tag-item">
+                        <span class="tag-name">诗歌</span>
+                        <span class="tag-percent">11%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部栏 -->
+        <div class="bottom-bar">
+            <div class="bottom-left">
+                <div class="bottom-item">
+                    <span class="bottom-label">COORD:</span>
+                    <span>34.0522°N, 118.2437°W</span>
+                </div>
+                <div class="bottom-item">
+                    <span class="bottom-label">SECTOR:</span>
+                    <span>ALPHA-7</span>
+                </div>
+                <div class="bottom-item">
+                    <span class="bottom-label">VER:</span>
+                    <span>7.6.8</span>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div class="status-dot"></div>
+                <span>ONLINE</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // Quote data
         const quotes = [
             { text: "在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光，是我莫大的荣幸。", author: "卡尔·萨根 · 宇宙" },
             { text: "给岁月以文明，而不是给文明以岁月。", author: "刘慈欣 · 三体" },
@@ -752,7 +923,6 @@
         ];
 
         let currentIndex = 0;
-        let isFocusMode = false;
 
         function updateQuote() {
             document.getElementById('quoteText').textContent = quotes[currentIndex].text;
@@ -769,16 +939,11 @@
             updateQuote();
         }
 
-        function toggleFocus() {
-            isFocusMode = !isFocusMode;
-            document.getElementById('appContainer').classList.toggle('focus-mode', isFocusMode);
-        }
-
         function goBack() {
             window.location.href = '../index.html';
         }
 
-        // Clock
+        // 时钟
         function updateClock() {
             const now = new Date();
             const time = now.toTimeString().split(' ')[0];
@@ -787,40 +952,27 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Random data jitter for stats
+        // 随机更新统计数据
         function jitterStats() {
-            const readTime = 20 + Math.floor(Math.random() * 10);
-            const streak = 7 + Math.floor(Math.random() * 5);
-            const notes = 3 + Math.floor(Math.random() * 5);
-
-            document.getElementById('readTime').textContent = readTime + 'h';
-            document.getElementById('streak').textContent = streak + '天';
-            document.getElementById('notes').textContent = notes;
-        }
-
-        // Update chart bars randomly
-        function updateChart() {
-            const bars = document.querySelectorAll('.chart-bar');
-            bars.forEach(bar => {
-                const height = 20 + Math.floor(Math.random() * 80);
-                bar.style.height = height + '%';
+            const stats = ['stat1', 'stat2', 'stat3'];
+            stats.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const current = parseInt(el.textContent) || 0;
+                    const change = Math.floor(Math.random() * 5) - 2;
+                    el.textContent = Math.max(0, current + change);
+                }
             });
         }
+        setInterval(jitterStats, 5000);
 
-        // Periodic updates
-        setInterval(() => {
-            jitterStats();
-            updateChart();
-        }, 5000);
-
-        // Keyboard navigation
+        // 键盘导航
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') prevQuote();
             if (e.key === 'ArrowRight') nextQuote();
-            if (e.key === 'f' || e.key === 'F') toggleFocus();
         });
 
-        // Initialize
+        // 初始化
         updateQuote();
     </script>
 </body>
