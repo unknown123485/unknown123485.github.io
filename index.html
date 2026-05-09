@@ -766,7 +766,7 @@
             pointer-events: none; z-index: -1; 
         }
 
-        .app-container { width: 100%; min-height: 100vh; min-height: 100dvh; display: block; position: relative; background: var(--bg-gradient); overflow: hidden; }
+        .app-container { width: 100%; min-height: 100vh; min-height: 100dvh; display: block; position: relative; background: var(--bg-gradient); overflow-x: hidden; overflow-y: auto; }
 
         #liquid-glass-canvas {
             position: absolute;
@@ -9318,11 +9318,12 @@
                 setBgEffect(savedEffect);
             }
             
-            // 初始化书摘展示效果
+            // 初始化书摘展示效果 - 不在主页自动应用
             var savedQuoteEffect = localStorage.getItem('quoteEffect') || 'none';
-            if (savedQuoteEffect !== 'none') {
-                setQuoteEffect(savedQuoteEffect);
-            }
+            // 只在设置面板中显示当前选择，不在主页自动加载效果
+            document.querySelectorAll('[data-quote-effect]').forEach(function(el) {
+                el.classList.toggle('active', el.getAttribute('data-quote-effect') === savedQuoteEffect);
+            });
         }
 
         // ===== WebGL 液态玻璃效果 =====
