@@ -3,977 +3,733 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TheGreatHe · 书摘控制台</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>黑曜石核心 · 书摘终端</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #111111;
-            --bg-card-hover: #161616;
-            --border-gold: rgba(212, 175, 55, 0.35);
-            --border-gold-bright: rgba(212, 175, 55, 0.6);
-            --gold: #d4af37;
-            --gold-bright: #e8c547;
-            --gold-dim: rgba(212, 175, 55, 0.5);
-            --text-primary: rgba(255, 255, 255, 0.9);
-            --text-secondary: rgba(255, 255, 255, 0.5);
-            --text-muted: rgba(255, 255, 255, 0.3);
-            --accent-green: #4ade80;
-            --accent-orange: #fb923c;
+            --bg: #050505;
+            --bg-panel: #0a0a0a;
+            --gold: #ffb700;
+            --gold-bright: #ffd700;
+            --gold-dim: rgba(255, 183, 0, 0.3);
+            --cyan: #00d4ff;
+            --cyan-glow: rgba(0, 212, 255, 0.4);
+            --red: #ff3366;
+            --text: rgba(255, 255, 255, 0.9);
+            --text-dim: rgba(255, 255, 255, 0.4);
         }
 
         body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            min-height: 100vh;
-            overflow: hidden;
-            font-size: 13px;
-        }
-
-        /* 主布局 */
-        .app-layout {
-            display: grid;
-            grid-template-columns: 200px 1fr 300px;
-            grid-template-rows: 48px 1fr;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans SC', sans-serif;
             height: 100vh;
-            gap: 1px;
-            background: var(--bg-primary);
-        }
-
-        /* 顶部栏 */
-        .top-bar {
-            grid-column: 1 / -1;
-            background: var(--bg-card);
+            overflow: hidden;
             display: flex;
-            align-items: center;
-            padding: 0 20px;
-            border-bottom: 1px solid var(--border-gold);
-            position: relative;
+            flex-direction: column;
         }
 
-        .top-bar::after {
+        /* 扫描线效果 */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.15) 2px,
+                rgba(0, 0, 0, 0.15) 4px
+            );
+        }
+
+        /* 顶部大标题区 - 占20%高度 */
+        .hero-section {
+            height: 20vh;
+            min-height: 140px;
+            background: linear-gradient(180deg, rgba(255,183,0,0.08) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(255,183,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
             content: '';
             position: absolute;
-            bottom: -1px;
+            top: 0;
             left: 0;
             right: 0;
-            height: 1px;
+            height: 2px;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            opacity: 0.5;
+            animation: scanH 3s linear infinite;
         }
 
-        .logo {
-            font-size: 14px;
-            font-weight: 600;
+        @keyframes scanH {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .hero-label {
+            font-size: 11px;
             color: var(--gold);
-            letter-spacing: 0.05em;
-        }
-
-        .logo-sub {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-left: 8px;
-            font-weight: 400;
-        }
-
-        .top-nav {
-            display: flex;
-            gap: 4px;
-            margin-left: 40px;
-        }
-
-        .top-nav-item {
-            padding: 6px 16px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .top-nav-item:hover {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--gold);
-        }
-
-        .top-nav-item.active {
-            background: rgba(212, 175, 55, 0.15);
-            color: var(--gold);
-            border-color: var(--border-gold);
-        }
-
-        .top-right {
-            margin-left: auto;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            font-size: 11px;
-            color: var(--text-muted);
+            gap: 10px;
         }
 
-        .status-indicator {
+        .hero-label::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero-title {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text);
+            text-shadow: 0 0 30px rgba(255,183,0,0.15);
+            transition: all 0.5s ease;
+        }
+
+        .hero-title.switching {
+            animation: glitchText 0.4s ease;
+        }
+
+        @keyframes glitchText {
+            0% { transform: translateX(0); filter: hue-rotate(0deg); }
+            20% { transform: translateX(-5px); filter: hue-rotate(90deg); }
+            40% { transform: translateX(5px); filter: hue-rotate(180deg); }
+            60% { transform: translateX(-3px); filter: hue-rotate(270deg); }
+            80% { transform: translateX(3px); filter: hue-rotate(360deg); }
+            100% { transform: translateX(0); filter: hue-rotate(0deg); }
+        }
+
+        .hero-meta {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-dim);
+            display: flex;
+            gap: 20px;
+        }
+
+        .hero-meta span {
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .status-dot {
+        .hero-meta .dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--accent-green);
-            box-shadow: 0 0 6px var(--accent-green);
+            background: var(--gold);
             animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* 左侧边栏 */
-        .sidebar {
-            background: var(--bg-card);
-            border-right: 1px solid var(--border-gold);
-            padding: 16px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            overflow-y: auto;
-        }
-
-        .sidebar-section {
-            margin-bottom: 16px;
-        }
-
-        .sidebar-title {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 8px;
-            padding: 0 8px;
-        }
-
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-secondary);
-            font-size: 12px;
-            position: relative;
-        }
-
-        .sidebar-item:hover {
-            background: rgba(212, 175, 55, 0.08);
-            color: var(--text-primary);
-        }
-
-        .sidebar-item.active {
-            background: rgba(212, 175, 55, 0.12);
-            color: var(--gold);
-        }
-
-        .sidebar-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 16px;
-            background: var(--gold);
-            border-radius: 0 2px 2px 0;
-        }
-
-        .sidebar-icon {
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
-            margin: 12px 8px;
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--gold); }
+            50% { opacity: 0.4; box-shadow: 0 0 2px var(--gold); }
         }
 
         /* 主内容区 */
-        .main-content {
-            background: var(--bg-primary);
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* 卡片样式 - 精确复刻 */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-gold);
-            border-radius: 8px;
-            padding: 16px;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .card:hover {
-            border-color: var(--border-gold-bright);
-            background: var(--bg-card-hover);
-        }
-
-        /* 卡片角标 */
-        .card::before,
-        .card::after {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-color: var(--gold);
-            border-style: solid;
-            opacity: 0.6;
-        }
-
-        .card::before {
-            top: 6px;
-            left: 6px;
-            border-width: 1px 0 0 1px;
-        }
-
-        .card::after {
-            top: 6px;
-            right: 6px;
-            border-width: 1px 1px 0 0;
-        }
-
-        .card-corner-bl,
-        .card-corner-br {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-color: var(--gold);
-            border-style: solid;
-            opacity: 0.6;
-        }
-
-        .card-corner-bl {
-            bottom: 6px;
-            left: 6px;
-            border-width: 0 0 1px 1px;
-        }
-
-        .card-corner-br {
-            bottom: 6px;
-            right: 6px;
-            border-width: 0 1px 1px 0;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .card-title {
-            font-size: 11px;
-            color: var(--gold);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-
-        .card-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border: 1px solid var(--border-gold);
-            border-radius: 4px;
-            color: var(--gold-dim);
-            background: rgba(212, 175, 55, 0.05);
-        }
-
-        /* 书摘展示区 */
-        .quote-section {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 16px;
-        }
-
-        .quote-main {
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .quote-text {
-            font-size: 18px;
-            line-height: 1.8;
-            color: var(--text-primary);
+        .main-area {
             flex: 1;
-            padding: 12px 0;
-        }
-
-        .quote-text .highlight {
-            color: var(--gold-bright);
-            font-weight: 500;
-        }
-
-        .quote-meta {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 20px 40px;
+            gap: 20px;
+            overflow: hidden;
         }
 
-        .quote-author {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .quote-nav {
+        /* 左侧关键词面板 */
+        .keywords-panel {
+            width: 200px;
             display: flex;
-            gap: 8px;
-        }
-
-        .btn-small {
-            padding: 6px 14px;
-            border: 1px solid var(--border-gold);
-            background: transparent;
-            color: var(--gold-dim);
-            border-radius: 4px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .btn-small:hover {
-            background: rgba(212, 175, 55, 0.15);
-            color: var(--gold);
-            border-color: var(--gold);
-        }
-
-        /* 统计卡片 */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            flex-direction: column;
             gap: 12px;
         }
 
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-gold);
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center;
+        .panel-label {
+            font-size: 10px;
+            color: var(--gold-dim);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,183,0,0.15);
+        }
+
+        .keyword-tag {
+            padding: 10px 14px;
+            background: rgba(255,183,0,0.05);
+            border: 1px solid rgba(255,183,0,0.15);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s;
             position: relative;
+            overflow: hidden;
+        }
+
+        .keyword-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,183,0,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .keyword-tag:hover::before {
+            left: 100%;
+        }
+
+        .keyword-tag:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255,183,0,0.2);
+            transform: translateX(5px);
+        }
+
+        .keyword-tag .kw-score {
+            float: right;
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        /* 中间书摘区 */
+        .quote-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        .quote-content {
+            text-align: center;
+            max-width: 700px;
+            position: relative;
+        }
+
+        .quote-text {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            line-height: 2;
+            color: var(--text);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            transition: all 0.5s ease;
+        }
+
+        .quote-text .highlight-word {
+            color: var(--gold);
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(255,183,0,0.3);
+        }
+
+        .quote-author {
+            margin-top: 30px;
+            font-size: 13px;
+            color: var(--text-dim);
+            letter-spacing: 0.15em;
+        }
+
+        .quote-author::before,
+        .quote-author::after {
+            content: '—';
+            margin: 0 10px;
+            color: var(--gold-dim);
+        }
+
+        /* 切换动画 */
+        .quote-content.switching-out {
+            animation: cyberOut 0.3s ease forwards;
+        }
+
+        .quote-content.switching-in {
+            animation: cyberIn 0.4s ease forwards;
+        }
+
+        @keyframes cyberOut {
+            0% { opacity: 1; transform: scale(1); filter: blur(0); }
+            50% { opacity: 0.5; transform: scale(0.95); filter: blur(2px); }
+            100% { opacity: 0; transform: scale(0.9); filter: blur(8px); }
+        }
+
+        @keyframes cyberIn {
+            0% { opacity: 0; transform: scale(1.1); filter: blur(8px) brightness(2); }
+            50% { opacity: 0.7; transform: scale(1.02); filter: blur(2px) brightness(1.5); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0) brightness(1); }
+        }
+
+        /* 右侧信息面板 */
+        .info-panel {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stat-box {
+            padding: 16px;
+            background: rgba(255,183,0,0.03);
+            border: 1px solid rgba(255,183,0,0.1);
+            border-radius: 8px;
+            text-align: center;
         }
 
         .stat-value {
             font-size: 28px;
             font-weight: 700;
             color: var(--gold);
-            margin-bottom: 4px;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            text-shadow: 0 0 15px rgba(255,183,0,0.3);
         }
 
         .stat-label {
             font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: var(--text-dim);
+            margin-top: 4px;
+            letter-spacing: 0.1em;
         }
 
-        /* 进度条 */
-        .progress-item {
-            margin-bottom: 12px;
-        }
-
-        .progress-header {
+        /* 底部导航栏 */
+        .nav-bar {
+            height: 80px;
+            background: linear-gradient(0deg, rgba(255,183,0,0.05) 0%, transparent 100%);
+            border-top: 1px solid rgba(255,183,0,0.15);
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: 11px;
-        }
-
-        .progress-name {
-            color: var(--text-secondary);
-        }
-
-        .progress-value {
-            color: var(--gold);
-            font-weight: 500;
-        }
-
-        .progress-track {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--gold), var(--gold-bright));
-            border-radius: 2px;
-            transition: width 0.5s ease;
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
-        }
-
-        /* 右侧边栏 */
-        .right-panel {
-            background: var(--bg-card);
-            border-left: 1px solid var(--border-gold);
-            padding: 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* 雷达图容器 */
-        .radar-container {
-            display: flex;
-            justify-content: center;
-            padding: 10px 0;
-        }
-
-        /* 六边形能力图 */
-        .hex-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            padding: 10px 0;
-        }
-
-        .hex-item {
-            width: 70px;
-            height: 70px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-gold);
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
+            gap: 30px;
+            padding: 0 40px;
+            position: relative;
         }
 
-        .hex-item:hover {
-            border-color: var(--gold);
-            background: rgba(212, 175, 55, 0.08);
+        .nav-bar::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: scanH 3s linear infinite;
         }
 
-        .hex-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--gold);
-        }
-
-        .hex-label {
-            font-size: 9px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* 标签列表 */
-        .tag-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .tag-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
-        }
-
-        .tag-name {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .tag-percent {
-            font-size: 12px;
-            color: var(--gold);
-            font-weight: 500;
-        }
-
-        /* 底部信息栏 */
-        .bottom-bar {
-            grid-column: 1 / -1;
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-gold);
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .bottom-left {
-            display: flex;
-            gap: 20px;
-        }
-
-        .bottom-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .bottom-label {
-            color: var(--gold-dim);
-        }
-
-        /* 滚动条 */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
+        /* 赛博朋克按钮 */
+        .cyber-btn {
+            position: relative;
+            padding: 14px 32px;
             background: transparent;
+            border: 1px solid rgba(255,183,0,0.3);
+            color: var(--text-dim);
+            font-family: inherit;
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s;
+            min-width: 140px;
+            text-align: center;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-gold);
-            border-radius: 2px;
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,183,0,0.3), transparent);
+            transition: left 0.4s;
+        }
+
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+
+        .cyber-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 
+                0 0 20px rgba(255,183,0,0.2),
+                inset 0 0 20px rgba(255,183,0,0.05);
+            text-shadow: 0 0 10px rgba(255,183,0,0.5);
+        }
+
+        .cyber-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* 闪烁效果 */
+        .cyber-btn.flicker {
+            animation: btnFlicker 0.15s ease 3;
+        }
+
+        @keyframes btnFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* 当前按钮特殊样式 */
+        .cyber-btn.current {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(255,183,0,0.08);
+            box-shadow: 
+                0 0 30px rgba(255,183,0,0.15),
+                inset 0 0 30px rgba(255,183,0,0.05);
+            animation: currentPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes currentPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 30px rgba(255,183,0,0.15),
+                    inset 0 0 30px rgba(255,183,0,0.05);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 50px rgba(255,183,0,0.25),
+                    inset 0 0 40px rgba(255,183,0,0.08);
+            }
+        }
+
+        .cyber-btn.current::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 1px solid var(--gold);
+            opacity: 0;
+            animation: borderExpand 2s ease-out infinite;
+        }
+
+        @keyframes borderExpand {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.1); }
+        }
+
+        /* 导航指示器 */
+        .nav-indicator {
+            position: absolute;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .nav-indicator .page-num {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: rgba(255,183,0,0.08);
+            border: 1px solid rgba(255,183,0,0.2);
+            color: var(--gold-dim);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,183,0,0.15);
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 20px rgba(255,183,0,0.2);
+        }
+
+        /* 粒子背景 */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 8s ease-in-out infinite;
+        }
+
+        @keyframes floatParticle {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-100px) translateX(50px); opacity: 0.6; }
         }
 
         /* 响应式 */
-        @media (max-width: 1024px) {
-            .app-layout {
-                grid-template-columns: 60px 1fr 200px;
-            }
-            .sidebar {
-                width: 60px;
-                padding: 16px 8px;
-            }
-            .sidebar-item span {
-                display: none;
-            }
-            .quote-section {
-                grid-template-columns: 1fr;
-            }
-        }
-
         @media (max-width: 768px) {
-            .app-layout {
-                grid-template-columns: 1fr;
-                grid-template-rows: 48px 1fr 40px;
-            }
-            .sidebar, .right-panel {
-                display: none;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .hero-section { padding: 0 20px; min-height: 100px; }
+            .main-area { padding: 10px 20px; flex-direction: column; }
+            .keywords-panel, .info-panel { width: 100%; flex-direction: row; flex-wrap: wrap; }
+            .quote-area { padding: 0; }
+            .nav-bar { gap: 10px; padding: 0 20px; }
+            .cyber-btn { min-width: 100px; padding: 10px 20px; font-size: 11px; }
         }
     </style>
 </head>
 <body>
-    <div class="app-layout">
-        <!-- 顶部栏 -->
-        <div class="top-bar">
-            <div class="logo">TheGreatHe</div>
-            <div class="logo-sub">v1.3 · CONTROL</div>
-            <div class="top-nav">
-                <div class="top-nav-item active">概览</div>
-                <div class="top-nav-item">书摘</div>
-                <div class="top-nav-item">数据</div>
-            </div>
-            <div class="top-right">
-                <div class="status-indicator">
-                    <div class="status-dot"></div>
-                    <span>系统正常</span>
-                </div>
-                <span id="clock">00:00:00</span>
+    <div class="scanlines"></div>
+    <div class="particles" id="particles"></div>
+
+    <a href="../index.html" class="back-btn">← 返回</a>
+
+    <!-- 顶部大标题区 -->
+    <div class="hero-section">
+        <div class="hero-label">
+            <span>当前书摘</span>
+            <span style="color: var(--text-dim); font-size: 10px;">CURRENT QUOTE</span>
+        </div>
+        <div class="hero-title" id="heroTitle">在广袤的空间和无限的时间中...</div>
+        <div class="hero-meta">
+            <span><div class="dot"></div>实时分析中</span>
+            <span id="heroAuthor">卡尔·萨根 · 宇宙</span>
+            <span id="quoteIndex">1 / 8</span>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-area">
+        <!-- 左侧关键词 -->
+        <div class="keywords-panel">
+            <div class="panel-label">关键词提取</div>
+            <div id="keywordsList">
+                <div class="keyword-tag">空间 <span class="kw-score">95%</span></div>
+                <div class="keyword-tag">时间 <span class="kw-score">88%</span></div>
+                <div class="keyword-tag">宇宙 <span class="kw-score">82%</span></div>
+                <div class="keyword-tag">荣幸 <span class="kw-score">76%</span></div>
             </div>
         </div>
 
-        <!-- 左侧边栏 -->
-        <div class="sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-item active">
-                    <div class="sidebar-icon">◆</div>
-                    <span>概览</span>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-icon">◎</div>
-                    <span>智能分析</span>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-icon">▣</div>
-                    <span>书库</span>
-                </div>
-            </div>
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section">
-                <div class="sidebar-title">数据</div>
-                <div class="sidebar-item">
-                    <div class="sidebar-icon">◈</div>
-                    <span>阅读报告</span>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-icon">◉</div>
-                    <span>趋势分析</span>
-                </div>
-                <div class="sidebar-item">
-                    <div class="sidebar-icon">◊</div>
-                    <span>排行榜</span>
-                </div>
-            </div>
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section">
-                <div class="sidebar-item" onclick="goBack()">
-                    <div class="sidebar-icon">←</div>
-                    <span>返回</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <!-- 书摘展示卡片 -->
-            <div class="card quote-main">
-                <div class="card-corner-bl"></div>
-                <div class="card-corner-br"></div>
-                <div class="card-header">
-                    <div class="card-title">本月目标</div>
-                    <div style="display:flex;gap:8px;">
-                        <div class="card-badge">周度</div>
-                        <div class="card-badge" style="background:rgba(212,175,55,0.15);color:var(--gold);">月度</div>
-                        <div class="card-badge">年度</div>
-                    </div>
-                </div>
+        <!-- 中间书摘 -->
+        <div class="quote-area">
+            <div class="quote-content" id="quoteContent">
                 <div class="quote-text" id="quoteText">
                     在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光，是我莫大的荣幸。
                 </div>
-                <div class="quote-meta">
-                    <div class="quote-author" id="quoteInfo">卡尔·萨根 · 宇宙</div>
-                    <div class="quote-nav">
-                        <button class="btn-small" onclick="prevQuote()">← 上一条</button>
-                        <button class="btn-small" onclick="nextQuote()">下一条 →</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 统计卡片 -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="stat1">24%</div>
-                    <div class="stat-label">本月进度</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat2">0</div>
-                    <div class="stat-label">今日笔记</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat3">5</div>
-                    <div class="stat-label">连续天数</div>
-                </div>
-            </div>
-
-            <!-- 阅读周报 -->
-            <div class="card">
-                <div class="card-corner-bl"></div>
-                <div class="card-corner-br"></div>
-                <div class="card-header">
-                    <div class="card-title">阅读周报</div>
-                    <div class="card-badge">weekly rollup</div>
-                </div>
-                <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
-                    <div style="color:var(--gold);font-weight:500;margin-bottom:8px;">第18周 · 4月24日 - 5月1日</div>
-                    <div>完成伟大的APP 8.3版本的更新，处理AI反应慢的问题</div>
-                    <div style="margin-top:8px;color:var(--text-muted);">
-                        本周已读：本周发布16+篇公众号推送，新UI基本定型。在多个平台上，内容运营对AI反应速度优化，
-                        增加文本解析的准确率。多模态搜索功能内测一个版本上线...
-                    </div>
-                </div>
-            </div>
-
-            <!-- 进度追踪 -->
-            <div class="card">
-                <div class="card-corner-bl"></div>
-                <div class="card-corner-br"></div>
-                <div class="card-header">
-                    <div class="card-title">阅读进度</div>
-                    <div class="card-badge">实时</div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-header">
-                        <span class="progress-name">科幻类</span>
-                        <span class="progress-value">32%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width:32%"></div>
-                    </div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-header">
-                        <span class="progress-name">哲学类</span>
-                        <span class="progress-value">24%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width:24%"></div>
-                    </div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-header">
-                        <span class="progress-name">文学类</span>
-                        <span class="progress-value">18%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width:18%"></div>
-                    </div>
-                </div>
+                <div class="quote-author" id="quoteAuthor">卡尔 · 萨根</div>
             </div>
         </div>
 
-        <!-- 右侧面板 -->
-        <div class="right-panel">
-            <!-- 系统状态 -->
-            <div class="card">
-                <div class="card-corner-bl"></div>
-                <div class="card-corner-br"></div>
-                <div class="card-header">
-                    <div class="card-title">系统状态</div>
-                    <div class="card-badge">正常</div>
-                </div>
-                <div style="text-align:center;padding:16px 0;">
-                    <div style="font-size:36px;font-weight:700;color:var(--gold);text-shadow:0 0 15px rgba(212,175,55,0.3);">98%</div>
-                    <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">系统运行效率</div>
-                </div>
-                <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);gap:8px;">
-                    <div style="text-align:center;padding:8px;background:var(--bg-primary);border-radius:6px;">
-                        <div style="font-size:16px;font-weight:600;color:var(--gold);">42</div>
-                        <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">CPU</div>
-                    </div>
-                    <div style="text-align:center;padding:8px;background:var(--bg-primary);border-radius:6px;">
-                        <div style="font-size:16px;font-weight:600;color:var(--gold);">1.2</div>
-                        <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">MEM</div>
-                    </div>
-                    <div style="text-align:center;padding:8px;background:var(--bg-primary);border-radius:6px;">
-                        <div style="font-size:16px;font-weight:600;color:var(--gold);">0.3</div>
-                        <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">NET</div>
-                    </div>
-                </div>
+        <!-- 右侧统计 -->
+        <div class="info-panel">
+            <div class="panel-label">阅读数据</div>
+            <div class="stat-box">
+                <div class="stat-value" id="charCount">42</div>
+                <div class="stat-label">字符数</div>
             </div>
-
-            <!-- 本月目标 -->
-            <div class="card">
-                <div class="card-corner-bl"></div>
-                <div class="card-corner-br"></div>
-                <div class="card-header">
-                    <div class="card-title">本月目标</div>
-                    <div class="card-badge">进行中</div>
-                </div>
-                <div style="margin-bottom:12px;">
-                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;">
-                        <span style="color:var(--text-secondary);">阅读进度</span>
-                        <span style="color:var(--gold);font-weight:600;">24%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width:24%"></div>
-                    </div>
-                </div>
-                <div style="font-size:11px;color:var(--text-secondary);line-height:1.8;">
-                    <div style="display:flex;justify-content:space-between;">
-                        <span>已读完</span>
-                        <span style="color:var(--gold);">6 / 25 本</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;">
-                        <span>剩余天数</span>
-                        <span style="color:var(--gold);">18 天</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;">
-                        <span>日均阅读</span>
-                        <span style="color:var(--gold);">2.3 小时</span>
-                    </div>
-                </div>
+            <div class="stat-box">
+                <div class="stat-value" id="wordCount">28</div>
+                <div class="stat-label">词数</div>
             </div>
-
-            <!-- 能力矩阵 -->
-            <div class="card">
-                <div class="card-corner-bl"></div>
-                <div class="card-corner-br"></div>
-                <div class="card-header">
-                    <div class="card-title">能力矩阵</div>
-                    <div class="card-badge">6维</div>
-                </div>
-                <div class="hex-grid">
-                    <div class="hex-item">
-                        <div class="hex-value">34</div>
-                        <div class="hex-label">执行力</div>
-                    </div>
-                    <div class="hex-item">
-                        <div class="hex-value">64</div>
-                        <div class="hex-label">思考力</div>
-                    </div>
-                    <div class="hex-item">
-                        <div class="hex-value">58</div>
-                        <div class="hex-label">创造力</div>
-                    </div>
-                    <div class="hex-item">
-                        <div class="hex-value">42</div>
-                        <div class="hex-label">阅读力</div>
-                    </div>
-                    <div class="hex-item">
-                        <div class="hex-value">71</div>
-                        <div class="hex-label">写作力</div>
-                    </div>
-                    <div class="hex-item">
-                        <div class="hex-value">39</div>
-                        <div class="hex-label">表达力</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 标签分布 -->
-            <div class="card">
-                <div class="card-corner-bl"></div>
-                <div class="card-corner-br"></div>
-                <div class="card-header">
-                    <div class="card-title">标签分布</div>
-                    <div class="card-badge">TOP5</div>
-                </div>
-                <div class="tag-list">
-                    <div class="tag-item">
-                        <span class="tag-name">科幻</span>
-                        <span class="tag-percent">32%</span>
-                    </div>
-                    <div class="tag-item">
-                        <span class="tag-name">哲学</span>
-                        <span class="tag-percent">24%</span>
-                    </div>
-                    <div class="tag-item">
-                        <span class="tag-name">文学</span>
-                        <span class="tag-percent">18%</span>
-                    </div>
-                    <div class="tag-item">
-                        <span class="tag-name">历史</span>
-                        <span class="tag-percent">15%</span>
-                    </div>
-                    <div class="tag-item">
-                        <span class="tag-name">诗歌</span>
-                        <span class="tag-percent">11%</span>
-                    </div>
-                </div>
+            <div class="stat-box">
+                <div class="stat-value" id="readTime">15s</div>
+                <div class="stat-label">阅读时间</div>
             </div>
         </div>
+    </div>
 
-        <!-- 底部栏 -->
-        <div class="bottom-bar">
-            <div class="bottom-left">
-                <div class="bottom-item">
-                    <span class="bottom-label">COORD:</span>
-                    <span>34.0522°N, 118.2437°W</span>
-                </div>
-                <div class="bottom-item">
-                    <span class="bottom-label">SECTOR:</span>
-                    <span>ALPHA-7</span>
-                </div>
-                <div class="bottom-item">
-                    <span class="bottom-label">VER:</span>
-                    <span>7.6.8</span>
-                </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;">
-                <div class="status-dot"></div>
-                <span>ONLINE</span>
-            </div>
+    <!-- 底部导航栏 -->
+    <div class="nav-bar">
+        <button class="cyber-btn" id="btnPrev" onclick="prevQuote()">
+            <span>◀ 上一条</span>
+        </button>
+        <button class="cyber-btn current" id="btnCurrent">
+            <span>● 当前</span>
+        </button>
+        <button class="cyber-btn" id="btnNext" onclick="nextQuote()">
+            <span>下一条 ▶</span>
+        </button>
+        
+        <div class="nav-indicator">
+            <span>QUOTE</span>
+            <span class="page-num" id="pageNum">01</span>
+            <span>/ 08</span>
         </div>
     </div>
 
     <script>
         const quotes = [
-            { text: "在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光，是我莫大的荣幸。", author: "卡尔·萨根 · 宇宙" },
-            { text: "给岁月以文明，而不是给文明以岁月。", author: "刘慈欣 · 三体" },
-            { text: "世界上只有一种真正的英雄主义，那就是认清生活的真相后依然热爱生活。", author: "罗曼·罗兰 · 米开朗基罗传" },
-            { text: "我们都是由星尘构成的，当我们死去，我们将回归星空。", author: "尼尔·德格拉斯·泰森 · 天体物理学" },
-            { text: "不要温和地走进那个良夜，老年应当在日暮时燃烧咆哮。", author: "狄兰·托马斯 · 诗集" },
-            { text: "宇宙既不仁慈，也不恶毒，它只是对人类的悲欢无动于衷。", author: "史蒂芬·霍金 · 时间简史" },
-            { text: "你身体里的每一个原子都来自一颗爆炸了的恒星。", author: "劳伦斯·克劳斯 · 一颗原子的时空之旅" },
-            { text: "我们都是星尘，但我们用双手触碰彼此，这就是宇宙中最浪漫的事。", author: "佚名" }
+            { text: "在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光，是我莫大的荣幸。", author: "卡尔 · 萨根", book: "宇宙" },
+            { text: "给岁月以文明，而不是给文明以岁月。", author: "刘慈欣", book: "三体" },
+            { text: "世界上只有一种真正的英雄主义，那就是认清生活的真相后依然热爱生活。", author: "罗曼 · 罗兰", book: "米开朗基罗传" },
+            { text: "我们都是由星尘构成的，当我们死去，我们将回归星空。", author: "尼尔 · 德格拉斯 · 泰森", book: "天体物理学" },
+            { text: "不要温和地走进那个良夜，老年应当在日暮时燃烧咆哮。", author: "狄兰 · 托马斯", book: "诗集" },
+            { text: "宇宙既不仁慈，也不恶毒，它只是对人类的悲欢无动于衷。", author: "史蒂芬 · 霍金", book: "时间简史" },
+            { text: "你身体里的每一个原子都来自一颗爆炸了的恒星。", author: "劳伦斯 · 克劳斯", book: "一颗原子的时空之旅" },
+            { text: "我们都是星尘，但我们用双手触碰彼此，这就是宇宙中最浪漫的事。", author: "佚名", book: "" }
         ];
 
         let currentIndex = 0;
+        let isAnimating = false;
 
-        function updateQuote() {
-            document.getElementById('quoteText').textContent = quotes[currentIndex].text;
-            document.getElementById('quoteInfo').textContent = quotes[currentIndex].author;
+        // 关键词提取
+        function extractKeywords(text) {
+            // 停用词
+            const stopWords = new Set(['的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这', '那', '我们', '让', '把', '被', '给', '与', '及', '或', '但', '而', '因为', '所以', '如果', '就', '让', '向', '从', '到', '在', '把', '被', '给', '对', '关于', '的', '地', '得']);
+            
+            // 分词并统计
+            const words = [];
+            const wordFreq = {};
+            
+            // 提取2-4字词组
+            for (let len = 4; len >= 2; len--) {
+                for (let i = 0; i <= text.length - len; i++) {
+                    const word = text.substr(i, len);
+                    // 过滤条件
+                    if (stopWords.has(word)) continue;
+                    if (/^[\u4e00-\u9fa5]+$/.test(word)) { // 纯中文
+                        wordFreq[word] = (wordFreq[word] || 0) + len;
+                    }
+                }
+            }
+            
+            // 排序并返回前5个
+            return Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([word, score]) => ({
+                    word,
+                    score: Math.min(98, Math.round(60 + score * 3))
+                }));
+        }
+
+        // 更新关键词显示
+        function updateKeywords(text) {
+            const keywords = extractKeywords(text);
+            const container = document.getElementById('keywordsList');
+            container.innerHTML = keywords.map(kw => 
+                `<div class="keyword-tag">${kw.word} <span class="kw-score">${kw.score}%</span></div>`
+            ).join('');
+        }
+
+        // 更新统计数据
+        function updateStats(text) {
+            document.getElementById('charCount').textContent = text.length;
+            document.getElementById('wordCount').textContent = text.split(/[\s，。！？、；：""''（）]+/).filter(w => w.length > 0).length;
+            document.getElementById('readTime').textContent = Math.max(5, Math.round(text.length / 3)) + 's';
+        }
+
+        // 切换书摘
+        function switchQuote(newIndex) {
+            if (isAnimating || newIndex === currentIndex) return;
+            isAnimating = true;
+
+            const quoteContent = document.getElementById('quoteContent');
+            const heroTitle = document.getElementById('heroTitle');
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+
+            // 闪烁效果
+            btnPrev.classList.add('flicker');
+            btnNext.classList.add('flicker');
+
+            // 退出动画
+            quoteContent.classList.add('switching-out');
+            heroTitle.classList.add('switching');
+
+            setTimeout(() => {
+                currentIndex = newIndex;
+                const quote = quotes[currentIndex];
+
+                // 更新内容
+                document.getElementById('quoteText').textContent = quote.text;
+                document.getElementById('quoteAuthor').textContent = quote.author + (quote.book ? ' · ' + quote.book : '');
+                document.getElementById('heroTitle').textContent = quote.text.substring(0, 30) + '...';
+                document.getElementById('heroAuthor').textContent = quote.author + ' · ' + (quote.book || '未知');
+                document.getElementById('quoteIndex').textContent = (currentIndex + 1) + ' / ' + quotes.length;
+                document.getElementById('pageNum').textContent = String(currentIndex + 1).padStart(2, '0');
+
+                // 更新关键词和统计
+                updateKeywords(quote.text);
+                updateStats(quote.text);
+
+                // 进入动画
+                quoteContent.classList.remove('switching-out');
+                quoteContent.classList.add('switching-in');
+                heroTitle.classList.remove('switching');
+
+                setTimeout(() => {
+                    quoteContent.classList.remove('switching-in');
+                    btnPrev.classList.remove('flicker');
+                    btnNext.classList.remove('flicker');
+                    isAnimating = false;
+                }, 400);
+            }, 300);
         }
 
         function nextQuote() {
-            currentIndex = (currentIndex + 1) % quotes.length;
-            updateQuote();
+            const newIndex = (currentIndex + 1) % quotes.length;
+            switchQuote(newIndex);
         }
 
         function prevQuote() {
-            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
-            updateQuote();
+            const newIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            switchQuote(newIndex);
         }
 
-        function goBack() {
-            window.location.href = '../index.html';
+        // 生成粒子
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.top = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 8 + 's';
+                p.style.animationDuration = (5 + Math.random() * 5) + 's';
+                container.appendChild(p);
+            }
         }
 
-        // 时钟
-        function updateClock() {
-            const now = new Date();
-            const time = now.toTimeString().split(' ')[0];
-            document.getElementById('clock').textContent = time;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // 随机更新统计数据
-        function jitterStats() {
-            const stats = ['stat1', 'stat2', 'stat3'];
-            stats.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    const current = parseInt(el.textContent) || 0;
-                    const change = Math.floor(Math.random() * 5) - 2;
-                    el.textContent = Math.max(0, current + change);
-                }
-            });
-        }
-        setInterval(jitterStats, 5000);
-
-        // 键盘导航
+        // 键盘控制
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') prevQuote();
             if (e.key === 'ArrowRight') nextQuote();
         });
 
         // 初始化
-        updateQuote();
+        createParticles();
+        updateKeywords(quotes[0].text);
+        updateStats(quotes[0].text);
     </script>
 </body>
 </html>
