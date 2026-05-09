@@ -9324,6 +9324,12 @@
             document.querySelectorAll('[data-quote-effect]').forEach(function(el) {
                 el.classList.toggle('active', el.getAttribute('data-quote-effect') === savedQuoteEffect);
             });
+
+            // 检查是否从主题页面返回，如果是则自动打开书摘展示界面
+            if (sessionStorage.getItem('returnToQuoteShowcase') === 'true') {
+                sessionStorage.removeItem('returnToQuoteShowcase');
+                showQuoteShowcase();
+            }
         }
 
         // ===== WebGL 液态玻璃效果 =====
@@ -11129,13 +11135,19 @@
             const icons = {
                 typewriter: '⌨️',
                 cinematic: '🎬',
-                inkwash: '🎨',
-                particles: '✨',
+                inkwash: '🖌️',
                 neon: '💡',
-                nature: '🌿',
+                pageflip: '📖',
+                nature: '🌧️',
                 letterpress: '📰',
-                fractal: '🌿',
-                hologram: '🔮'
+                fractal: '🌳',
+                hologram: '🔮',
+                hourglass: '⏳',
+                zen: '⛩️',
+                clouds: '☁️',
+                hud: '🎯',
+                memoria: '💫',
+                obsidian: '💎'
             };
             return icons[id] || '📖';
         }
@@ -11163,10 +11175,12 @@
                 });
                 Promise.all(readers).then(files => {
                     sessionStorage.setItem('quoteFiles', JSON.stringify(files));
-                    window.open(`quotes-showcase/${effectId}.html`, '_blank');
+                    sessionStorage.setItem('returnToQuoteShowcase', 'true');
+                    window.location.href = `quotes-showcase/${effectId}.html`;
                 });
             } else {
-                window.open(`quotes-showcase/${effectId}.html`, '_blank');
+                sessionStorage.setItem('returnToQuoteShowcase', 'true');
+                window.location.href = `quotes-showcase/${effectId}.html`;
             }
         }
     </script>
