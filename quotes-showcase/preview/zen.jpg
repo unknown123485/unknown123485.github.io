@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect fill="#e8e0d4" width="400" height="300"/>
+  <circle cx="150" cy="200" r="30" fill="#6a6a6a" opacity="0.7"/>
+  <circle cx="280" cy="180" r="25" fill="#5a5a5a" opacity="0.6"/>
+  <line x1="0" y1="250" x2="400" y2="250" stroke="#d4c8b8" stroke-width="2"/>
+  <text x="200" y="100" font-family="serif" font-size="18" fill="#3a3530" text-anchor="middle">禅意庭院</text>
+  <text x="200" y="280" font-family="serif" font-size="10" fill="#777" text-anchor="middle">枯山水</text>
+</svg>

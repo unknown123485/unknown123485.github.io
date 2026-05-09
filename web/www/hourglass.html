@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时光沙漏 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(180deg, #1a1a2e 0%, #2a2a4a 50%, #1a1a2e 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', serif;
+            position: relative;
+        }
+        .stars {
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 400px 90px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 500px 200px, rgba(255,255,255,0.7), transparent);
+            background-size: 550px 250px;
+            animation: twinkle 5s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .hourglass-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        .hourglass {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            margin-bottom: 40px;
+        }
+        .hourglass-glass {
+            position: absolute;
+            inset: 0;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 100px 100px 0 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+        .hourglass-glass::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: 0;
+            right: 0;
+            height: 150px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: none;
+            border-radius: 0 0 100px 100px;
+            background: linear-gradient(180deg, transparent 50%, rgba(255,255,255,0.1) 100%);
+        }
+        .sand-top {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            height: 130px;
+            background: linear-gradient(180deg, #c9a84c 0%, #d4b85c 100%);
+            border-radius: 90px 90px 0 0;
+            animation: sandFlow 8s ease-in-out infinite;
+        }
+        .sand-bottom {
+            position: absolute;
+            bottom: -140px;
+            left: 10px;
+            right: 10px;
+            height: 0;
+            background: linear-gradient(180deg, #d4b85c 0%, #c9a84c 100%);
+            border-radius: 0 0 90px 90px;
+            animation: sandAccumulate 8s ease-in-out infinite;
+        }
+        @keyframes sandFlow {
+            0% { height: 130px; }
+            100% { height: 0; }
+        }
+        @keyframes sandAccumulate {
+            0% { height: 0; }
+            100% { height: 130px; }
+        }
+        .sand-stream {
+            position: absolute;
+            top: 140px;
+            left: 50%;
+            width: 2px;
+            height: 0;
+            background: linear-gradient(180deg, #d4b85c, #c9a84c);
+            transform: translateX(-50%);
+            animation: streamFlow 8s ease-in-out infinite;
+        }
+        @keyframes streamFlow {
+            0% { height: 0; opacity: 0; }
+            10% { height: 150px; opacity: 1; }
+            90% { height: 150px; opacity: 1; }
+            100% { height: 0; opacity: 0; }
+        }
+        .quote-text {
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            line-height: 1.8;
+            text-align: center;
+            max-width: 80vw;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            letter-spacing: 0.1em;
+            font-weight: 300;
+        }
+        .quote-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .quote-info {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.15em;
+            opacity: 0;
+            transition: opacity 1s 0.3s;
+        }
+        .quote-info.show { opacity: 1; }
+        .book-name {
+            font-style: italic;
+            opacity: 0.7;
+        }
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+        .btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.6);
+            padding: 12px 32px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            letter-spacing: 0.1em;
+            font-family: inherit;
+            backdrop-filter: blur(10px);
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            font-size: 0.85rem;
+            z-index: 100;
+            transition: color 0.3s;
+            letter-spacing: 0.1em;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.7); }
+        .settings-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.5);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <a href="quotes-showcase/index.html" class="back-link">← 返回</a>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <div class="hourglass-container">
+        <div class="hourglass">
+            <div class="hourglass-glass"></div>
+            <div class="sand-top"></div>
+            <div class="sand-stream"></div>
+            <div class="sand-bottom"></div>
+        </div>
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-info" id="quoteInfo"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "时间是一条河，我们都是过河的人", author: "赫拉克利特", book: "残篇" },
+            { text: "逝者如斯夫，不舍昼夜", author: "孔子", book: "论语" },
+            { text: "一寸光阴一寸金，寸金难买寸光阴", author: "古语", book: "增广贤文" },
+            { text: "时间是最好的作者，它总会写出完美的结局", author: "莎士比亚", book: "暴风雨" },
+            { text: "人生天地之间，若白驹过隙，忽然而已", author: "庄子", book: "知北游" },
+            { text: "岁月不居，时节如流", author: "孔融", book: "论盛孝章书" }
+        ];
+
+        let currentIndex = 0;
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                infoEl.innerHTML = `${quote.author} · <span class="book-name">${quote.book}</span>`;
+                textEl.classList.add('show');
+                infoEl.classList.add('show');
+            }, 300);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        function toggleSettings() {
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        showQuote();
+    </script>
+</body>
+</html>

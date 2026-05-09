@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect fill="#1a1a2e" width="400" height="300"/>
+  <text x="200" y="50" font-family="monospace" font-size="12" fill="#c9a84c" text-anchor="middle" opacity="0.6">时光沙漏</text>
+  <path d="M150 100 L250 100 L200 150 L150 100" fill="none" stroke="#c9a84c" stroke-width="2"/>
+  <path d="M150 200 L250 200 L200 150 L150 200" fill="none" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="200" y1="150" x2="200" y2="180" stroke="#c9a84c" stroke-width="1">
+    <animate attributeName="y1" values="150;170;150" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="y2" values="180;155;180" dur="2s" repeatCount="indefinite"/>
+  </line>
+  <ellipse cx="200" cy="170" rx="30" ry="5" fill="#c9a84c" opacity="0.5"/>
+</svg>

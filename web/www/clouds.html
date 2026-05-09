@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云端之上 - 书摘展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #E0F6FF 70%, #F0F8FF 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', serif;
+            position: relative;
+        }
+        .sun {
+            position: fixed;
+            top: 10%;
+            right: 15%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #FFD700 0%, #FFA500 70%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
+            animation: sunPulse 4s ease-in-out infinite;
+            z-index: 1;
+        }
+        @keyframes sunPulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 100px;
+            z-index: 2;
+            animation: cloudFloat 20s ease-in-out infinite;
+        }
+        .cloud::before {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 100px;
+        }
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 100px;
+        }
+        .cloud1 {
+            width: 120px;
+            height: 40px;
+            top: 20%;
+            left: 10%;
+        }
+        .cloud1::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 15px;
+        }
+        .cloud1::after {
+            width: 60px;
+            height: 40px;
+            top: -15px;
+            right: 15px;
+        }
+        .cloud2 {
+            width: 100px;
+            height: 35px;
+            top: 40%;
+            right: 20%;
+            animation-delay: -5s;
+        }
+        .cloud2::before {
+            width: 45px;
+            height: 45px;
+            top: -22px;
+            left: 20px;
+        }
+        .cloud2::after {
+            width: 55px;
+            height: 35px;
+            top: -12px;
+            right: 10px;
+        }
+        .cloud3 {
+            width: 140px;
+            height: 45px;
+            top: 60%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+        .cloud3::before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 25px;
+        }
+        .cloud3::after {
+            width: 70px;
+            height: 45px;
+            top: -18px;
+            right: 20px;
+        }
+        @keyframes cloudFloat {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(30px) translateY(-10px); }
+            50% { transform: translateX(-20px) translateY(5px); }
+            75% { transform: translateX(15px) translateY(-5px); }
+        }
+        .bird {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            z-index: 3;
+            animation: birdFly 15s linear infinite;
+        }
+        .bird::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 3px;
+            background: rgba(100, 100, 100, 0.6);
+            border-radius: 0 50% 50% 0;
+            transform: rotate(-20deg);
+            animation: wingFlap 0.5s ease-in-out infinite;
+        }
+        .bird::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 12px;
+            height: 3px;
+            background: rgba(100, 100, 100, 0.6);
+            border-radius: 50% 0 0 50%;
+            transform: rotate(20deg);
+            animation: wingFlap 0.5s ease-in-out infinite 0.1s;
+        }
+        @keyframes birdFly {
+            0% { left: -50px; top: 30%; }
+            100% { left: 110%; top: 25%; }
+        }
+        @keyframes wingFlap {
+            0%, 100% { transform: rotate(-20deg) translateY(0); }
+            50% { transform: rotate(-40deg) translateY(-3px); }
+        }
+        .rays {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                rgba(255,255,255,0.1) 0%,
+                transparent 30%,
+                transparent 70%,
+                rgba(255,255,255,0.05) 100%
+            );
+            transform: translateX(-50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .quote-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 40px;
+        }
+        .quote-text {
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            line-height: 2;
+            text-align: center;
+            max-width: 80vw;
+            color: #4a5568;
+            letter-spacing: 0.1em;
+            font-weight: 400;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        .quote-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .quote-info {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #718096;
+            letter-spacing: 0.15em;
+            opacity: 0;
+            transition: opacity 1s 0.5s;
+        }
+        .quote-info.show { opacity: 1; }
+        .book-name {
+            font-style: italic;
+            opacity: 0.7;
+        }
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+        .btn {
+            background: rgba(255,255,255,0.5);
+            border: 1px solid rgba(255,255,255,0.6);
+            color: #4a5568;
+            padding: 12px 32px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            letter-spacing: 0.1em;
+            font-family: inherit;
+            backdrop-filter: blur(10px);
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.7);
+            color: #2d3748;
+        }
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: rgba(74, 85, 104, 0.5);
+            text-decoration: none;
+            font-size: 0.85rem;
+            z-index: 100;
+            transition: color 0.3s;
+            letter-spacing: 0.1em;
+        }
+        .back-link:hover { color: rgba(74, 85, 104, 0.8); }
+        .settings-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: rgba(74, 85, 104, 0.5);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.5);
+            color: rgba(74, 85, 104, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="sun"></div>
+    <div class="rays"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    <div class="bird"></div>
+
+    <a href="quotes-showcase/index.html" class="back-link">← 返回</a>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <div class="quote-container">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-info" id="quoteInfo"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevQuote()">上一个</button>
+        <button class="btn" onclick="nextQuote()">下一个</button>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "海阔凭鱼跃，天高任鸟飞", author: "古诗", book: "古今贤文" },
+            { text: "行到水穷处，坐看云起时", author: "王维", book: "终南别业" },
+            { text: "会当凌绝顶，一览众山小", author: "杜甫", book: "望岳" },
+            { text: "长风破浪会有时，直挂云帆济沧海", author: "李白", book: "行路难" },
+            { text: "落霞与孤鹜齐飞，秋水共长天一色", author: "王勃", book: "滕王阁序" },
+            { text: "晴空一鹤排云上，便引诗情到碧霄", author: "刘禹锡", book: "秋词" }
+        ];
+
+        let currentIndex = 0;
+
+        function showQuote() {
+            const quote = quotes[currentIndex];
+            const textEl = document.getElementById('quoteText');
+            const infoEl = document.getElementById('quoteInfo');
+
+            textEl.classList.remove('show');
+            infoEl.classList.remove('show');
+
+            setTimeout(() => {
+                textEl.textContent = quote.text;
+                infoEl.innerHTML = `${quote.author} · <span class="book-name">${quote.book}</span>`;
+                textEl.classList.add('show');
+                infoEl.classList.add('show');
+            }, 300);
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            showQuote();
+        }
+
+        function prevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            showQuote();
+        }
+
+        function toggleSettings() {
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === 'ArrowLeft') prevQuote();
+        });
+
+        showQuote();
+    </script>
+</body>
+</html>
