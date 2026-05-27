@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
  <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -13084,763 +13084,551 @@
         }
     </script>
 
-    <!-- ═══ Dashboard 书斋展示 ═══════════════════════════════════════ -->
+    <!-- ═══ Dashboard 书斋展示 — SOA Terminal 1:1 复刻 ════════════════ -->
     <style>
-        .dash-panel{background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;position:relative;}
-        .dash-panel-title{font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;padding:12px 16px 0;font-family:var(--font-ui,'Inter'),sans-serif;}
-        .dash-panel-code{position:absolute;top:10px;right:14px;font-size:0.55rem;color:rgba(255,255,255,0.2);font-family:var(--font-mono,'JetBrains Mono'),monospace;letter-spacing:1px;}
-        .dash-scanlines{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:1001;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);}
-        .dash-grid-bg{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;
-            background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
-            background-size:40px 40px;}
-        .dash-tab{padding:6px 14px;font-size:0.7rem;letter-spacing:1.5px;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,0.4);font-family:var(--font-ui,'Inter'),sans-serif;transition:all 0.3s;position:relative;}
-        .dash-tab.active{color:var(--accent);}
-        .dash-tab.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:30px;height:2px;background:var(--accent);}
-        .dash-ring{display:flex;flex-direction:column;align-items:center;gap:4px;}
-        .dash-ring canvas{width:52px;height:52px;}
-        .dash-ring-label{font-size:0.55rem;letter-spacing:1.5px;font-weight:700;font-family:var(--font-mono,'JetBrains Mono'),monospace;}
-        .dash-ring-value{font-size:0.65rem;font-weight:700;font-family:var(--font-mono,'JetBrains Mono'),monospace;color:var(--text-primary);}
-        .dash-quote-hero{position:relative;text-align:center;padding:20px;}
-        .dash-quote-hero::before{content:'\201C';position:absolute;top:-10px;left:10px;font-size:6rem;color:var(--accent);opacity:0.12;line-height:1;}
-        .dash-quote-hero::after{content:'\201D';position:absolute;bottom:-20px;right:10px;font-size:6rem;color:var(--accent);opacity:0.12;line-height:1;}
-        .dash-quote-text{font-size:1.3rem;font-weight:600;line-height:2;color:var(--text-primary);text-shadow:0 0 20px rgba(var(--accent-rgb,100,200,255),0.3);max-width:600px;margin:0 auto;}
-        .dash-quote-attr{font-size:0.7rem;color:var(--accent);letter-spacing:1px;margin-top:12px;font-family:var(--font-mono,'JetBrains Mono'),monospace;}
-        .dash-quote-ghost{font-size:0.75rem;color:rgba(255,255,255,0.25);padding:6px 16px;cursor:pointer;transition:color 0.3s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-        .dash-quote-ghost:hover{color:rgba(255,255,255,0.5);}
-        @keyframes dashFadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes dashPulse{0%,100%{opacity:0.6}50%{opacity:1}}
-        @keyframes dashScanMove{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
-        .dash-scan-beam{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.15;pointer-events:none;z-index:1002;animation:dashScanMove 8s linear infinite;}
-        .dash-toc-item{padding:6px 10px;cursor:pointer;border-radius:6px;transition:all 0.2s;display:flex;align-items:center;gap:8px;font-size:0.75rem;}
-        .dash-toc-item:hover{background:rgba(255,255,255,0.05);}
-        .dash-toc-item.active{background:rgba(var(--accent-rgb,100,200,255),0.12);border:1px solid rgba(var(--accent-rgb,100,200,255),0.25);}
-        .dash-toc-num{font-family:var(--font-mono,'JetBrains Mono'),monospace;font-size:0.6rem;color:rgba(255,255,255,0.3);min-width:28px;}
-        .dash-toc-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-secondary);}
-        .dash-toc-item.active .dash-toc-title{color:var(--text-primary);font-weight:600;}
-        .dash-toc-count{font-size:0.55rem;color:rgba(255,255,255,0.25);font-family:var(--font-mono,'JetBrains Mono'),monospace;}
-        .dash-cover-card{width:48px;height:68px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:white;cursor:pointer;transition:all 0.4s;position:absolute;border:1px solid rgba(255,255,255,0.1);}
-        .dash-streak-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-        .dash-streak-cell{width:100%;aspect-ratio:1;border-radius:3px;background:rgba(255,255,255,0.04);}
-        .dash-streak-cell.active{background:var(--accent);opacity:0.7;}
-        .dash-streak-cell.today{box-shadow:0 0 0 1px var(--accent);}
+        :root{--dash-bg:#050506;--dash-panel:#0A0A0C;--dash-subtle:#131318;--dash-accent:#FFCC33;--dash-secondary:#6FE0FF;--dash-brand:#FF4D9D;--dash-ok:#6BFF8C;--dash-warn:#FFCC33;--dash-danger:#FF4D9D;--dash-grid:#2A2A2F;--dash-text:#EDEDE9;--dash-text2:#B7B7B0;--dash-muted:#6E6E6A}
+        #dashboard-page{font-family:'JetBrains Mono',monospace}
+        .d-panel{background:linear-gradient(180deg,rgba(19,19,24,0.75),rgba(10,10,12,0.92),rgba(5,5,6,0.95));border:0.8px solid rgba(255,204,51,0.40);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+        .d-panel-head{background:linear-gradient(90deg,rgba(255,204,51,0.18),rgba(19,19,24,0.10),transparent);padding:7px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid}
+        .d-panel-head{border-image:linear-gradient(90deg,rgba(255,204,51,0.6),rgba(255,204,51,0.15),transparent) 1}
+        .d-panel-dot{width:7px;height:7px;border-radius:50%;background:var(--dash-brand)}
+        .d-panel-code{color:var(--dash-brand);font-size:9px;letter-spacing:0.6px;font-weight:700}
+        .d-panel-title{color:var(--dash-text);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .d-panel-body{padding:10px;flex:1;overflow:hidden}
+        .d-panel-foot{padding:2px 8px 5px;display:flex;align-items:center;font-size:7px;letter-spacing:0.6px;color:var(--dash-muted)}
+        .d-panel-foot-ok{color:var(--dash-ok);opacity:0.7}
+        .d-bracket{color:var(--dash-accent);opacity:0.55;font-size:11px}
+        .d-topbar{background:var(--dash-bg);padding:8px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid}
+        .d-topbar{border-image:linear-gradient(90deg,transparent,rgba(255,204,51,0.6),rgba(255,204,51,0.3),transparent) 1}
+        .d-topbar-label{color:var(--dash-accent);font-size:11px;letter-spacing:1.4px;font-weight:600}
+        .d-ticker{color:var(--dash-text2);font-size:10px;letter-spacing:0.6px}
+        .d-tab{padding:4px 8px;cursor:pointer;text-align:center;color:var(--dash-muted);font-size:12px;letter-spacing:0.8px;transition:all 0.3s}
+        .d-tab-sel{color:var(--dash-accent);font-weight:700}
+        .d-tab-line{width:40px;height:2px;background:var(--dash-accent);margin:3px auto 0}
+        .d-hero{position:relative;text-align:center;padding:12px}
+        .d-hero-q{position:absolute;font-size:140px;font-weight:900;color:var(--dash-accent);opacity:0.18;line-height:1}
+        .d-hero-q-l{top:-25px;left:-10px}.d-hero-q-r{bottom:-20px;right:10px}
+        .d-hero-text{font-size:24px;font-weight:700;line-height:38px;letter-spacing:1px;color:var(--dash-text);text-align:center;max-width:600px;margin:0 auto;text-shadow:0 0 18px rgba(255,204,51,0.4)}
+        .d-hero-attr{font-size:11px;color:var(--dash-brand);letter-spacing:1px;font-weight:700;margin-top:12px}
+        .d-ghost{opacity:0.35;padding:4px 16px;cursor:pointer;font-size:11px;color:var(--dash-text2);letter-spacing:0.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .d-ghost:hover{opacity:0.55}
+        .d-toc-item{padding:6px;display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;border-radius:6px;transition:all 0.2s}
+        .d-toc-item:hover{background:rgba(255,255,255,0.05)}
+        .d-toc-item-active{background:rgba(255,204,51,0.12);border:0.8px solid rgba(255,204,51,0.25)}
+        .d-toc-num{font-size:10px;color:var(--dash-muted);min-width:28px;letter-spacing:0.6px}
+        .d-toc-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dash-text2)}
+        .d-toc-item-active .d-toc-title{color:var(--dash-text);font-weight:700}
+        .d-toc-count{font-size:9px;color:var(--dash-muted);letter-spacing:0.5px}
+        .d-cover{width:44px;height:64px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;position:absolute;border:0.4px solid var(--dash-grid);transition:all 0.4s}
+        .d-cover-active{border-color:var(--dash-accent);border-width:1.2px}
+        .d-ring canvas{width:50px;height:50px}
+        .d-ring-val{font-size:10px;font-weight:700;color:var(--dash-text);text-shadow:0 0 6px rgba(255,204,51,0.6)}
+        .d-ring-lbl{font-size:9px;letter-spacing:1.4px;font-weight:700}
+        @keyframes dScanMove{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+        .d-scan{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--dash-accent),transparent);opacity:0.15;pointer-events:none;z-index:1002;animation:dScanMove 8s linear infinite}
+        .d-grid{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px}
+        .d-glow{position:fixed;top:0;left:50%;width:400px;height:200px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(255,204,51,0.04),transparent 70%);pointer-events:none;z-index:0}
+        .d-splash{position:fixed;inset:0;z-index:2000;background:var(--dash-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s}
+        .d-splash-title{font-size:32px;font-weight:900;letter-spacing:4px;color:var(--dash-accent);font-family:'JetBrains Mono',monospace}
+        .d-splash-sub{font-size:12px;letter-spacing:2.4px;color:var(--dash-text2);font-family:'JetBrains Mono',monospace;margin-top:6px}
+        .d-splash-bar{width:120px;height:2px;background:rgba(255,255,255,0.1);border-radius:1px;overflow:hidden;margin-top:20px}
+        .d-splash-bar-inner{width:0%;height:100%;background:var(--dash-accent);transition:width 2.5s ease-out}
+        .d-kpi{border-radius:8px;border:0.8px solid;background:radial-gradient(circle,rgba(255,204,51,0.12),rgba(5,5,6,0.55));padding:10px}
+        .d-kpi-big{font-size:38px;font-weight:900;font-family:'JetBrains Mono',monospace;letter-spacing:-1px}
+        .d-kpi-unit{font-size:12px;letter-spacing:1px;font-weight:700;font-family:'JetBrains Mono',monospace}
+        .d-kpi-en{font-size:8px;letter-spacing:1.2px;color:var(--dash-muted)}
+        .d-donut-ring{stroke-width:0.22;fill:none}
+        .d-heat-cell{rx:3;ry:3}
     </style>
-    <div id="dashboard-page" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:var(--bg-base);overflow-y:auto;-webkit-overflow-scrolling:touch;">
-        <div class="dash-grid-bg"></div>
-        <div class="dash-scanlines"></div>
-        <div class="dash-scan-beam"></div>
-
+    <div id="dashboard-page" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--dash-bg);overflow-y:auto;-webkit-overflow-scrolling:touch;">
+        <div class="d-grid"></div>
+        <div class="d-glow"></div>
+        <div class="d-scan"></div>
         <!-- ACCESS GRANTED splash -->
-        <div id="dash-splash" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:2000;background:var(--bg-base);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s;">
-            <div style="font-size:0.7rem;letter-spacing:4px;color:var(--accent);font-family:var(--font-mono,'JetBrains Mono'),monospace;margin-bottom:12px;">ACCESS GRANTED</div>
-            <div style="font-size:1.6rem;font-weight:300;color:var(--text-primary);letter-spacing:0.15em;">MAS.READER</div>
-            <div style="margin-top:20px;width:120px;height:2px;background:rgba(255,255,255,0.1);border-radius:1px;overflow:hidden;">
-                <div id="dash-splash-bar" style="width:0%;height:100%;background:var(--accent);transition:width 2.5s ease-out;"></div>
+        <div id="dash-splash" class="d-splash">
+            <div class="d-splash-title">--ACCESS GRANTED--</div>
+            <div class="d-splash-sub">WELCOME, READER</div>
+            <div class="d-splash-bar"><div id="dash-splash-bar" class="d-splash-bar-inner"></div></div>
+        </div>
+        <!-- Top bar -->
+        <div class="d-topbar">
+            <span class="d-topbar-label">COGNITIVE ENCODE MODULE</span>
+            <span class="d-ticker" id="dash-pct">34%</span>
+            <span class="d-ticker" id="dash-rps">24 RPS</span>
+            <span class="d-ticker" id="dash-tc">01:02:21:09</span>
+            <span style="flex:1"></span>
+            <span style="color:var(--dash-muted);font-size:11px">🎤</span>
+            <span style="color:var(--dash-muted);font-size:11px">|</span>
+            <span style="color:var(--dash-text);font-size:11px;letter-spacing:0.6px" id="dash-user">READER</span>
+            <div style="width:8px"></div>
+            <div onclick="closeDashboard()" style="cursor:pointer;padding:4px 12px;border:1px solid rgba(255,77,157,0.8);border-radius:50px;background:rgba(255,77,157,0.15);color:var(--dash-brand);font-size:10px;letter-spacing:0.8px;font-weight:600">Log Out</div>
+        </div>
+        <!-- Tabs -->
+        <div style="display:flex;align-items:center;padding:6px 14px;gap:8px;border-bottom:1px solid var(--dash-grid)">
+            <div class="d-tab d-tab-sel" id="dash-tab-main" onclick="switchDashTab('main')"><div>控制面板</div><div class="d-tab-line" id="dash-tab-main-line"></div></div>
+            <div class="d-tab" id="dash-tab-stats" onclick="switchDashTab('stats')"><div>书库统计</div><div class="d-tab-line" id="dash-tab-stats-line" style="background:transparent"></div></div>
+            <span style="flex:1"></span>
+            <span style="color:var(--dash-accent);font-size:14px;letter-spacing:3px;font-weight:900;font-family:'JetBrains Mono',monospace">MAS.READER</span>
+        </div>
+        <!-- DASHBOARD 主页 -->
+        <div id="dash-main-page" style="display:flex;width:100%;height:calc(100vh - 90px);padding:8px;gap:6px">
+            <!-- 左列 weight 2 -->
+            <div style="flex:2;display:flex;flex-direction:column;gap:6px;min-width:0">
+                <div class="d-panel" style="flex:2" id="dash-toc-panel"></div>
+                <div class="d-panel" style="flex:0.7" id="dash-cover-panel"></div>
+                <div class="d-panel" style="flex:1" id="dash-heat-panel"></div>
+            </div>
+            <!-- 中央 weight 2.4 -->
+            <div class="d-panel" style="flex:2.4;min-width:0" id="dash-quote-panel"></div>
+            <!-- 右列 weight 1.1 -->
+            <div style="flex:1.1;display:flex;flex-direction:column;gap:6px;min-width:0">
+                <div class="d-panel" style="flex:1.2" id="dash-bar-panel"></div>
+                <div class="d-panel" style="flex:1.3" id="dash-radar-panel"></div>
+                <div class="d-panel" style="flex:1" id="dash-rings-panel"></div>
             </div>
         </div>
-
-        <div style="max-width:1100px;margin:0 auto;padding:20px 16px;min-height:100vh;position:relative;z-index:1;">
-            <!-- Top bar -->
-            <div style="display:flex;align-items:center;gap:15px;margin-bottom:16px;">
-                <button onclick="closeDashboard()" style="background:transparent;border:none;color:var(--text-primary);cursor:pointer;font-size:1rem;display:flex;align-items:center;gap:8px;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    <span data-i18n="common_back">返回</span>
-                </button>
-                <h1 style="font-size:1.1rem;font-weight:300;letter-spacing:0.15em;color:var(--text-primary);margin:0;font-family:var(--font-ui,'Inter'),sans-serif;">MAS.READER</h1>
-                <div style="flex:1;"></div>
-                <div style="display:flex;gap:4px;">
-                    <button class="dash-tab active" onclick="switchDashTab(this,'dashboard')" data-i18n="dash_tab_dashboard">控制面板</button>
-                    <button class="dash-tab" onclick="switchDashTab(this,'stats')" data-i18n="dash_tab_stats">书库统计</button>
-                </div>
-            </div>
-
-            <!-- ═══ DASHBOARD 主页 ═══ -->
-            <div id="dash-main-page">
-                <!-- 4 环指标 -->
-                <div id="dash-rings" style="display:flex;gap:12px;margin-bottom:20px;justify-content:center;flex-wrap:wrap;"></div>
-
-                <!-- 3列布局: 左TOC | 中Quote | 右图表 -->
-                <div style="display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:14px;margin-bottom:20px;">
-                    <!-- 左列: TOC + 书架 -->
-                    <div style="display:flex;flex-direction:column;gap:14px;">
-                        <div class="dash-panel" style="flex:2;">
-                            <div class="dash-panel-title" data-i18n="dash_toc">目录</div>
-                            <div class="dash-panel-code">NC 802</div>
-                            <div id="dash-toc" style="padding:8px;max-height:300px;overflow-y:auto;"></div>
-                        </div>
-                        <div class="dash-panel" style="flex:1;">
-                            <div class="dash-panel-title" data-i18n="dash_shelf">书架</div>
-                            <div class="dash-panel-code">SB 01-1</div>
-                            <div id="dash-coverflow" style="padding:12px;height:100px;position:relative;overflow:hidden;"></div>
-                        </div>
-                    </div>
-                    <!-- 中列: Quote Stream -->
-                    <div class="dash-panel" style="display:flex;flex-direction:column;">
-                        <div class="dash-panel-title" data-i18n="dash_quote_stream">书摘流</div>
-                        <div class="dash-panel-code" id="dash-quote-code">Q-001</div>
-                        <div style="flex:1;display:flex;flex-direction:column;padding:8px;">
-                            <div id="dash-quote-prev" class="dash-quote-ghost" onclick="dashQuoteNav(-1)"></div>
-                            <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-                                <div class="dash-quote-hero">
-                                    <div class="dash-quote-text" id="dash-quote-text">加载中...</div>
-                                    <div class="dash-quote-attr" id="dash-quote-attr"></div>
-                                </div>
-                            </div>
-                            <div id="dash-quote-next" class="dash-quote-ghost" onclick="dashQuoteNav(1)"></div>
-                        </div>
-                    </div>
-                    <!-- 右列: 柱状图 + 雷达 + 阅读热力 -->
-                    <div style="display:flex;flex-direction:column;gap:14px;">
-                        <div class="dash-panel" style="flex:1.2;">
-                            <div class="dash-panel-title" data-i18n="dash_chapter_load">章节负载</div>
-                            <div class="dash-panel-code">FP1</div>
-                            <canvas id="dash-bar-chart" style="width:100%;height:140px;padding:8px;"></canvas>
-                        </div>
-                        <div class="dash-panel" style="flex:1.3;">
-                            <div class="dash-panel-title" data-i18n="dash_keyword_radar">关键词雷达</div>
-                            <div class="dash-panel-code" id="dash-radar-code">K-0</div>
-                            <canvas id="dash-radar" style="width:100%;height:160px;padding:8px;"></canvas>
-                        </div>
-                        <div class="dash-panel" style="flex:1;">
-                            <div class="dash-panel-title" data-i18n="dash_streak">阅读热力</div>
-                            <div id="dash-streak" style="padding:10px;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 底部: 最近阅读 + 书库概览 -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-                    <div class="dash-panel">
-                        <div class="dash-panel-title" data-i18n="dash_recent">最近阅读</div>
-                        <div id="dash-recent" style="padding:12px;"></div>
-                    </div>
-                    <div class="dash-panel">
-                        <div class="dash-panel-title" data-i18n="dash_library_overview">书库概览</div>
-                        <div id="dash-library" style="padding:12px;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ═══ STATS 子页 ═══ -->
-            <div id="dash-stats-page" style="display:none;">
-                <div id="dash-stats-content"></div>
-            </div>
-        </div>
+        <!-- LIBRARY 子页 -->
+        <div id="dash-stats-page" style="display:none;padding:8px"></div>
     </div>
-
     <script>
-        // ── Reading stats tracking ───────────────────────────────────────
-        function getReadingStats() {
-            try { return JSON.parse(localStorage.getItem('readingStats') || '{}'); } catch(e) { return {}; }
-        }
-        function saveReadingStats(stats) {
-            localStorage.setItem('readingStats', JSON.stringify(stats));
-        }
-        function trackReadingSession(sentencesCount) {
-            var stats = getReadingStats();
-            stats.totalSentences = (stats.totalSentences || 0) + sentencesCount;
-            stats.sessionCount = (stats.sessionCount || 0) + 1;
-            stats.lastReadAt = Date.now();
-            // Track reading streak
-            if (!stats.streak) stats.streak = {};
-            var today = new Date().toISOString().slice(0, 10);
-            stats.streak[today] = (stats.streak[today] || 0) + 1;
-            saveReadingStats(stats);
-        }
-        // Hook into startDisplay to track sessions
-        var _dashOriginalStartDisplay = typeof startDisplay !== 'undefined' ? startDisplay : null;
-        if (_dashOriginalStartDisplay) {
-            startDisplay = function() {
-                var result = _dashOriginalStartDisplay.apply(this, arguments);
-                var text = document.getElementById('text-input').value.trim();
-                if (text) {
-                    var count = text.split(/\n\n+/).flatMap(function(p) {
-                        return p.split(/[。！？?!.]+/).filter(function(s) { return s.trim().length > 0; });
-                    }).length;
-                    trackReadingSession(count);
-                    var title = text.substring(0, 80).replace(/[\r\n]+/g, ' ').trim() || '未命名';
-                    var stats = getReadingStats();
-                    if (!stats.books) stats.books = {};
-                    var key = title.substring(0, 40);
-                    if (!stats.books[key]) stats.books[key] = { title: title, sentences: 0, sessions: 0, firstRead: Date.now() };
-                    stats.books[key].sentences += count;
-                    stats.books[key].sessions += 1;
-                    stats.books[key].lastRead = Date.now();
-                    saveReadingStats(stats);
-                }
-                return result;
-            };
+    (function(){
+        // ── SOA Palette ───────────────────────────────────────────────
+        var P={bg:'#050506',panel:'#0A0A0C',subtle:'#131318',accent:'#FFCC33',secondary:'#6FE0FF',brand:'#FF4D9D',ok:'#6BFF8C',warn:'#FFCC33',danger:'#FF4D9D',grid:'#2A2A2F',text:'#EDEDE9',text2:'#B7B7B0',muted:'#6E6E6A'};
+
+        // ── Live ticker ───────────────────────────────────────────────
+        var _pct=34,_rps=24;
+        setInterval(function(){
+            var now=new Date(),h=now.getHours(),m=now.getMinutes(),s=now.getSeconds(),f=Math.floor(now.getMilliseconds()/41);
+            var el=document.getElementById('dash-tc');if(el)el.textContent=pad2(h)+':'+pad2(m)+':'+pad2(s)+':'+pad2(f);
+            if(f===0){_pct=(_pct+1)%101;_rps=22+Math.floor(Math.random()*7);
+                var ep=document.getElementById('dash-pct');if(ep)ep.textContent=_pct+'%';
+                var er=document.getElementById('dash-rps');if(er)er.textContent=_rps+' RPS';
+            }
+        },41);
+        function pad2(n){return n<10?'0'+n:''+n}
+
+        // ── State ────────────────────────────────────────────────────
+        var _quotes=[],_idx=0,_quoteTimer=null,_coverIdx=0,_coverTimer=null,_tocMode='OVERVIEW';
+        var _dashTickPct=34,_dashTickRps=24;
+
+        // ── Helpers ──────────────────────────────────────────────────
+        function loadLib(){try{return JSON.parse(localStorage.getItem('bookLibrary')||'[]')}catch(e){return[]}}
+        function getStats(){try{return JSON.parse(localStorage.getItem('readingStats')||'{}')}catch(e){return{}}}
+        function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+        function fmtRel(ts){var d=Date.now()-ts;if(d<60000)return'刚刚';if(d<3600000)return Math.floor(d/60000)+'分钟前';if(d<86400000)return Math.floor(d/3600000)+'小时前';return Math.floor(d/86400000)+'天前'}
+        function fmtBig(n){if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return''+n}
+
+        // ── PanelFrame ───────────────────────────────────────────────
+        function panelHTML(id,titleZh,title,code,body){
+            var showZh=titleZh?'<span style="color:'+P.text+';font-size:11px;font-weight:700;letter-spacing:0.4px">'+esc(titleZh)+'</span><span style="color:'+P.muted+';font-size:11px;margin:0 5px">|</span>':'';
+            return '<div class="d-panel" style="height:100%;display:flex;flex-direction:column">'+
+                '<div class="d-panel-head"><div class="d-panel-dot"></div><span class="d-panel-code">'+esc(code)+'</span>'+showZh+'<span class="d-panel-title">'+esc(title)+'</span></div>'+
+                '<div class="d-panel-body" id="'+id+'">'+body+'</div>'+
+                '<div class="d-panel-foot"><span class="d-bracket">└</span><span style="margin:0 4px">NC '+esc(code)+' · 002.320</span><span style="flex:1"></span><span class="d-panel-foot-ok">'+Math.floor(Math.random()*999)+' · OK</span><span class="d-bracket" style="margin-left:4px">┘</span></div>'+
+            '</div>';
         }
 
-        // ── Dashboard state ─────────────────────────────────────────────
-        var _dashQuotes = [];
-        var _dashQuoteIdx = 0;
-        var _dashQuoteTimer = null;
-        var _dashCoverIdx = 0;
-        var _dashCoverTimer = null;
+        // ── showDashboard / closeDashboard ───────────────────────────
+        window.showDashboard=function(){
+            var dp=document.getElementById('dashboard-page');if(!dp)return;
+            dp.style.display='block';
+            var sp=document.getElementById('dash-splash');if(sp){sp.style.opacity='1';sp.style.display='flex'}
+            setTimeout(function(){var b=document.getElementById('dash-splash-bar');if(b)b.style.width='100%'},50);
+            setTimeout(function(){if(sp){sp.style.opacity='0';setTimeout(function(){sp.style.display='none'},800)}},2800);
+            try{renderDashboard()}catch(e){console.error('Dashboard render error:',e)}
+        };
+        window.closeDashboard=function(){
+            var dp=document.getElementById('dashboard-page');if(dp)dp.style.display='none';
+            if(_quoteTimer)clearInterval(_quoteTimer);if(_coverTimer)clearInterval(_coverTimer);
+        };
+        window.switchDashTab=function(tab){
+            document.getElementById('dash-tab-main').className='d-tab'+(tab==='main'?' d-tab-sel':'');
+            document.getElementById('dash-tab-stats').className='d-tab'+(tab==='stats'?' d-tab-sel':'');
+            document.getElementById('dash-tab-main-line').style.background=tab==='main'?P.accent:'transparent';
+            document.getElementById('dash-tab-stats-line').style.background=tab==='stats'?P.accent:'transparent';
+            document.getElementById('dash-main-page').style.display=tab==='main'?'flex':'none';
+            document.getElementById('dash-stats-page').style.display=tab==='stats'?'block':'none';
+            if(tab==='stats')renderLibStats();
+        };
 
-        function switchDashTab(btn, tab) {
-            document.querySelectorAll('.dash-tab').forEach(function(t) { t.classList.remove('active'); });
-            btn.classList.add('active');
-            document.getElementById('dash-main-page').style.display = tab === 'dashboard' ? 'block' : 'none';
-            document.getElementById('dash-stats-page').style.display = tab === 'stats' ? 'block' : 'none';
-            if (tab === 'stats') renderDashStats();
+        // ── Main render ──────────────────────────────────────────────
+        function renderDashboard(){
+            var lib=loadLib(),stats=getStats(),recent=JSON.parse(localStorage.getItem('recentBooks')||'[]');
+            // Build quotes from library
+            _quotes=[];
+            lib.forEach(function(b){if(b.text){var sents=b.text.split(/[。！？?!.]\s*/).filter(function(s){return s.trim().length>5});
+                sents.slice(0,10).forEach(function(s){_quotes.push({text:s.trim(),bookTitle:b.title})})}});
+            if(_quotes.length===0&&recent.length>0)_quotes=[{text:'开始阅读，添加书籍到书库即可在此展示书摘',bookTitle:'Mas.Reader'}];
+            if(_quotes.length===0)_quotes=[{text:'书库为空，请先导入书籍',bookTitle:'Mas.Reader'}];
+            _idx=0;
+
+            renderTocPanel(lib,stats);
+            renderCoverPanel(lib,recent);
+            renderHeatPanel(lib);
+            renderQuotePanel();
+            renderBarPanel();
+            renderRadarPanel();
+            renderRingsPanel(stats);
+
+            // Auto-advance quotes
+            if(_quoteTimer)clearInterval(_quoteTimer);
+            if(_quotes.length>1){_quoteTimer=setInterval(function(){_idx=(_idx+1)%_quotes.length;renderQuotePanel()},6000)}
+            // Auto-rotate covers
+            var covers=lib.map(function(b){return{title:b.title}});if(covers.length===0)covers=recent.map(function(b){return{title:b.title}});
+            if(_coverTimer)clearInterval(_coverTimer);
+            _coverIdx=0;
+            if(covers.length>1){_coverTimer=setInterval(function(){_coverIdx=(_coverIdx+1)%covers.length;renderCoverPanel(lib,recent)},2500)}
         }
 
-        function showDashboard() {
-            document.getElementById('dashboard-page').style.display = 'block';
-            // Splash screen
-            var splash = document.getElementById('dash-splash');
-            splash.style.opacity = '1';
-            splash.style.display = 'flex';
-            setTimeout(function() {
-                document.getElementById('dash-splash-bar').style.width = '100%';
-            }, 50);
-            setTimeout(function() {
-                splash.style.opacity = '0';
-                setTimeout(function() { splash.style.display = 'none'; }, 800);
-            }, 2800);
-            try { renderDashboard(); } catch(e) { console.error('Dashboard render error:', e); }
+        // ── TOC Panel ────────────────────────────────────────────────
+        function renderTocPanel(lib,stats){
+            var el=document.getElementById('dash-toc-panel');if(!el)return;
+            var books=stats.books||{};
+            var body='';
+            // Mode toggle
+            body+='<div style="display:flex;margin-bottom:8px">';
+            body+='<div style="flex:1;text-align:center;padding:4px;cursor:pointer;font-size:10px;letter-spacing:0.8px;'+(_tocMode==='TOC'?'background:rgba(255,204,51,0.15);color:'+P.accent+';font-weight:600':'color:'+P.text2)+'" onclick="_setTocMode(\'TOC\')">目录 TOC</div>';
+            body+='<div style="flex:1;text-align:center;padding:4px;cursor:pointer;font-size:10px;letter-spacing:0.8px;'+(_tocMode==='OVERVIEW'?'background:rgba(255,204,51,0.15);color:'+P.accent+';font-weight:600':'color:'+P.text2)+'" onclick="_setTocMode(\'OVERVIEW\')">全览 OVERVIEW</div>';
+            body+='</div>';
+            if(_tocMode==='TOC'){
+                // Group quotes by bookTitle as chapters
+                var chapters=[],seen={};
+                _quotes.forEach(function(q,i){if(!seen[q.bookTitle]){seen[q.bookTitle]=chapters.length;chapters.push({title:q.bookTitle,start:i,count:1})}else{chapters[seen[q.bookTitle]].count++}});
+                var curCh=0;for(var c=0;c<chapters.length;c++){if(_idx>=chapters[c].start&&_idx<chapters[c].start+chapters[c].count){curCh=c;break}}
+                body+='<div style="overflow-y:auto;max-height:100%">';
+                chapters.forEach(function(ch,i){
+                    var active=i===curCh;
+                    body+='<div class="d-toc-item'+(active?' d-toc-item-active':'')+'" onclick="_selectQuote('+ch.start+')">';
+                    body+='<span class="d-toc-num" style="color:'+(active?P.brand:P.muted)+'">C'+pad2(i+1)+'</span>';
+                    body+='<span class="d-toc-title" style="color:'+(active?P.text:P.text2)+';font-weight:'+(active?700:400)+'">'+esc(ch.title.substring(0,28))+'</span>';
+                    body+='<span class="d-toc-count">'+ch.count+' entries</span>';
+                    if(active)body+='<span style="color:'+P.warn+';font-size:12px">●</span>';
+                    body+='</div>';
+                });
+                body+='</div>';
+            }else{
+                body+='<div style="overflow-y:auto;max-height:100%">';
+                _quotes.forEach(function(q,i){
+                    var active=i===_idx;
+                    body+='<div style="padding:6px 8px;display:flex;gap:8px;align-items:flex-start;cursor:pointer;border-radius:6px;'+(active?'background:linear-gradient(90deg,rgba(255,204,51,0.35),rgba(255,204,51,0.10),transparent);border:0.8px solid rgba(255,204,51,0.6)':'')+'" onclick="_selectQuote('+i+')">';
+                    body+='<span style="font-size:9px;color:'+(active?P.brand:P.muted)+';letter-spacing:0.4px;min-width:28px;padding-top:1px">'+pad3(i+1)+'</span>';
+                    body+='<span style="font-size:12px;color:'+(active?P.text:P.text2+';opacity:0.85')+';font-weight:'+(active?700:400)+';letter-spacing:0.2px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'+(active?'max-height:60px;white-space:normal':'')+'">'+esc(q.text.substring(0,active?200:80))+'</span>';
+                    body+='</div>';
+                });
+                body+='</div>';
+            }
+            el.innerHTML=panelHTML('dash-toc-inner','目录','Full Overview','NC 802',body);
         }
-        function closeDashboard() {
-            document.getElementById('dashboard-page').style.display = 'none';
-            if (_dashQuoteTimer) clearInterval(_dashQuoteTimer);
-            if (_dashCoverTimer) clearInterval(_dashCoverTimer);
+        window._setTocMode=function(m){_tocMode=m;renderTocPanel(loadLib(),getStats())};
+        window._selectQuote=function(i){_idx=i;renderQuotePanel();renderTocPanel(loadLib(),getStats())};
+        function pad3(n){return n<10?'00'+n:n<100?'0'+n:''+n}
+
+        // ── CoverFlow Panel ──────────────────────────────────────────
+        function renderCoverPanel(lib,recent){
+            var el=document.getElementById('dash-cover-panel');if(!el)return;
+            var covers=lib.map(function(b){return{title:b.title}});if(covers.length===0)covers=recent.map(function(b){return{title:b.title}});
+            var n=covers.length||1;
+            var colors=['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e84393'];
+            var body='<div style="position:relative;height:80px;display:flex;align-items:center;justify-content:center">';
+            if(covers.length>0){for(var off=-2;off<=2;off++){
+                var ci=((_coverIdx+off)%n+n)%n;var c=covers[ci];var scale=1-Math.abs(off)*0.18;var alpha=1-Math.abs(off)*0.3;var tx=off*42;var z=10-Math.abs(off);
+                var col=colors[ci%colors.length];var act=off===0;
+                body+='<div class="d-cover'+(act?' d-cover-active':'')+'" style="transform:translateX('+tx+'px) scale('+scale+');opacity:'+alpha+';z-index:'+z+';background:'+col+';left:calc(50% - 22px);top:8px;'+(act?'box-shadow:0 0 12px '+col+'50':'')+'">'+esc((c.title||'?').substring(0,2))+'</div>';
+            }}
+            body+='<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:'+P.accent+';letter-spacing:0.6px">CURRENT ▸ '+esc((covers[_coverIdx]||{title:''}).title.substring(0,30))+'</div>';
+            body+='</div>';
+            el.innerHTML=panelHTML('dash-cover-inner','书架','Shelf','SB 01-1',body);
         }
 
-        // ── Keyword extraction (mirrors Android端 logic) ───────────────
-        var _dashStopChars = new Set('的了是在和也就与或而不没有一二三为以于从到把被给向让使着过所其此之地得人事时后前上下里要可能须再又已才只'.split(''));
-        var _dashStopWords = new Set(['the','and','for','with','that','this','from','have','but','not','are','was','were','you','his','her','she','him']);
-        function extractDashKeywords(s, max) {
-            if (!s) return [];
-            max = max || 5;
-            var cleaned = s.replace(/[!"#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~　-〿＀-￯""''\d]/g, ' ');
-            var freq = {};
-            // English words
-            cleaned.match(/[A-Za-z]{3,}/g).forEach(function(w) {
-                w = w.toLowerCase();
-                if (!_dashStopWords.has(w)) freq[w] = (freq[w] || 0) + 2;
+        // ── Chapter Heatmap Panel ────────────────────────────────────
+        function renderHeatPanel(lib){
+            var el=document.getElementById('dash-heat-panel');if(!el)return;
+            var body='';
+            if(lib.length===0){body='<div style="text-align:center;padding:20px;color:'+P.muted+';font-size:11px">书库为空</div>'}
+            else{
+                var maxCh=1;lib.forEach(function(b){var c=(b.text||'').split(/\n\n+/).length;if(c>maxCh)maxCh=c});
+                var maxLen=1;lib.forEach(function(b){var c=(b.text||'').length;if(c>maxLen)maxLen=c});
+                var vis=lib.slice(0,8);
+                body+='<div style="display:flex;height:100%">';
+                // Left: book names
+                body+='<div style="width:100px;display:flex;flex-direction:column;justify-content:space-evenly;padding-right:4px">';
+                vis.forEach(function(b){
+                    body+='<div style="display:flex;align-items:center"><div style="width:3px;height:10px;background:'+P.accent+';opacity:0.4"></div><span style="font-size:9px;color:'+P.text2+';margin-left:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">'+esc(b.title.substring(0,12))+'</span></div>';
+                });
+                body+='</div>';
+                // Right: heatmap grid using canvas
+                body+='<canvas id="dash-heat-canvas" style="flex:1;height:100%"></canvas>';
+                body+='</div>';
+            }
+            el.innerHTML=panelHTML('dash-heat-inner','章节密度图','Chapter Density','MAP',body);
+            // Draw heatmap
+            if(lib.length>0)setTimeout(function(){drawHeatmap(lib)},50);
+        }
+        function drawHeatmap(lib){
+            var c=document.getElementById('dash-heat-canvas');if(!c)return;
+            var dpr=window.devicePixelRatio||1;var rect=c.getBoundingClientRect();
+            c.width=rect.width*dpr;c.height=rect.height*dpr;
+            var ctx=c.getContext('2d');ctx.scale(dpr,dpr);
+            var w=rect.width,h=rect.height,vis=lib.slice(0,8);
+            var maxLen=1;vis.forEach(function(b){if((b.text||'').length>maxLen)maxLen=(b.text||'').length});
+            var rowH=h/vis.length;
+            vis.forEach(function(b,i){
+                var chunks=(b.text||'').split(/\n\n+/);var cellW=w/chunks.length;
+                chunks.forEach(function(ch,j){
+                    var ratio=Math.max(0.05,Math.min(1,ch.length/maxLen));
+                    ctx.fillStyle='rgba(255,204,51,'+(0.18+0.7*ratio)+')';
+                    ctx.beginPath();ctx.roundRect(j*cellW+1,i*rowH+2,cellW-2,rowH-4,2);ctx.fill();
+                });
             });
-            // Chinese 3-grams and 2-grams
-            var zhChunks = cleaned.split(/\s+/);
-            zhChunks.forEach(function(seg) {
-                var zh = seg.replace(/[^一-鿿]/g, '');
-                for (var i = 0; i <= zh.length - 3; i++) {
-                    var tri = zh.substring(i, i + 3);
-                    var penalty = 0;
-                    for (var c = 0; c < 3; c++) { if (_dashStopChars.has(tri[c])) penalty++; }
-                    if (penalty <= 1) freq[tri] = (freq[tri] || 0) + (3 - penalty);
+        }
+
+        // ── Quote Center Panel ───────────────────────────────────────
+        function renderQuotePanel(){
+            var el=document.getElementById('dash-quote-panel');if(!el)return;
+            var n=_quotes.length;var cur=_quotes[_idx% n]||{text:'',bookTitle:''};
+            var prev=_quotes[(_idx-1+n)%n]||{text:''};var next=_quotes[(_idx+1)%n]||{text:''};
+            var body='';
+            // Prev ghost
+            body+='<div class="d-ghost" onclick="window._selectQuote('+((_idx-1+n)%n)+')"><span style="font-size:8px;color:'+P.muted+';letter-spacing:0.4px;margin-right:10px">Q'+pad3(((_idx-1+n)%n)+1)+'</span>'+esc(prev.text.substring(0,60))+(prev.text.length>60?'...':'')+'</div>';
+            // Hero
+            body+='<div class="d-hero">';
+            body+='<span class="d-hero-q d-hero-q-l">“</span>';
+            body+='<span class="d-hero-q d-hero-q-r">”</span>';
+            // Top line: dot + code + gradient line
+            body+='<div style="display:flex;align-items:center;margin-bottom:20px">';
+            body+='<div style="width:7px;height:7px;border-radius:50%;background:'+P.brand+'"></div>';
+            body+='<span style="font-size:11px;font-weight:900;color:'+P.brand+';letter-spacing:1px;margin-left:8px">Q'+pad3(_idx+1)+'</span>';
+            body+='<div style="flex:1;height:1px;margin-left:12px;background:linear-gradient(90deg,rgba(255,204,51,0.6),transparent)"></div>';
+            body+='</div>';
+            // Main text
+            body+='<div class="d-hero-text">'+esc(cur.text)+'</div>';
+            // Bottom line
+            body+='<div style="display:flex;align-items:center;margin-top:18px">';
+            body+='<div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,77,157,0.6))"></div>';
+            body+='<span style="font-size:11px;font-weight:700;color:'+P.brand+';letter-spacing:1px;margin-left:10px">— '+esc(cur.bookTitle.substring(0,26))+'</span>';
+            body+='</div>';
+            body+='</div>';
+            // Next ghost
+            body+='<div class="d-ghost" onclick="window._selectQuote('+((_idx+1)%n)+')"><span style="font-size:8px;color:'+P.muted+';letter-spacing:0.4px;margin-right:10px">Q'+pad3(((_idx+1)%n)+1)+'</span>'+esc(next.text.substring(0,60))+(next.text.length>60?'...':'')+'</div>';
+            el.innerHTML=panelHTML('dash-quote-inner','书摘流','Quote Stream','Q-'+pad3(_idx+1)+'/'+pad3(n),body);
+        }
+
+        // ── Chapter Bar Chart ────────────────────────────────────────
+        function renderBarPanel(){
+            var el=document.getElementById('dash-bar-panel');if(!el)return;
+            el.innerHTML=panelHTML('dash-bar-inner','章节负载','Chapter Load','FP1','<canvas id="dash-bar-canvas" style="width:100%;height:100%"></canvas>');
+            setTimeout(function(){drawBarChart()},50);
+        }
+        function drawBarChart(){
+            var c=document.getElementById('dash-bar-canvas');if(!c)return;
+            var dpr=window.devicePixelRatio||1;var rect=c.getBoundingClientRect();
+            c.width=rect.width*dpr;c.height=rect.height*dpr;
+            var ctx=c.getContext('2d');ctx.scale(dpr,dpr);
+            var w=rect.width,h=rect.height,n=10;var bars=[];
+            for(var i=0;i<n;i++)bars.push(0.4+((i*1.7)%1)*0.9);
+            var progress=_quotes.length>0?(_idx+1)/_quotes.length:0;
+            var gap=w*0.025,bw=(w-gap*(n+1))/n,maxH=h*0.78;
+            var filledN=Math.floor(n*progress);
+            bars.forEach(function(f,i){
+                var bh=maxH*Math.min(f,1);var x=gap+i*(bw+gap);var y=h-bh-12;
+                ctx.fillStyle='rgba(42,42,47,0.6)';ctx.beginPath();ctx.roundRect(x,y,bw,bh,3);ctx.fill();
+                var col=i<filledN?P.warn:i===filledN?P.accent:null;
+                if(col){var partial=i===filledN?(n*progress-filledN):1;var abh=bh*partial;var ay=y+bh-abh;
+                    var grad=ctx.createLinearGradient(x,ay,x,ay+abh);grad.addColorStop(0,col+'8c');grad.addColorStop(0.5,col);grad.addColorStop(1,col+'d9');
+                    ctx.fillStyle=grad;ctx.beginPath();ctx.roundRect(x,ay,bw,abh,3);ctx.fill();
+                    ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x+1,ay+1);ctx.lineTo(x+bw-1,ay+1);ctx.stroke();
+                    if(i===filledN){ctx.strokeStyle=col+'99';ctx.lineWidth=1.5;ctx.beginPath();ctx.roundRect(x-1,ay-1,bw+2,abh+2,3);ctx.stroke()}
                 }
-                for (var i = 0; i <= zh.length - 2; i++) {
-                    var bi = zh.substring(i, i + 2);
-                    if (_dashStopChars.has(bi[0]) || _dashStopChars.has(bi[1])) continue;
-                    freq[bi] = (freq[bi] || 0) + 1;
-                }
+                ctx.fillStyle='rgba(255,255,255,0.25)';ctx.beginPath();ctx.arc(x+bw/2,h-4,1.4,0,Math.PI*2);ctx.fill();
             });
-            var entries = Object.entries(freq).filter(function(e) { return e[0].trim().length > 0; });
-            entries.sort(function(a, b) { return b[1] - a[1]; });
-            var result = entries.slice(0, max).map(function(e) { return { word: e[0], weight: e[1] }; });
-            if (result.length === 0) {
-                // Fallback
-                var chars = s.replace(/[^一-鿿A-Za-z]/g, '');
-                for (var i = 0; i < Math.min(max, Math.floor(chars.length / 2)); i++) {
-                    result.push({ word: chars.substring(i * 2, i * 2 + 2), weight: max - i });
-                }
-            }
-            return result;
+            ctx.fillStyle=P.warn;ctx.font='bold 12px JetBrains Mono,monospace';ctx.fillText(Math.floor(progress*100)+'%',4,h-2);
+            ctx.fillStyle='rgba(255,255,255,0.3)';ctx.font='9px JetBrains Mono,monospace';ctx.fillText('READ · '+(_idx+1)+'/'+_quotes.length,40,h-2);
         }
 
-        // ── Ring indicators (canvas) ────────────────────────────────────
-        function drawDashRing(canvas, ratio, color, value, label) {
-            var dpr = window.devicePixelRatio || 1;
-            canvas.width = 52 * dpr;
-            canvas.height = 52 * dpr;
-            var ctx = canvas.getContext('2d');
-            ctx.scale(dpr, dpr);
-            var cx = 26, cy = 26, r = 20, sw = 4;
-            // Halo glow
-            ctx.beginPath();
-            ctx.arc(cx, cy, r + 4, 0, Math.PI * 2);
-            ctx.fillStyle = color + '26';
-            ctx.fill();
-            // Background ring
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-            ctx.lineWidth = sw;
-            ctx.stroke();
-            // Foreground arc
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(ratio, 1));
-            ctx.strokeStyle = color;
-            ctx.lineWidth = sw;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-            // Glow
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(ratio, 1));
-            ctx.strokeStyle = color + '70';
-            ctx.lineWidth = sw + 4;
-            ctx.stroke();
+        // ── Keyword Radar ────────────────────────────────────────────
+        function renderRadarPanel(){
+            var el=document.getElementById('dash-radar-panel');if(!el)return;
+            var cur=_quotes[_idx%_quotes.length]||{text:''};
+            var kw=extractKW(cur.text,5);
+            el.innerHTML=panelHTML('dash-radar-inner','关键词雷达','Keyword Radar','K-'+kw.length,'<canvas id="dash-radar-canvas" style="width:100%;height:100%"></canvas>');
+            setTimeout(function(){drawRadar(kw)},50);
         }
-
-        // ── Canvas roundRect polyfill ──────────────────────────────────
-        function _dashRoundRect(ctx, x, y, w, h, r) {
-            ctx.moveTo(x + r, y);
-            ctx.lineTo(x + w - r, y);
-            ctx.arcTo(x + w, y, x + w, y + r, r);
-            ctx.lineTo(x + w, y + h - r);
-            ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
-            ctx.lineTo(x + r, y + h);
-            ctx.arcTo(x, y + h, x, y + h - r, r);
-            ctx.lineTo(x, y + r);
-            ctx.arcTo(x, y, x + r, y, r);
-            ctx.closePath();
-        }
-
-        // ── Bar chart (canvas) ──────────────────────────────────────────
-        function drawDashBarChart(canvas, totalSentences, currentIdx) {
-            var dpr = window.devicePixelRatio || 1;
-            var rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = 140 * dpr;
-            var ctx = canvas.getContext('2d');
-            ctx.scale(dpr, dpr);
-            var w = rect.width, h = 140;
-            var n = 10;
-            var bars = [];
-            for (var i = 0; i < n; i++) bars.push(0.4 + ((i * 1.7) % 1) * 0.9);
-            var progress = totalSentences > 0 ? (currentIdx + 1) / totalSentences : 0;
-            var gap = w * 0.025, bw = (w - gap * (n + 1)) / n, maxH = h * 0.78;
-            var filledN = Math.floor(n * progress);
-            for (var i = 0; i < n; i++) {
-                var bh = maxH * Math.min(bars[i], 1);
-                var x = gap + i * (bw + gap);
-                var y = h - bh - 10;
-                // Background bar
-                ctx.fillStyle = 'rgba(255,255,255,0.06)';
-                ctx.beginPath();
-                _dashRoundRect(ctx, x, y, bw, bh, 3);
-                ctx.fill();
-                if (i < filledN || i === filledN) {
-                    var color = i < filledN ? '#ff6b6b' : '#64c8ff';
-                    var partial = i === filledN ? (n * progress - filledN) : 1;
-                    var activeBH = bh * partial;
-                    var activeY = y + bh - activeBH;
-                    // Gradient fill
-                    var grad = ctx.createLinearGradient(x, activeY, x, activeY + activeBH);
-                    grad.addColorStop(0, color + '8c');
-                    grad.addColorStop(0.5, color);
-                    grad.addColorStop(1, color + 'd9');
-                    ctx.fillStyle = grad;
-                    ctx.beginPath();
-                    _dashRoundRect(ctx, x, activeY, bw, activeBH, 3);
-                    ctx.fill();
-                    // Top highlight
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = 1.5;
-                    ctx.beginPath();
-                    ctx.moveTo(x + 1, activeY + 1);
-                    ctx.lineTo(x + bw - 1, activeY + 1);
-                    ctx.stroke();
-                    // Current bar glow
-                    if (i === filledN) {
-                        ctx.strokeStyle = color + '99';
-                        ctx.lineWidth = 1.5;
-                        ctx.beginPath();
-                        _dashRoundRect(ctx, x - 1, activeY - 1, bw + 2, activeBH + 2, 3);
-                        ctx.stroke();
-                    }
-                }
-                // Bottom dot
-                ctx.fillStyle = 'rgba(255,255,255,0.25)';
-                ctx.beginPath();
-                ctx.arc(x + bw / 2, h - 4, 1.5, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            // Percentage text
-            ctx.fillStyle = '#ff6b6b';
-            ctx.font = 'bold 11px ' + getComputedStyle(document.body).getPropertyValue('--font-mono').trim() || 'monospace';
-            ctx.fillText(Math.floor(progress * 100) + '%', 4, h - 2);
-            ctx.fillStyle = 'rgba(255,255,255,0.3)';
-            ctx.font = '9px monospace';
-            ctx.fillText('READ · ' + (currentIdx + 1) + '/' + totalSentences, 40, h - 2);
-        }
-
-        // ── Radar chart (canvas) ────────────────────────────────────────
-        function drawDashRadar(canvas, keywords) {
-            var dpr = window.devicePixelRatio || 1;
-            var rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = 160 * dpr;
-            var ctx = canvas.getContext('2d');
-            ctx.scale(dpr, dpr);
-            var w = rect.width, h = 160;
-            var cx = w / 2, cy = h / 2;
-            var r = Math.min(w, h) / 2.5;
-            var n = Math.max(keywords.length, 3);
-            // Grid rings
-            for (var ring = 1; ring <= 4; ring++) {
-                var rr = r * ring / 4;
-                ctx.beginPath();
-                for (var i = 0; i < n; i++) {
-                    var angle = -Math.PI / 2 + i * 2 * Math.PI / n;
-                    var px = cx + rr * Math.cos(angle);
-                    var py = cy + rr * Math.sin(angle);
-                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-                }
-                ctx.closePath();
-                ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-                ctx.lineWidth = 0.8;
-                ctx.stroke();
-            }
-            // Axis lines
-            for (var i = 0; i < n; i++) {
-                var angle = -Math.PI / 2 + i * 2 * Math.PI / n;
-                ctx.beginPath();
-                ctx.moveTo(cx, cy);
-                ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
-                ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-            }
-            if (keywords.length > 0) {
-                var maxVal = Math.max.apply(null, keywords.map(function(k) { return k.weight; }));
-                // Data polygon fill
-                ctx.beginPath();
-                for (var i = 0; i < n; i++) {
-                    var angle = -Math.PI / 2 + i * 2 * Math.PI / n;
-                    var ratio = (keywords[i] ? keywords[i].weight : 0) / maxVal;
-                    var rr = r * (0.25 + 0.75 * ratio);
-                    var px = cx + rr * Math.cos(angle);
-                    var py = cy + rr * Math.sin(angle);
-                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-                }
-                ctx.closePath();
-                ctx.fillStyle = 'rgba(100,200,255,0.15)';
-                ctx.fill();
-                ctx.strokeStyle = '#64c8ff';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-                // Vertices
-                for (var i = 0; i < n; i++) {
-                    var angle = -Math.PI / 2 + i * 2 * Math.PI / n;
-                    var ratio = (keywords[i] ? keywords[i].weight : 0) / maxVal;
-                    var rr = r * (0.25 + 0.75 * ratio);
-                    ctx.beginPath();
-                    ctx.arc(cx + rr * Math.cos(angle), cy + rr * Math.sin(angle), 3, 0, Math.PI * 2);
-                    ctx.fillStyle = '#ff6b6b';
-                    ctx.fill();
-                }
-                // Labels
-                ctx.fillStyle = 'var(--text-primary)';
-                ctx.font = '10px ' + (getComputedStyle(document.body).getPropertyValue('--font-mono').trim() || 'monospace');
-                ctx.textAlign = 'center';
-                for (var i = 0; i < n; i++) {
-                    var angle = -Math.PI / 2 + i * 2 * Math.PI / n;
-                    var lr = r * 1.2;
-                    var lx = cx + lr * Math.cos(angle);
-                    var ly = cy + lr * Math.sin(angle) + 4;
-                    ctx.fillStyle = 'rgba(255,255,255,0.7)';
-                    ctx.fillText(keywords[i] ? keywords[i].word : '—', lx, ly);
-                }
+        function drawRadar(kw){
+            var c=document.getElementById('dash-radar-canvas');if(!c)return;
+            var dpr=window.devicePixelRatio||1;var rect=c.getBoundingClientRect();
+            c.width=rect.width*dpr;c.height=rect.height*dpr;
+            var ctx=c.getContext('2d');ctx.scale(dpr,dpr);
+            var w=rect.width,h=rect.height,cx=w/2,cy=h/2,r=Math.min(w,h)/2.4;
+            var n=Math.max(kw.length,3);
+            for(var ring=1;ring<=4;ring++){var rr=r*ring/4;ctx.beginPath();
+                for(var i=0;i<n;i++){var a=-Math.PI/2+i*2*Math.PI/n;var px=cx+rr*Math.cos(a),py=cy+rr*Math.sin(a);i===0?ctx.moveTo(px,py):ctx.lineTo(px,py)}
+                ctx.closePath();ctx.strokeStyle='rgba(42,42,47,0.8)';ctx.lineWidth=0.8;ctx.stroke()}
+            for(var i=0;i<n;i++){var a=-Math.PI/2+i*2*Math.PI/n;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=0.5;ctx.stroke()}
+            if(kw.length>0){var maxV=Math.max.apply(null,kw.map(function(k){return k.w}));
+                ctx.beginPath();for(var i=0;i<n;i++){var a=-Math.PI/2+i*2*Math.PI/n;var ratio=(kw[i]?kw[i].w:0)/maxV;var rr=r*(0.25+0.75*ratio);var px=cx+rr*Math.cos(a),py=cy+rr*Math.sin(a);i===0?ctx.moveTo(px,py):ctx.lineTo(px,py)}
+                ctx.closePath();ctx.fillStyle='rgba(111,224,255,0.15)';ctx.fill();ctx.strokeStyle=P.secondary;ctx.lineWidth=1.6;ctx.stroke();
+                for(var i=0;i<n;i++){var a=-Math.PI/2+i*2*Math.PI/n;var ratio=(kw[i]?kw[i].w:0)/maxV;var rr=r*(0.25+0.75*ratio);ctx.beginPath();ctx.arc(cx+rr*Math.cos(a),cy+rr*Math.sin(a),3,0,Math.PI*2);ctx.fillStyle=P.warn;ctx.fill()}
+                ctx.textAlign='center';ctx.font='10px JetBrains Mono,monospace';
+                for(var i=0;i<n;i++){var a=-Math.PI/2+i*2*Math.PI/n;var lr=r*1.15;ctx.fillStyle='rgba(255,255,255,0.7)';ctx.fillText(kw[i]?kw[i].word:'—',cx+lr*Math.cos(a),cy+lr*Math.sin(a)+4)}
             }
         }
-
-        // ── Reading streak heatmap ──────────────────────────────────────
-        function renderDashStreak(container, streak) {
-            var html = '<div class="dash-streak-grid">';
-            var today = new Date();
-            // Show last 28 days (4 weeks)
-            for (var i = 27; i >= 0; i--) {
-                var d = new Date(today);
-                d.setDate(d.getDate() - i);
-                var key = d.toISOString().slice(0, 10);
-                var active = streak && streak[key];
-                var isToday = i === 0;
-                html += '<div class="dash-streak-cell' + (active ? ' active' : '') + (isToday ? ' today' : '') + '" title="' + key + (active ? ' (' + active + '次)' : '') + '"></div>';
-            }
-            html += '</div>';
-            html += '<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.5rem;color:rgba(255,255,255,0.25);letter-spacing:1px;">';
-            html += '<span>4周前</span><span>今天</span></div>';
-            container.innerHTML = html;
+        var _stopChars='的了是在和也就与或而不没有一二三为以于从到把被给向让使着过所其此之地得人事时后前上下里要可能须再又已才只';
+        var _stopWords={'the':1,'and':1,'for':1,'with':1,'that':1,'this':1,'from':1,'have':1,'but':1,'not':1,'are':1,'was':1,'were':1,'you':1,'his':1,'her':1,'she':1,'him':1};
+        function extractKW(s,max){if(!s)return[];max=max||5;
+            var cleaned=s.replace(/[!"#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~　-〿＀-￯“”‘’\d]/g,' ');
+            var freq={};
+            cleaned.match(/[A-Za-z]{3,}/g)||[];var en=cleaned.match(/[A-Za-z]{3,}/g);if(en)en.forEach(function(w){w=w.toLowerCase();if(!_stopWords[w])freq[w]=(freq[w]||0)+2});
+            cleaned.split(/\s+/).forEach(function(seg){var zh=seg.replace(/[^一-鿿]/g,'');
+                for(var i=0;i<=zh.length-3;i++){var tri=zh.substring(i,i+3),pen=0;for(var c=0;c<3;c++){if(_stopChars.indexOf(tri[c])>=0)pen++}if(pen<=1)freq[tri]=(freq[tri]||0)+(3-pen)}
+                for(var i=0;i<=zh.length-2;i++){var bi=zh.substring(i,i+2);if(_stopChars.indexOf(bi[0])>=0||_stopChars.indexOf(bi[1])>=0)continue;freq[bi]=(freq[bi]||0)+1}
+            });
+            var entries=[];for(var k in freq)if(freq.hasOwnProperty(k)&&k.trim().length>0)entries.push({word:k,w:freq[k]});
+            entries.sort(function(a,b){return b.w-a.w});var res=entries.slice(0,max);
+            if(res.length===0){var chars=s.replace(/[^一-鿿A-Za-z]/g,'');for(var i=0;i<Math.min(max,Math.floor(chars.length/2));i++)res.push({word:chars.substring(i*2,i*2+2),w:max-i})}
+            return res;
         }
 
-        // ── Mini CoverFlow ──────────────────────────────────────────────
-        function renderDashCovers(covers) {
-            var container = document.getElementById('dash-coverflow');
-            if (!covers || covers.length === 0) {
-                container.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:0.7rem;">书架为空</div>';
-                return;
-            }
-            var colors = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e84393'];
-            function renderCoverView() {
-                var n = covers.length;
-                var html = '';
-                // Show 5 covers (-2 to +2)
-                for (var off = -2; off <= 2; off++) {
-                    var idx = ((_dashCoverIdx + off) % n + n) % n;
-                    var cover = covers[idx];
-                    var scale = 1 - Math.abs(off) * 0.18;
-                    var alpha = 1 - Math.abs(off) * 0.3;
-                    var tx = off * 42;
-                    var zIdx = 10 - Math.abs(off);
-                    var color = colors[idx % colors.length];
-                    var isActive = off === 0;
-                    html += '<div class="dash-cover-card" style="transform:translateX(' + tx + 'px) scale(' + scale + ');opacity:' + alpha + ';z-index:' + zIdx + ';background:' + color + ';left:calc(50% - 24px);top:10px;' + (isActive ? 'border-color:var(--accent);box-shadow:0 0 12px ' + color + '50;' : '') + '">' +
-                        (cover.title || '?').substring(0, 2) + '</div>';
-                }
-                html += '<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:0.6rem;color:var(--accent);letter-spacing:1px;font-family:var(--font-mono),monospace;">CURRENT ▸ ' + (covers[_dashCoverIdx].title || '').substring(0, 20) + '</div>';
-                container.innerHTML = html;
-            }
-            renderCoverView();
-            if (_dashCoverTimer) clearInterval(_dashCoverTimer);
-            if (covers.length > 1) {
-                _dashCoverTimer = setInterval(function() {
-                    _dashCoverIdx = (_dashCoverIdx + 1) % covers.length;
-                    renderCoverView();
-                }, 2500);
-            }
-        }
-
-        // ── Quote stream ───────────────────────────────────────────────
-        function dashQuoteNav(dir) {
-            if (_dashQuotes.length === 0) return;
-            _dashQuoteIdx = (_dashQuoteIdx + dir + _dashQuotes.length) % _dashQuotes.length;
-            renderDashQuote();
-            // Reset auto-advance timer
-            if (_dashQuoteTimer) clearInterval(_dashQuoteTimer);
-            _dashQuoteTimer = setInterval(function() {
-                _dashQuoteIdx = (_dashQuoteIdx + 1) % _dashQuotes.length;
-                renderDashQuote();
-            }, 6000);
-        }
-        function renderDashQuote() {
-            var n = _dashQuotes.length;
-            if (n === 0) {
-                document.getElementById('dash-quote-text').textContent = '暂无书摘，请先添加书籍';
-                document.getElementById('dash-quote-attr').textContent = '';
-                document.getElementById('dash-quote-prev').textContent = '';
-                document.getElementById('dash-quote-next').textContent = '';
-                return;
-            }
-            var cur = _dashQuotes[_dashQuoteIdx];
-            var prev = _dashQuotes[(_dashQuoteIdx - 1 + n) % n];
-            var next = _dashQuotes[(_dashQuoteIdx + 1) % n];
-            document.getElementById('dash-quote-text').textContent = cur.text || '';
-            document.getElementById('dash-quote-attr').textContent = '— ' + (cur.bookTitle || '').substring(0, 26);
-            document.getElementById('dash-quote-prev').textContent = prev.text ? prev.text.substring(0, 60) + '...' : '';
-            document.getElementById('dash-quote-next').textContent = next.text ? next.text.substring(0, 60) + '...' : '';
-            document.getElementById('dash-quote-code').textContent = 'Q-' + String(_dashQuoteIdx + 1).padStart(3, '0');
-            // Draw radar with current quote keywords
-            var keywords = extractDashKeywords(cur.text, 5);
-            var radarCanvas = document.getElementById('dash-radar');
-            if (radarCanvas) drawDashRadar(radarCanvas, keywords);
-            document.getElementById('dash-radar-code').textContent = 'K-' + keywords.length;
-        }
-
-        // ── Main render ────────────────────────────────────────────────
-        function renderDashboard() {
-            var stats = getReadingStats();
-            var totalSentences = stats.totalSentences || 0;
-            var sessionCount = stats.sessionCount || 0;
-            var books = stats.books || {};
-            var bookCount = Object.keys(books).length;
-            var recentBooks = JSON.parse(localStorage.getItem('recentBooks') || '[]');
-            var library = loadLibrary();
-
-            // ── 4 Ring indicators ──
-            var ringsData = [
-                { label: 'SENTENCES', value: totalSentences.toLocaleString(), ratio: Math.min(totalSentences / 1000, 1), color: '#ff6b6b' },
-                { label: 'SESSIONS', value: String(sessionCount), ratio: Math.min(sessionCount / 50, 1), color: '#64c8ff' },
-                { label: 'BOOKS', value: String(Math.max(bookCount, library.length)), ratio: Math.min(Math.max(bookCount, library.length) / 20, 1), color: '#ffd93d' },
-                { label: 'STREAK', value: (stats.streak ? Object.keys(stats.streak).length : 0) + 'd', ratio: Math.min((stats.streak ? Object.keys(stats.streak).length : 0) / 30, 1), color: '#6bcb77' }
+        // ── Device Rings ─────────────────────────────────────────────
+        function renderRingsPanel(stats){
+            var el=document.getElementById('dash-rings-panel');if(!el)return;
+            var lib=loadLib();var total=_quotes.length||1;var progress=(_idx+1)/total;
+            var sessions=stats.sessionCount||0;var streak=stats.streak?Object.keys(stats.streak).length:0;
+            // Simulate device-like values
+            var tempC=30+Math.floor(streak*0.5);if(tempC>45)tempC=45;
+            var cpuPct=Math.min(0.95,sessions*0.05+0.1);
+            var memPct=Math.min(0.9,lib.length*0.08+0.15);
+            var etaMin=Math.max(1,Math.floor((total-_idx)*0.5));
+            var tempR=((tempC-25)/25);if(tempR<0)tempR=0;if(tempR>1)tempR=1;
+            var etaR=etaMin/90;if(etaR>1)etaR=1;
+            var rings=[
+                {l:'TEMP',v:tempC.toFixed(1)+'°',r:tempR,c:P.warn},
+                {l:'CPU',v:Math.floor(cpuPct*100)+'%',r:cpuPct,c:P.accent},
+                {l:'MEM',v:Math.floor(memPct*100)+'%',r:memPct,c:P.secondary},
+                {l:'ETA',v:etaMin+'m',r:etaR,c:P.ok}
             ];
-            var ringsHtml = ringsData.map(function(r) {
-                return '<div class="dash-ring"><canvas id="dash-ring-' + r.label + '"></canvas><div class="dash-ring-value">' + r.value + '</div><div class="dash-ring-label" style="color:' + r.color + ';">' + r.label + '</div></div>';
-            }).join('');
-            document.getElementById('dash-rings').innerHTML = ringsHtml;
-            // Draw rings after DOM update
-            setTimeout(function() {
-                try {
-                    ringsData.forEach(function(r) {
-                        var c = document.getElementById('dash-ring-' + r.label);
-                        if (c) drawDashRing(c, r.ratio, r.color, r.value, r.label);
-                    });
-                } catch(e) { console.error('Ring draw error:', e); }
-            }, 50);
-
-            // ── TOC panel ──
-            var tocHtml = '';
-            var libBooks = library.length > 0 ? library : recentBooks.map(function(b) { return { title: b.title, text: '' }; });
-            libBooks.slice(0, 15).forEach(function(book, i) {
-                var isActive = i === 0;
-                var sentCount = (books[book.title.substring(0, 40)] || {}).sentences || 0;
-                tocHtml += '<div class="dash-toc-item' + (isActive ? ' active' : '') + '">' +
-                    '<span class="dash-toc-num">C' + String(i + 1).padStart(2, '0') + '</span>' +
-                    '<span class="dash-toc-title">' + (book.title || '未命名').substring(0, 22) + '</span>' +
-                    '<span class="dash-toc-count">' + (sentCount > 0 ? sentCount + '句' : '') + '</span>' +
-                '</div>';
+            var body='<div style="display:flex;justify-content:space-evenly;align-items:center;height:100%">';
+            rings.forEach(function(r){
+                body+='<div class="d-ring" style="text-align:center"><canvas id="dash-ring-'+r.l+'" width="50" height="50"></canvas>';
+                body+='<div class="d-ring-val" style="text-shadow:0 0 6px '+r.c+'99">'+r.v+'</div>';
+                body+='<div class="d-ring-lbl" style="color:'+r.c+'">'+r.l+'</div></div>';
             });
-            if (libBooks.length === 0) tocHtml = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:0.7rem;">书库为空</div>';
-            document.getElementById('dash-toc').innerHTML = tocHtml;
+            body+='</div>';
+            el.innerHTML=panelHTML('dash-rings-inner','设备状态','Device Vitals','DV-04',body);
+            setTimeout(function(){rings.forEach(function(r){drawRing(r.l,r.r,r.c,r.v)})},50);
+        }
+        function drawRing(id,ratio,color,value){
+            var c=document.getElementById('dash-ring-'+id);if(!c)return;
+            var dpr=window.devicePixelRatio||1;c.width=50*dpr;c.height=50*dpr;
+            var ctx=c.getContext('2d');ctx.scale(dpr,dpr);
+            var cx=25,cy=25,r=18,sw=4.5;
+            ctx.beginPath();ctx.arc(cx,cy,r+4,0,Math.PI*2);ctx.fillStyle=color+'26';ctx.fill();
+            ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(42,42,47,0.7)';ctx.lineWidth=sw;ctx.stroke();
+            ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(ratio,1));ctx.strokeStyle=color+'73';ctx.lineWidth=sw+4;ctx.lineCap='round';ctx.stroke();
+            ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(ratio,1));ctx.strokeStyle=color;ctx.lineWidth=sw;ctx.lineCap='round';ctx.stroke();
+        }
 
-            // ── Quote stream ──
-            // Collect quotes from library
-            _dashQuotes = [];
-            library.forEach(function(book) {
-                if (book.text) {
-                    var sents = book.text.split(/[。！？?!.]\s*/).filter(function(s) { return s.trim().length > 5; });
-                    sents.slice(0, 5).forEach(function(s) {
-                        _dashQuotes.push({ text: s.trim(), bookTitle: book.title });
-                    });
-                }
+        // ── Library Stats Sub-page ───────────────────────────────────
+        function renderLibStats(){
+            var el=document.getElementById('dash-stats-page');if(!el)return;
+            var lib=loadLib(),stats=getStats(),books=stats.books||{};
+            var entries=Object.entries(books).sort(function(a,b){return(b[1].lastRead||0)-(a[1].lastRead||0)});
+            var totalChars=lib.reduce(function(s,b){return s+(b.text||'').length},0);
+            var favCount=lib.filter(function(b){return b.fav}).length;
+            var streak=stats.streak||{};var streakDays=Object.keys(streak).length;
+            var activity=[];var today=new Date();for(var i=29;i>=0;i--){var d=new Date(today);d.setDate(d.getDate()-i);var key=d.toISOString().slice(0,10);activity.push(streak[key]||0)}
+            var html='';
+            // Row 1: KPI quad + format donut
+            html+='<div style="display:flex;gap:8px;margin-bottom:8px;height:45%">';
+            // KPI quad
+            html+='<div style="flex:1.5;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px">';
+            var kpis=[
+                {en:'TOTAL BOOKS',zh:'藏书',big:''+lib.length,unit:'本',c:P.accent},
+                {en:'TOTAL WORDS',zh:'字数',big:fmtBig(totalChars),unit:'字',c:P.brand},
+                {en:'READ',zh:'已读',big:''+Object.keys(books).length,unit:'本',c:P.ok},
+                {en:'FAVORITES',zh:'收藏',big:''+favCount,unit:'★',c:P.warn}
+            ];
+            kpis.forEach(function(k){
+                html+='<div class="d-kpi" style="border-color:'+k.c+'55">';
+                html+='<div style="display:flex;align-items:center;margin-bottom:4px"><div style="width:6px;height:6px;border-radius:50%;background:'+k.c+'"></div><span class="d-kpi-en" style="margin-left:5px">'+k.en+'</span></div>';
+                html+='<div style="flex:1;display:flex;align-items:flex-end"><span class="d-kpi-big" style="color:'+k.c+';text-shadow:0 0 16px '+k.c+'d9">'+k.big+'</span><span class="d-kpi-unit" style="color:'+k.c+';opacity:0.85;margin-left:4px;padding-bottom:6px">'+k.unit+'</span></div>';
+                html+='</div>';
             });
-            if (_dashQuotes.length === 0 && recentBooks.length > 0) {
-                _dashQuotes = [{ text: '开始阅读，添加书籍到书库即可在此展示书摘', bookTitle: 'Mas.Reader' }];
-            }
-            _dashQuoteIdx = 0;
-            renderDashQuote();
-            if (_dashQuoteTimer) clearInterval(_dashQuoteTimer);
-            if (_dashQuotes.length > 1) {
-                _dashQuoteTimer = setInterval(function() {
-                    _dashQuoteIdx = (_dashQuoteIdx + 1) % _dashQuotes.length;
-                    renderDashQuote();
-                }, 6000);
-            }
-
-            // ── Bar chart ──
-            setTimeout(function() {
-                try {
-                    var barCanvas = document.getElementById('dash-bar-chart');
-                    if (barCanvas) drawDashBarChart(barCanvas, Math.max(totalSentences, 10), Math.floor(totalSentences * 0.6));
-                } catch(e) { console.error('Bar chart error:', e); }
-            }, 100);
-
-            // ── CoverFlow ──
-            var covers = library.map(function(b) { return { title: b.title }; });
-            if (covers.length === 0) covers = recentBooks.map(function(b) { return { title: b.title }; });
-            _dashCoverIdx = 0;
-            renderDashCovers(covers);
-
-            // ── Streak heatmap ──
-            renderDashStreak(document.getElementById('dash-streak'), stats.streak || {});
-
-            // ── Recent activity ──
-            var recentHtml = '';
-            if (recentBooks.length > 0) {
-                recentHtml += '<div style="display:flex;flex-direction:column;gap:6px;">';
-                var colors = ['#64c8ff','#ff6b6b','#ffd93d','#6bcb77','#9b59b6'];
-                recentBooks.slice(0, 5).forEach(function(book, i) {
-                    var bs = books[book.title.substring(0, 40)] || {};
-                    recentHtml += '<div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.05);">' +
-                        '<div style="width:32px;height:32px;border-radius:6px;background:' + colors[i % 5] + ';display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:white;font-weight:700;flex-shrink:0;">' + (book.title || '?').charAt(0) + '</div>' +
-                        '<div style="flex:1;min-width:0;">' +
-                            '<div style="font-size:0.75rem;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (book.title || '未命名') + '</div>' +
-                            '<div style="font-size:0.6rem;color:rgba(255,255,255,0.35);">' + (bs.sessions || 0) + '次 · ' + (bs.sentences || 0) + '句' + (bs.lastRead ? ' · ' + formatRelativeTime(bs.lastRead) : '') + '</div>' +
-                        '</div>' +
-                    '</div>';
+            html+='</div>';
+            // Format donut
+            html+='<div style="flex:1;display:flex;align-items:center;justify-content:center">';
+            html+='<div style="text-align:center"><svg width="120" height="120" viewBox="0 0 120 120">';
+            var fmts={};lib.forEach(function(b){var f=(b.title.match(/\.(\w+)$/)||[])[1]||'TXT';fmts[f]=(fmts[f]||0)+1});
+            var fmtArr=Object.entries(fmts);if(fmtArr.length===0)fmtArr=[['TXT',0]];
+            var total=lib.length||1;var startAngle=-90;var colors=[P.accent,P.brand,P.warn,P.ok];
+            fmtArr.forEach(function(e,i){
+                var sweep=360*e[1]/total;var c=colors[i%4];
+                html+='<circle cx="60" cy="60" r="40" fill="none" stroke="'+c+'" stroke-width="14" stroke-dasharray="'+(sweep/360*251.3)+' 251.3" stroke-dashoffset="'+(-startAngle/360*251.3)+'" transform="rotate(-90 60 60)" opacity="0.8"/>';
+                startAngle+=sweep;
+            });
+            html+='</svg><div style="margin-top:-70px"><div style="font-size:28px;font-weight:900;color:'+P.text+'">'+lib.length+'</div><div style="font-size:9px;letter-spacing:1.4px;color:'+P.muted+'">BOOKS</div></div></div>';
+            html+='</div>';
+            html+='</div>';
+            // Row 2: Activity heatmap + top books
+            html+='<div style="display:flex;gap:8px;height:45%">';
+            // Heatmap
+            html+='<div style="flex:1.5">';
+            html+='<div style="font-size:8px;color:'+P.muted+';letter-spacing:1px;margin-bottom:6px">READING ACTIVITY · 30 DAYS</div>';
+            html+='<canvas id="dash-activity-canvas" style="width:100%;height:80%"></canvas>';
+            html+='<div style="display:flex;justify-content:space-between;font-size:8px;color:'+P.muted+';margin-top:4px"><span>30 days ago</span><span style="color:'+P.warn+';font-weight:700">Σ '+activity.reduce(function(a,b){return a+b},0)+' reads</span><span>today</span></div>';
+            html+='</div>';
+            // Top books
+            html+='<div style="flex:1;overflow-y:auto">';
+            html+='<div style="font-size:8px;color:'+P.muted+';letter-spacing:1px;margin-bottom:6px">TOP BOOKS · RECENT</div>';
+            var topBooks=entries.slice(0,5);
+            topBooks.forEach(function(e,i){
+                var b=e[1];var col=i===0?P.warn:P.bgSubtle||'#131318';
+                html+='<div style="display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;'+(i===0?'background:rgba(255,204,51,0.12)':'')+'">';
+                html+='<div style="width:20px;height:20px;border-radius:50%;background:'+col+';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:'+(i===0?P.bg:P.text)+'">'+(i+1)+'</div>';
+                html+='<div style="flex:1;min-width:0"><div style="font-size:11px;color:'+(i===0?P.text:P.text2)+';font-weight:'+(i===0?700:400)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc((b.title||e[0]).substring(0,24))+'</div>';
+                html+='<div style="font-size:8px;color:'+P.muted+';letter-spacing:0.4px">'+(b.sessions||0)+'次 · '+(b.sentences||0)+'句</div></div>';
+                html+='<span style="font-size:9px;color:'+P.accent+';letter-spacing:0.4px">'+(b.lastRead?fmtRel(b.lastRead):'—')+'</span>';
+                html+='</div>';
+            });
+            html+='</div>';
+            html+='</div>';
+            // Streak detail
+            html+='<div style="margin-top:8px">';
+            html+='<div style="font-size:8px;color:'+P.muted+';letter-spacing:1px;margin-bottom:4px">READING CALENDAR</div>';
+            html+='<div style="display:flex;gap:20px;font-size:11px"><span><span style="color:'+P.accent+';font-size:18px;font-weight:900">'+streakDays+'</span> <span style="color:'+P.muted+'">天活跃</span></span>';
+            html+='<span><span style="color:'+P.accent+';font-size:18px;font-weight:900">'+activity.reduce(function(a,b){return a+b},0)+'</span> <span style="color:'+P.muted+'">次阅读</span></span></div>';
+            html+='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;max-width:280px;margin-top:8px">';
+            for(var i=55;i>=0;i--){var d=new Date(today);d.setDate(d.getDate()-i);var key=d.toISOString().slice(0,10);var active=streak[key];var isToday=i===0;
+                html+='<div style="aspect-ratio:1;border-radius:3px;background:'+(active?P.accent+';opacity:0.7':'rgba(255,255,255,0.04)')+(isToday?';box-shadow:0 0 0 1px '+P.accent:'')+'" title="'+key+(active?' ('+active+'次)':'')+'"></div>'}
+            html+='</div></div>';
+            el.innerHTML=html;
+            // Draw activity heatmap
+            setTimeout(function(){var ac=document.getElementById('dash-activity-canvas');if(!ac)return;
+                var dpr=window.devicePixelRatio||1;var rect=ac.getBoundingClientRect();ac.width=rect.width*dpr;ac.height=rect.height*dpr;
+                var ctx=ac.getContext('2d');ctx.scale(dpr,dpr);var w=rect.width,h=rect.height;
+                var cols=30,gap=3,cellW=(w-gap*(cols-1))/cols,cellH=h*0.55;
+                var maxV=Math.max.apply(null,activity)||1;
+                activity.forEach(function(v,i){var ratio=v/maxV;var x=i*(cellW+gap);
+                    var col=v===0?'rgba(42,42,47,0.4)':ratio<0.3?'rgba(255,204,51,0.4)':ratio<0.6?'rgba(255,204,51,0.7)':P.warn;
+                    ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,h*0.05,cellW,cellH,3);ctx.fill();
+                    if(ratio>0.4){ctx.strokeStyle=col+'4d';ctx.lineWidth=1.4;ctx.beginPath();ctx.roundRect(x-1,h*0.05-1,cellW+2,cellH+2,4);ctx.stroke()}
                 });
-                recentHtml += '</div>';
-            } else {
-                recentHtml += '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:0.75rem;">暂无阅读记录</div>';
-            }
-            document.getElementById('dash-recent').innerHTML = recentHtml;
-
-            // ── Library overview ──
-            var libHtml = '';
-            if (library.length > 0) {
-                var favCount = library.filter(function(b) { return b.fav; }).length;
-                var totalWords = library.reduce(function(sum, b) { return sum + (b.text || '').length; }, 0);
-                libHtml += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">';
-                libHtml += '<div style="padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;text-align:center;">' +
-                    '<div style="font-size:1.3rem;font-weight:600;color:var(--text-primary);font-family:var(--font-mono),monospace;">' + library.length + '</div>' +
-                    '<div style="font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:1px;">藏书</div></div>';
-                libHtml += '<div style="padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;text-align:center;">' +
-                    '<div style="font-size:1.3rem;font-weight:600;color:var(--text-primary);font-family:var(--font-mono),monospace;">' + favCount + '</div>' +
-                    '<div style="font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:1px;">收藏</div></div>';
-                libHtml += '<div style="padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;text-align:center;">' +
-                    '<div style="font-size:1.3rem;font-weight:600;color:var(--text-primary);font-family:var(--font-mono),monospace;">' + formatWordCount(totalWords) + '</div>' +
-                    '<div style="font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:1px;">总字数</div></div>';
-                libHtml += '</div>';
-            } else {
-                libHtml += '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:0.75rem;">书库为空，请先导入书籍</div>';
-            }
-            document.getElementById('dash-library').innerHTML = libHtml;
+                ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(0,h*0.05+cellH+6);ctx.lineTo(w,h*0.05+cellH+6);ctx.stroke();
+            },50);
         }
 
-        // ── Stats sub-page ──────────────────────────────────────────────
-        function renderDashStats() {
-            var stats = getReadingStats();
-            var books = stats.books || {};
-            var library = loadLibrary();
-            var entries = Object.entries(books).sort(function(a, b) { return (b[1].lastRead || 0) - (a[1].lastRead || 0); });
-            var html = '<div class="dash-panel" style="margin-bottom:14px;"><div class="dash-panel-title">阅读统计详情</div><div style="padding:16px;">';
-            if (entries.length > 0) {
-                html += '<div style="display:grid;grid-template-columns:1fr auto auto auto;gap:8px;font-size:0.7rem;align-items:center;">';
-                html += '<div style="color:rgba(255,255,255,0.4);letter-spacing:1px;">书名</div><div style="color:rgba(255,255,255,0.4);text-align:right;">句数</div><div style="color:rgba(255,255,255,0.4);text-align:right;">次数</div><div style="color:rgba(255,255,255,0.4);text-align:right;">最近</div>';
-                entries.forEach(function(e) {
-                    var key = e[0], book = e[1];
-                    var maxSent = Math.max.apply(null, entries.map(function(x) { return x[1].sentences || 0; }));
-                    html += '<div style="color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (book.title || key) + '</div>';
-                    html += '<div style="text-align:right;color:var(--accent);font-family:var(--font-mono),monospace;">' + (book.sentences || 0) + '</div>';
-                    html += '<div style="text-align:right;color:rgba(255,255,255,0.6);font-family:var(--font-mono),monospace;">' + (book.sessions || 0) + '</div>';
-                    html += '<div style="text-align:right;color:rgba(255,255,255,0.4);font-size:0.6rem;">' + (book.lastRead ? formatRelativeTime(book.lastRead) : '—') + '</div>';
-                });
-                html += '</div>';
-            } else {
-                html += '<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">暂无统计数据，开始阅读后自动记录</div>';
-            }
-            html += '</div></div>';
-
-            // Reading streak detail
-            html += '<div class="dash-panel"><div class="dash-panel-title">阅读日历</div><div style="padding:16px;">';
-            var streak = stats.streak || {};
-            var streakDays = Object.keys(streak).length;
-            var totalSessions = Object.values(streak).reduce(function(a, b) { return a + b; }, 0);
-            html += '<div style="display:flex;gap:20px;margin-bottom:14px;font-size:0.75rem;">';
-            html += '<div><span style="color:var(--accent);font-size:1.2rem;font-weight:600;font-family:var(--font-mono),monospace;">' + streakDays + '</span> <span style="color:rgba(255,255,255,0.4);">天活跃</span></div>';
-            html += '<div><span style="color:var(--accent);font-size:1.2rem;font-weight:600;font-family:var(--font-mono),monospace;">' + totalSessions + '</span> <span style="color:rgba(255,255,255,0.4);">次阅读</span></div>';
-            html += '</div>';
-            html += '<div class="dash-streak-grid" style="max-width:280px;">';
-            var today = new Date();
-            for (var i = 55; i >= 0; i--) {
-                var d = new Date(today);
-                d.setDate(d.getDate() - i);
-                var key = d.toISOString().slice(0, 10);
-                var active = streak[key];
-                var isToday = i === 0;
-                html += '<div class="dash-streak-cell' + (active ? ' active' : '') + (isToday ? ' today' : '') + '" title="' + key + (active ? ' (' + active + '次)' : '') + '"></div>';
-            }
-            html += '</div></div></div>';
-            document.getElementById('dash-stats-content').innerHTML = html;
-        }
-    </script>
-    <script>
-        // Fallback: ensure showDashboard is always callable
-        if (typeof showDashboard !== 'function') {
-            function showDashboard() {
-                var dp = document.getElementById('dashboard-page');
-                if (dp) {
-                    dp.style.display = 'block';
-                    var splash = document.getElementById('dash-splash');
-                    if (splash) { splash.style.opacity = '1'; splash.style.display = 'flex'; }
-                    setTimeout(function() {
-                        var bar = document.getElementById('dash-splash-bar');
-                        if (bar) bar.style.width = '100%';
-                    }, 50);
-                    setTimeout(function() {
-                        if (splash) { splash.style.opacity = '0'; setTimeout(function() { splash.style.display = 'none'; }, 800); }
-                    }, 2800);
-                    if (typeof renderDashboard === 'function') { try { renderDashboard(); } catch(e) { console.error('Dashboard render error:', e); } }
-                }
-            }
-        }
-        if (typeof closeDashboard !== 'function') {
-            function closeDashboard() {
-                var dp = document.getElementById('dashboard-page');
-                if (dp) dp.style.display = 'none';
-            }
-        }
+        // ── Hook into startDisplay for session tracking ──────────────
+        var _origSD=typeof startDisplay!=='undefined'?startDisplay:null;
+        if(_origSD){startDisplay=function(){var r=_origSD.apply(this,arguments);
+            var txt=document.getElementById('text-input');if(txt){var t=txt.value.trim();if(t){
+                var count=t.split(/[。！？?!.]+/).filter(function(s){return s.trim().length>0}).length;
+                var s=getStats();s.totalSentences=(s.totalSentences||0)+count;s.sessionCount=(s.sessionCount||0)+1;s.lastReadAt=Date.now();
+                if(!s.streak)s.streak={};var today=new Date().toISOString().slice(0,10);s.streak[today]=(s.streak[today]||0)+1;
+                var title=t.substring(0,80).replace(/[\r\n]+/g,' ').trim()||'未命名';if(!s.books)s.books={};var key=title.substring(0,40);
+                if(!s.books[key])s.books[key]={title:title,sentences:0,sessions:0,firstRead:Date.now()};
+                s.books[key].sentences+=count;s.books[key].sessions+=1;s.books[key].lastRead=Date.now();
+                localStorage.setItem('readingStats',JSON.stringify(s));
+            }}return r}}
+    })();
     </script>
 </body>
 </html>
