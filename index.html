@@ -3009,6 +3009,254 @@
             border-radius: 11px !important;
         }
 
+        /* ═══════════════════════════════════════════════════════════
+           五套墨水屏主题 — 素笺 · 墨刻 · 铅印 · 竹简 · 蓝图
+           ═══════════════════════════════════════════════════════════ */
+
+        /* ── 主题1: 素笺 Suzu — 纸书修复美学 ── */
+        .e-ink-active.theme-suzu,
+        .e-ink-active[data-eink-theme="suzu"] {
+            --eink-bg: #FAFAF5; --eink-text: #1A1A1A; --eink-border: #C8C0B4; --eink-accent: #8A7E6E;
+            --eink-glass-bg: #FAFAF5; --eink-glass-border: #C8C0B4; --eink-glass-border-top: #B0A898; --eink-glass-border-left: #B0A898;
+            --eink-glass-shadow: none; --eink-glass-blur: none; --eink-shadow: none; --eink-text-shadow: none;
+            --eink-opacity: 1; --eink-filter: none; --eink-transition: none; --eink-animation: none;
+            --eink-pseudo-display: none; --eink-hover-bg: #EDE8DC; --eink-overlay-bg: rgba(26,26,26,0.05);
+            --eink-svg-fill: #1A1A1A; --eink-thumb-bg: #8A7E6E; --eink-toggle-bg: #D8D0C4; --eink-toggle-active-bg: #8A7E6E; --eink-toggle-dot: #FAFAF5;
+            background: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='1'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"), radial-gradient(ellipse at center, #FAFAF5 40%, #F2EDE3 80%, #E8E0D0 100%) !important;
+            background-color: #FAFAF5 !important; color: #1A1A1A !important; font-family: 'Noto Serif SC', serif !important; -webkit-font-smoothing: antialiased;
+        }
+        .e-ink-active.theme-suzu *, .e-ink-active[data-eink-theme="suzu"] * { color: #1A1A1A !important; border-color: #C8C0B4 !important; box-shadow: none !important; text-shadow: none !important; }
+        .e-ink-active.theme-suzu .hero-glass-base { background: #FAFAF5 !important; border: 2px solid #B0A898 !important; border-radius: 4px !important; box-shadow: inset 0 0 0 3px #FAFAF5, inset 0 0 0 4px #C8C0B4 !important; padding: 2rem 1.5rem !important; position: relative; }
+        .e-ink-active.theme-suzu .hero-glass-base::before { content: '' !important; display: block !important; position: absolute; top: 8px; left: 8px; width: 20px; height: 20px; border-top: 1.5px solid #B0A898; border-left: 1.5px solid #B0A898; }
+        .e-ink-active.theme-suzu .hero-glass-base::after { content: '' !important; display: block !important; position: absolute; bottom: 8px; right: 8px; width: 20px; height: 20px; border-bottom: 1.5px solid #B0A898; border-right: 1.5px solid #B0A898; }
+        .e-ink-active.theme-suzu .entry-card { background: #FAFAF5 !important; border: 1.5px dashed #C8C0B4 !important; border-radius: 3px !important; padding: 1rem 1.2rem !important; position: relative; }
+        .e-ink-active.theme-suzu .entry-card::before { content: '' !important; display: block !important; position: absolute; left: 0; top: 15%; width: 2px; height: 70%; background: #B0A898; }
+        .e-ink-active.theme-suzu .entry-card:hover { background: #EDE8DC !important; border-color: #B0A898 !important; border-style: solid !important; }
+        .e-ink-active.theme-suzu .nav-bar-luxury { background: #FAFAF5 !important; border-top: 1px solid #C8C0B4 !important; border-bottom: none !important; border-left: none !important; border-right: none !important; }
+        .e-ink-active.theme-suzu .bottom-control-btn, .e-ink-active.theme-suzu .btn-luxury, .e-ink-active.theme-suzu .btn-back { background: #FAFAF5 !important; border: 1px solid #C8C0B4 !important; border-radius: 3px !important; font-family: 'Noto Serif SC', serif !important; letter-spacing: 0.05em; }
+        .e-ink-active.theme-suzu .bottom-control-btn:hover, .e-ink-active.theme-suzu .btn-luxury:hover, .e-ink-active.theme-suzu .btn-back:hover { background: #EDE8DC !important; border-color: #8A7E6E !important; }
+        .e-ink-active.theme-suzu .sentence-text { font-family: 'Noto Serif SC', serif !important; font-size: 20px !important; line-height: 1.9 !important; letter-spacing: 0.05em !important; color: #1A1A1A !important; -webkit-font-smoothing: antialiased; text-align: center; }
+        .e-ink-active.theme-suzu .sentence-text::before { content: '\300C' !important; display: block !important; font-size: 28px; color: #A0A0A0; margin-bottom: 0.3em; }
+        .e-ink-active.theme-suzu .sentence-text::after { content: '\300D' !important; display: block !important; font-size: 28px; color: #A0A0A0; margin-top: 0.3em; }
+        .e-ink-active.theme-suzu .status-badge { background: #FAFAF5 !important; border: 1px solid #C8C0B4 !important; border-radius: 3px !important; font-size: 11px; letter-spacing: 0.08em; }
+        .e-ink-active.theme-suzu .slider-custom { -webkit-appearance: none !important; appearance: none !important; height: 1px !important; background: #C8C0B4 !important; border-radius: 0 !important; border: none !important; }
+        .e-ink-active.theme-suzu .slider-custom::-webkit-slider-thumb { -webkit-appearance: none; width: 10px !important; height: 10px !important; border-radius: 50% !important; background: #FAFAF5 !important; border: 1.5px solid #8A7E6E !important; box-shadow: none !important; cursor: pointer; }
+        .e-ink-active.theme-suzu .eink-toggle { width: 36px !important; height: 18px !important; background: #D8D0C4 !important; border: 1px solid #C8C0B4 !important; border-radius: 9px !important; }
+        .e-ink-active.theme-suzu .eink-toggle.active { background: #8A7E6E !important; border-color: #6A5E4E !important; }
+        .e-ink-active.theme-suzu .eink-toggle::after { width: 14px !important; height: 14px !important; background: #FAFAF5 !important; border: 1px solid #B0A898 !important; }
+        .e-ink-active.theme-suzu .eink-toggle.active::after { background: #FAFAF5 !important; border-color: #FAFAF5 !important; }
+        .e-ink-active.theme-suzu .settings-overlay { background: rgba(250,250,245,0.97) !important; }
+        .e-ink-active.theme-suzu .glass-panel { background: #FAFAF5 !important; border: 2px solid #B0A898 !important; border-radius: 4px !important; box-shadow: inset 0 0 0 3px #FAFAF5, inset 0 0 0 4px #C8C0B4 !important; }
+        .e-ink-active.theme-suzu .font-option { background: #FAFAF5 !important; border: 1px solid #D8D0C4 !important; border-radius: 3px !important; }
+        .e-ink-active.theme-suzu .font-option:hover { background: #EDE8DC !important; border-color: #B0A898 !important; }
+        .e-ink-active.theme-suzu .font-option.selected { background: #E0D8CC !important; border-color: #8A7E6E !important; }
+        .e-ink-active.theme-suzu .toc-modal-content { background: #FAFAF5 !important; border: 2px solid #B0A898 !important; border-radius: 4px !important; }
+        .e-ink-active.theme-suzu .toc-item { border-bottom: 1px dotted #D8D0C4 !important; }
+        .e-ink-active.theme-suzu .toc-item:hover { background: #EDE8DC !important; }
+        .e-ink-active.theme-suzu .file-list-item { background: #FAFAF5 !important; border: 1px solid #D8D0C4 !important; border-radius: 3px !important; }
+        .e-ink-active.theme-suzu .file-list-item:hover { background: #EDE8DC !important; }
+        .e-ink-active.theme-suzu .luxury-fab { background: #FAFAF5 !important; border: 1.5px solid #B0A898 !important; border-radius: 50% !important; }
+        .e-ink-active.theme-suzu .text-input, .e-ink-active.theme-suzu .typewriter-paper { background: #FAFAF5 !important; border: 1px solid #C8C0B4 !important; border-radius: 3px !important; border-bottom: 1.5px solid #8A7E6E !important; font-family: 'Noto Serif SC', serif !important; }
+        .e-ink-active.theme-suzu svg { fill: #1A1A1A !important; color: #1A1A1A !important; }
+        .e-ink-active.theme-suzu ::selection { background: #D8D0C4; color: #1A1A1A; }
+        .e-ink-active.theme-suzu *:focus-visible { outline: 1.5px solid #8A7E6E !important; outline-offset: 2px; }
+        .e-ink-active.theme-suzu ::-webkit-scrollbar { width: 6px; }
+        .e-ink-active.theme-suzu ::-webkit-scrollbar-track { background: #F2EDE3; }
+        .e-ink-active.theme-suzu ::-webkit-scrollbar-thumb { background: #C8C0B4; border-radius: 3px; }
+
+        /* ── 主题2: 墨刻 Moke — 极致黑白工程美学 ── */
+        .e-ink-active.theme-moke,
+        .e-ink-active[data-eink-theme="moke"] {
+            --eink-bg: #FFFFFF; --eink-text: #000000; --eink-border: #000000; --eink-accent: #000000;
+            --eink-glass-bg: #FFFFFF; --eink-glass-border: #000000; --eink-glass-border-top: #000000; --eink-glass-border-left: #000000;
+            --eink-glass-shadow: none; --eink-glass-blur: none; --eink-shadow: none; --eink-text-shadow: none;
+            --eink-opacity: 1; --eink-filter: none; --eink-transition: none; --eink-animation: none;
+            --eink-pseudo-display: none; --eink-hover-bg: #FFFFFF; --eink-overlay-bg: rgba(0,0,0,0.08);
+            --eink-svg-fill: #000000; --eink-thumb-bg: #000000; --eink-toggle-bg: #FFFFFF; --eink-toggle-active-bg: #000000; --eink-toggle-dot: #000000;
+            background: linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px), #FFFFFF !important;
+            background-size: 20px 20px !important; color: #000000 !important; font-family: 'JetBrains Mono', monospace !important;
+            -webkit-font-smoothing: none !important; -moz-osx-font-smoothing: unset !important;
+        }
+        .e-ink-active.theme-moke * { color: #000000 !important; border-color: #000000 !important; box-shadow: none !important; text-shadow: none !important; border-radius: 0 !important; -webkit-font-smoothing: none !important; }
+        .e-ink-active.theme-moke .hero-glass-base { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; text-transform: uppercase; letter-spacing: 0.15em; }
+        .e-ink-active.theme-moke .entry-card { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; text-transform: uppercase; }
+        .e-ink-active.theme-moke .entry-card:hover { background: #000000 !important; }
+        .e-ink-active.theme-moke .entry-card:hover * { color: #FFFFFF !important; }
+        .e-ink-active.theme-moke .bottom-control-btn, .e-ink-active.theme-moke .btn-luxury, .e-ink-active.theme-moke .btn-back { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace !important; font-size: 11px !important; }
+        .e-ink-active.theme-moke .bottom-control-btn:hover, .e-ink-active.theme-moke .btn-luxury:hover, .e-ink-active.theme-moke .btn-back:hover { background: #000000 !important; }
+        .e-ink-active.theme-moke .bottom-control-btn:hover *, .e-ink-active.theme-moke .btn-luxury:hover *, .e-ink-active.theme-moke .btn-back:hover * { color: #FFFFFF !important; }
+        .e-ink-active.theme-moke .sentence-text { font-family: 'JetBrains Mono', monospace !important; font-size: 18px !important; line-height: 1.7 !important; letter-spacing: 0 !important; color: #000000 !important; -webkit-font-smoothing: none !important; text-transform: uppercase; }
+        .e-ink-active.theme-moke .status-badge { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; text-transform: uppercase; font-size: 10px; letter-spacing: 0.15em; }
+        .e-ink-active.theme-moke .nav-bar-luxury { background: #FFFFFF !important; border-top: 1px solid #000000 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .slider-custom { -webkit-appearance: none !important; appearance: none !important; height: 2px !important; background: #000000 !important; border: none !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .slider-custom::-webkit-slider-thumb { -webkit-appearance: none; width: 12px !important; height: 12px !important; background: #000000 !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; cursor: crosshair; }
+        .e-ink-active.theme-moke .eink-toggle { width: 36px !important; height: 18px !important; background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .eink-toggle.active { background: #000000 !important; }
+        .e-ink-active.theme-moke .eink-toggle::after { width: 14px !important; height: 14px !important; background: #000000 !important; border: none !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .eink-toggle.active::after { background: #FFFFFF !important; border: none !important; }
+        .e-ink-active.theme-moke .settings-overlay { background: rgba(255,255,255,0.97) !important; }
+        .e-ink-active.theme-moke .glass-panel { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .font-option { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; text-transform: uppercase; font-size: 11px; }
+        .e-ink-active.theme-moke .font-option:hover { background: #000000 !important; }
+        .e-ink-active.theme-moke .font-option:hover * { color: #FFFFFF !important; }
+        .e-ink-active.theme-moke .font-option.selected { background: #000000 !important; }
+        .e-ink-active.theme-moke .font-option.selected * { color: #FFFFFF !important; }
+        .e-ink-active.theme-moke .toc-modal-content { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .toc-item { border-bottom: 1px solid #000000 !important; text-transform: uppercase; font-size: 11px; }
+        .e-ink-active.theme-moke .toc-item:hover { background: #000000 !important; }
+        .e-ink-active.theme-moke .toc-item:hover * { color: #FFFFFF !important; }
+        .e-ink-active.theme-moke .file-list-item { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .file-list-item:hover { background: #000000 !important; }
+        .e-ink-active.theme-moke .file-list-item:hover * { color: #FFFFFF !important; }
+        .e-ink-active.theme-moke .luxury-fab { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-moke .text-input, .e-ink-active.theme-moke .typewriter-paper { background: #FFFFFF !important; border: 1px solid #000000 !important; border-radius: 0 !important; font-family: 'JetBrains Mono', monospace !important; }
+        .e-ink-active.theme-moke svg { fill: #000000 !important; color: #000000 !important; }
+        .e-ink-active.theme-moke ::selection { background: #000000; color: #FFFFFF; }
+        .e-ink-active.theme-moke *:focus-visible { outline: 2px solid #000000 !important; outline-offset: 0 !important; }
+        .e-ink-active.theme-moke *[disabled], .e-ink-active.theme-moke .disabled { border-style: dashed !important; color: #000000 !important; opacity: 1 !important; cursor: not-allowed !important; }
+        .e-ink-active.theme-moke ::-webkit-scrollbar { width: 8px; }
+        .e-ink-active.theme-moke ::-webkit-scrollbar-track { background: #FFFFFF; border-left: 1px solid #000000; }
+        .e-ink-active.theme-moke ::-webkit-scrollbar-thumb { background: #000000; }
+
+        /* ── 主题3: 铅印 Letterpress — 报纸排版美学 ── */
+        .e-ink-active.theme-letterpress,
+        .e-ink-active[data-eink-theme="letterpress"] {
+            --eink-bg: #F8F6F0; --eink-text: #1C1C1C; --eink-border: #B0A898; --eink-accent: #5C5C5C;
+            --eink-glass-bg: #F8F6F0; --eink-glass-border: #B0A898; --eink-glass-border-top: #8A7E6E; --eink-glass-border-left: #8A7E6E;
+            --eink-glass-shadow: none; --eink-glass-blur: none; --eink-shadow: none; --eink-text-shadow: none;
+            --eink-opacity: 1; --eink-filter: none; --eink-transition: none; --eink-animation: none;
+            --eink-pseudo-display: none; --eink-hover-bg: #E8E4DC; --eink-overlay-bg: rgba(28,28,28,0.06);
+            --eink-svg-fill: #1C1C1C; --eink-thumb-bg: #5C5C5C; --eink-toggle-bg: #D0C8B8; --eink-toggle-active-bg: #5C5C5C; --eink-toggle-dot: #F8F6F0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' seed='5'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E"), #F8F6F0 !important;
+            background-color: #F8F6F0 !important; color: #1C1C1C !important; font-family: 'Literata', 'Noto Serif SC', serif !important;
+        }
+        .e-ink-active.theme-letterpress * { color: #1C1C1C !important; border-color: #B0A898 !important; box-shadow: none !important; text-shadow: none !important; }
+        .e-ink-active.theme-letterpress .hero-glass-base { background: #F8F6F0 !important; border-top: 3px solid #1C1C1C !important; border-bottom: 1px solid #1C1C1C !important; border-left: none !important; border-right: none !important; border-radius: 0 !important; text-align: center; padding: 1.5rem 1rem !important; }
+        .e-ink-active.theme-letterpress .hero-glass-base::before { content: 'THE DIGITAL GAZETTE' !important; display: block !important; font-variant: small-caps; font-size: 11px; letter-spacing: 0.3em; color: #6C6C6C; margin-top: 0.5rem; }
+        .e-ink-active.theme-letterpress .hero-glass-base::after { content: 'Est. 2024' !important; display: block !important; font-size: 10px; letter-spacing: 0.2em; color: #9C9C9C; margin-top: 0.3rem; }
+        .e-ink-active.theme-letterpress .entry-card { background: #F8F6F0 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; font-variant: small-caps; letter-spacing: 0.1em; }
+        .e-ink-active.theme-letterpress .entry-card:hover { background: #E8E4DC !important; }
+        .e-ink-active.theme-letterpress .sentence-text { font-family: 'Literata', 'Noto Serif SC', serif !important; font-size: 19px !important; line-height: 1.85 !important; letter-spacing: 0.02em !important; color: #1C1C1C !important; text-indent: 2em; text-align: justify; }
+        .e-ink-active.theme-letterpress .nav-bar-luxury { background: #F8F6F0 !important; border-top: 2px solid #1C1C1C !important; border-radius: 0 !important; }
+        .e-ink-active.theme-letterpress .bottom-control-btn, .e-ink-active.theme-letterpress .btn-luxury, .e-ink-active.theme-letterpress .btn-back { background: #F8F6F0 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; font-variant: small-caps; letter-spacing: 0.1em; font-size: 11px !important; }
+        .e-ink-active.theme-letterpress .bottom-control-btn:hover, .e-ink-active.theme-letterpress .btn-luxury:hover { background: #E8E4DC !important; }
+        .e-ink-active.theme-letterpress .status-badge { background: #F8F6F0 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; font-variant: small-caps; font-size: 10px; }
+        .e-ink-active.theme-letterpress .slider-custom { -webkit-appearance: none !important; appearance: none !important; height: 1px !important; background: #B0A898 !important; border: none !important; border-radius: 0 !important; }
+        .e-ink-active.theme-letterpress .slider-custom::-webkit-slider-thumb { -webkit-appearance: none; width: 8px !important; height: 14px !important; background: #1C1C1C !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; }
+        .e-ink-active.theme-letterpress .eink-toggle { width: 32px !important; height: 16px !important; background: #D0C8B8 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-letterpress .eink-toggle.active { background: #5C5C5C !important; }
+        .e-ink-active.theme-letterpress .eink-toggle::after { width: 12px !important; height: 12px !important; background: #1C1C1C !important; border: none !important; border-radius: 0 !important; }
+        .e-ink-active.theme-letterpress .eink-toggle.active::after { background: #F8F6F0 !important; }
+        .e-ink-active.theme-letterpress .settings-overlay { background: rgba(248,246,240,0.98) !important; }
+        .e-ink-active.theme-letterpress .glass-panel { background: #F8F6F0 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; border-top: 3px solid #1C1C1C !important; }
+        .e-ink-active.theme-letterpress .font-option { background: #F8F6F0 !important; border: 1px solid #C0B8A8 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-letterpress .font-option:hover { background: #E8E4DC !important; }
+        .e-ink-active.theme-letterpress .toc-modal-content { background: #F8F6F0 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-letterpress .toc-item { border-bottom: 1px dotted #C0B8A8 !important; font-variant: small-caps; letter-spacing: 0.08em; }
+        .e-ink-active.theme-letterpress .luxury-fab { background: #F8F6F0 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-letterpress .text-input, .e-ink-active.theme-letterpress .typewriter-paper { background: #F8F6F0 !important; border: 1px solid #B0A898 !important; border-radius: 0 !important; font-family: 'Literata', serif !important; }
+        .e-ink-active.theme-letterpress svg { fill: #1C1C1C !important; color: #1C1C1C !important; }
+        .e-ink-active.theme-letterpress ::selection { background: #C0B8A8; color: #1C1C1C; }
+        .e-ink-active.theme-letterpress ::-webkit-scrollbar { width: 6px; }
+        .e-ink-active.theme-letterpress ::-webkit-scrollbar-track { background: #F8F6F0; }
+        .e-ink-active.theme-letterpress ::-webkit-scrollbar-thumb { background: #B0A898; }
+
+        /* ── 主题4: 竹简 Zhujian — 东方古典美学 ── */
+        .e-ink-active.theme-zhujian,
+        .e-ink-active[data-eink-theme="zhujian"] {
+            --eink-bg: #F7F3ED; --eink-text: #2A2018; --eink-border: #8B7355; --eink-accent: #8B2500;
+            --eink-glass-bg: #F7F3ED; --eink-glass-border: #8B7355; --eink-glass-border-top: #6B5335; --eink-glass-border-left: #6B5335;
+            --eink-glass-shadow: none; --eink-glass-blur: none; --eink-shadow: none; --eink-text-shadow: none;
+            --eink-opacity: 1; --eink-filter: none; --eink-transition: none; --eink-animation: none;
+            --eink-pseudo-display: none; --eink-hover-bg: #EDE8DC; --eink-overlay-bg: rgba(42,32,24,0.06);
+            --eink-svg-fill: #2A2018; --eink-thumb-bg: #8B2500; --eink-toggle-bg: #C0B8A8; --eink-toggle-active-bg: #8B2500; --eink-toggle-dot: #F7F3ED;
+            background: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='5' seed='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"), radial-gradient(ellipse at center, #F7F3ED 50%, #EDE5D8 100%) !important;
+            background-color: #F7F3ED !important; color: #2A2018 !important; font-family: 'Noto Serif SC', serif !important;
+        }
+        .e-ink-active.theme-zhujian * { color: #2A2018 !important; border-color: #8B7355 !important; box-shadow: none !important; text-shadow: none !important; }
+        .e-ink-active.theme-zhujian .hero-glass-base { background: #F7F3ED !important; border: 3px solid #8B7355 !important; border-radius: 2px !important; box-shadow: inset 0 0 0 2px #F7F3ED, inset 0 0 0 3px #C0B8A8 !important; text-align: center; padding: 2rem 1.5rem !important; }
+        .e-ink-active.theme-zhujian .hero-glass-base::before { content: '\58A8 \9999 \4E66 \82D9' !important; display: block !important; font-family: 'Noto Serif SC', serif; font-size: 14px; letter-spacing: 0.5em; color: #7A7068; margin-top: 0.5rem; }
+        .e-ink-active.theme-zhujian .hero-glass-base::after { content: '' !important; display: block !important; width: 32px; height: 32px; border: 2px solid #8B2500; margin: 0.8rem auto 0; position: relative; box-shadow: inset 0 0 0 1px #8B2500 !important; }
+        .e-ink-active.theme-zhujian .entry-card { background: #F7F3ED !important; border: 1px solid #8B7355 !important; border-radius: 2px !important; padding: 1rem 1.2rem !important; position: relative; }
+        .e-ink-active.theme-zhujian .entry-card::before { content: '' !important; display: block !important; position: absolute; left: 0; top: 10%; width: 3px; height: 80%; background: #8B2500; }
+        .e-ink-active.theme-zhujian .entry-card:hover { background: #EDE8DC !important; border-color: #6B5335 !important; }
+        .e-ink-active.theme-zhujian .sentence-text { font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive !important; font-size: 22px !important; line-height: 2.0 !important; letter-spacing: 0.1em !important; color: #2A2018 !important; text-align: center; }
+        .e-ink-active.theme-zhujian .sentence-text::before { content: '\300C' !important; display: block !important; font-size: 30px; color: #8B2500; margin-bottom: 0.3em; }
+        .e-ink-active.theme-zhujian .sentence-text::after { content: '\300D' !important; display: block !important; font-size: 30px; color: #8B2500; margin-top: 0.3em; }
+        .e-ink-active.theme-zhujian .status-badge { background: #F7F3ED !important; border: 2px solid #8B2500 !important; border-radius: 2px !important; color: #8B2500 !important; font-size: 11px; padding: 2px 8px; }
+        .e-ink-active.theme-zhujian .status-badge * { color: #8B2500 !important; }
+        .e-ink-active.theme-zhujian .nav-bar-luxury { background: #F7F3ED !important; border-top: 2px solid #8B7355 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-zhujian .bottom-control-btn, .e-ink-active.theme-zhujian .btn-luxury, .e-ink-active.theme-zhujian .btn-back { background: #F7F3ED !important; border: 1px solid #8B7355 !important; border-radius: 2px !important; font-family: 'Noto Serif SC', serif !important; }
+        .e-ink-active.theme-zhujian .bottom-control-btn:hover, .e-ink-active.theme-zhujian .btn-luxury:hover { background: #EDE8DC !important; border-color: #8B2500 !important; }
+        .e-ink-active.theme-zhujian .slider-custom { -webkit-appearance: none !important; appearance: none !important; height: 2px !important; background: #8B7355 !important; border: none !important; border-radius: 0 !important; }
+        .e-ink-active.theme-zhujian .slider-custom::-webkit-slider-thumb { -webkit-appearance: none; width: 10px !important; height: 10px !important; background: #F7F3ED !important; border: 2px solid #8B2500 !important; border-radius: 0 !important; box-shadow: none !important; }
+        .e-ink-active.theme-zhujian .eink-toggle { width: 36px !important; height: 18px !important; background: #C0B8A8 !important; border: 1px solid #8B7355 !important; border-radius: 2px !important; }
+        .e-ink-active.theme-zhujian .eink-toggle.active { background: #8B2500 !important; border-color: #6B1500 !important; }
+        .e-ink-active.theme-zhujian .eink-toggle::after { width: 14px !important; height: 14px !important; background: #F7F3ED !important; border: 1px solid #8B7355 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-zhujian .eink-toggle.active::after { background: #F7F3ED !important; border-color: #F7F3ED !important; }
+        .e-ink-active.theme-zhujian .settings-overlay { background: rgba(247,243,237,0.98) !important; }
+        .e-ink-active.theme-zhujian .glass-panel { background: #F7F3ED !important; border: 3px solid #8B7355 !important; border-radius: 2px !important; box-shadow: inset 0 0 0 2px #F7F3ED, inset 0 0 0 3px #C0B8A8 !important; }
+        .e-ink-active.theme-zhujian .font-option { background: #F7F3ED !important; border: 1px solid #C0B8A8 !important; border-radius: 2px !important; }
+        .e-ink-active.theme-zhujian .font-option:hover { background: #EDE8DC !important; border-color: #8B7355 !important; }
+        .e-ink-active.theme-zhujian .font-option.selected { border-color: #8B2500 !important; border-width: 2px !important; }
+        .e-ink-active.theme-zhujian .toc-modal-content { background: #F7F3ED !important; border: 3px solid #8B7355 !important; border-radius: 2px !important; }
+        .e-ink-active.theme-zhujian .toc-item { border-bottom: 1px dotted #C0B8A8 !important; }
+        .e-ink-active.theme-zhujian .toc-item:hover { background: #EDE8DC !important; }
+        .e-ink-active.theme-zhujian .luxury-fab { background: #F7F3ED !important; border: 2px solid #8B2500 !important; border-radius: 50% !important; }
+        .e-ink-active.theme-zhujian .text-input, .e-ink-active.theme-zhujian .typewriter-paper { background: #F7F3ED !important; border: 1px solid #8B7355 !important; border-radius: 2px !important; font-family: 'Noto Serif SC', serif !important; }
+        .e-ink-active.theme-zhujian svg { fill: #2A2018 !important; color: #2A2018 !important; }
+        .e-ink-active.theme-zhujian ::selection { background: #D0C0A8; color: #2A2018; }
+        .e-ink-active.theme-zhujian *:focus-visible { outline: 1.5px solid #8B2500 !important; outline-offset: 2px; }
+        .e-ink-active.theme-zhujian ::-webkit-scrollbar { width: 6px; }
+        .e-ink-active.theme-zhujian ::-webkit-scrollbar-track { background: #EDE5D8; }
+        .e-ink-active.theme-zhujian ::-webkit-scrollbar-thumb { background: #8B7355; border-radius: 2px; }
+
+        /* ── 主题5: 蓝图 Blueprint — 工程制图美学 ── */
+        .e-ink-active.theme-blueprint,
+        .e-ink-active[data-eink-theme="blueprint"] {
+            --eink-bg: #F5F5F0; --eink-text: #2A2A2A; --eink-border: #6A6A6A; --eink-accent: #1A3A5A;
+            --eink-glass-bg: #F5F5F0; --eink-glass-border: #6A6A6A; --eink-glass-border-top: #2A2A2A; --eink-glass-border-left: #2A2A2A;
+            --eink-glass-shadow: none; --eink-glass-blur: none; --eink-shadow: none; --eink-text-shadow: none;
+            --eink-opacity: 1; --eink-filter: none; --eink-transition: none; --eink-animation: none;
+            --eink-pseudo-display: none; --eink-hover-bg: #E0E8F0; --eink-overlay-bg: rgba(42,42,42,0.06);
+            --eink-svg-fill: #2A2A2A; --eink-thumb-bg: #1A3A5A; --eink-toggle-bg: #C0C0B8; --eink-toggle-active-bg: #1A3A5A; --eink-toggle-dot: #F5F5F0;
+            background: linear-gradient(rgba(42,42,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(42,42,42,0.04) 1px, transparent 1px), linear-gradient(rgba(42,42,42,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(42,42,42,0.08) 1px, transparent 1px), #F5F5F0 !important;
+            background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px !important; color: #2A2A2A !important; font-family: 'JetBrains Mono', monospace !important;
+        }
+        .e-ink-active.theme-blueprint * { color: #2A2A2A !important; border-color: #6A6A6A !important; box-shadow: none !important; text-shadow: none !important; }
+        .e-ink-active.theme-blueprint .hero-glass-base { background: #F5F5F0 !important; border: 2px solid #2A2A2A !important; border-radius: 0 !important; box-shadow: inset 0 0 0 1px #F5F5F0, inset 0 0 0 2px #B0B0A8 !important; position: relative; padding: 1.5rem !important; }
+        .e-ink-active.theme-blueprint .hero-glass-base::before { content: 'TITLE: MAS.READER  |  SCALE: 1:1  |  UNIT: px' !important; display: block !important; font-size: 10px; letter-spacing: 0.1em; color: #6A6A6A; border-top: 1px solid #B0B0A8; margin-top: 1rem; padding-top: 0.5rem; }
+        .e-ink-active.theme-blueprint .hero-glass-base::after { content: 'DATE: 2024  |  DWG: 001  |  REV: A' !important; display: block !important; font-size: 10px; letter-spacing: 0.1em; color: #6A6A6A; }
+        .e-ink-active.theme-blueprint .entry-card { background: #F5F5F0 !important; border: 1px solid #6A6A6A !important; border-radius: 0 !important; position: relative; }
+        .e-ink-active.theme-blueprint .entry-card:hover { background: #E0E8F0 !important; border-color: #1A3A5A !important; }
+        .e-ink-active.theme-blueprint .sentence-text { font-family: 'JetBrains Mono', monospace !important; font-size: 16px !important; line-height: 1.6 !important; letter-spacing: 0 !important; color: #2A2A2A !important; }
+        .e-ink-active.theme-blueprint .nav-bar-luxury { background: #F5F5F0 !important; border-top: 1px solid #2A2A2A !important; border-radius: 0 !important; }
+        .e-ink-active.theme-blueprint .bottom-control-btn, .e-ink-active.theme-blueprint .btn-luxury, .e-ink-active.theme-blueprint .btn-back { background: #F5F5F0 !important; border: 1px solid #6A6A6A !important; border-radius: 0 !important; font-family: 'JetBrains Mono', monospace !important; font-size: 11px !important; text-transform: uppercase; }
+        .e-ink-active.theme-blueprint .bottom-control-btn:hover, .e-ink-active.theme-blueprint .btn-luxury:hover { background: #E0E8F0 !important; border-color: #1A3A5A !important; }
+        .e-ink-active.theme-blueprint .status-badge { background: #F5F5F0 !important; border: 1px solid #6A6A6A !important; border-radius: 0 !important; font-size: 10px; }
+        .e-ink-active.theme-blueprint .slider-custom { -webkit-appearance: none !important; appearance: none !important; height: 1px !important; background: #6A6A6A !important; border: none !important; border-radius: 0 !important; }
+        .e-ink-active.theme-blueprint .slider-custom::-webkit-slider-thumb { -webkit-appearance: none; width: 10px !important; height: 10px !important; background: #F5F5F0 !important; border: 1px solid #1A3A5A !important; border-radius: 0 !important; box-shadow: none !important; cursor: crosshair; }
+        .e-ink-active.theme-blueprint .eink-toggle { width: 32px !important; height: 16px !important; background: #C0C0B8 !important; border: 1px solid #6A6A6A !important; border-radius: 0 !important; }
+        .e-ink-active.theme-blueprint .eink-toggle.active { background: #1A3A5A !important; }
+        .e-ink-active.theme-blueprint .eink-toggle::after { width: 12px !important; height: 12px !important; background: #2A2A2A !important; border: none !important; border-radius: 0 !important; }
+        .e-ink-active.theme-blueprint .eink-toggle.active::after { background: #F5F5F0 !important; }
+        .e-ink-active.theme-blueprint .settings-overlay { background: rgba(245,245,240,0.98) !important; }
+        .e-ink-active.theme-blueprint .glass-panel { background: #F5F5F0 !important; border: 2px solid #2A2A2A !important; border-radius: 0 !important; box-shadow: inset 0 0 0 1px #F5F5F0, inset 0 0 0 2px #B0B0A8 !important; }
+        .e-ink-active.theme-blueprint .font-option { background: #F5F5F0 !important; border: 1px solid #B0B0A8 !important; border-radius: 0 !important; }
+        .e-ink-active.theme-blueprint .font-option:hover { background: #E0E8F0 !important; }
+        .e-ink-active.theme-blueprint .font-option.selected { border-color: #1A3A5A !important; border-width: 2px !important; }
+        .e-ink-active.theme-blueprint .toc-modal-content { background: #F5F5F0 !important; border: 2px solid #2A2A2A !important; border-radius: 0 !important; }
+        .e-ink-active.theme-blueprint .toc-item { border-bottom: 1px solid #D0D0C8 !important; }
+        .e-ink-active.theme-blueprint .toc-item:hover { background: #E0E8F0 !important; }
+        .e-ink-active.theme-blueprint .luxury-fab { background: #F5F5F0 !important; border: 1px solid #1A3A5A !important; border-radius: 0 !important; }
+        .e-ink-active.theme-blueprint .text-input, .e-ink-active.theme-blueprint .typewriter-paper { background: #F5F5F0 !important; border: 1px solid #6A6A6A !important; border-radius: 0 !important; font-family: 'JetBrains Mono', monospace !important; }
+        .e-ink-active.theme-blueprint svg { fill: #2A2A2A !important; color: #2A2A2A !important; }
+        .e-ink-active.theme-blueprint ::selection { background: #C0D0E0; color: #2A2A2A; }
+        .e-ink-active.theme-blueprint *:focus-visible { outline: 1px solid #1A3A5A !important; outline-offset: 1px; }
+        .e-ink-active.theme-blueprint ::-webkit-scrollbar { width: 8px; }
+        .e-ink-active.theme-blueprint ::-webkit-scrollbar-track { background: #F5F5F0; border-left: 1px solid #D0D0C8; }
+        .e-ink-active.theme-blueprint ::-webkit-scrollbar-thumb { background: #B0B0A8; }
+
         /* ── E-Ink dedicated reader layout ──────────────────────────── */
         .eink-reader-layout { display: none; flex-direction: column; width: 100%; height: 100%; position: absolute; inset: 0; z-index: 30; background: #FFFFFF; color: #000000; font-family: 'Noto Serif SC', serif; }
         .e-ink-active .eink-reader-layout.active { display: flex; }
@@ -5570,6 +5818,17 @@
                     <div class="eink-toggle-wrap">
                         <div class="slider-label" data-i18n="settings_eink">墨水屏模式</div>
                         <div class="eink-toggle" id="eink-toggle" onclick="toggleEinkMode()"></div>
+                    </div>
+                    <div id="eink-theme-selector" style="display:none; width:100%; padding:8px 0;">
+                        <div class="slider-label" style="margin-bottom:8px;">墨水屏主题</div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <div class="eink-theme-dot" data-theme="default" onclick="setEinkTheme('default')" title="默认" style="width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid #000;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#000;">D</div>
+                            <div class="eink-theme-dot" data-theme="suzu" onclick="setEinkTheme('suzu')" title="素笺 Suzu" style="width:32px;height:32px;border-radius:50%;background:#FAFAF5;border:2px solid #C8C0B4;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1A1A1A;font-family:'Noto Serif SC',serif;">笺</div>
+                            <div class="eink-theme-dot" data-theme="moke" onclick="setEinkTheme('moke')" title="墨刻 Moke" style="width:32px;height:32px;border-radius:0;background:#000;border:2px solid #000;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:monospace;">刻</div>
+                            <div class="eink-theme-dot" data-theme="letterpress" onclick="setEinkTheme('letterpress')" title="铅印 Letterpress" style="width:32px;height:32px;border-radius:50%;background:#F8F6F0;border:2px solid #B0A898;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1C1C1C;font-variant:small-caps;">印</div>
+                            <div class="eink-theme-dot" data-theme="zhujian" onclick="setEinkTheme('zhujian')" title="竹简 Zhujian" style="width:32px;height:32px;border-radius:2px;background:#F7F3ED;border:2px solid #8B7355;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#8B2500;font-family:'Noto Serif SC',serif;">简</div>
+                            <div class="eink-theme-dot" data-theme="blueprint" onclick="setEinkTheme('blueprint')" title="蓝图 Blueprint" style="width:32px;height:32px;border-radius:0;background:#F5F5F0;border:2px solid #6A6A6A;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1A3A5A;font-family:monospace;">图</div>
+                        </div>
                     </div>
                     <div class="eink-toggle-wrap">
                         <div class="slider-label" data-i18n="settings_lowperf">低性能模式</div>
@@ -9662,10 +9921,33 @@
             if (playBtn) playBtn.innerText = isPlaying ? '‖' : '▶';
         }
 
+        function setEinkTheme(theme) {
+            var themes = ['suzu','moke','letterpress','zhujian','blueprint'];
+            themes.forEach(function(t) {
+                document.documentElement.classList.remove('theme-' + t);
+            });
+            document.documentElement.removeAttribute('data-eink-theme');
+            if (theme && theme !== 'default') {
+                document.documentElement.classList.add('theme-' + theme);
+                document.documentElement.setAttribute('data-eink-theme', theme);
+                localStorage.setItem('einkTheme', theme);
+            } else {
+                localStorage.removeItem('einkTheme');
+            }
+            // Update active dot
+            document.querySelectorAll('.eink-theme-dot').forEach(function(d) {
+                d.style.outline = 'none';
+                d.style.outlineOffset = '0';
+            });
+            var activeDot = document.querySelector('.eink-theme-dot[data-theme="' + (theme || 'default') + '"]');
+            if (activeDot) { activeDot.style.outline = '2px solid var(--accent)'; activeDot.style.outlineOffset = '2px'; }
+        }
+
         function toggleEinkMode() {
             einkMode = !einkMode;
             const toggle = document.getElementById('eink-toggle');
             var einkLayout = document.getElementById('eink-reader-layout');
+            var themeSelector = document.getElementById('eink-theme-selector');
 
             if (einkMode) {
                 savedThemeBeforeEink = currentTheme;
@@ -9677,6 +9959,11 @@
                 currentTheme = 'dark';
                 localStorage.setItem('animType', 'none');
                 toggle.classList.add('active');
+                if (themeSelector) themeSelector.style.display = 'block';
+                // Restore saved eink theme
+                var savedEinkTheme = localStorage.getItem('einkTheme');
+                if (savedEinkTheme) setEinkTheme(savedEinkTheme);
+                else setEinkTheme('default');
 
                 if (timer) {
                     cancelAnimationFrame(timer);
@@ -9711,6 +9998,9 @@
                 localStorage.setItem('animType', savedAnimBeforeEink);
                 document.getElementById('anim-select').value = savedAnimBeforeEink;
                 toggle.classList.remove('active');
+                if (themeSelector) themeSelector.style.display = 'none';
+                // Clear eink theme classes
+                setEinkTheme('default');
 
                 // Hide E-Ink dedicated layout
                 if (einkLayout) einkLayout.classList.remove('active');
