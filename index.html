@@ -97,6 +97,7 @@
             --eink-toggle-bg: rgba(255,255,255,0.1);
             --eink-toggle-active-bg: var(--accent);
             --eink-toggle-dot: #ffffff;
+            --font-ui: var(--font-display);
         }
 
         /* 注意：不要在这里添加全局重置，会破坏所有自定义样式 */
@@ -108,6 +109,25 @@
         button, a, input, select, textarea, [role="button"] {
             touch-action: manipulation;
             -webkit-touch-callout: none;
+        }
+
+        /* Apply --font-ui to UI chrome (NOT reading text) */
+        .slider-label, .slider-value, .slider-header label,
+        .status-badge, .status-badge-setting,
+        .entry-card, .entry-card .liquid-upload-title, .entry-card .liquid-upload-desc,
+        .nav-bar-luxury, .nav-bar-luxury label, .nav-bar-luxury span,
+        .bottom-control-btn, .control-btn,
+        .font-select, .anim-select, .font-option,
+        .eink-toggle-wrap, .eink-toggle-wrap .slider-label,
+        .about-module, .about-label,
+        .toc-modal-title, .toc-item,
+        .home-settings-panel, .home-settings-section label,
+        .theme-detail-item, .theme-carousel-current-label,
+        .quick-summon-label, .quick-summon-value,
+        #dashboard-page, #dashboard-page *:not(.eink-reader-text),
+        #library-screen, #library-screen *:not(.sentence-text),
+        #quote-showcase-page {
+            font-family: var(--font-ui) !important;
         }
 
         .liquid-glass,
@@ -1181,6 +1201,181 @@
 
         /* --- 输入屏幕重构 --- */
         #input-screen { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100vh; height: 100dvh; z-index: 20; background: transparent; position: fixed; top: 0; left: 0; right: 0; box-sizing: border-box; padding-top: calc(max(env(safe-area-inset-top), 12px) + 12px); padding-bottom: max(env(safe-area-inset-bottom), 12px); overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+
+        /* ===== 书库管理系统 ===== */
+        #library-screen {
+            display: none; position: fixed; inset: 0; z-index: 100;
+            background: var(--bg-base, #0a0a14);
+            overflow-y: auto; -webkit-overflow-scrolling: touch;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        #library-screen.open { display: block; }
+        .library-header {
+            display: flex; align-items: center; gap: 12px;
+            padding: 16px 20px; position: sticky; top: 0; z-index: 10;
+            background: rgba(10,10,20,0.85); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .library-back-btn {
+            background: none; border: none; color: var(--text-primary, #fff);
+            font-size: 1.2rem; cursor: pointer; padding: 8px;
+            opacity: 0.7; transition: opacity 0.2s;
+        }
+        .library-back-btn:hover { opacity: 1; }
+        .library-title {
+            font-size: 1.1rem; font-weight: 600; color: var(--text-primary, #fff);
+            letter-spacing: 0.05em;
+        }
+        .library-search-bar {
+            margin: 0 20px 12px; display: flex; gap: 8px;
+        }
+        .library-search-input {
+            flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 10px 16px; color: var(--text-primary, #fff);
+            font-size: 0.85rem; outline: none; transition: border-color 0.2s;
+        }
+        .library-search-input:focus { border-color: var(--accent, #7b61ff); }
+        .library-search-input::placeholder { color: rgba(255,255,255,0.3); }
+        .library-sort-btn {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 10px 14px; color: var(--text-primary, #fff);
+            font-size: 0.8rem; cursor: pointer; white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .library-sort-btn:hover { background: rgba(255,255,255,0.1); }
+        .library-filter-row {
+            display: flex; gap: 8px; padding: 0 20px 12px; flex-wrap: wrap;
+        }
+        .library-filter-chip {
+            padding: 6px 14px; border-radius: 20px; font-size: 0.75rem;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.2s;
+        }
+        .library-filter-chip.active {
+            background: var(--accent, #7b61ff); color: #fff;
+            border-color: var(--accent, #7b61ff);
+        }
+        .library-stats {
+            padding: 0 20px 8px; font-size: 0.7rem; color: rgba(255,255,255,0.3);
+            letter-spacing: 0.05em;
+        }
+        .library-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px; padding: 0 20px 100px;
+        }
+        .library-book-card {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px; overflow: hidden; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+            position: relative;
+        }
+        .library-book-card:hover {
+            transform: translateY(-4px); border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+        }
+        .library-book-cover {
+            width: 100%; aspect-ratio: 3/4; display: flex; align-items: center;
+            justify-content: center; font-size: 2rem; position: relative;
+            overflow: hidden;
+        }
+        .library-book-cover-gradient {
+            position: absolute; inset: 0; opacity: 0.8;
+        }
+        .library-book-cover-icon {
+            position: relative; z-index: 1; font-size: 2.5rem; opacity: 0.6;
+        }
+        .library-book-info {
+            padding: 10px 12px;
+        }
+        .library-book-title {
+            font-size: 0.8rem; color: var(--text-primary, #fff);
+            font-weight: 500; line-height: 1.3;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; word-break: break-all;
+        }
+        .library-book-meta {
+            font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-top: 4px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .library-book-fav {
+            position: absolute; top: 8px; right: 8px; z-index: 2;
+            background: rgba(0,0,0,0.5); border: none; border-radius: 50%;
+            width: 28px; height: 28px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; font-size: 0.8rem;
+            transition: all 0.2s; backdrop-filter: blur(8px);
+        }
+        .library-book-fav:hover { background: rgba(0,0,0,0.7); }
+        .library-book-fav.active { color: #ff6b6b; }
+        .library-book-actions {
+            position: absolute; top: 8px; left: 8px; z-index: 2;
+            background: rgba(0,0,0,0.5); border: none; border-radius: 50%;
+            width: 28px; height: 28px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; font-size: 0.7rem;
+            color: rgba(255,255,255,0.6); transition: all 0.2s;
+            backdrop-filter: blur(8px); opacity: 0;
+        }
+        .library-book-card:hover .library-book-actions { opacity: 1; }
+        .library-empty {
+            text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.3);
+        }
+        .library-empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+        .library-empty-text { font-size: 0.85rem; }
+        /* 书库右键菜单 */
+        .library-context-menu {
+            position: fixed; z-index: 200; background: rgba(20,20,30,0.95);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            padding: 6px 0; min-width: 160px; display: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        .library-context-menu.open { display: block; }
+        .library-context-item {
+            padding: 10px 16px; font-size: 0.8rem; color: var(--text-primary, #fff);
+            cursor: pointer; transition: background 0.15s; display: flex;
+            align-items: center; gap: 10px;
+        }
+        .library-context-item:hover { background: rgba(255,255,255,0.08); }
+        .library-context-item.danger { color: #ff6b6b; }
+        /* 书库排序菜单 */
+        .library-sort-menu {
+            position: fixed; z-index: 200; background: rgba(20,20,30,0.95);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            padding: 6px 0; min-width: 140px; display: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        .library-sort-menu.open { display: block; }
+        .library-sort-item {
+            padding: 10px 16px; font-size: 0.8rem; color: var(--text-primary, #fff);
+            cursor: pointer; transition: background 0.15s;
+        }
+        .library-sort-item:hover { background: rgba(255,255,255,0.08); }
+        .library-sort-item.active { color: var(--accent, #7b61ff); }
+        /* 重命名对话框 */
+        .library-rename-dialog {
+            position: fixed; inset: 0; z-index: 300; display: none;
+            align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+        }
+        .library-rename-dialog.open { display: flex; }
+        .library-rename-box {
+            background: rgba(20,20,30,0.95); border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px; padding: 24px; width: 90%; max-width: 360px;
+        }
+        .library-rename-input {
+            width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px; padding: 12px 16px; color: var(--text-primary, #fff);
+            font-size: 0.9rem; outline: none; margin: 12px 0;
+        }
+        .library-rename-input:focus { border-color: var(--accent, #7b61ff); }
+        .library-rename-btns { display: flex; gap: 8px; justify-content: flex-end; }
+        .library-rename-btn {
+            padding: 8px 20px; border-radius: 10px; border: none;
+            font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+        }
+        .library-rename-btn.cancel { background: rgba(255,255,255,0.08); color: var(--text-primary, #fff); }
+        .library-rename-btn.confirm { background: var(--accent, #7b61ff); color: #fff; }
         
         /* Logo和标题容器 - 只在主页面显示 */
         .hero-header-container {
@@ -1706,6 +1901,10 @@
         #bg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         #bg-layer canvas { width: 100%; height: 100%; display: block; transition: filter 0.3s ease; object-fit: cover; }
         #display-screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.2s ease; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 25; overflow: hidden; padding-top: env(safe-area-inset-top, 0px) !important; padding-bottom: env(safe-area-inset-bottom, 0px) !important; box-sizing: border-box; }
+        /* ── Custom background image overlay ─────────────────────────── */
+        .bg-image-overlay { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center; background-repeat: no-repeat; pointer-events: none; transition: filter 0.4s ease, opacity 0.4s ease; }
+        .bg-image-overlay.has-blur { filter: blur(var(--bg-image-blur, 12px)); }
+        .bg-image-overlay.hidden { opacity: 0; }
         .display-area { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
         #standard-area { position: relative; z-index: 5; width: 100%; height: 100%; display: grid; place-items: center; }
 
@@ -1726,6 +1925,64 @@
         .sentence-text.centered-display {
             max-width: min(85vw, 720px);
             padding: 0 max(5vw, 20px);
+        }
+
+        /* ===== 上下滚动模式 ===== */
+        #display-screen.scroll-mode {
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+        #display-screen.scroll-mode .display-area {
+            height: auto;
+            min-height: 100%;
+            align-items: flex-start;
+            padding: 15vh 0 40vh 0;
+        }
+        #display-screen.scroll-mode #standard-area {
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0 5vw;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        #display-screen.scroll-mode .sentence-text {
+            position: relative;
+            grid-area: auto;
+            opacity: 0.3;
+            transform: none;
+            filter: none;
+            transition: opacity 0.4s ease, transform 0.4s ease, color 0.3s ease;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-radius: 12px;
+            max-width: 100%;
+        }
+        #display-screen.scroll-mode .sentence-text.active {
+            opacity: 1;
+            transform: none;
+            filter: none;
+            background: rgba(255,255,255,0.04);
+        }
+        #display-screen.scroll-mode .sentence-text.scroll-current {
+            opacity: 1;
+            transform: none;
+            filter: none;
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 30px rgba(var(--accent-rgb, 123,97,255), 0.15);
+        }
+        #display-screen.scroll-mode .vintage-machine-body,
+        #display-screen.scroll-mode .typewriter-paper,
+        #display-screen.scroll-mode .typewriter-display {
+            display: none !important;
+        }
+        #display-screen.scroll-mode .display-area {
+            padding-left: max(env(safe-area-inset-left), 0px);
+            padding-right: max(env(safe-area-inset-right), 0px);
         }
         .sentence-text.smart-break {
             word-break: keep-all; line-break: strict; overflow-wrap: break-word;
@@ -2751,6 +3008,37 @@
         .e-ink-active .eink-toggle {
             border-radius: 11px !important;
         }
+
+        /* ── E-Ink dedicated reader layout ──────────────────────────── */
+        .eink-reader-layout { display: none; flex-direction: column; width: 100%; height: 100%; position: absolute; inset: 0; z-index: 30; background: #FFFFFF; color: #000000; font-family: 'Noto Serif SC', serif; }
+        .e-ink-active .eink-reader-layout.active { display: flex; }
+        .e-ink-active #display-screen.active { display: none !important; }
+        .eink-reader-top { display: flex; align-items: center; padding: 12px 20px 0 20px; height: 44px; }
+        .eink-reader-top-back { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: #888; }
+        .eink-reader-top-center { flex: 1; text-align: center; font-size: 13px; color: #888; letter-spacing: 1.6px; font-family: 'Courier New', monospace; cursor: pointer; }
+        .eink-reader-top-settings { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: #888; letter-spacing: 2px; }
+        .eink-reader-sentence-zone { flex: 1; display: flex; flex-direction: column; width: 100%; padding: 0 28px; overflow: hidden; }
+        .eink-reader-sentence-zone .spacer-top { flex: 0.38 1 0; }
+        .eink-reader-sentence-zone .spacer-bottom { flex: 0.62 1 0; }
+        .eink-reader-text { font-size: 20px; line-height: 1.9; color: #000; text-align: center; }
+        .eink-reader-hr { width: 100%; height: 1px; background: rgba(0,0,0,0.10); flex-shrink: 0; }
+        .eink-reader-progress { width: 100%; padding: 16px 20px 0 20px; height: 12px; position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        .eink-progress-track { width: calc(100% - 40px); height: 1px; background: #ccc; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); }
+        .eink-progress-fill { height: 2px; background: #000; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); transition: width 0.2s ease; }
+        .eink-progress-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 1.5px solid #000; position: absolute; top: 50%; transform: translate(-50%, -50%); transition: left 0.2s ease; }
+        .eink-reader-nav { display: flex; width: 100%; height: 64px; flex-shrink: 0; }
+        .eink-nav-btn { flex: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; color: #000; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .eink-nav-btn.play-btn { font-size: 22px; }
+        .eink-reader-footer { width: 100%; text-align: center; padding-bottom: 12px; font-size: 11px; color: #888; letter-spacing: 1px; font-family: 'Courier New', monospace; flex-shrink: 0; }
+
+        /* ── Quick Summon overlay ──────────────────────────────────────── */
+        .quick-summon-overlay { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 999; background: rgba(20,20,30,0.92); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 18px 24px; min-width: 260px; box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.15); animation: quickSummonIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .quick-summon-overlay.active { display: block; }
+        @keyframes quickSummonIn { from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.9); } to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } }
+        .quick-summon-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; text-align: center; }
+        .quick-summon-value { font-size: 1.4rem; font-weight: 600; color: var(--accent); text-align: center; margin-bottom: 12px; font-family: 'Montserrat', sans-serif; }
+        .quick-summon-slider { width: 100%; }
+        .quick-summon-hint { font-size: 0.6rem; color: rgba(255,255,255,0.3); text-align: center; margin-top: 8px; }
 
         /* ===== E-Ink 开关 ===== */
         .eink-toggles-grid {
@@ -4322,6 +4610,14 @@
             </button>
         </div>
 
+        <!-- Quick Summon overlay -->
+        <div class="quick-summon-overlay" id="quick-summon-overlay">
+            <div class="quick-summon-label" id="qs-label">参数</div>
+            <div class="quick-summon-value" id="qs-value">0</div>
+            <input type="range" class="slider-custom quick-summon-slider" id="qs-slider" oninput="onQuickSummonInput(this.value)">
+            <div class="quick-summon-hint">松手关闭 · 点击空白处取消</div>
+        </div>
+
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
@@ -4336,7 +4632,7 @@
             <div class="home-settings-panel" id="home-settings-panel">
                 <h3>主界面设置 <button onclick="toggleHomeSettings()">✕</button></h3>
                 <div class="home-settings-section">
-                    <label>配色方案</label>
+                    <label data-i18n="settings_theme">配色方案</label>
                     <div class="home-theme-grid">
                         <div class="home-theme-card" data-home-theme="dark" onclick="setHomeTheme('dark')">
                             <div class="theme-preview" style="background:linear-gradient(135deg,#1a1a2e,#050508)"></div>
@@ -4673,7 +4969,7 @@
                         <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M14 16h20M14 22h16M14 28h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
                     </div>
                     <div class="entry-text-wrap">
-                        <div class="liquid-upload-title">手动输入</div>
+                        <div class="liquid-upload-title" data-i18n="home_manual">手动输入</div>
                         <div class="liquid-upload-desc">粘贴或输入文本</div>
                     </div>
                 </div>
@@ -4683,14 +4979,24 @@
                         <svg viewBox="0 0 48 48" fill="none"><path d="M12 12h24v24H12z" stroke="currentColor" stroke-width="2.5"/><path d="M16 20h16M16 26h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="32" r="6" stroke="currentColor" stroke-width="2"/><path d="M30 32l1.5 1.5L34 30" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
                     <div class="entry-text-wrap">
-                        <div class="liquid-upload-title">展示书摘</div>
+                        <div class="liquid-upload-title" data-i18n="home_showcase">展示书摘</div>
                         <div class="liquid-upload-desc">选择效果展示书摘</div>
+                    </div>
+                </div>
+
+                <div class="entry-card liquid-upload-card" id="dashboard-btn" onclick="showDashboard()">
+                    <div class="liquid-upload-icon">
+                        <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="6" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="6" y="28" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="28" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/></svg>
+                    </div>
+                    <div class="entry-text-wrap">
+                        <div class="liquid-upload-title" data-i18n="home_dashboard">书斋展示</div>
+                        <div class="liquid-upload-desc">阅读数据与统计</div>
                     </div>
                 </div>
             </div>
 
             <div class="recent-books-section" id="recent-books-section" style="display:none; width:100%; max-width:280px; margin:16px auto 0;">
-                <div style="font-size:0.65rem; color:rgba(255,255,255,0.35); letter-spacing:3px; text-transform:uppercase; margin-bottom:10px; text-align:left;">最近在阅读</div>
+                <div style="font-size:0.65rem; color:rgba(255,255,255,0.35); letter-spacing:3px; text-transform:uppercase; margin-bottom:10px; text-align:left;" data-i18n="home_recent">最近在阅读</div>
                 <div id="recent-books-list" style="display:flex; flex-direction:column; gap:8px;"></div>
             </div>
 
@@ -4911,6 +5217,7 @@
 
         <div id="bg-layer">
         <div id="display-screen">
+            <div class="bg-image-overlay hidden" id="bg-image-overlay"></div>
             <div class="display-area">
                 <div class="typewriter-paper" id="paper">
                     <div id="typewriter-area" class="sentence-text"></div>
@@ -5015,7 +5322,7 @@
                 <div class="control-group">
                     <div class="slider-wrap">
                         <div class="slider-header">
-                            <div class="slider-label">阅读速度</div>
+                            <div class="slider-label" data-i18n="settings_speed">阅读速度</div>
                             <span class="slider-value" id="dwell-display" style="color:var(--accent)">×1.5</span>
                         </div>
                         <input type="range" class="slider-custom" id="dwell-slider" min="0.3" max="5" step="0.1" value="1.5" onchange="updateSpeed()" oninput="throttledUpdateSpeed()">
@@ -5024,7 +5331,7 @@
                     <!-- 字体设置 - 可展开 -->
                     <div class="bg-adjust-section" style="width:100%;">
                         <div class="slider-label" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:8px 0;" onclick="toggleFontSettingsSection()">
-                            <span>字体设置</span>
+                            <span data-i18n="settings_font">字体设置</span>
                             <span id="font-settings-arrow" style="font-size:0.7rem; opacity:0.5; transition:transform 0.3s ease;">&#9662;</span>
                         </div>
                         <div id="font-settings-sliders" style="display:none; transition:all 0.3s ease;">
@@ -5153,9 +5460,47 @@
                             </optgroup>
                         </select>
                     </div>
+
+                    <!-- UI字体 & 代码雨字体 -->
+                    <div class="bg-adjust-section" style="width:100%; margin-top: 0.4rem;">
+                        <div class="slider-label" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:6px 0;" onclick="toggleFontSeparateSection()">
+                            <span data-i18n="settings_font_sep">字体分离设置</span>
+                            <span id="font-separate-arrow" style="font-size:0.7rem; opacity:0.5; transition:transform 0.3s ease;">&#9662;</span>
+                        </div>
+                        <div id="font-separate-sliders" style="display:none; transition:all 0.3s ease;">
+                            <div class="select-wrap" style="margin-bottom:8px;">
+                                <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;margin-bottom:4px;display:block;" data-i18n="settings_ui_font">界面字体</label>
+                                <select class="font-select" id="ui-font-select" onchange="updateUIFont()" style="width:100%;">
+                                    <option value="" data-i18n="settings_follow_reading">跟随阅读字体</option>
+                                    <option value="HYZhengYuan">汉仪正圆</option>
+                                    <option value="Noto Sans SC">思源黑体</option>
+                                    <option value="Montserrat">Montserrat</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="DM Sans">DM Sans</option>
+                                    <option value="Space Grotesk">Space Grotesk</option>
+                                    <option value="Raleway">Raleway</option>
+                                </select>
+                            </div>
+                            <div class="select-wrap">
+                                <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;margin-bottom:4px;display:block;" data-i18n="settings_matrix_font">代码雨字体</label>
+                                <select class="font-select" id="matrix-font-select" onchange="updateMatrixFont()" style="width:100%;">
+                                    <option value="" data-i18n="settings_follow_reading">跟随阅读字体</option>
+                                    <option value="HuiWenMingChao">汇文明朝体</option>
+                                    <option value="Ma Shan Zheng">马善政楷体</option>
+                                    <option value="JingHuaOldSong">京华老宋体</option>
+                                    <option value="Noto Serif SC">思源宋体</option>
+                                    <option value="LXGW WenKai">霞鹜文楷</option>
+                                    <option value="ZCOOL XiaoWei">站酷小薇体</option>
+                                    <option value="Fira Code">Fira Code</option>
+                                    <option value="JetBrains Mono">JetBrains Mono</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="select-wrap">
                         <div class="slider-header">
-                            <div class="slider-label">动画方式</div>
+                            <div class="slider-label" data-i18n="settings_anim">动画方式</div>
                             <span class="slider-value" id="anim-display" style="color:var(--accent)">渐入渐出</span>
                         </div>
                         <div class="custom-font-select" id="custom-anim-select">
@@ -5187,8 +5532,24 @@
                             <option value="ink-spread">墨迹洇开</option>
                         </select>
                     </div>
+
+                    <!-- 打字机速度 & 雾效 -->
+                    <div id="typewriter-controls" style="display:none; margin-top: 0.6rem;">
+                        <div class="slider-wrap">
+                            <div class="slider-header">
+                                <div class="slider-label" data-i18n="settings_tw_speed">打字机速度</div>
+                                <span class="slider-value" id="tw-speed-val" style="color:var(--accent)">×1.0</span>
+                            </div>
+                            <input type="range" class="slider-custom" id="tw-speed-slider" min="0.1" max="2.0" step="0.1" value="1.0" oninput="updateTypewriterSpeed(this.value)">
+                        </div>
+                        <div class="eink-toggle-wrap" style="margin-top:8px;">
+                            <div class="slider-label" style="font-size:0.7rem;" data-i18n="settings_tw_ghost">打字机雾效</div>
+                            <div class="eink-toggle" id="tw-ghost-toggle" onclick="toggleTypewriterGhost()"></div>
+                        </div>
+                        <div style="font-size:0.6rem; color:rgba(255,255,255,0.3); margin-top:4px;">雾效：未打字部分显示淡影预览</div>
+                    </div>
                 </div>
-                
+
                 <div class="themes-section theme-select-section">
                     <div class="theme-current-capsule" id="theme-current-capsule" onclick="toggleThemeCarousel()">
                         <span class="capsule-color-dot" id="capsule-color-dot"></span>
@@ -5207,29 +5568,38 @@
                 
                 <div class="eink-toggles-grid">
                     <div class="eink-toggle-wrap">
-                        <div class="slider-label">墨水屏模式</div>
+                        <div class="slider-label" data-i18n="settings_eink">墨水屏模式</div>
                         <div class="eink-toggle" id="eink-toggle" onclick="toggleEinkMode()"></div>
                     </div>
                     <div class="eink-toggle-wrap">
-                        <div class="slider-label">低性能模式</div>
+                        <div class="slider-label" data-i18n="settings_lowperf">低性能模式</div>
                         <div class="eink-toggle" id="lowperf-toggle" onclick="toggleLowPerfMode()"></div>
                     </div>
                     <div class="eink-toggle-wrap">
-                        <div class="slider-label">状态栏显示</div>
+                        <div class="slider-label" data-i18n="settings_statusbar">状态栏显示</div>
                         <div class="eink-toggle" id="statusbar-toggle" onclick="toggleStatusBar()"></div>
                     </div>
                     <div class="eink-toggle-wrap">
-                        <div class="slider-label">智能语义断行</div>
+                        <div class="slider-label" data-i18n="settings_smartbreak">智能语义断行</div>
                         <div class="eink-toggle" id="smartbreak-toggle" onclick="toggleSmartBreak()"></div>
                     </div>
                     <div class="eink-toggle-wrap">
-                        <div class="slider-label">篇幅智能判断</div>
+                        <div class="slider-label" data-i18n="settings_widemode">篇幅智能判断</div>
                         <div class="eink-toggle" id="widemode-toggle" onclick="toggleWideMode()"></div>
                     </div>
                     <div class="eink-toggle-wrap">
-                        <div class="slider-label">智能长度</div>
+                        <div class="slider-label" data-i18n="settings_smartlen">智能长度</div>
                         <div class="eink-toggle" id="smartlen-toggle" onclick="toggleSmartLen()"></div>
                     </div>
+                </div>
+
+                <!-- 语言切换 -->
+                <div class="eink-toggle-wrap" style="margin-top:8px;">
+                    <div class="slider-label" data-i18n="settings_language">界面语言</div>
+                    <select id="lang-select" onchange="switchLanguage(this.value)" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:white;padding:6px 10px;border-radius:10px;font-size:0.7rem;cursor:pointer;outline:none;min-width:80px;">
+                        <option value="zh">中文</option>
+                        <option value="en">English</option>
+                    </select>
                 </div>
 
                 <!-- 液态玻璃透明度滑块 -->
@@ -5250,54 +5620,147 @@
 
                 <div class="bg-adjust-section" style="width:100%; margin-top: 0.5rem;">
                     <div class="slider-label" style="margin-bottom: 0.5rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="toggleBgAdjustSection()">
-                        <span>背景调节</span>
+                        <span data-i18n="settings_bg_adjust">背景调节</span>
                         <span id="bg-adjust-arrow" style="font-size:0.7rem; opacity:0.5; transition:transform 0.3s ease;">&#9662;</span>
                     </div>
                     <div id="bg-adjust-sliders" style="display:none; transition:all 0.3s ease;">
                         <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
-                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;">亮度</label>
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_brightness">亮度</label>
                             <input type="range" class="slider-custom" id="bg-brightness" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;">
                             <span class="val" id="bg-brightness-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">100%</span>
                         </div>
                         <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
-                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;">饱和度</label>
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_saturation">饱和度</label>
                             <input type="range" class="slider-custom" id="bg-saturation" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;">
                             <span class="val" id="bg-saturation-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">100%</span>
                         </div>
                         <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
-                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;">深浅度</label>
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_lightness">深浅度</label>
                             <input type="range" class="slider-custom" id="bg-lightness" min="0" max="200" value="100" oninput="applyBgAdjust()" style="flex:1;">
                             <span class="val" id="bg-lightness-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">100%</span>
+                        </div>
+                        <!-- Custom background image -->
+                        <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06);">
+                            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                                <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;" data-i18n="settings_bg_image">背景图片</label>
+                                <div style="display:flex; gap:6px;">
+                                    <button onclick="pickBgImage()" style="font-size:0.6rem; padding:3px 10px; border-radius:999px; background:rgba(255,255,255,0.08); color:var(--text-primary); border:1px solid rgba(255,255,255,0.1); cursor:pointer;">选择</button>
+                                    <button onclick="clearBgImage()" id="bg-image-clear-btn" style="font-size:0.6rem; padding:3px 10px; border-radius:999px; background:rgba(255,80,80,0.15); color:rgba(255,120,120,0.9); border:1px solid rgba(255,80,80,0.2); cursor:pointer; display:none;">清除</button>
+                                </div>
+                            </div>
+                            <input type="file" id="bg-image-file" accept="image/*" style="display:none;" onchange="onBgImagePicked(event)">
+                            <div id="bg-image-preview-wrap" style="display:none; margin-bottom:8px;">
+                                <div id="bg-image-preview" style="width:100%; height:60px; border-radius:8px; background-size:cover; background-position:center; border:1px solid rgba(255,255,255,0.1);"></div>
+                            </div>
+                            <div class="eink-toggle-wrap" style="margin-top:6px;">
+                                <div class="slider-label" style="font-size:0.65rem;" data-i18n="settings_bg_blur">背景模糊</div>
+                                <div class="eink-toggle" id="bg-image-blur-toggle" onclick="toggleBgImageBlur()"></div>
+                            </div>
+                            <div id="bg-image-blur-section" style="display:none; margin-top:6px;">
+                                <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;">
+                                    <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;">模糊</label>
+                                    <input type="range" class="slider-custom" id="bg-image-blur" min="0" max="30" value="12" oninput="updateBgImageBlur(this.value)" style="flex:1;">
+                                    <span class="val" id="bg-image-blur-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">12px</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="slider-wrap" id="reading-glow-intensity-section" style="display:none;">
                     <div class="slider-header">
-                        <div class="slider-label">发光强度</div>
+                        <div class="slider-label" data-i18n="settings_glow_intensity">发光强度</div>
                         <span class="slider-value" id="reading-glow-intensity-val" style="color:var(--accent)">50%</span>
                     </div>
                     <input type="range" class="slider-custom" id="reading-glow-intensity" min="0" max="100" value="50" oninput="updateGlowIntensity(this.value)">
                 </div>
 
                 <div class="eink-toggle-wrap" style="margin-top:12px;">
-                    <div class="slider-label">居中显示</div>
+                    <div class="slider-label" data-i18n="settings_centered">居中显示</div>
                     <div class="eink-toggle" id="centered-toggle" onclick="toggleCenteredDisplay()"></div>
                 </div>
 
                 <div class="eink-toggle-wrap" style="margin-top:8px;">
-                    <div class="slider-label">随机播放</div>
+                    <div class="slider-label" data-i18n="settings_shuffle">随机播放</div>
                     <div class="eink-toggle" id="shuffle-toggle" onclick="toggleShuffleMode()"></div>
                 </div>
 
+                <div class="eink-toggle-wrap" style="margin-top:8px;">
+                    <div class="slider-label" data-i18n="settings_scroll">上下滚动</div>
+                    <div class="eink-toggle" id="scrollmode-toggle" onclick="toggleScrollMode()"></div>
+                </div>
+
+                <!-- 玻璃参数精细控制 -->
+                <div class="bg-adjust-section" style="width:100%; margin-top: 0.8rem;">
+                    <div class="slider-label" style="margin-bottom: 0.5rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="toggleGlassSection()">
+                        <span data-i18n="settings_glass">玻璃效果</span>
+                        <span id="glass-section-arrow" style="font-size:0.7rem; opacity:0.5; transition:transform 0.3s ease;">&#9662;</span>
+                    </div>
+                    <div id="glass-sliders" style="display:none; transition:all 0.3s ease;">
+                        <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_blur">模糊</label>
+                            <input type="range" class="slider-custom" id="glass-blur" min="0" max="50" value="25" oninput="updateGlassParam('blur', this.value)" style="flex:1;">
+                            <span class="val" id="glass-blur-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">25px</span>
+                        </div>
+                        <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_corner">圆角</label>
+                            <input type="range" class="slider-custom" id="glass-corner" min="0" max="40" value="20" oninput="updateGlassParam('corner', this.value)" style="flex:1;">
+                            <span class="val" id="glass-corner-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">20px</span>
+                        </div>
+                        <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_refraction">折射</label>
+                            <input type="range" class="slider-custom" id="glass-refraction" min="0" max="3" step="0.1" value="1" oninput="updateGlassParam('refraction', this.value)" style="flex:1;">
+                            <span class="val" id="glass-refraction-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">1.0</span>
+                        </div>
+                        <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_chroma">色散</label>
+                            <input type="range" class="slider-custom" id="glass-chroma" min="0" max="3" step="0.1" value="0.5" oninput="updateGlassParam('chroma', this.value)" style="flex:1;">
+                            <span class="val" id="glass-chroma-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">0.5px</span>
+                        </div>
+                        <div class="slider-row" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+                            <label style="color:var(--text-primary);font-size:0.7rem;opacity:0.6;min-width:40px;" data-i18n="settings_saturate">饱和</label>
+                            <input type="range" class="slider-custom" id="glass-saturate" min="100" max="300" value="200" oninput="updateGlassParam('saturate', this.value)" style="flex:1;">
+                            <span class="val" id="glass-saturate-val" style="color:var(--text-primary);font-size:0.65rem;opacity:0.5;min-width:30px;text-align:right;">200%</span>
+                        </div>
+                        <button onclick="resetGlassDefaults()" style="width:100%;margin-top:4px;font-size:0.6rem;padding:6px;border-radius:999px;background:rgba(255,255,255,0.06);color:var(--text-primary);border:1px solid rgba(255,255,255,0.08);cursor:pointer;opacity:0.6;" data-i18n="settings_restore_default">恢复默认</button>
+                    </div>
+                </div>
+
                 <div style="margin-top:16px; display:flex; gap:8px;">
-                    <button class="status-badge" onclick="closeSettingsFromOverlay()" style="flex:1; justify-content:center; border-radius:999px;">返回阅读</button>
-                    <button class="status-badge" onclick="exitDisplay()" style="flex:1; justify-content:center; border-radius:999px;">退出阅读</button>
+                    <button class="status-badge" onclick="closeSettingsFromOverlay()" style="flex:1; justify-content:center; border-radius:999px;" data-i18n="settings_back_read">返回阅读</button>
+                    <button class="status-badge" onclick="exitDisplay()" style="flex:1; justify-content:center; border-radius:999px;" data-i18n="settings_exit">退出阅读</button>
                 </div>
 
                 </div>
             </div>
         </div>
+
+        <!-- E-Ink dedicated reader layout -->
+        <div class="eink-reader-layout" id="eink-reader-layout">
+            <div class="eink-reader-top">
+                <div class="eink-reader-top-back" onclick="exitDisplay()">←</div>
+                <div class="eink-reader-top-center" id="eink-page-label" onclick="toggleTOC()">P.1 / 1</div>
+                <div class="eink-reader-top-settings" onclick="handleSettingsGear()">···</div>
+            </div>
+            <div class="eink-reader-sentence-zone">
+                <div class="spacer-top"></div>
+                <div class="eink-reader-text" id="eink-reader-text"></div>
+                <div class="spacer-bottom"></div>
+            </div>
+            <div class="eink-reader-hr"></div>
+            <div class="eink-reader-progress">
+                <div class="eink-progress-track"></div>
+                <div class="eink-progress-fill" id="eink-progress-fill" style="width:0;"></div>
+                <div class="eink-progress-thumb" id="eink-progress-thumb" style="left:20px;"></div>
+            </div>
+            <div class="eink-reader-nav">
+                <div class="eink-nav-btn" onclick="prevSentence()">←</div>
+                <div class="eink-nav-btn play-btn" id="eink-play-btn" onclick="togglePlay()">▶</div>
+                <div class="eink-nav-btn" onclick="nextSentence()">→</div>
+            </div>
+            <div class="eink-reader-footer" id="eink-reader-footer">1 · 1 · 0%</div>
+        </div>
+
         </div>
     </div>
 
@@ -7262,8 +7725,306 @@
             
             localStorage.setItem('selectedFont', font);
             console.log('%c[字体切换] → ' + font + ' | display: ' + fontDisplay, 'color:#7b61ff');
+
+            // If UI font is "follow reading", update UI too
+            if (!localStorage.getItem('uiFont')) {
+                document.documentElement.style.setProperty('--font-ui', fontDisplay);
+            }
         }
-        
+
+        // ── Font separation: UI font ────────────────────────────────────
+        function updateUIFont() {
+            var font = document.getElementById('ui-font-select').value;
+            if (!font) {
+                // Follow reading font
+                localStorage.removeItem('uiFont');
+                var readingFont = document.getElementById('font-select').value;
+                var info = FONT_MAP[readingFont] || {};
+                var fd = info.display || ("'" + readingFont + "', sans-serif");
+                document.documentElement.style.setProperty('--font-ui', fd);
+                return;
+            }
+            localStorage.setItem('uiFont', font);
+            var fontDisplay = "'" + font + "', 'Noto Sans SC', sans-serif";
+            document.documentElement.style.setProperty('--font-ui', fontDisplay);
+            loadFontAsync(font);
+        }
+
+        function updateMatrixFont() {
+            var font = document.getElementById('matrix-font-select').value;
+            if (!font) {
+                localStorage.removeItem('matrixFont');
+                return;
+            }
+            localStorage.setItem('matrixFont', font);
+            loadFontAsync(font);
+        }
+
+        function restoreSeparatedFonts() {
+            var uiFont = localStorage.getItem('uiFont');
+            var matrixFont = localStorage.getItem('matrixFont');
+            if (uiFont) {
+                document.getElementById('ui-font-select').value = uiFont;
+                var fontDisplay = "'" + uiFont + "', 'Noto Sans SC', sans-serif";
+                document.documentElement.style.setProperty('--font-ui', fontDisplay);
+                loadFontAsync(uiFont);
+            } else {
+                // Follow reading font
+                var readingFont = localStorage.getItem('selectedFont') || 'Noto Serif SC';
+                var info = FONT_MAP[readingFont] || {};
+                document.documentElement.style.setProperty('--font-ui', info.display || ("'" + readingFont + "', sans-serif"));
+            }
+            if (matrixFont) {
+                document.getElementById('matrix-font-select').value = matrixFont;
+                loadFontAsync(matrixFont);
+                // Apply to matrix engine
+                if (typeof matrixEngine !== 'undefined' && matrixEngine) {
+                    matrixEngine.fontFamily = "'" + matrixFont + "', 'Noto Serif SC', serif";
+                }
+            }
+        }
+
+        function toggleFontSeparateSection() {
+            var sliders = document.getElementById('font-separate-sliders');
+            var arrow = document.getElementById('font-separate-arrow');
+            if (sliders.style.display === 'none') {
+                sliders.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                sliders.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // ── i18n: 中英文切换 ─────────────────────────────────────────────
+        var i18nStrings = {
+            zh: {
+                // Home screen
+                home_import: '导入书籍',
+                home_manual: '手动输入',
+                home_showcase: '展示书摘',
+                home_dashboard: '书斋展示',
+                home_recent: '最近在阅读',
+                home_about: '关于',
+                // Settings panel
+                settings_speed: '阅读速度',
+                settings_font: '字体设置',
+                settings_anim: '动画方式',
+                settings_font_sep: '字体分离设置',
+                settings_ui_font: '界面字体',
+                settings_matrix_font: '代码雨字体',
+                settings_follow_reading: '跟随阅读字体',
+                settings_theme: '配色方案',
+                settings_eink: '墨水屏模式',
+                settings_lowperf: '低性能模式',
+                settings_statusbar: '状态栏显示',
+                settings_smartbreak: '智能语义断行',
+                settings_widemode: '篇幅智能判断',
+                settings_smartlen: '智能长度',
+                settings_language: '界面语言',
+                settings_bg_adjust: '背景调节',
+                settings_brightness: '亮度',
+                settings_saturation: '饱和度',
+                settings_lightness: '深浅度',
+                settings_bg_image: '背景图片',
+                settings_bg_blur: '背景模糊',
+                settings_blur: '模糊',
+                settings_glass: '玻璃效果',
+                settings_corner: '圆角',
+                settings_refraction: '折射',
+                settings_chroma: '色散',
+                settings_saturate: '饱和',
+                settings_glow_intensity: '发光强度',
+                settings_centered: '居中显示',
+                settings_shuffle: '随机播放',
+                settings_scroll: '上下滚动',
+                settings_back_read: '返回阅读',
+                settings_exit: '退出阅读',
+                settings_tw_speed: '打字机速度',
+                settings_tw_ghost: '打字机雾效',
+                settings_tw_ghost_hint: '雾效：未打字部分显示淡影预览',
+                settings_restore_default: '恢复默认',
+                // Library
+                library_title: '书库',
+                library_all: '全部',
+                library_fav: '收藏',
+                library_recent: '最近',
+                library_search: '搜索书名...',
+                library_sort: '排序',
+                library_empty: '书库为空',
+                library_empty_hint: '从首页导入书籍',
+                library_open: '打开',
+                library_rename: '重命名',
+                library_delete: '删除',
+                library_sort_recent: '最近阅读',
+                library_sort_added: '添加时间',
+                library_sort_title: '书名',
+                library_sort_size: '大小',
+                // Dashboard
+                dashboard_title: '书斋 Dashboard',
+                dashboard_total_sentences: '总阅读句数',
+                dashboard_sessions: '阅读次数',
+                dashboard_total_books: '书籍总数',
+                dashboard_recent: '最近在读',
+                dashboard_current: '当前书籍',
+                dashboard_recent_activity: '最近阅读',
+                dashboard_library: '书库概览',
+                dashboard_library_books: '书库藏书',
+                dashboard_favorites: '收藏书籍',
+                dashboard_total_words: '总字数',
+                dashboard_no_activity: '暂无阅读记录',
+                dashboard_empty_library: '书库为空，请先导入书籍',
+                // E-Ink reader
+                eink_play: '▶',
+                eink_pause: '‖',
+                // Quick Summon
+                qs_speed: '阅读速度',
+                qs_fontsize: '字体大小',
+                qs_brightness: '背景亮度',
+                qs_lineheight: '行高',
+                qs_hint: '松手关闭 · 点击空白处取消',
+                // Common
+                common_back: '返回',
+                common_confirm: '确定',
+                common_cancel: '取消',
+                common_delete_confirm: '确定删除？'
+            },
+            en: {
+                // Home screen
+                home_import: 'Import Book',
+                home_manual: 'Manual Input',
+                home_showcase: 'Quotes Showcase',
+                home_dashboard: 'Dashboard',
+                home_recent: 'Recently Reading',
+                home_about: 'About',
+                // Settings panel
+                settings_speed: 'Reading Speed',
+                settings_font: 'Font Settings',
+                settings_anim: 'Animation',
+                settings_font_sep: 'Font Separation',
+                settings_ui_font: 'UI Font',
+                settings_matrix_font: 'Matrix Rain Font',
+                settings_follow_reading: 'Follow Reading Font',
+                settings_theme: 'Color Scheme',
+                settings_eink: 'E-Ink Mode',
+                settings_lowperf: 'Low Performance',
+                settings_statusbar: 'Status Bar',
+                settings_smartbreak: 'Smart Break',
+                settings_widemode: 'Wide Mode',
+                settings_smartlen: 'Smart Length',
+                settings_language: 'Language',
+                settings_bg_adjust: 'Background Adjust',
+                settings_brightness: 'Brightness',
+                settings_saturation: 'Saturation',
+                settings_lightness: 'Lightness',
+                settings_bg_image: 'Background Image',
+                settings_bg_blur: 'Background Blur',
+                settings_blur: 'Blur',
+                settings_glass: 'Glass Effect',
+                settings_corner: 'Corner',
+                settings_refraction: 'Refraction',
+                settings_chroma: 'Chroma',
+                settings_saturate: 'Saturate',
+                settings_glow_intensity: 'Glow Intensity',
+                settings_centered: 'Centered',
+                settings_shuffle: 'Shuffle',
+                settings_scroll: 'Scroll Mode',
+                settings_back_read: 'Back to Reading',
+                settings_exit: 'Exit Reading',
+                settings_tw_speed: 'Typewriter Speed',
+                settings_tw_ghost: 'Typewriter Ghost',
+                settings_tw_ghost_hint: 'Ghost: shows faint preview of untyped text',
+                settings_restore_default: 'Reset Default',
+                // Library
+                library_title: 'Library',
+                library_all: 'All',
+                library_fav: 'Favorites',
+                library_recent: 'Recent',
+                library_search: 'Search title...',
+                library_sort: 'Sort',
+                library_empty: 'Library is empty',
+                library_empty_hint: 'Import books from the home screen',
+                library_open: 'Open',
+                library_rename: 'Rename',
+                library_delete: 'Delete',
+                library_sort_recent: 'Recently Read',
+                library_sort_added: 'Date Added',
+                library_sort_title: 'Title',
+                library_sort_size: 'Size',
+                // Dashboard
+                dashboard_title: 'Dashboard',
+                dashboard_total_sentences: 'Total Sentences',
+                dashboard_sessions: 'Reading Sessions',
+                dashboard_total_books: 'Total Books',
+                dashboard_recent: 'Recently Read',
+                dashboard_current: 'Current Book',
+                dashboard_recent_activity: 'Recent Activity',
+                dashboard_library: 'Library Overview',
+                dashboard_library_books: 'Library Books',
+                dashboard_favorites: 'Favorites',
+                dashboard_total_words: 'Total Words',
+                dashboard_no_activity: 'No reading activity yet',
+                dashboard_empty_library: 'Library is empty, import books first',
+                // E-Ink reader
+                eink_play: '▶',
+                eink_pause: '‖',
+                // Quick Summon
+                qs_speed: 'Reading Speed',
+                qs_fontsize: 'Font Size',
+                qs_brightness: 'Brightness',
+                qs_lineheight: 'Line Height',
+                qs_hint: 'Release to close · Tap outside to cancel',
+                // Common
+                common_back: 'Back',
+                common_confirm: 'Confirm',
+                common_cancel: 'Cancel',
+                common_delete_confirm: 'Delete?'
+            }
+        };
+        var currentLang = 'zh';
+
+        function t(key) {
+            return (i18nStrings[currentLang] && i18nStrings[currentLang][key]) || (i18nStrings.zh[key]) || key;
+        }
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('appLanguage', lang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n');
+                var text = t(key);
+                if (el.tagName === 'INPUT' && el.type !== 'range') {
+                    el.placeholder = text;
+                } else {
+                    el.textContent = text;
+                }
+            });
+            // Update specific elements by ID
+            var updates = {
+                'library-search-input': { attr: 'placeholder', key: 'library_search' }
+            };
+            Object.keys(updates).forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) {
+                    var cfg = updates[id];
+                    el.setAttribute(cfg.attr, t(cfg.key));
+                }
+            });
+        }
+
+        function restoreLanguage() {
+            var lang = localStorage.getItem('appLanguage') || 'zh';
+            currentLang = lang;
+            var select = document.getElementById('lang-select');
+            if (select) select.value = lang;
+            applyLanguage();
+        }
+
         // 字体选择时的界面优化
         document.addEventListener('DOMContentLoaded', function() {
             var splash = document.getElementById('app-splash');
@@ -7545,6 +8306,34 @@
             const animNames = { fade: '渐入渐出', slide: '滑动', scale: '缩放', typewriter: '打字机', blur: '模糊', bounce: '弹跳', flip: '翻转' };
             const animDisplay = document.getElementById('anim-display');
             if (animDisplay) animDisplay.textContent = animNames[anim] || anim;
+            // Show/hide typewriter controls
+            var twControls = document.getElementById('typewriter-controls');
+            if (twControls) twControls.style.display = (anim === 'typewriter') ? 'block' : 'none';
+        }
+
+        // ── Typewriter speed & ghost ─────────────────────────────────────
+        function updateTypewriterSpeed(val) {
+            val = parseFloat(val);
+            document.getElementById('tw-speed-val').textContent = '×' + val.toFixed(1);
+            localStorage.setItem('typewriterSpeed', val);
+        }
+
+        function toggleTypewriterGhost() {
+            var toggle = document.getElementById('tw-ghost-toggle');
+            var enabled = !toggle.classList.contains('active');
+            toggle.classList.toggle('active', enabled);
+            localStorage.setItem('typewriterGhost', enabled ? '1' : '0');
+        }
+
+        function restoreTypewriterSettings() {
+            var speed = parseFloat(localStorage.getItem('typewriterSpeed') || '1.0');
+            var ghost = localStorage.getItem('typewriterGhost') === '1';
+            document.getElementById('tw-speed-slider').value = speed;
+            document.getElementById('tw-speed-val').textContent = '×' + speed.toFixed(1);
+            if (ghost) document.getElementById('tw-ghost-toggle').classList.add('active');
+            var anim = localStorage.getItem('animType') || 'fade';
+            var twControls = document.getElementById('typewriter-controls');
+            if (twControls) twControls.style.display = (anim === 'typewriter') ? 'block' : 'none';
         }
 
         // 筛选无效字段的函数
@@ -7630,6 +8419,24 @@
                 document.querySelectorAll('.sentence-text').forEach(function(el) { el.classList.add('centered-display'); });
             }
 
+            // 恢复滚动模式设置
+            if (localStorage.getItem('scrollMode') === '1') {
+                scrollMode = true;
+                var scrollToggle = document.getElementById('scrollmode-toggle');
+                if (scrollToggle) scrollToggle.classList.add('active');
+            }
+
+            // 恢复背景图片
+            restoreBgImage();
+            // 恢复玻璃参数
+            restoreGlassSettings();
+            // 恢复打字机设置
+            restoreTypewriterSettings();
+            // 恢复字体分离设置
+            restoreSeparatedFonts();
+            // 恢复语言设置
+            restoreLanguage();
+
             const text = document.getElementById('text-input').value;
             manualDwellOverride = false;
             speedFactor = parseFloat(document.getElementById('dwell-slider').value) || 1.5;
@@ -7714,7 +8521,21 @@
             }
             if (typeof pushNavState === 'function') pushNavState('reading');
             document.body.classList.add('reading-active');
-            renderSentence(); startTimer();
+            // 初始化滚动模式
+            if (scrollMode) {
+                renderScrollMode();
+            } else {
+                renderSentence();
+            }
+            // Activate E-Ink dedicated layout if einkMode is on
+            if (einkMode) {
+                var einkLayout = document.getElementById('eink-reader-layout');
+                if (einkLayout) einkLayout.classList.add('active');
+                ds.classList.add('active');
+                var eidx = displayMode === 'random' ? randomOrder[currentIndex] : currentIndex;
+                updateEinkReader(getSmartDisplayText(eidx));
+            }
+            startTimer();
             history.pushState(null, '', location.href);
         }
 
@@ -7751,6 +8572,13 @@
         }
 
         function renderSentence() {
+            // 滚动模式：高亮当前句并滚动到视图
+            if (scrollMode) {
+                document.getElementById('progress-val').innerText = (currentIndex + 1) + ' / ' + sentences.length;
+                highlightScrollSentence(currentIndex);
+                scrollToCurrentSentence();
+                return;
+            }
             const idx = displayMode === 'random' ? randomOrder[currentIndex] : currentIndex;
             var displayText = getSmartDisplayText(idx);
             if (typeof applySmartBreak === 'function') displayText = applySmartBreak(displayText);
@@ -7792,6 +8620,8 @@
                     if (typeof stopTypewriterEffect === 'function') stopTypewriterEffect();
                 }
                 isAnimationFinished = true;
+                // Update E-Ink dedicated reader layout
+                updateEinkReader(displayText);
             } else if (currentTheme === 'retro-typewriter') {
                 if (paper) paper.style.display = 'block';
                 paper.style.setProperty('--paper-y', '0px');
@@ -8026,33 +8856,103 @@
                 btn.addEventListener('touchcancel', cancelPress);
             }
 
-            // 上一条：短按切换，长按字体平滑缩小
+            // 上一条：短按切换，长按 Quick Summon 阅读速度
             setupLongPress('prev-btn', prevSentence, function() {
-                const slider = document.getElementById('size-slider');
-                let val = parseFloat(slider.value) - 0.2;
-                val = Math.max(1.5, val);
-                slider.value = val;
-                updateSize();
+                showQuickSummon('readingSpeed');
             });
 
-            // 下一条：短按切换，长按字体平滑放大
+            // 下一条：短按切换，长按 Quick Summon 阅读速度
             setupLongPress('next-btn', nextSentence, function() {
-                const slider = document.getElementById('size-slider');
-                let val = parseFloat(slider.value) + 0.2;
-                val = Math.min(8, val);
-                slider.value = val;
-                updateSize();
+                showQuickSummon('readingSpeed');
             });
 
-            // 播放键：短按播放/暂停，长按恢复默认布局
+            // 播放键：短按播放/暂停，长按 Quick Summon 字体大小
             setupLongPress('bottom-play-btn', togglePlay, function() {
-                const btn = document.getElementById('bottom-play-btn');
-                if (btn) btn.style.opacity = '0.5';
-            }, function() {
-                const btn = document.getElementById('bottom-play-btn');
-                if (btn) btn.style.opacity = '';
-                resetDefaultLayout();
+                showQuickSummon('fontSize');
             });
+        })();
+
+        // ── Quick Summon 快速调节 ─────────────────────────────────────────
+        var quickSummonConfig = {
+            readingSpeed: { label: '阅读速度', min: 0.3, max: 5, step: 0.1, get: function() { return parseFloat(document.getElementById('dwell-slider').value); }, set: function(v) { document.getElementById('dwell-slider').value = v; updateSpeed(); }, format: function(v) { return '×' + parseFloat(v).toFixed(1); } },
+            fontSize: { label: '字体大小', min: 12, max: 48, step: 1, get: function() { return parseFloat(document.getElementById('size-slider').value); }, set: function(v) { document.getElementById('size-slider').value = v; updateSize(); }, format: function(v) { return Math.round(v) + 'px'; } },
+            bgBrightness: { label: '背景亮度', min: 0, max: 200, step: 5, get: function() { return parseInt(document.getElementById('bg-brightness').value); }, set: function(v) { document.getElementById('bg-brightness').value = v; applyBgAdjust(); }, format: function(v) { return v + '%'; } },
+            lineHeight: { label: '行高', min: 1.0, max: 3.0, step: 0.1, get: function() { return parseFloat(localStorage.getItem('lineHeight') || '1.8'); }, set: function(v) { localStorage.setItem('lineHeight', v); document.documentElement.style.setProperty('--line-height', v); }, format: function(v) { return parseFloat(v).toFixed(1); } }
+        };
+        var quickSummonActive = false;
+
+        function showQuickSummon(key) {
+            var cfg = quickSummonConfig[key];
+            if (!cfg) return;
+            quickSummonActive = true;
+            var overlay = document.getElementById('quick-summon-overlay');
+            var label = document.getElementById('qs-label');
+            var value = document.getElementById('qs-value');
+            var slider = document.getElementById('qs-slider');
+            label.textContent = cfg.label;
+            slider.min = cfg.min;
+            slider.max = cfg.max;
+            slider.step = cfg.step;
+            slider.value = cfg.get();
+            value.textContent = cfg.format(slider.value);
+            overlay.classList.add('active');
+            // Haptic feedback
+            if (navigator.vibrate) navigator.vibrate(30);
+            // Store config for input handler
+            overlay.dataset.qsKey = key;
+        }
+
+        function hideQuickSummon() {
+            quickSummonActive = false;
+            document.getElementById('quick-summon-overlay').classList.remove('active');
+        }
+
+        function onQuickSummonInput(val) {
+            var overlay = document.getElementById('quick-summon-overlay');
+            var key = overlay.dataset.qsKey;
+            var cfg = quickSummonConfig[key];
+            if (!cfg) return;
+            cfg.set(parseFloat(val));
+            document.getElementById('qs-value').textContent = cfg.format(val);
+        }
+
+        // Close Quick Summon on outside click
+        document.addEventListener('mousedown', function(e) {
+            if (quickSummonActive && !e.target.closest('#quick-summon-overlay') && !e.target.closest('.bottom-control-btn')) {
+                hideQuickSummon();
+            }
+        });
+        document.addEventListener('touchstart', function(e) {
+            if (quickSummonActive && !e.target.closest('#quick-summon-overlay') && !e.target.closest('.bottom-control-btn')) {
+                hideQuickSummon();
+            }
+        }, { passive: true });
+
+        // Settings gear long-press for Quick Summon
+        (function() {
+            var gear = document.querySelector('.status-badge-setting');
+            if (!gear) return;
+            var pressTimer = null;
+            var isLong = false;
+            function gearStart(e) {
+                isLong = false;
+                pressTimer = setTimeout(function() {
+                    isLong = true;
+                    showQuickSummon('bgBrightness');
+                }, 500);
+            }
+            function gearEnd(e) {
+                clearTimeout(pressTimer);
+                if (!isLong) handleSettingsGear();
+            }
+            function gearCancel() { clearTimeout(pressTimer); }
+            gear.addEventListener('mousedown', gearStart);
+            gear.addEventListener('mouseup', gearEnd);
+            gear.addEventListener('mouseleave', gearCancel);
+            gear.addEventListener('touchstart', gearStart, { passive: true });
+            gear.addEventListener('touchend', gearEnd);
+            gear.addEventListener('touchcancel', gearCancel);
+            gear.removeAttribute('onclick');
         })();
 
         function toggleMode() {
@@ -8087,15 +8987,148 @@
             }
         }
 
+        // ===== 上下滚动模式 =====
+        var scrollMode = false;
+
+        function toggleScrollMode() {
+            scrollMode = !scrollMode;
+            var toggle = document.getElementById('scrollmode-toggle');
+            if (scrollMode) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+            localStorage.setItem('scrollMode', scrollMode ? '1' : '0');
+            if (document.getElementById('display-screen').style.display === 'flex') {
+                if (scrollMode) {
+                    renderScrollMode();
+                } else {
+                    exitScrollMode();
+                    renderSentence();
+                }
+            }
+        }
+
+        function renderScrollMode() {
+            var ds = document.getElementById('display-screen');
+            var standardArea = document.getElementById('standard-area');
+            var typewriterArea = document.getElementById('typewriter-area');
+            var paper = document.getElementById('paper');
+            if (paper) paper.style.display = 'none';
+            typewriterArea.innerHTML = '';
+            clearInterval(typewriterInterval);
+            if (typeof stopTypewriterEffect === 'function') stopTypewriterEffect();
+
+            ds.classList.add('scroll-mode');
+            standardArea.innerHTML = '';
+
+            var frag = document.createDocumentFragment();
+            for (var i = 0; i < sentences.length; i++) {
+                var div = document.createElement('div');
+                div.className = 'sentence-text';
+                div.innerText = sentences[i].text || sentences[i];
+                div.setAttribute('data-idx', i);
+                div.style.opacity = (i === currentIndex) ? '1' : '0.3';
+                div.style.transform = 'none';
+                div.style.filter = 'none';
+                if (i === currentIndex) div.classList.add('scroll-current');
+                var currentFontDisplay = getComputedStyle(document.documentElement).getPropertyValue('--font-display');
+                if (currentFontDisplay) div.style.setProperty('font-family', currentFontDisplay, 'important');
+                div.addEventListener('click', (function(idx) {
+                    return function() {
+                        currentIndex = idx;
+                        highlightScrollSentence(idx);
+                        accumulatedTime = 0;
+                        dwellTime = calculateDisplayDuration(sentences[idx].text || sentences[idx], speedFactor);
+                    };
+                })(i));
+                frag.appendChild(div);
+            }
+            standardArea.appendChild(frag);
+
+            // 滚动到当前句子
+            scrollToCurrentSentence();
+
+            // 滚动监听：自动高亮可见句子
+            var scrollThrottle = null;
+            ds.addEventListener('scroll', function() {
+                if (scrollThrottle) return;
+                scrollThrottle = requestAnimationFrame(function() {
+                    scrollThrottle = null;
+                    if (!scrollMode) return;
+                    var containerRect = ds.getBoundingClientRect();
+                    var centerY = containerRect.top + containerRect.height * 0.38;
+                    var closest = null;
+                    var closestDist = Infinity;
+                    standardArea.querySelectorAll('.sentence-text').forEach(function(el) {
+                        var rect = el.getBoundingClientRect();
+                        var elCenter = rect.top + rect.height / 2;
+                        var dist = Math.abs(elCenter - centerY);
+                        if (dist < closestDist) {
+                            closestDist = dist;
+                            closest = el;
+                        }
+                    });
+                    if (closest) {
+                        var idx = parseInt(closest.getAttribute('data-idx'));
+                        if (!isNaN(idx) && idx !== currentIndex) {
+                            currentIndex = idx;
+                            highlightScrollSentence(idx);
+                            accumulatedTime = 0;
+                            dwellTime = calculateDisplayDuration(sentences[idx].text || sentences[idx], speedFactor);
+                        }
+                    }
+                });
+            }, { passive: true });
+
+            isAnimationFinished = true;
+        }
+
+        function highlightScrollSentence(idx) {
+            var standardArea = document.getElementById('standard-area');
+            standardArea.querySelectorAll('.sentence-text').forEach(function(el) {
+                var elIdx = parseInt(el.getAttribute('data-idx'));
+                if (elIdx === idx) {
+                    el.classList.add('scroll-current');
+                    el.style.opacity = '1';
+                } else {
+                    el.classList.remove('scroll-current');
+                    el.style.opacity = '0.3';
+                }
+            });
+        }
+
+        function scrollToCurrentSentence() {
+            var ds = document.getElementById('display-screen');
+            var standardArea = document.getElementById('standard-area');
+            var target = standardArea.querySelector('.sentence-text[data-idx="' + currentIndex + '"]');
+            if (target) {
+                var containerRect = ds.getBoundingClientRect();
+                var targetRect = target.getBoundingClientRect();
+                var offset = targetRect.top - containerRect.top - containerRect.height * 0.35;
+                ds.scrollBy({ top: offset, behavior: 'smooth' });
+            }
+        }
+
+        function exitScrollMode() {
+            var ds = document.getElementById('display-screen');
+            ds.classList.remove('scroll-mode');
+            ds.scrollTop = 0;
+        }
+
         function exitDisplay() {
             if (timer) { cancelAnimationFrame(timer); timer = null; }
             if (typewriterInterval) { clearInterval(typewriterInterval); typewriterInterval = null; }
             if (typeof stopTypewriterEffect === 'function') stopTypewriterEffect();
             isPlaying = false;
             accumulatedTime = 0;
+            if (scrollMode) exitScrollMode();
             document.body.classList.remove('reading-active');
             const ds = document.getElementById('display-screen');
             ds.style.opacity = '0'; ds.classList.remove('active');
+            // Hide E-Ink dedicated layout
+            var einkLayout = document.getElementById('eink-reader-layout');
+            if (einkLayout) einkLayout.classList.remove('active');
             setTimeout(() => {
                 ds.style.display = 'none';
                 document.getElementById('input-screen').style.display = 'flex';
@@ -8151,6 +9184,172 @@
                 });
             } catch(e) {}
         }
+
+        // ── Library: navigation & interaction ─────────────────────────────
+        function openBookFromLibrary(idx) {
+            var lib = loadLibrary();
+            if (idx < 0 || idx >= lib.length) return;
+            var book = lib[idx];
+            document.getElementById('text-input').value = book.text;
+            startDisplay();
+        }
+
+        function filterLibrary(type) {
+            currentLibraryFilter = type;
+            var chips = document.querySelectorAll('#library-screen .lib-chip');
+            chips.forEach(function(c) {
+                c.classList.toggle('active', c.dataset.filter === type);
+            });
+            renderLibrary();
+        }
+
+        function setLibrarySort(key) {
+            currentLibrarySort = key;
+            localStorage.setItem('librarySort', key);
+            closeSortMenu();
+            renderLibrary();
+        }
+
+        function toggleSortMenu(e) {
+            e.stopPropagation();
+            var menu = document.getElementById('library-sort-menu');
+            if (!menu) return;
+            var showing = menu.style.display !== 'block';
+            closeSortMenu();
+            if (showing) {
+                var btn = document.getElementById('library-sort-btn');
+                if (btn) {
+                    var r = btn.getBoundingClientRect();
+                    menu.style.top = (r.bottom + 4) + 'px';
+                    menu.style.right = (window.innerWidth - r.right) + 'px';
+                }
+                menu.style.display = 'block';
+            }
+        }
+
+        function closeSortMenu() {
+            var menu = document.getElementById('library-sort-menu');
+            if (menu) menu.style.display = 'none';
+        }
+
+        var libraryContextIdx = -1;
+        function showContextMenu(e, idx) {
+            e.preventDefault();
+            e.stopPropagation();
+            libraryContextIdx = idx;
+            var lib = loadLibrary();
+            if (idx < 0 || idx >= lib.length) return;
+            var menu = document.getElementById('library-context-menu');
+            if (!menu) return;
+            // Update fav label
+            var favItem = menu.querySelector('[data-action="fav"]');
+            if (favItem) favItem.textContent = lib[idx].fav ? '取消收藏' : '收藏';
+            menu.style.display = 'block';
+            var x = Math.min(e.clientX || e.touches[0].clientX, window.innerWidth - 160);
+            var y = Math.min(e.clientY || e.touches[0].clientY, window.innerHeight - 180);
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+        }
+
+        function closeContextMenu() {
+            var menu = document.getElementById('library-context-menu');
+            if (menu) menu.style.display = 'none';
+            libraryContextIdx = -1;
+        }
+
+        function openLibraryBook() {
+            if (libraryContextIdx < 0) return;
+            closeContextMenu();
+            openBookFromLibrary(libraryContextIdx);
+        }
+
+        function toggleLibraryFav() {
+            if (libraryContextIdx < 0) return;
+            var lib = loadLibrary();
+            if (libraryContextIdx >= lib.length) return;
+            lib[libraryContextIdx].fav = !lib[libraryContextIdx].fav;
+            saveLibrary(lib);
+            closeContextMenu();
+            renderLibrary();
+        }
+
+        function toggleFavFromCard(idx) {
+            var lib = loadLibrary();
+            if (idx < 0 || idx >= lib.length) return;
+            lib[idx].fav = !lib[idx].fav;
+            saveLibrary(lib);
+            renderLibrary();
+        }
+
+        function renameLibraryBook() {
+            if (libraryContextIdx < 0) return;
+            var lib = loadLibrary();
+            if (libraryContextIdx >= lib.length) return;
+            closeContextMenu();
+            var dialog = document.getElementById('library-rename-dialog');
+            var input = document.getElementById('library-rename-input');
+            if (dialog && input) {
+                input.value = lib[libraryContextIdx].title;
+                dialog.style.display = 'flex';
+                setTimeout(function() { input.focus(); input.select(); }, 100);
+            }
+        }
+
+        function closeRenameDialog() {
+            var dialog = document.getElementById('library-rename-dialog');
+            if (dialog) dialog.style.display = 'none';
+        }
+
+        function confirmRename() {
+            if (libraryContextIdx < 0) return;
+            var lib = loadLibrary();
+            if (libraryContextIdx >= lib.length) return;
+            var input = document.getElementById('library-rename-input');
+            if (!input) return;
+            var newTitle = input.value.trim();
+            if (!newTitle) return;
+            lib[libraryContextIdx].title = newTitle;
+            saveLibrary(lib);
+            closeRenameDialog();
+            renderLibrary();
+        }
+
+        function deleteLibraryBook() {
+            if (libraryContextIdx < 0) return;
+            var lib = loadLibrary();
+            if (libraryContextIdx >= lib.length) return;
+            var title = lib[libraryContextIdx].title;
+            if (!confirm('删除《' + title + '》？')) return;
+            lib.splice(libraryContextIdx, 1);
+            saveLibrary(lib);
+            closeContextMenu();
+            renderLibrary();
+        }
+
+        // Close menus on document click
+        document.addEventListener('click', function(e) {
+            closeSortMenu();
+            closeContextMenu();
+        });
+
+        // Close menus on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSortMenu();
+                closeContextMenu();
+                closeRenameDialog();
+            }
+        });
+
+        // Auto-add books to library when startDisplay() is called
+        var _originalStartDisplay = startDisplay;
+        startDisplay = function() {
+            var text = document.getElementById('text-input').value.trim();
+            if (text && text.length > 50) {
+                addToLibrary(text.substring(0, 80).replace(/[\r\n]+/g, ' ').trim() || '未命名书籍', text);
+            }
+            return _originalStartDisplay.apply(this, arguments);
+        };
 
         window.addEventListener('popstate', function(e) {
             const ds = document.getElementById('display-screen');
@@ -8328,21 +9527,43 @@
         let savedAnimBeforeEink = 'fade';
         let savedPlayStateBeforeEink = false;
 
+        function updateEinkReader(text) {
+            var einkText = document.getElementById('eink-reader-text');
+            if (einkText) einkText.innerText = text || '';
+            var total = sentences.length || 1;
+            var pct = total > 0 ? Math.round((currentIndex / total) * 100) : 0;
+            var label = document.getElementById('eink-page-label');
+            if (label) label.innerText = 'P.' + (currentIndex + 1) + ' / ' + total;
+            var footer = document.getElementById('eink-reader-footer');
+            if (footer) footer.innerText = (currentIndex + 1) + ' · ' + total + ' · ' + pct + '%';
+            var fill = document.getElementById('eink-progress-fill');
+            var thumb = document.getElementById('eink-progress-thumb');
+            if (fill && thumb) {
+                var trackWidth = fill.parentElement.offsetWidth - 40;
+                var w = Math.max(0, Math.min(trackWidth, trackWidth * (currentIndex / Math.max(total - 1, 1))));
+                fill.style.width = w + 'px';
+                thumb.style.left = (20 + w) + 'px';
+            }
+            var playBtn = document.getElementById('eink-play-btn');
+            if (playBtn) playBtn.innerText = isPlaying ? '‖' : '▶';
+        }
+
         function toggleEinkMode() {
             einkMode = !einkMode;
             const toggle = document.getElementById('eink-toggle');
-            
+            var einkLayout = document.getElementById('eink-reader-layout');
+
             if (einkMode) {
                 savedThemeBeforeEink = currentTheme;
                 savedAnimBeforeEink = localStorage.getItem('animType') || 'fade';
                 savedPlayStateBeforeEink = isPlaying;
-                
+
                 document.documentElement.classList.add('e-ink-active');
                 document.body.className = 'theme-dark';
                 currentTheme = 'dark';
                 localStorage.setItem('animType', 'none');
                 toggle.classList.add('active');
-                
+
                 if (timer) {
                     cancelAnimationFrame(timer);
                     timer = null;
@@ -8355,8 +9576,15 @@
                 accumulatedTime = 0;
                 const bottomPlayIcon = document.getElementById('bottom-play-icon-svg');
                 if (bottomPlayIcon) bottomPlayIcon.innerHTML = '<path class="p-play" fill="currentColor"/>';
-                
-                if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
+
+                // Show E-Ink dedicated layout if display screen is active
+                if (document.getElementById('display-screen').style.display === 'flex') {
+                    if (einkLayout) einkLayout.classList.add('active');
+                    var ds = document.getElementById('display-screen');
+                    if (ds) ds.classList.add('active');
+                    var idx = displayMode === 'random' ? randomOrder[currentIndex] : currentIndex;
+                    updateEinkReader(getSmartDisplayText(idx));
+                }
                 document.querySelectorAll('.theme-select-section').forEach(function(el) {
                     el.style.display = 'none';
                 });
@@ -8369,10 +9597,16 @@
                 localStorage.setItem('animType', savedAnimBeforeEink);
                 document.getElementById('anim-select').value = savedAnimBeforeEink;
                 toggle.classList.remove('active');
+
+                // Hide E-Ink dedicated layout
+                if (einkLayout) einkLayout.classList.remove('active');
+                var ds = document.getElementById('display-screen');
+                if (ds) ds.classList.remove('active');
+
                 document.querySelectorAll('.theme-select-section').forEach(function(el) {
                     el.style.display = '';
                 });
-                
+
                 if (savedPlayStateBeforeEink) {
                     isPlaying = true;
                     accumulatedTime = 0;
@@ -8380,7 +9614,7 @@
                     if (bottomPlayIcon) bottomPlayIcon.innerHTML = '<path class="p-pause" fill="currentColor"/>';
                     startTimer();
                 }
-                
+
                 if (document.getElementById('display-screen').style.display === 'flex') renderSentence();
             }
         }
@@ -8427,6 +9661,192 @@
                 sliders.style.display = 'none';
                 arrow.style.transform = 'rotate(0deg)';
             }
+        }
+
+        // ── Glass parameter controls ─────────────────────────────────────
+        function toggleGlassSection() {
+            var sliders = document.getElementById('glass-sliders');
+            var arrow = document.getElementById('glass-section-arrow');
+            if (sliders.style.display === 'none') {
+                sliders.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                sliders.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function updateGlassParam(param, val) {
+            val = parseFloat(val);
+            switch(param) {
+                case 'blur':
+                    document.documentElement.style.setProperty('--lg-blur', val + 'px');
+                    document.getElementById('glass-blur-val').textContent = Math.round(val) + 'px';
+                    localStorage.setItem('glassBlur', val);
+                    break;
+                case 'corner':
+                    document.documentElement.style.setProperty('--lg-corner', val + 'px');
+                    document.getElementById('glass-corner-val').textContent = Math.round(val) + 'px';
+                    localStorage.setItem('glassCorner', val);
+                    // Update all glass elements' border-radius
+                    document.querySelectorAll('.liquid-glass, .glass-panel, .status-badge, .status-badge-setting, .nav-bar-luxury, .bottom-control-btn').forEach(function(el) {
+                        el.style.borderRadius = val + 'px';
+                    });
+                    break;
+                case 'refraction':
+                    document.documentElement.style.setProperty('--lg-refraction', val);
+                    document.getElementById('glass-refraction-val').textContent = parseFloat(val).toFixed(1);
+                    localStorage.setItem('glassRefraction', val);
+                    break;
+                case 'chroma':
+                    document.documentElement.style.setProperty('--lg-chromatic-r', val + 'px');
+                    document.getElementById('glass-chroma-val').textContent = parseFloat(val).toFixed(1) + 'px';
+                    localStorage.setItem('glassChroma', val);
+                    break;
+                case 'saturate':
+                    document.documentElement.style.setProperty('--lg-saturate', val + '%');
+                    document.getElementById('glass-saturate-val').textContent = Math.round(val) + '%';
+                    localStorage.setItem('glassSaturate', val);
+                    break;
+            }
+        }
+
+        function restoreGlassSettings() {
+            var blur = localStorage.getItem('glassBlur');
+            var corner = localStorage.getItem('glassCorner');
+            var refraction = localStorage.getItem('glassRefraction');
+            var chroma = localStorage.getItem('glassChroma');
+            var saturate = localStorage.getItem('glassSaturate');
+            if (blur !== null) {
+                document.getElementById('glass-blur').value = blur;
+                document.getElementById('glass-blur-val').textContent = Math.round(blur) + 'px';
+                document.documentElement.style.setProperty('--lg-blur', blur + 'px');
+            }
+            if (corner !== null) {
+                document.getElementById('glass-corner').value = corner;
+                document.getElementById('glass-corner-val').textContent = Math.round(corner) + 'px';
+                document.documentElement.style.setProperty('--lg-corner', corner + 'px');
+            }
+            if (refraction !== null) {
+                document.getElementById('glass-refraction').value = refraction;
+                document.getElementById('glass-refraction-val').textContent = parseFloat(refraction).toFixed(1);
+                document.documentElement.style.setProperty('--lg-refraction', refraction);
+            }
+            if (chroma !== null) {
+                document.getElementById('glass-chroma').value = chroma;
+                document.getElementById('glass-chroma-val').textContent = parseFloat(chroma).toFixed(1) + 'px';
+                document.documentElement.style.setProperty('--lg-chromatic-r', chroma + 'px');
+            }
+            if (saturate !== null) {
+                document.getElementById('glass-saturate').value = saturate;
+                document.getElementById('glass-saturate-val').textContent = Math.round(saturate) + '%';
+                document.documentElement.style.setProperty('--lg-saturate', saturate + '%');
+            }
+        }
+
+        function resetGlassDefaults() {
+            document.getElementById('glass-blur').value = 25;
+            document.getElementById('glass-corner').value = 20;
+            document.getElementById('glass-refraction').value = 1;
+            document.getElementById('glass-chroma').value = 0.5;
+            document.getElementById('glass-saturate').value = 200;
+            updateGlassParam('blur', 25);
+            updateGlassParam('corner', 20);
+            updateGlassParam('refraction', 1);
+            updateGlassParam('chroma', 0.5);
+            updateGlassParam('saturate', 200);
+            // Clear saved values
+            ['glassBlur', 'glassCorner', 'glassRefraction', 'glassChroma', 'glassSaturate'].forEach(function(k) { localStorage.removeItem(k); });
+            // Reset border-radius
+            document.querySelectorAll('.liquid-glass, .glass-panel, .status-badge, .status-badge-setting, .nav-bar-luxury, .bottom-control-btn').forEach(function(el) {
+                el.style.borderRadius = '';
+            });
+        }
+
+        // ── Custom background image ──────────────────────────────────────
+        function pickBgImage() {
+            document.getElementById('bg-image-file').click();
+        }
+
+        function onBgImagePicked(e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var dataUrl = ev.target.result;
+                localStorage.setItem('bgImageData', dataUrl);
+                applyBgImage(dataUrl);
+                // Show clear button & preview
+                document.getElementById('bg-image-clear-btn').style.display = '';
+                var previewWrap = document.getElementById('bg-image-preview-wrap');
+                var preview = document.getElementById('bg-image-preview');
+                if (previewWrap && preview) {
+                    previewWrap.style.display = 'block';
+                    preview.style.backgroundImage = 'url(' + dataUrl + ')';
+                }
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+        }
+
+        function clearBgImage() {
+            localStorage.removeItem('bgImageData');
+            var overlay = document.getElementById('bg-image-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                overlay.style.backgroundImage = '';
+            }
+            document.getElementById('bg-image-clear-btn').style.display = 'none';
+            document.getElementById('bg-image-preview-wrap').style.display = 'none';
+        }
+
+        function applyBgImage(dataUrl) {
+            var overlay = document.getElementById('bg-image-overlay');
+            if (!overlay) return;
+            overlay.style.backgroundImage = 'url(' + dataUrl + ')';
+            overlay.classList.remove('hidden');
+            // Apply blur if enabled
+            var blurEnabled = localStorage.getItem('bgImageBlur') === 'true';
+            var blurRadius = parseInt(localStorage.getItem('bgImageBlurRadius') || '12');
+            overlay.classList.toggle('has-blur', blurEnabled);
+            document.documentElement.style.setProperty('--bg-image-blur', blurRadius + 'px');
+        }
+
+        function toggleBgImageBlur() {
+            var toggle = document.getElementById('bg-image-blur-toggle');
+            var enabled = !toggle.classList.contains('active');
+            toggle.classList.toggle('active', enabled);
+            localStorage.setItem('bgImageBlur', enabled ? 'true' : 'false');
+            var overlay = document.getElementById('bg-image-overlay');
+            if (overlay) overlay.classList.toggle('has-blur', enabled);
+            document.getElementById('bg-image-blur-section').style.display = enabled ? 'block' : 'none';
+        }
+
+        function updateBgImageBlur(val) {
+            document.getElementById('bg-image-blur-val').textContent = val + 'px';
+            document.documentElement.style.setProperty('--bg-image-blur', val + 'px');
+            localStorage.setItem('bgImageBlurRadius', val);
+        }
+
+        function restoreBgImage() {
+            var data = localStorage.getItem('bgImageData');
+            if (data) {
+                applyBgImage(data);
+                document.getElementById('bg-image-clear-btn').style.display = '';
+                var previewWrap = document.getElementById('bg-image-preview-wrap');
+                var preview = document.getElementById('bg-image-preview');
+                if (previewWrap && preview) {
+                    previewWrap.style.display = 'block';
+                    preview.style.backgroundImage = 'url(' + data + ')';
+                }
+            }
+            var blurEnabled = localStorage.getItem('bgImageBlur') === 'true';
+            var blurRadius = parseInt(localStorage.getItem('bgImageBlurRadius') || '12');
+            var toggle = document.getElementById('bg-image-blur-toggle');
+            if (toggle) toggle.classList.toggle('active', blurEnabled);
+            document.getElementById('bg-image-blur').value = blurRadius;
+            document.getElementById('bg-image-blur-val').textContent = blurRadius + 'px';
+            document.getElementById('bg-image-blur-section').style.display = blurEnabled ? 'block' : 'none';
         }
 
         function toggleFontSettingsSection() {
@@ -10683,6 +12103,11 @@
                 var dwellTime = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--dwell-time')) || 2000;
                 typewriterCharDelay = Math.max(20, Math.floor(dwellTime / Math.max(1, text.length)));
                 typewriterCharDelay = Math.round(typewriterCharDelay * 2.22);
+                // Apply speed multiplier
+                var twSpeed = parseFloat(localStorage.getItem('typewriterSpeed') || '1.0');
+                if (twSpeed > 0) typewriterCharDelay = Math.max(10, Math.round(typewriterCharDelay / twSpeed));
+                // Ghost mode: show faint preview of remaining text
+                var twGhost = localStorage.getItem('typewriterGhost') === '1';
 
                 function tick(now) {
                     if (!typewriterLastTime) typewriterLastTime = now;
@@ -10698,7 +12123,23 @@
                                 element.appendChild(charNode);
                             }
                             typewriterIndex++;
+                            // Update ghost text
+                            if (twGhost) {
+                                var ghostEl = document.getElementById('typewriter-ghost');
+                                if (!ghostEl) {
+                                    ghostEl = document.createElement('span');
+                                    ghostEl.id = 'typewriter-ghost';
+                                    ghostEl.style.cssText = 'opacity:0.12;color:inherit;font:inherit;pointer-events:none;';
+                                    var c2 = document.getElementById('typewriter-cursor-active');
+                                    if (c2) element.insertBefore(ghostEl, c2);
+                                    else element.appendChild(ghostEl);
+                                }
+                                ghostEl.textContent = typewriterText.substring(typewriterIndex);
+                            }
                         } else {
+                            // Remove ghost on completion
+                            var ghostDone = document.getElementById('typewriter-ghost');
+                            if (ghostDone) ghostDone.remove();
                             stopTypewriterEffect();
                             element.style.textAlign = '';
                             element.style.justifySelf = '';
@@ -10720,6 +12161,8 @@
                 typewriterLastTime = 0;
                 var cursor = document.getElementById('typewriter-cursor-active');
                 if (cursor) cursor.remove();
+                var ghost = document.getElementById('typewriter-ghost');
+                if (ghost) ghost.remove();
             };
 
             window.isTypewriterRunning = function() {
@@ -11019,6 +12462,58 @@
         })();
     </script>
 
+    <!-- ===== 书库管理系统 ===== -->
+    <div id="library-screen">
+        <div class="library-header">
+            <button class="library-back-btn" onclick="closeLibrary()">←</button>
+            <div class="library-title">书库</div>
+            <div style="flex:1;"></div>
+            <button class="library-sort-btn" id="library-sort-btn" onclick="toggleSortMenu(event)">最近阅读 ▾</button>
+        </div>
+        <div class="library-search-bar">
+            <input type="text" class="library-search-input" id="library-search" placeholder="搜索书名..." oninput="filterLibrary()">
+        </div>
+        <div class="library-filter-row">
+            <div class="library-filter-chip active" data-filter="all" onclick="setLibraryFilter('all')">全部</div>
+            <div class="library-filter-chip" data-filter="favorites" onclick="setLibraryFilter('favorites')">收藏</div>
+            <div class="library-filter-chip" data-filter="recent" onclick="setLibraryFilter('recent')">最近</div>
+        </div>
+        <div class="library-stats" id="library-stats"></div>
+        <div class="library-grid" id="library-grid"></div>
+        <div class="library-empty" id="library-empty" style="display:none;">
+            <div class="library-empty-icon">📚</div>
+            <div class="library-empty-text">书库空空如也<br><span style="font-size:0.75rem;opacity:0.5;">导入书籍后会自动出现在这里</span></div>
+        </div>
+    </div>
+
+    <!-- 书库右键菜单 -->
+    <div class="library-context-menu" id="library-context-menu">
+        <div class="library-context-item" onclick="openLibraryBook()">📖 打开阅读</div>
+        <div class="library-context-item" onclick="toggleLibraryFav()">⭐ 切换收藏</div>
+        <div class="library-context-item" onclick="renameLibraryBook()">✏️ 重命名</div>
+        <div class="library-context-item danger" onclick="deleteLibraryBook()">🗑 删除</div>
+    </div>
+
+    <!-- 书库排序菜单 -->
+    <div class="library-sort-menu" id="library-sort-menu">
+        <div class="library-sort-item active" data-sort="recent" onclick="setLibrarySort('recent')">最近阅读</div>
+        <div class="library-sort-item" data-sort="added" onclick="setLibrarySort('added')">最近添加</div>
+        <div class="library-sort-item" data-sort="title" onclick="setLibrarySort('title')">标题 A-Z</div>
+        <div class="library-sort-item" data-sort="size" onclick="setLibrarySort('size')">字数</div>
+    </div>
+
+    <!-- 重命名对话框 -->
+    <div class="library-rename-dialog" id="library-rename-dialog">
+        <div class="library-rename-box">
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">重命名</div>
+            <input type="text" class="library-rename-input" id="library-rename-input" placeholder="输入新书名">
+            <div class="library-rename-btns">
+                <button class="library-rename-btn cancel" onclick="closeRenameDialog()">取消</button>
+                <button class="library-rename-btn confirm" onclick="confirmRename()">确定</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 书摘展示选择页面 -->
     <div id="quote-showcase-page" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:var(--bg-base);overflow-y:auto;-webkit-overflow-scrolling:touch;">
         <div style="max-width:900px;margin:0 auto;padding:40px 20px;min-height:100vh;">
@@ -11182,6 +12677,164 @@
                 sessionStorage.setItem('returnToQuoteShowcase', 'true');
                 window.location.href = `quotes-showcase/${effectId}.html`;
             }
+        }
+    </script>
+
+    <!-- ═══ Dashboard 书斋展示 ═══════════════════════════════════════ -->
+    <div id="dashboard-page" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:var(--bg-base);overflow-y:auto;-webkit-overflow-scrolling:touch;">
+        <div style="max-width:800px;margin:0 auto;padding:30px 20px;min-height:100vh;">
+            <!-- Top bar -->
+            <div style="display:flex;align-items:center;gap:15px;margin-bottom:30px;">
+                <button onclick="closeDashboard()" style="background:transparent;border:none;color:var(--text-primary);cursor:pointer;font-size:1rem;display:flex;align-items:center;gap:8px;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    返回
+                </button>
+                <h1 style="font-size:1.4rem;font-weight:300;letter-spacing:0.1em;color:var(--text-primary);margin:0;">书斋 Dashboard</h1>
+            </div>
+
+            <!-- Stats overview cards -->
+            <div id="dashboard-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:30px;"></div>
+
+            <!-- Current book progress -->
+            <div id="dashboard-current" style="margin-bottom:30px;"></div>
+
+            <!-- Recent activity -->
+            <div id="dashboard-recent" style="margin-bottom:30px;"></div>
+
+            <!-- Library overview -->
+            <div id="dashboard-library"></div>
+        </div>
+    </div>
+
+    <script>
+        // ── Reading stats tracking ───────────────────────────────────────
+        function getReadingStats() {
+            try { return JSON.parse(localStorage.getItem('readingStats') || '{}'); } catch(e) { return {}; }
+        }
+        function saveReadingStats(stats) {
+            localStorage.setItem('readingStats', JSON.stringify(stats));
+        }
+        function trackReadingSession(sentencesCount) {
+            var stats = getReadingStats();
+            stats.totalSentences = (stats.totalSentences || 0) + sentencesCount;
+            stats.sessionCount = (stats.sessionCount || 0) + 1;
+            stats.lastReadAt = Date.now();
+            saveReadingStats(stats);
+        }
+        // Hook into startDisplay to track sessions
+        var _dashOriginalStartDisplay = startDisplay;
+        startDisplay = function() {
+            var result = _dashOriginalStartDisplay.apply(this, arguments);
+            var text = document.getElementById('text-input').value.trim();
+            if (text) {
+                var count = text.split(/\n\n+/).flatMap(function(p) {
+                    return p.split(/[。！？?!.]+/).filter(function(s) { return s.trim().length > 0; });
+                }).length;
+                trackReadingSession(count);
+                // Track per-book
+                var title = text.substring(0, 80).replace(/[\r\n]+/g, ' ').trim() || '未命名';
+                var stats = getReadingStats();
+                if (!stats.books) stats.books = {};
+                var key = title.substring(0, 40);
+                if (!stats.books[key]) stats.books[key] = { title: title, sentences: 0, sessions: 0, firstRead: Date.now() };
+                stats.books[key].sentences += count;
+                stats.books[key].sessions += 1;
+                stats.books[key].lastRead = Date.now();
+                saveReadingStats(stats);
+            }
+            return result;
+        };
+
+        function showDashboard() {
+            document.getElementById('dashboard-page').style.display = 'block';
+            renderDashboard();
+        }
+        function closeDashboard() {
+            document.getElementById('dashboard-page').style.display = 'none';
+        }
+
+        function renderDashboard() {
+            var stats = getReadingStats();
+            var totalSentences = stats.totalSentences || 0;
+            var sessionCount = stats.sessionCount || 0;
+            var books = stats.books || {};
+            var bookCount = Object.keys(books).length;
+            var recentBooks = JSON.parse(localStorage.getItem('recentBooks') || '[]');
+            var library = JSON.parse(localStorage.getItem('bookLibrary') || '[]');
+
+            // Stats cards
+            var statsHtml = [
+                { label: '总阅读句数', value: totalSentences.toLocaleString(), icon: '📖' },
+                { label: '阅读次数', value: sessionCount, icon: '🔄' },
+                { label: '书籍总数', value: Math.max(bookCount, library.length), icon: '📚' },
+                { label: '最近在读', value: recentBooks.length > 0 ? recentBooks.length + '本' : '无', icon: '🔖' }
+            ].map(function(s) {
+                return '<div style="background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;text-align:center;">' +
+                    '<div style="font-size:1.8rem;margin-bottom:6px;">' + s.icon + '</div>' +
+                    '<div style="font-size:1.5rem;font-weight:600;color:var(--text-primary);font-family:Montserrat,sans-serif;">' + s.value + '</div>' +
+                    '<div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:4px;letter-spacing:1px;">' + s.label + '</div>' +
+                '</div>';
+            }).join('');
+            document.getElementById('dashboard-stats').innerHTML = statsHtml;
+
+            // Current book
+            var currentHtml = '';
+            if (recentBooks.length > 0) {
+                var latest = recentBooks[0];
+                var bookStats = books[latest.title.substring(0, 40)] || {};
+                currentHtml = '<div style="background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;">' +
+                    '<div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;">当前书籍</div>' +
+                    '<div style="font-size:1.1rem;color:var(--text-primary);margin-bottom:8px;">' + escapeHtml(latest.title || '未命名') + '</div>' +
+                    '<div style="display:flex;gap:20px;font-size:0.75rem;color:rgba(255,255,255,0.5);">' +
+                        '<span>阅读 ' + (bookStats.sessions || 0) + ' 次</span>' +
+                        '<span>共 ' + (bookStats.sentences || 0) + ' 句</span>' +
+                        (bookStats.lastRead ? '<span>最近 ' + formatRelativeTime(bookStats.lastRead) + '</span>' : '') +
+                    '</div>' +
+                '</div>';
+            }
+            document.getElementById('dashboard-current').innerHTML = currentHtml;
+
+            // Recent activity
+            var recentHtml = '<div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;">最近阅读</div>';
+            if (recentBooks.length > 0) {
+                recentHtml += '<div style="display:flex;flex-direction:column;gap:8px;">';
+                recentBooks.slice(0, 5).forEach(function(book, i) {
+                    var bs = books[book.title.substring(0, 40)] || {};
+                    var color = ['var(--accent)', '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff'][i % 5];
+                    recentHtml += '<div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);">' +
+                        '<div style="width:36px;height:36px;border-radius:8px;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:white;font-weight:700;flex-shrink:0;">' + (book.title || '?').charAt(0) + '</div>' +
+                        '<div style="flex:1;min-width:0;">' +
+                            '<div style="font-size:0.8rem;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(book.title || '未命名') + '</div>' +
+                            '<div style="font-size:0.65rem;color:rgba(255,255,255,0.35);">' + (bs.sessions || 0) + '次阅读 · ' + (bs.sentences || 0) + '句</div>' +
+                        '</div>' +
+                    '</div>';
+                });
+                recentHtml += '</div>';
+            } else {
+                recentHtml += '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:0.8rem;">暂无阅读记录</div>';
+            }
+            document.getElementById('dashboard-recent').innerHTML = recentHtml;
+
+            // Library overview
+            var libHtml = '<div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;">书库概览</div>';
+            if (library.length > 0) {
+                var favCount = library.filter(function(b) { return b.fav; }).length;
+                var totalWords = library.reduce(function(sum, b) { return sum + (b.text || '').length; }, 0);
+                libHtml += '<div style="display:flex;gap:14px;flex-wrap:wrap;">';
+                libHtml += '<div style="flex:1;min-width:120px;padding:14px;background:rgba(255,255,255,0.04);border-radius:10px;text-align:center;">' +
+                    '<div style="font-size:1.2rem;font-weight:600;color:var(--text-primary);">' + library.length + '</div>' +
+                    '<div style="font-size:0.65rem;color:rgba(255,255,255,0.35);">书库藏书</div></div>';
+                libHtml += '<div style="flex:1;min-width:120px;padding:14px;background:rgba(255,255,255,0.04);border-radius:10px;text-align:center;">' +
+                    '<div style="font-size:1.2rem;font-weight:600;color:var(--text-primary);">' + favCount + '</div>' +
+                    '<div style="font-size:0.65rem;color:rgba(255,255,255,0.35);">收藏书籍</div></div>';
+                libHtml += '<div style="flex:1;min-width:120px;padding:14px;background:rgba(255,255,255,0.04);border-radius:10px;text-align:center;">' +
+                    '<div style="font-size:1.2rem;font-weight:600;color:var(--text-primary);">' + formatWordCount(totalWords) + '</div>' +
+                    '<div style="font-size:0.65rem;color:rgba(255,255,255,0.35);">总字数</div></div>';
+                libHtml += '</div>';
+            } else {
+                libHtml += '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:0.8rem;">书库为空，请先导入书籍</div>';
+            }
+            document.getElementById('dashboard-library').innerHTML = libHtml;
         }
     </script>
 </body>
