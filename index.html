@@ -9185,6 +9185,120 @@
             } catch(e) {}
         }
 
+        // ── Library: core storage & rendering ─────────────────────────────
+        var currentLibraryFilter = 'all';
+        var currentLibrarySort = 'recent';
+
+        function loadLibrary() {
+            try { return JSON.parse(localStorage.getItem('bookLibrary') || '[]'); } catch(e) { return []; }
+        }
+
+        function saveLibrary(lib) {
+            localStorage.setItem('bookLibrary', JSON.stringify(lib));
+        }
+
+        function addToLibrary(title, text) {
+            var lib = loadLibrary();
+            // Check duplicate by title prefix
+            var key = title.substring(0, 40);
+            var existing = lib.findIndex(function(b) { return b.title.substring(0, 40) === key; });
+            if (existing >= 0) {
+                // Update existing
+                lib[existing].text = text;
+                lib[existing].lastRead = Date.now();
+            } else {
+                lib.unshift({
+                    title: title,
+                    text: text,
+                    fav: false,
+                    addedAt: Date.now(),
+                    lastRead: Date.now()
+                });
+            }
+            saveLibrary(lib);
+        }
+
+        function openLibrary() {
+            var screen = document.getElementById('library-screen');
+            if (screen) { screen.classList.add('open'); renderLibrary(); }
+        }
+
+        function closeLibrary() {
+            var screen = document.getElementById('library-screen');
+            if (screen) screen.classList.remove('open');
+        }
+
+        function hashCode(str) {
+            var hash = 0;
+            for (var i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash |= 0;
+            }
+            return Math.abs(hash);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function formatWordCount(n) {
+            if (n >= 10000) return (n / 10000).toFixed(1) + '万字';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'k字';
+            return n + '字';
+        }
+
+        function formatRelativeTime(ts) {
+            var diff = Date.now() - ts;
+            if (diff < 60000) return '刚刚';
+            if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
+            return Math.floor(diff / 86400000) + '天前';
+        }
+
+        function renderLibrary() {
+            var lib = loadLibrary();
+            // Filter
+            if (currentLibraryFilter === 'fav') lib = lib.filter(function(b) { return b.fav; });
+            else if (currentLibraryFilter === 'recent') {
+                lib = lib.slice().sort(function(a, b) { return (b.lastRead || 0) - (a.lastRead || 0); });
+            }
+            // Sort
+            if (currentLibrarySort === 'title') lib.sort(function(a, b) { return (a.title || '').localeCompare(b.title || ''); });
+            else if (currentLibrarySort === 'added') lib.sort(function(a, b) { return (b.addedAt || 0) - (a.addedAt || 0); });
+            else if (currentLibrarySort === 'size') lib.sort(function(a, b) { return (b.text || '').length - (a.text || '').length; });
+            else if (currentLibrarySort === 'recent') lib.sort(function(a, b) { return (b.lastRead || 0) - (a.lastRead || 0); });
+
+            var grid = document.getElementById('library-grid');
+            var stats = document.getElementById('library-stats');
+            var empty = document.getElementById('library-empty');
+            if (!grid) return;
+
+            if (stats) stats.textContent = lib.length + ' 本书';
+            if (lib.length === 0) {
+                grid.innerHTML = '';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+            if (empty) empty.style.display = 'none';
+
+            var colors = ['#7b61ff', '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#e84393', '#00b894', '#fdcb6e'];
+            var icons = ['📖', '📕', '📗', '📘', '📙', '📓', '📔', '📒'];
+            grid.innerHTML = lib.map(function(book, idx) {
+                var color = colors[hashCode(book.title) % colors.length];
+                var icon = icons[hashCode(book.title) % icons.length];
+                return '<div class="library-book-card" onclick="openBookFromLibrary(' + idx + ')" oncontextmenu="showContextMenu(event,' + idx + ')" ontouchstart="this._t=Date.now()" ontouchend="if(Date.now()-this._t>500){showContextMenu(event,' + idx + ')}">' +
+                    '<div class="library-book-cover" style="background:linear-gradient(135deg,' + color + ',' + color + '88)">' +
+                        '<div class="library-book-cover-icon">' + icon + '</div>' +
+                    '</div>' +
+                    '<div class="library-book-info">' +
+                        '<div class="library-book-title">' + escapeHtml(book.title || '未命名') + '</div>' +
+                        '<div class="library-book-meta">' + formatWordCount((book.text || '').length) + ' · ' + formatRelativeTime(book.lastRead || book.addedAt || Date.now()) + '</div>' +
+                    '</div>' +
+                    '<div class="library-book-fav ' + (book.fav ? 'active' : '') + '" onclick="event.stopPropagation();toggleFavFromCard(' + idx + ')">' + (book.fav ? '❤' : '♡') + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
         // ── Library: navigation & interaction ─────────────────────────────
         function openBookFromLibrary(idx) {
             var lib = loadLibrary();
