@@ -13313,7 +13313,7 @@
         function extractDashKeywords(s, max) {
             if (!s) return [];
             max = max || 5;
-            var cleaned = s.replace(/[\p{Punct}　-〿＀-￯""''\d]/gu, ' ');
+            var cleaned = s.replace(/[!"#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~　-〿＀-￯""''\d]/g, ' ');
             var freq = {};
             // English words
             cleaned.match(/[A-Za-z]{3,}/g).forEach(function(w) {
@@ -13813,6 +13813,33 @@
             }
             html += '</div></div></div>';
             document.getElementById('dash-stats-content').innerHTML = html;
+        }
+    </script>
+    <script>
+        // Fallback: ensure showDashboard is always callable
+        if (typeof showDashboard !== 'function') {
+            function showDashboard() {
+                var dp = document.getElementById('dashboard-page');
+                if (dp) {
+                    dp.style.display = 'block';
+                    var splash = document.getElementById('dash-splash');
+                    if (splash) { splash.style.opacity = '1'; splash.style.display = 'flex'; }
+                    setTimeout(function() {
+                        var bar = document.getElementById('dash-splash-bar');
+                        if (bar) bar.style.width = '100%';
+                    }, 50);
+                    setTimeout(function() {
+                        if (splash) { splash.style.opacity = '0'; setTimeout(function() { splash.style.display = 'none'; }, 800); }
+                    }, 2800);
+                    if (typeof renderDashboard === 'function') { try { renderDashboard(); } catch(e) { console.error('Dashboard render error:', e); } }
+                }
+            }
+        }
+        if (typeof closeDashboard !== 'function') {
+            function closeDashboard() {
+                var dp = document.getElementById('dashboard-page');
+                if (dp) dp.style.display = 'none';
+            }
         }
     </script>
 </body>
