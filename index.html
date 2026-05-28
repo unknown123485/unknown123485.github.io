@@ -13376,7 +13376,7 @@
     <style>
         :root{--dash-bg:#050506;--dash-panel:#0A0A0C;--dash-subtle:#131318;--dash-accent:#FFCC33;--dash-secondary:#6FE0FF;--dash-brand:#FF4D9D;--dash-ok:#6BFF8C;--dash-warn:#FFCC33;--dash-danger:#FF4D9D;--dash-grid:#2A2A2F;--dash-text:#EDEDE9;--dash-text2:#B7B7B0;--dash-muted:#6E6E6A}
         #dashboard-page{font-family:'JetBrains Mono',monospace}
-        .d-panel{background:linear-gradient(180deg,rgba(19,19,24,0.75),rgba(10,10,12,0.92),rgba(5,5,6,0.95));border:0.8px solid rgba(255,204,51,0.40);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+        .d-panel{background:linear-gradient(180deg,rgba(19,19,24,0.75),rgba(10,10,12,0.92),rgba(5,5,6,0.95));border:0.8px solid rgba(255,204,51,0.40);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 6px 20px rgba(255,204,51,0.12),0 2px 8px rgba(255,204,51,0.08)}
         .d-panel-head{background:linear-gradient(90deg,rgba(255,204,51,0.18),rgba(19,19,24,0.10),transparent);padding:7px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid}
         .d-panel-head{border-image:linear-gradient(90deg,rgba(255,204,51,0.6),rgba(255,204,51,0.15),transparent) 1}
         .d-panel-dot{width:7px;height:7px;border-radius:50%;background:var(--dash-brand)}
@@ -13386,12 +13386,13 @@
         .d-panel-foot{padding:2px 8px 5px;display:flex;align-items:center;font-size:7px;letter-spacing:0.6px;color:var(--dash-muted)}
         .d-panel-foot-ok{color:var(--dash-ok);opacity:0.7}
         .d-bracket{color:var(--dash-accent);opacity:0.55;font-size:11px}
-        .d-topbar{background:var(--dash-bg);padding:8px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid}
+        .d-topbar{background:var(--dash-bg);padding:8px 14px;display:flex;align-items:center;border-bottom:1px solid}
         .d-topbar{border-image:linear-gradient(90deg,transparent,rgba(255,204,51,0.6),rgba(255,204,51,0.3),transparent) 1}
         .d-topbar-label{color:var(--dash-accent);font-size:11px;letter-spacing:1.4px;font-weight:600}
         .d-ticker{color:var(--dash-text2);font-size:10px;letter-spacing:0.6px}
         .d-tab{padding:4px 8px;cursor:pointer;text-align:center;color:var(--dash-muted);font-size:12px;letter-spacing:0.8px;transition:all 0.3s}
-        .d-tab-sel{color:var(--dash-accent);font-weight:700}
+        .d-tab-en{font-size:12px;letter-spacing:0.8px}
+        .d-tab-sel .d-tab-en{color:var(--dash-accent);font-weight:700}
         .d-tab-line{width:40px;height:2px;background:var(--dash-accent);margin:3px auto 0}
         .d-hero{position:relative;text-align:center;padding:12px}
         .d-hero-q{position:absolute;font-size:140px;font-weight:900;color:var(--dash-accent);opacity:0.18;line-height:1}
@@ -13407,7 +13408,7 @@
         .d-toc-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dash-text2)}
         .d-toc-item-active .d-toc-title{color:var(--dash-text);font-weight:700}
         .d-toc-count{font-size:9px;color:var(--dash-muted);letter-spacing:0.5px}
-        .d-cover{width:44px;height:64px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;position:absolute;border:0.4px solid var(--dash-grid);transition:all 0.4s}
+        .d-cover{width:44px;height:64px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;position:absolute;border:0.4px solid var(--dash-grid);transition:all 0.4s;transform-style:preserve-3d;backface-visibility:hidden}
         .d-cover-active{border-color:var(--dash-accent);border-width:1.2px}
         .d-ring canvas{width:50px;height:50px}
         .d-ring-val{font-size:10px;font-weight:700;color:var(--dash-text);text-shadow:0 0 6px rgba(255,204,51,0.6)}
@@ -13428,7 +13429,7 @@
         .d-donut-ring{stroke-width:0.22;fill:none}
         .d-heat-cell{rx:3;ry:3}
     </style>
-    <div id="dashboard-page" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--dash-bg);overflow-y:auto;-webkit-overflow-scrolling:touch;">
+    <div id="dashboard-page" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--dash-bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;">
         <div class="d-grid"></div>
         <div class="d-glow"></div>
         <div class="d-scan"></div>
@@ -13438,28 +13439,33 @@
             <div class="d-splash-sub">WELCOME, READER</div>
             <div class="d-splash-bar"><div id="dash-splash-bar" class="d-splash-bar-inner"></div></div>
         </div>
-        <!-- Top bar -->
+        <!-- Top bar — 间距完全匹配 Android DashboardChrome.kt -->
         <div class="d-topbar">
             <span class="d-topbar-label">COGNITIVE ENCODE MODULE</span>
+            <div style="width:20px"></div>
             <span class="d-ticker" id="dash-pct">34%</span>
+            <div style="width:12px"></div>
             <span class="d-ticker" id="dash-rps">24 RPS</span>
+            <div style="width:12px"></div>
             <span class="d-ticker" id="dash-tc">01:02:21:09</span>
             <span style="flex:1"></span>
             <span style="color:var(--dash-muted);font-size:11px">🎤</span>
+            <div style="width:6px"></div>
             <span style="color:var(--dash-muted);font-size:11px">|</span>
+            <div style="width:6px"></div>
             <span style="color:var(--dash-text);font-size:11px;letter-spacing:0.6px" id="dash-user">READER</span>
-            <div style="width:8px"></div>
+            <div style="width:10px"></div>
             <div onclick="closeDashboard()" style="cursor:pointer;padding:4px 12px;border:1px solid rgba(255,77,157,0.8);border-radius:50px;background:rgba(255,77,157,0.15);color:var(--dash-brand);font-size:10px;letter-spacing:0.8px;font-weight:600">Log Out</div>
         </div>
         <!-- Tabs -->
         <div style="display:flex;align-items:center;padding:6px 14px;gap:8px;border-bottom:1px solid var(--dash-grid)">
-            <div class="d-tab d-tab-sel" id="dash-tab-main" onclick="switchDashTab('main')"><div>控制面板</div><div class="d-tab-line" id="dash-tab-main-line"></div></div>
-            <div class="d-tab" id="dash-tab-stats" onclick="switchDashTab('stats')"><div>书库统计</div><div class="d-tab-line" id="dash-tab-stats-line" style="background:transparent"></div></div>
+            <div class="d-tab d-tab-sel" id="dash-tab-main" onclick="switchDashTab('main')"><div class="d-tab-en">DASHBOARD</div><div class="d-tab-line" id="dash-tab-main-line"></div></div>
+            <div class="d-tab" id="dash-tab-stats" onclick="switchDashTab('stats')"><div class="d-tab-en">LIBRARY</div><div class="d-tab-line" id="dash-tab-stats-line" style="background:transparent"></div></div>
             <span style="flex:1"></span>
             <span style="color:var(--dash-accent);font-size:14px;letter-spacing:3px;font-weight:900;font-family:'JetBrains Mono',monospace">MAS.READER</span>
         </div>
         <!-- DASHBOARD 主页 -->
-        <div id="dash-main-page" style="display:flex;width:100%;height:calc(100vh - 90px);padding:8px;gap:6px">
+        <div id="dash-main-page" style="display:flex;width:100%;flex:1;min-height:0;padding:8px;gap:6px">
             <!-- 左列 weight 2 -->
             <div style="flex:2;display:flex;flex-direction:column;gap:6px;min-width:0">
                 <div class="d-panel" style="flex:2" id="dash-toc-panel"></div>
@@ -13476,7 +13482,7 @@
             </div>
         </div>
         <!-- LIBRARY 子页 -->
-        <div id="dash-stats-page" style="display:none;padding:8px"></div>
+        <div id="dash-stats-page" style="display:none;padding:8px;flex:1;min-height:0;overflow-y:auto"></div>
     </div>
     <script>
     (function(){
@@ -13519,7 +13525,7 @@
         // ── showDashboard / closeDashboard ───────────────────────────
         window.showDashboard=function(){
             var dp=document.getElementById('dashboard-page');if(!dp)return;
-            dp.style.display='block';
+            dp.style.display='flex';
             var sp=document.getElementById('dash-splash');if(sp){sp.style.opacity='1';sp.style.display='flex'}
             setTimeout(function(){var b=document.getElementById('dash-splash-bar');if(b)b.style.width='100%'},50);
             setTimeout(function(){if(sp){sp.style.opacity='0';setTimeout(function(){sp.style.display='none'},800)}},2800);
@@ -13619,9 +13625,9 @@
             var colors=['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e84393'];
             var body='<div style="position:relative;height:80px;display:flex;align-items:center;justify-content:center">';
             if(covers.length>0){for(var off=-2;off<=2;off++){
-                var ci=((_coverIdx+off)%n+n)%n;var c=covers[ci];var scale=1-Math.abs(off)*0.18;var alpha=1-Math.abs(off)*0.3;var tx=off*42;var z=10-Math.abs(off);
+                var ci=((_coverIdx+off)%n+n)%n;var c=covers[ci];var scale=1-Math.abs(off)*0.18;var alpha=1-Math.abs(off)*0.3;var tx=off*42;var z=10-Math.abs(off);var rotY=-off*18;
                 var col=colors[ci%colors.length];var act=off===0;
-                body+='<div class="d-cover'+(act?' d-cover-active':'')+'" style="transform:translateX('+tx+'px) scale('+scale+');opacity:'+alpha+';z-index:'+z+';background:'+col+';left:calc(50% - 22px);top:8px;'+(act?'box-shadow:0 0 12px '+col+'50':'')+'">'+esc((c.title||'?').substring(0,2))+'</div>';
+                body+='<div class="d-cover'+(act?' d-cover-active':'')+'" style="transform:translateX('+tx+'px) scale('+scale+') perspective(120px) rotateY('+rotY+'deg);opacity:'+alpha+';z-index:'+z+';background:'+col+';left:calc(50% - 22px);top:8px;'+(act?'box-shadow:0 0 12px '+col+'50':'')+'">'+esc((c.title||'?').substring(0,2))+'</div>';
             }}
             body+='<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:'+P.accent+';letter-spacing:0.6px">CURRENT ▸ '+esc((covers[_coverIdx]||{title:''}).title.substring(0,30))+'</div>';
             body+='</div>';
