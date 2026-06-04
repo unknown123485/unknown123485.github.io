@@ -5152,24 +5152,25 @@
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
-        <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;pointer-events:none;"></canvas>
+        <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;background:rgba(255,0,0,0.5);"></canvas>
         <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2;pointer-events:none;"></canvas>
         <script>
-        setTimeout(function(){
+        window.addEventListener('load', function(){
             var c = document.getElementById('matrix-canvas');
-            if(!c) return;
-            var w = window.innerWidth || document.documentElement.clientWidth || 1280;
-            var h = window.innerHeight || document.documentElement.clientHeight || 720;
-            c.width = w;
-            c.height = h;
+            if(!c) { console.error('no canvas'); return; }
+            console.log('canvas found, offset:', c.offsetWidth, c.offsetHeight);
+            c.width = c.offsetWidth || window.innerWidth || 1280;
+            c.height = c.offsetHeight || window.innerHeight || 720;
+            console.log('canvas size:', c.width, c.height);
             var ctx = c.getContext('2d');
             if(!ctx) { console.error('no 2d context'); return; }
             ctx.fillStyle = '#ff0000';
-            ctx.fillRect(0, 0, w, h);
+            ctx.fillRect(0, 0, c.width, c.height);
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 40px monospace';
-            ctx.fillText('CANVAS: ' + c.width + 'x' + c.height, 50, 100);
-        }, 300);
+            ctx.font = 'bold 60px monospace';
+            ctx.fillText('CANVAS WORKS: ' + c.width + 'x' + c.height, 100, 200);
+            console.log('drew on canvas');
+        });
         </script>
 
         <div id="input-screen">
