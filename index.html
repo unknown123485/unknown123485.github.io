@@ -11343,6 +11343,13 @@
                 return;
             }
             matrixRainInitialized = true;
+            // debug: 画一个红色色块确认canvas可渲染
+            if (c) {
+                c.width = c.offsetWidth; c.height = c.offsetHeight;
+                var ctx = c.getContext('2d');
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(0, 0, 200, 200);
+            }
             var savedEffect = localStorage.getItem('bgEffect') || 'matrix';
             currentBgEffect = savedEffect;
             document.querySelectorAll('[data-bg-effect]').forEach(function(el) {
