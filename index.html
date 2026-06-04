@@ -5153,7 +5153,7 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
+            <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
             <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;pointer-events:none;"></div>
             <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;padding-top:120px;padding-bottom:40px;">
@@ -10702,8 +10702,9 @@
             };
             MatrixEngine.prototype.resize = function() {
                 var dpr = Math.min(window.devicePixelRatio || 1, 1);
-                var w = this.canvas.offsetWidth;
-                var h = this.canvas.offsetHeight;
+                var rect = this.canvas.getBoundingClientRect();
+                var w = rect.width || this.canvas.offsetWidth;
+                var h = rect.height || this.canvas.offsetHeight;
                 if (w <= 0 || h <= 0) return;
                 this.canvas.width = Math.floor(w * dpr);
                 this.canvas.height = Math.floor(h * dpr);
@@ -11337,19 +11338,15 @@
         function initMatrixRain() {
             if (matrixRainInitialized) return;
             var c = document.getElementById('matrix-canvas');
-            if (c && (c.offsetWidth <= 0 || c.offsetHeight <= 0)) {
-                matrixRainInitialized = false;
-                requestAnimationFrame(initMatrixRain);
-                return;
+            if (c) {
+                var r = c.getBoundingClientRect();
+                if ((r.width <= 0 || r.height <= 0) && (c.offsetWidth <= 0 || c.offsetHeight <= 0)) {
+                    matrixRainInitialized = false;
+                    requestAnimationFrame(initMatrixRain);
+                    return;
+                }
             }
             matrixRainInitialized = true;
-            // debug: 画一个红色色块确认canvas可渲染
-            if (c) {
-                c.width = c.offsetWidth; c.height = c.offsetHeight;
-                var ctx = c.getContext('2d');
-                ctx.fillStyle = '#ff0000';
-                ctx.fillRect(0, 0, 200, 200);
-            }
             var savedEffect = localStorage.getItem('bgEffect') || 'matrix';
             currentBgEffect = savedEffect;
             document.querySelectorAll('[data-bg-effect]').forEach(function(el) {
