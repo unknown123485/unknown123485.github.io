@@ -1733,9 +1733,10 @@
         .av-date { font-size: 0.6rem; color: var(--text-primary); opacity: 0.4; margin-top: 2px; }
         .av-desc { font-size: 0.65rem; color: var(--text-primary); opacity: 0.6; margin-top: 4px; line-height: 1.5; }
 
-        .entry-container { display: flex; flex-direction: column; gap: 10px; align-items: center; box-sizing: border-box; max-width: 280px; margin: 0 auto; width: 100%; }
+        .entry-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: center; justify-content: center; box-sizing: border-box; max-width: 520px; margin: 0 auto; width: 100%; }
+        .entry-container .entry-card:nth-child(3) { grid-column: 1 / -1; justify-self: center; max-width: 50%; }
         .entry-card {
-            width: 70%; max-width: 196px; padding: 10px 20px;
+            width: 100%; max-width: none; padding: 10px 20px;
             background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%) !important;
             border: none;
             border-radius: 999px !important;
@@ -4607,7 +4608,9 @@
                 width: 90vw;
                 gap: 12px;
                 margin-top: 60px;
+                grid-template-columns: 1fr;
             }
+            .entry-container .entry-card:nth-child(3) { max-width: 70%; }
             .entry-card,
             #manual-input-btn {
                 width: 70% !important;
@@ -4919,7 +4922,9 @@
                 gap: 12px;
                 padding: 0 0.5rem;
                 margin-top: 80px;
+                grid-template-columns: 1fr;
             }
+            .entry-container .entry-card:nth-child(3) { max-width: 70%; }
             .entry-card,
             #manual-input-btn {
                 width: 70% !important;
@@ -4997,11 +5002,20 @@
         }
         @media (min-width: 1200px) and (min-height: 800px) {
             .entry-container {
-                max-width: 400px;
+                max-width: 600px;
                 height: auto;
                 margin: 0 auto;
                 align-items: center;
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
             }
+            .entry-container .entry-card {
+                width: 100% !important;
+                max-width: none !important;
+                border-radius: 16px !important;
+                padding: 14px 20px !important;
+            }
+            .entry-container .entry-card:nth-child(3) { grid-column: 1 / -1; justify-self: center; max-width: 50%; }
             .entry-card,
             #manual-input-btn {
                 padding: 8px 20px;
@@ -5024,9 +5038,19 @@
         }
         @media (min-width: 769px) {
             .entry-container {
+                max-width: 600px;
                 margin: 0 auto;
                 align-items: center;
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
             }
+            .entry-container .entry-card {
+                width: 100% !important;
+                max-width: none !important;
+                border-radius: 16px !important;
+                padding: 14px 20px !important;
+            }
+            .entry-container .entry-card:nth-child(3) { grid-column: 1 / -1; justify-self: center; max-width: 50%; }
             .hero-header-container {
                 margin-top: 80px !important;
                 gap: 14px;
@@ -5495,33 +5519,13 @@
                     </label>
                 </div>
 
-                <div class="entry-card liquid-upload-card" id="manual-input-btn" onclick="showManualInput()">
-                    <div class="liquid-upload-icon">
-                        <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M14 16h20M14 22h16M14 28h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-                    </div>
-                    <div class="entry-text-wrap">
-                        <div class="liquid-upload-title" data-i18n="home_manual">手动输入</div>
-                        <div class="liquid-upload-desc">粘贴或输入文本</div>
-                    </div>
-                </div>
-
-                <div class="entry-card liquid-upload-card" id="quote-showcase-btn" onclick="showQuoteShowcase()">
-                    <div class="liquid-upload-icon">
-                        <svg viewBox="0 0 48 48" fill="none"><path d="M12 12h24v24H12z" stroke="currentColor" stroke-width="2.5"/><path d="M16 20h16M16 26h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="32" r="6" stroke="currentColor" stroke-width="2"/><path d="M30 32l1.5 1.5L34 30" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <div class="entry-text-wrap">
-                        <div class="liquid-upload-title" data-i18n="home_showcase">展示书摘</div>
-                        <div class="liquid-upload-desc">选择效果展示书摘</div>
-                    </div>
-                </div>
-
                 <div class="entry-card liquid-upload-card" id="dashboard-btn" onclick="showDashboard()">
                     <div class="liquid-upload-icon">
                         <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="6" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="6" y="28" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="28" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/></svg>
                     </div>
                     <div class="entry-text-wrap">
-                        <div class="liquid-upload-title" data-i18n="home_dashboard">书斋展示</div>
-                        <div class="liquid-upload-desc">阅读数据与统计</div>
+                        <div class="liquid-upload-title" data-i18n="home_dashboard">展示书斋</div>
+                        <div class="liquid-upload-desc">书架浏览 · 效果展示</div>
                     </div>
                 </div>
             </div>
