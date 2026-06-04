@@ -8558,40 +8558,7 @@
             var progressBar = document.getElementById('app-splash-progress-bar');
             var progressPercent = document.getElementById('app-splash-percent');
             var progress = 0;
-            function updateProgress() {
-                progress += Math.random() * 15 + 5;
-                if (progress > 100) progress = 100;
-                if (progressBar) progressBar.style.width = progress + '%';
-                if (progressPercent) progressPercent.textContent = Math.floor(progress) + '%';
-                if (progress < 100) {
-                    if (window.lifecycleManager) {
-                        window.lifecycleManager.setTimeout(updateProgress, Math.random() * 200 + 80, 'splash-progress');
-                    } else {
-                        setTimeout(updateProgress, Math.random() * 200 + 80);
-                    }
-                } else {
-                    if (window.lifecycleManager) {
-                        window.lifecycleManager.setTimeout(function() {
-                            if (splash) {
-                                splash.classList.add('hide');
-                                if (window.lifecycleManager) {
-                                    window.lifecycleManager.setTimeout(function() { splash.remove(); }, 600, 'splash-remove');
-                                } else {
-                                    setTimeout(function() { splash.remove(); }, 600);
-                                }
-                            }
-                        }, 300, 'splash-hide');
-                    } else {
-                        setTimeout(function() {
-                            if (splash) {
-                                splash.classList.add('hide');
-                                setTimeout(function() { splash.remove(); }, 600);
-                            }
-                        }, 300);
-                    }
-                }
-            }
-            updateProgress();
+            if (splash) { splash.style.display = 'none'; splash.remove(); }
             const statusTimeEl = document.getElementById('status-time');
             function updateStatusTime() {
                 if (!statusTimeEl) return;
@@ -11656,11 +11623,7 @@
             }
         }
 
-        if (window.requestIdleCallback) {
-            requestIdleCallback(initMatrixRain, { timeout: 800 });
-        } else {
-            setTimeout(initMatrixRain, 600);
-        }
+        initMatrixRain();
         setTimeout(initLiquidGlass, 1000);
 
         document.addEventListener('visibilitychange', function() {
