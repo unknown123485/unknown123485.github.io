@@ -5152,26 +5152,27 @@
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
+        <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;pointer-events:none;"></canvas>
+        <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2;pointer-events:none;"></canvas>
+        <script>
+        setTimeout(function(){
+            var c = document.getElementById('matrix-canvas');
+            if(!c) return;
+            var w = window.innerWidth || document.documentElement.clientWidth || 1280;
+            var h = window.innerHeight || document.documentElement.clientHeight || 720;
+            c.width = w;
+            c.height = h;
+            var ctx = c.getContext('2d');
+            if(!ctx) { console.error('no 2d context'); return; }
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 40px monospace';
+            ctx.fillText('CANVAS: ' + c.width + 'x' + c.height, 50, 100);
+        }, 300);
+        </script>
+
         <div id="input-screen">
-            <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:1;background:rgba(0,255,0,0.3);border:2px solid lime;"></canvas>
-            <script>
-            setTimeout(function(){
-                var c = document.getElementById('matrix-canvas');
-                if(!c) return;
-                var w = window.innerWidth || document.documentElement.clientWidth || 1280;
-                var h = window.innerHeight || document.documentElement.clientHeight || 720;
-                c.setAttribute('width', w);
-                c.setAttribute('height', h);
-                var ctx = c.getContext('2d');
-                if(!ctx) return;
-                ctx.fillStyle = '#ff0000';
-                ctx.fillRect(0, 0, w, h);
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 40px monospace';
-                ctx.fillText('CANVAS: ' + c.width + 'x' + c.height, 50, 100);
-            }, 200);
-            </script>
-            <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;pointer-events:none;"></div>
             <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;padding-top:120px;padding-bottom:40px;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
