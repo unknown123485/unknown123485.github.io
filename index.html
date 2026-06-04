@@ -8558,7 +8558,24 @@
             var progressBar = document.getElementById('app-splash-progress-bar');
             var progressPercent = document.getElementById('app-splash-percent');
             var progress = 0;
-            if (splash) { splash.style.display = 'none'; splash.remove(); }
+            function updateProgress() {
+                progress += Math.random() * 20 + 10;
+                if (progress > 100) progress = 100;
+                if (progressBar) progressBar.style.width = progress + '%';
+                if (progressPercent) progressPercent.textContent = Math.floor(progress) + '%';
+                if (progress < 100) {
+                    setTimeout(updateProgress, 60);
+                } else {
+                    setTimeout(function() {
+                        if (splash) {
+                            splash.classList.add('hide');
+                            setTimeout(function() { splash.remove(); }, 500);
+                        }
+                        initMatrixRain();
+                    }, 200);
+                }
+            }
+            updateProgress();
             const statusTimeEl = document.getElementById('status-time');
             function updateStatusTime() {
                 if (!statusTimeEl) return;
@@ -11319,6 +11336,12 @@
         var matrixRainInitialized = false;
         function initMatrixRain() {
             if (matrixRainInitialized) return;
+            var c = document.getElementById('matrix-canvas');
+            if (c && (c.offsetWidth <= 0 || c.offsetHeight <= 0)) {
+                matrixRainInitialized = false;
+                requestAnimationFrame(initMatrixRain);
+                return;
+            }
             matrixRainInitialized = true;
             var savedEffect = localStorage.getItem('bgEffect') || 'matrix';
             currentBgEffect = savedEffect;
@@ -11623,7 +11646,6 @@
             }
         }
 
-        setTimeout(initMatrixRain, 50);
         setTimeout(initLiquidGlass, 1000);
 
         document.addEventListener('visibilitychange', function() {
