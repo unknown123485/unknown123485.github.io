@@ -7587,6 +7587,17 @@
                             var rBooks = JSON.parse(localStorage.getItem('recentBooks') || '[]');
                             if (rBooks.length > 0 && rBooks[0].text) {
                                 matrixEngine.setCustomText(rBooks[0].text);
+                            } else {
+                                // 首次访问: 从 books.json 加载书籍
+                                fetch('books.json').then(function(r){return r.json();}).then(function(bks){
+                                    if(bks && bks.length>0){
+                                        var now=Date.now();
+                                        var loaded=bks.map(function(b,i){return{title:b.title,text:b.text,timestamp:now-i*1000};});
+                                        localStorage.setItem('recentBooks',JSON.stringify(loaded));
+                                        matrixEngine.setCustomText(loaded[0].text);
+                                        if(typeof renderRecentBooks==='function') renderRecentBooks();
+                                    }
+                                }).catch(function(){});
                             }
                         } catch(e) {}
                     }
