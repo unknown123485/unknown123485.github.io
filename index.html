@@ -5152,7 +5152,6 @@
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
-        <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;"></canvas>
         <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2;pointer-events:none;"></canvas>
 
         <div id="input-screen">
@@ -11653,21 +11652,21 @@
 
         setTimeout(initLiquidGlass, 1000);
 
-        // DEBUG: canvas绘制测试
+        // DEBUG: 动态创建canvas测试
         (function _debugCanvas(){
-            var c = document.getElementById('matrix-canvas');
-            if(!c){ setTimeout(_debugCanvas, 100); return; }
-            var w = window.innerWidth || 1280;
-            var h = window.innerHeight || 720;
-            c.width = w; c.height = h;
+            var c = document.createElement('canvas');
+            c.id = 'matrix-canvas';
+            c.style.cssText = 'position:fixed;top:0;left:0;z-index:9999;pointer-events:none;';
+            c.width = 1920; c.height = 1080;
+            document.body.insertBefore(c, document.body.firstChild);
             var ctx = c.getContext('2d');
-            if(!ctx) return;
-            ctx.fillStyle = 'rgba(255,0,0,0.6)';
-            ctx.fillRect(0,0,w,h);
+            if(!ctx){ alert('NO 2D CONTEXT'); return; }
+            ctx.fillStyle = 'rgba(255,0,0,0.7)';
+            ctx.fillRect(0,0,1920,1080);
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 60px monospace';
-            ctx.fillText('CANVAS: '+w+'x'+h, 100, 200);
-            ctx.fillText('JS DRAW OK', 100, 300);
+            ctx.font = 'bold 80px monospace';
+            ctx.fillText('CANVAS JS OK', 100, 300);
+            ctx.fillText('1920x1080', 100, 420);
         })();
 
         document.addEventListener('visibilitychange', function() {
