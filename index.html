@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000" id="theme-color-meta">
+    <meta name="theme-color" content="#0e0e18" id="theme-color-meta">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -1733,7 +1733,7 @@
         .av-date { font-size: 0.6rem; color: var(--text-primary); opacity: 0.4; margin-top: 2px; }
         .av-desc { font-size: 0.65rem; color: var(--text-primary); opacity: 0.6; margin-top: 4px; line-height: 1.5; }
 
-        .entry-container { display: flex; flex-direction: column; gap: 10px; align-items: center; box-sizing: border-box; max-width: 280px; margin: 40px auto 0; width: 100%; }
+        .entry-container { display: flex; flex-direction: column; gap: 10px; align-items: center; box-sizing: border-box; max-width: 280px; margin: 0 auto; width: 100%; }
         .entry-card {
             width: 70%; max-width: 196px; padding: 10px 20px;
             background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%) !important;
@@ -8559,20 +8559,36 @@
             var progressPercent = document.getElementById('app-splash-percent');
             var progress = 0;
             function updateProgress() {
-                progress += Math.random() * 20 + 10;
+                progress += Math.random() * 15 + 5;
                 if (progress > 100) progress = 100;
                 if (progressBar) progressBar.style.width = progress + '%';
                 if (progressPercent) progressPercent.textContent = Math.floor(progress) + '%';
                 if (progress < 100) {
-                    setTimeout(updateProgress, 60);
+                    if (window.lifecycleManager) {
+                        window.lifecycleManager.setTimeout(updateProgress, Math.random() * 200 + 80, 'splash-progress');
+                    } else {
+                        setTimeout(updateProgress, Math.random() * 200 + 80);
+                    }
                 } else {
-                    setTimeout(function() {
-                        if (splash) {
-                            splash.classList.add('hide');
-                            setTimeout(function() { splash.remove(); }, 500);
-                        }
-                        initMatrixRain();
-                    }, 200);
+                    if (window.lifecycleManager) {
+                        window.lifecycleManager.setTimeout(function() {
+                            if (splash) {
+                                splash.classList.add('hide');
+                                if (window.lifecycleManager) {
+                                    window.lifecycleManager.setTimeout(function() { splash.remove(); }, 600, 'splash-remove');
+                                } else {
+                                    setTimeout(function() { splash.remove(); }, 600);
+                                }
+                            }
+                        }, 300, 'splash-hide');
+                    } else {
+                        setTimeout(function() {
+                            if (splash) {
+                                splash.classList.add('hide');
+                                setTimeout(function() { splash.remove(); }, 600);
+                            }
+                        }, 300);
+                    }
                 }
             }
             updateProgress();
@@ -10702,9 +10718,8 @@
             };
             MatrixEngine.prototype.resize = function() {
                 var dpr = Math.min(window.devicePixelRatio || 1, 1);
-                var rect = this.canvas.getBoundingClientRect();
-                var w = rect.width || this.canvas.offsetWidth;
-                var h = rect.height || this.canvas.offsetHeight;
+                var w = this.canvas.offsetWidth;
+                var h = this.canvas.offsetHeight;
                 if (w <= 0 || h <= 0) return;
                 this.canvas.width = Math.floor(w * dpr);
                 this.canvas.height = Math.floor(h * dpr);
@@ -11337,15 +11352,6 @@
         var matrixRainInitialized = false;
         function initMatrixRain() {
             if (matrixRainInitialized) return;
-            var c = document.getElementById('matrix-canvas');
-            if (c) {
-                var r = c.getBoundingClientRect();
-                if ((r.width <= 0 || r.height <= 0) && (c.offsetWidth <= 0 || c.offsetHeight <= 0)) {
-                    matrixRainInitialized = false;
-                    requestAnimationFrame(initMatrixRain);
-                    return;
-                }
-            }
             matrixRainInitialized = true;
             var savedEffect = localStorage.getItem('bgEffect') || 'matrix';
             currentBgEffect = savedEffect;
@@ -11650,6 +11656,11 @@
             }
         }
 
+        if (window.requestIdleCallback) {
+            requestIdleCallback(initMatrixRain, { timeout: 800 });
+        } else {
+            setTimeout(initMatrixRain, 600);
+        }
         setTimeout(initLiquidGlass, 1000);
 
         document.addEventListener('visibilitychange', function() {
