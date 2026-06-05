@@ -5154,24 +5154,6 @@
 
         <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;"></canvas>
         <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2;pointer-events:none;"></canvas>
-        <script>
-        (function drawTest(){
-            var c = document.getElementById('matrix-canvas');
-            if(!c){ setTimeout(drawTest, 50); return; }
-            var w = c.offsetWidth || window.innerWidth || 1280;
-            var h = c.offsetHeight || window.innerHeight || 720;
-            if(w < 10 || h < 10){ setTimeout(drawTest, 50); return; }
-            c.width = w; c.height = h;
-            var ctx = c.getContext('2d');
-            if(!ctx){ setTimeout(drawTest, 50); return; }
-            ctx.fillStyle = 'rgba(255,0,0,0.6)';
-            ctx.fillRect(0,0,w,h);
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 60px monospace';
-            ctx.fillText('CANVAS: '+w+'x'+h, 100, 200);
-            ctx.fillText('JS DRAWING OK', 100, 300);
-        })();
-        </script>
 
         <div id="input-screen">
             <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;pointer-events:none;"></div>
@@ -11670,6 +11652,23 @@
         }
 
         setTimeout(initLiquidGlass, 1000);
+
+        // DEBUG: canvas绘制测试
+        (function _debugCanvas(){
+            var c = document.getElementById('matrix-canvas');
+            if(!c){ setTimeout(_debugCanvas, 100); return; }
+            var w = window.innerWidth || 1280;
+            var h = window.innerHeight || 720;
+            c.width = w; c.height = h;
+            var ctx = c.getContext('2d');
+            if(!ctx) return;
+            ctx.fillStyle = 'rgba(255,0,0,0.6)';
+            ctx.fillRect(0,0,w,h);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 60px monospace';
+            ctx.fillText('CANVAS: '+w+'x'+h, 100, 200);
+            ctx.fillText('JS DRAW OK', 100, 300);
+        })();
 
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
