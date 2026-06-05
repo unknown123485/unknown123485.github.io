@@ -5152,25 +5152,25 @@
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
-        <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;background:rgba(255,0,0,0.5);"></canvas>
+        <canvas id="matrix-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;"></canvas>
         <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2;pointer-events:none;"></canvas>
         <script>
-        window.addEventListener('load', function(){
+        (function drawTest(){
             var c = document.getElementById('matrix-canvas');
-            if(!c) { console.error('no canvas'); return; }
-            console.log('canvas found, offset:', c.offsetWidth, c.offsetHeight);
-            c.width = c.offsetWidth || window.innerWidth || 1280;
-            c.height = c.offsetHeight || window.innerHeight || 720;
-            console.log('canvas size:', c.width, c.height);
+            if(!c){ setTimeout(drawTest, 50); return; }
+            var w = c.offsetWidth || window.innerWidth || 1280;
+            var h = c.offsetHeight || window.innerHeight || 720;
+            if(w < 10 || h < 10){ setTimeout(drawTest, 50); return; }
+            c.width = w; c.height = h;
             var ctx = c.getContext('2d');
-            if(!ctx) { console.error('no 2d context'); return; }
-            ctx.fillStyle = '#ff0000';
-            ctx.fillRect(0, 0, c.width, c.height);
+            if(!ctx){ setTimeout(drawTest, 50); return; }
+            ctx.fillStyle = 'rgba(255,0,0,0.6)';
+            ctx.fillRect(0,0,w,h);
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 60px monospace';
-            ctx.fillText('CANVAS WORKS: ' + c.width + 'x' + c.height, 100, 200);
-            console.log('drew on canvas');
-        });
+            ctx.fillText('CANVAS: '+w+'x'+h, 100, 200);
+            ctx.fillText('JS DRAWING OK', 100, 300);
+        })();
         </script>
 
         <div id="input-screen">
