@@ -1689,6 +1689,7 @@
             border: none;
             border-radius: 0; padding: 2rem;
             z-index: 10000; scrollbar-width: none;
+            transform: none !important;
             font-family: 'Noto Serif SC', serif !important;
             font-size: 1.04rem;
             box-shadow: none;
@@ -5153,7 +5154,7 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:1;"></canvas>
             <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;pointer-events:none;"></div>
             <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;padding-top:120px;padding-bottom:40px;">
@@ -5507,7 +5508,7 @@
             </div>
 
             <div class="recent-books-section" id="recent-books-section" style="display:none; width:100%; max-width:280px; margin:16px auto 0;">
-                <div style="font-size:0.65rem; color:rgba(255,255,255,0.35); letter-spacing:3px; text-transform:uppercase; margin-bottom:10px; text-align:left;" data-i18n="home_recent">最近在阅读</div>
+                <div style="font-size:0.65rem; color:rgba(255,255,255,0.35); letter-spacing:3px; text-transform:uppercase; margin-bottom:10px; text-align:left;" data-i18n="home_recent">最近阅读</div>
                 <div id="recent-books-list" style="display:flex; flex-direction:column; gap:8px;"></div>
             </div>
 
@@ -7579,7 +7580,16 @@
                         if (mrToggle) mrToggle.classList.add('active');
                     }
                     var savedText = localStorage.getItem('matrixCustomText');
-                    if (savedText) matrixEngine.setCustomText(savedText);
+                    if (savedText) {
+                        matrixEngine.setCustomText(savedText);
+                    } else {
+                        try {
+                            var rBooks = JSON.parse(localStorage.getItem('recentBooks') || '[]');
+                            if (rBooks.length > 0 && rBooks[0].text) {
+                                matrixEngine.setCustomText(rBooks[0].text);
+                            }
+                        } catch(e) {}
+                    }
                     var savedHomeFont = localStorage.getItem('homeFont');
                     if (savedHomeFont) matrixEngine.fontFamily = savedHomeFont;
                     var savedGradTop = localStorage.getItem('matrixGradientTop');
@@ -8331,7 +8341,7 @@
                 home_manual: '手动输入',
                 home_showcase: '展示书摘',
                 home_dashboard: '书斋展示',
-                home_recent: '最近在阅读',
+                home_recent: '最近阅读',
                 home_about: '关于',
                 // Settings panel
                 settings_speed: '阅读速度',
@@ -9700,7 +9710,8 @@
                 recentBooks.forEach(function(book, idx) {
                     var item = document.createElement('div');
                     item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.04);border-radius:10px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;backdrop-filter:blur(8px);transition:all 0.2s ease;';
-                    item.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5;flex-shrink:0;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><div style="flex:1;min-width:0;"><div style="font-size:0.75rem;color:rgba(255,255,255,0.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (book.title || '未命名') + '</div></div>';
+                    var cleanTitle = (book.title || '未命名').replace(/[\n\r]+/g, ' ').substring(0, 40);
+                    item.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5;flex-shrink:0;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><div style="flex:1;min-width:0;"><div style="font-size:0.75rem;color:rgba(255,255,255,0.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + cleanTitle + '</div></div>';
                     item.onmouseenter = function() { this.style.background = 'rgba(255,255,255,0.08)'; };
                     item.onmouseleave = function() { this.style.background = 'rgba(255,255,255,0.04)'; };
                     item.onclick = function() {
@@ -10829,9 +10840,9 @@
                 var ar = this._accentR || 0, ag = this._accentG || 255, ab = this._accentB || 136;
                 var colWidth = this.fontSize * 0.8;
                 var layers = [
-                    { fontMul: 0.5, speedMul: 0.15, alphaBase: 0.06, blur: 1.5, zOffset: 80 },
-                    { fontMul: 0.75, speedMul: 0.5, alphaBase: 0.2, blur: 0.5, zOffset: 40 },
-                    { fontMul: 1.0, speedMul: 1.0, alphaBase: 0.7, blur: 0, zOffset: 0 }
+                    { fontMul: 0.5, speedMul: 0.15, alphaBase: 0.15, blur: 1.5, zOffset: 80 },
+                    { fontMul: 0.75, speedMul: 0.5, alphaBase: 0.4, blur: 0.5, zOffset: 40 },
+                    { fontMul: 1.0, speedMul: 1.0, alphaBase: 0.9, blur: 0, zOffset: 0 }
                 ];
                 if (!this.columnChars) this.columnChars = [];
                 var hasGrad = this.gradientTopColor && this.gradientBottomColor;
