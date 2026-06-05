@@ -5152,9 +5152,9 @@
         <!-- 晶体主题选择器 -->
         <!-- 主题选择器已移动到设置面板中 -->
 
-        <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2;pointer-events:none;"></canvas>
-
         <div id="input-screen">
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
+            <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;pointer-events:none;"></div>
             <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;padding-top:120px;padding-bottom:40px;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
@@ -11651,23 +11651,6 @@
         }
 
         setTimeout(initLiquidGlass, 1000);
-
-        // DEBUG: 动态创建canvas测试
-        (function _debugCanvas(){
-            var c = document.createElement('canvas');
-            c.id = 'matrix-canvas';
-            c.style.cssText = 'position:fixed;top:0;left:0;z-index:9999;pointer-events:none;';
-            c.width = 1920; c.height = 1080;
-            document.body.insertBefore(c, document.body.firstChild);
-            var ctx = c.getContext('2d');
-            if(!ctx){ alert('NO 2D CONTEXT'); return; }
-            ctx.fillStyle = 'rgba(255,0,0,0.7)';
-            ctx.fillRect(0,0,1920,1080);
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 80px monospace';
-            ctx.fillText('CANVAS JS OK', 100, 300);
-            ctx.fillText('1920x1080', 100, 420);
-        })();
 
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
