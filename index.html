@@ -50,8 +50,8 @@
     <script src="scripts/lifecycleManager.js"></script>
     <style>
         :root {
-            --bg-base: #050508;
-            --accent: #7b61ff;
+            --bg-base: #08070e;
+            --accent: #00e87a;
             --text-primary: #ffffff;
             --glass-blur: 50px;
             --dwell-time: 2000;
@@ -307,10 +307,11 @@
             --font-display: var(--font-serif);
         }
         .theme-mystic {
-            --bg-base: #000000; --accent: #00ff88; --text-primary: #ffffff;
-            --bg-gradient: radial-gradient(circle at 50% 30%, rgba(0,255,136,0.03) 0%, transparent 50%),
-                          linear-gradient(180deg, #000000 0%, #050a05 100%);
-            --font-display: var(--font-serif);
+            --bg-base: #08070e; --accent: #00e87a; --text-primary: #e8e4ef;
+            --bg-gradient: radial-gradient(ellipse 80% 60% at 50% 35%, rgba(40,20,60,0.25) 0%, transparent 70%),
+                          radial-gradient(ellipse 50% 50% at 20% 80%, rgba(15,10,30,0.3) 0%, transparent 60%),
+                          linear-gradient(180deg, #08070e 0%, #0a0914 50%, #08070e 100%);
+            --font-display: 'Noto Serif SC', 'EB Garamond', Georgia, serif;
         }
         .theme-ocean {
             --bg-base: #0e1e30; --accent: #4a90d9; --text-primary: #e6f2ff;
@@ -1002,12 +1003,10 @@
         }
         
         .status-badge-setting {
-            background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
-            padding: 0; border-radius: 50%; 
-            box-shadow:
-                0 8px 32px rgba(0,0,0,0.4),
-                inset 0 1px 1px rgba(255,255,255,0.4),
-                inset 0 -1px 1px rgba(0,0,0,0.1);
+            background: rgba(15,14,22,0.75);
+            padding: 0; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             display: flex; align-items: center; justify-content: center;
@@ -1403,16 +1402,15 @@
         .mas-reader-logo svg { width: 100%; height: 100%; }
 
         .hero-glass-base {
-            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%);
-            backdrop-filter: blur(var(--lg-blur, 28px)) saturate(var(--lg-saturate, 200%));
-            -webkit-backdrop-filter: blur(var(--lg-blur, 28px)) saturate(var(--lg-saturate, 200%));
-            border: none;
-            border-radius: 20px;
-            padding: 10px 24px 8px;
+            background: linear-gradient(135deg, rgba(18,16,28,0.7) 0%, rgba(10,9,16,0.8) 100%);
+            backdrop-filter: blur(var(--lg-blur, 20px)) saturate(120%);
+            -webkit-backdrop-filter: blur(var(--lg-blur, 20px)) saturate(120%);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 10px 28px 8px;
             box-shadow:
-                0 8px 32px rgba(0,0,0,0.4),
-                inset 0 1px 1px rgba(255,255,255,0.5),
-                inset 0 -1px 1px rgba(0,0,0,0.1);
+                0 4px 24px rgba(0,0,0,0.3),
+                0 1px 0 rgba(255,255,255,0.02) inset;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1446,18 +1444,18 @@
             transition: opacity 0.3s ease;
         }
         .mas-reader-title {
-            font-family: 'Noto Serif SC', 'Noto Serif TC', serif;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 4px;
-            color: rgba(255, 255, 255, 0.9);
+            font-family: 'Noto Serif SC', 'EB Garamond', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            letter-spacing: 8px;
+            color: rgba(232,228,239,0.88);
             text-align: center;
             margin-bottom: 0;
-            background: linear-gradient(135deg, #ffffff 0%, rgba(200,200,220,0.9) 50%, #ffffff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+            background-clip: unset;
+            filter: none;
             user-select: none;
             -webkit-user-select: none;
             position: relative;
@@ -1629,13 +1627,10 @@
         .about-content {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 3px 16px; border-radius: 999px; cursor: pointer;
-            background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
-            border: none;
-            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow:
-                0 6px 20px rgba(0,0,0,0.2),
-                inset 0 1px 1px rgba(255,255,255,0.4),
-                inset 0 -1px 1px rgba(0,0,0,0.1);
+            background: rgba(15,14,22,0.7);
+            border: 1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(16px) saturate(120%); -webkit-backdrop-filter: blur(16px) saturate(120%);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25);
             transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -1736,17 +1731,16 @@
 
         .entry-container { display: flex; flex-direction: column; gap: 10px; align-items: center; box-sizing: border-box; max-width: 280px; margin: 0 auto; width: 100%; }
         .entry-card {
-            width: 70%; max-width: 196px; padding: 10px 20px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%) !important;
-            border: none;
-            border-radius: 999px !important;
-            backdrop-filter: blur(var(--lg-blur, 40px)) saturate(200%);
-            -webkit-backdrop-filter: blur(var(--lg-blur, 40px)) saturate(200%);
+            width: 70%; max-width: 220px; padding: 12px 22px;
+            background: linear-gradient(135deg, rgba(20,18,30,0.85) 0%, rgba(12,11,18,0.92) 100%) !important;
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 14px !important;
+            backdrop-filter: blur(var(--lg-blur, 30px)) saturate(140%);
+            -webkit-backdrop-filter: blur(var(--lg-blur, 30px)) saturate(140%);
             box-shadow:
-                0 8px 32px rgba(0,0,0,0.4),
-                inset 0 1px 1px rgba(255,255,255,0.4),
-                inset 0 -1px 1px rgba(0,0,0,0.1);
-            transition: transform 0.03s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.03s cubic-bezier(0.4, 0, 0.2, 1), background 0.03s cubic-bezier(0.4, 0, 0.2, 1);
+                0 4px 20px rgba(0,0,0,0.35),
+                0 1px 0 rgba(255,255,255,0.03) inset;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px;
             cursor: pointer; position: relative; overflow: hidden;
             margin-left: auto;
@@ -1778,11 +1772,12 @@
             z-index: -1;
         }
         .entry-card:hover {
-            background: linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%);
+            background: linear-gradient(135deg, rgba(25,22,38,0.9) 0%, rgba(15,14,22,0.95) 100%) !important;
+            border-color: rgba(0,232,122,0.12);
             box-shadow:
-                0 12px 40px rgba(0,0,0,0.45),
-                inset 0 1.5px 2px rgba(255,255,255,0.5),
-                inset 0 -1px 1px rgba(0,0,0,0.12);
+                0 6px 28px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(0,232,122,0.06) inset;
+            transform: translateY(-1px);
         }
         .entry-card:active {
             transition: none;
@@ -1813,10 +1808,10 @@
         .entry-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; margin: 0; }
         .entry-desc { font-size: 0.6rem; opacity: 0.45; line-height: 1.4; margin: 0; }
         .liquid-upload-card { border-radius: 16px; }
-        .liquid-upload-icon { width: 20px; height: 20px; margin: 0; color: var(--text-primary); opacity: 1; flex-shrink: 0; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5)); align-self: center; }
+        .liquid-upload-icon { width: 20px; height: 20px; margin: 0; color: var(--accent); opacity: 0.9; flex-shrink: 0; align-self: center; }
         .liquid-upload-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 3; margin: 0; }
-        .liquid-upload-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-primary); margin: 0; }
-        .liquid-upload-desc { font-size: 0.6rem; opacity: 0.45; letter-spacing: 0.03em; color: var(--text-primary); margin: 0; }
+        .liquid-upload-title { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; color: var(--accent); margin: 0; }
+        .liquid-upload-desc { font-size: 0.55rem; opacity: 0.3; letter-spacing: 0.04em; color: var(--text-primary); margin: 0; }
         .entry-text-wrap { display: flex; flex-direction: column; min-width: 0; text-align: left; flex: 1; }
 
         .entry-file-input {
@@ -5154,7 +5149,7 @@
         <!-- 主题选择器已移动到设置面板中 -->
 
         <div id="input-screen">
-            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:1;"></canvas>
+            <canvas id="matrix-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.85;"></canvas>
             <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;pointer-events:none;"></div>
             <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;padding-top:120px;padding-bottom:40px;">
@@ -10606,7 +10601,7 @@
                 this.columnStartY = [];
                 this.columnTrailLen = [];
                 this.columnChars = [];
-                this.accentColor = '#00ff88';
+                this.accentColor = '#8a5cf5';
                 this.gradientTopColor = null;
                 this.gradientBottomColor = null;
                 this.brightness = 1.0;
@@ -10841,9 +10836,9 @@
                 var ar = this._accentR || 0, ag = this._accentG || 255, ab = this._accentB || 136;
                 var colWidth = this.fontSize * 0.8;
                 var layers = [
-                    { fontMul: 0.5, speedMul: 0.15, alphaBase: 0.15, blur: 1.5, zOffset: 80 },
-                    { fontMul: 0.75, speedMul: 0.5, alphaBase: 0.4, blur: 0.5, zOffset: 40 },
-                    { fontMul: 1.0, speedMul: 1.0, alphaBase: 0.9, blur: 0, zOffset: 0 }
+                    { fontMul: 0.5, speedMul: 0.12, alphaBase: 0.08, blur: 2.0, zOffset: 80 },
+                    { fontMul: 0.75, speedMul: 0.4, alphaBase: 0.2, blur: 0.8, zOffset: 40 },
+                    { fontMul: 1.0, speedMul: 0.8, alphaBase: 0.5, blur: 0, zOffset: 0 }
                 ];
                 if (!this.columnChars) this.columnChars = [];
                 var hasGrad = this.gradientTopColor && this.gradientBottomColor;
