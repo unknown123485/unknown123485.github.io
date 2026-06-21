@@ -11,17 +11,11 @@
     <meta http-equiv="Expires" content="0">
     <title>Mas.reader v7.6.8</title>
     <script>
-        // 缓存控制 - v7.6.8
-        (function() {
-            var url = window.location.href;
-            var hasVersion = /[?&]v=\d+/.test(url);
-            if (!hasVersion) {
-                url = url.replace(/[?&]v=\d+/g, '');
-                url = url.replace(/\?$/,'').replace(/&$/,'');
-                var sep = url.indexOf('?') === -1 ? '?' : '&';
-                window.location.replace(url + sep + 'v=' + Date.now());
-            }
-        })();
+        // ponytail: keep the address stable; the old ?v= cache buster trapped back navigation.
+        window.MAS_READER_BUILD = '7.6.8';
+        if (/[?&]v=\d+/.test(window.location.search)) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+        }
     </script>
     <style>
         #app-splash{position:fixed;inset:0;z-index:99999;background:#0e0e18;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s ease;gap:20px}
@@ -12363,6 +12357,11 @@
                 var inputScreen = document.getElementById('input-screen');
                 var displayScreen = document.getElementById('display-screen');
 
+                var quoteShowcasePage = document.getElementById('quote-showcase-page');
+                if (quoteShowcasePage && quoteShowcasePage.style.display === 'block') {
+                    closeQuoteShowcase();
+                    return;
+                }
                 if (navBar && navBar.classList.contains('open')) {
                     toggleNav();
                     return;
@@ -13196,18 +13195,18 @@
 
     <!-- 书摘展示选择页面 -->
     <div id="quote-showcase-page" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:var(--bg-base);overflow-y:auto;-webkit-overflow-scrolling:touch;">
-        <div style="max-width:900px;margin:0 auto;padding:40px 20px;min-height:100vh;">
+        <div style="max-width:1120px;margin:0 auto;padding:clamp(24px,5vh,48px) 24px 64px;min-height:100vh;">
             <!-- 顶部返回按钮 -->
-            <div style="display:flex;align-items:center;gap:15px;margin-bottom:40px;">
+            <div style="display:flex;align-items:center;gap:15px;margin-bottom:32px;">
                 <button onclick="closeQuoteShowcase()" style="background:transparent;border:none;color:var(--text-primary);cursor:pointer;font-size:1rem;display:flex;align-items:center;gap:8px;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    返回
+                    返回主页
                 </button>
                 <h1 style="font-size:1.5rem;font-weight:300;letter-spacing:0.1em;color:var(--text-primary);">书摘展示</h1>
             </div>
 
             <!-- 选择书籍文件 -->
-            <div style="margin-bottom:40px;">
+            <div style="margin-bottom:32px;">
                 <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;margin-bottom:15px;text-transform:uppercase;">选择书籍</div>
                 <div class="entry-card liquid-upload-card" style="max-width:100%;width:100%;" onclick="document.getElementById('quote-file-input').click()">
                     <input type="file" id="quote-file-input" accept=".txt,.json,.md,.epub" multiple onchange="handleQuoteFileSelect(event)" style="display:none;">
@@ -13227,7 +13226,7 @@
             <!-- 展示效果选择 -->
             <div>
                 <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;margin-bottom:20px;text-transform:uppercase;">选择展示效果</div>
-                <div id="quote-effects-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
+                <div id="quote-effects-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:20px;">
                     <!-- 效果卡片将通过JS生成 -->
                 </div>
             </div>
@@ -13257,12 +13256,22 @@
         let selectedQuoteFiles = [];
 
         function showQuoteShowcase() {
-            document.getElementById('quote-showcase-page').style.display = 'block';
+            const page = document.getElementById('quote-showcase-page');
+            page.style.display = 'block';
+            page.scrollTop = 0;
             renderQuoteEffects();
+            cleanQuoteShowcaseUrl();
         }
 
         function closeQuoteShowcase() {
             document.getElementById('quote-showcase-page').style.display = 'none';
+            cleanQuoteShowcaseUrl();
+        }
+
+        function cleanQuoteShowcaseUrl() {
+            if ((location.search || location.hash) && history.replaceState) {
+                history.replaceState(null, '', location.pathname);
+            }
         }
 
         function renderQuoteEffects() {
@@ -13276,9 +13285,9 @@
                     overflow:hidden;
                     cursor:pointer;
                     transition:all 0.4s cubic-bezier(0.22,1,0.36,1);
-                    height:140px;
+                    height:132px;
                 " onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='rgba(255,255,255,0.25)';this.style.boxShadow='0 20px 40px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='';this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow=''">
-                    <div style="width:140px;height:140px;flex-shrink:0;background:linear-gradient(135deg,${getEffectGradient(effect.id)});display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+                    <div style="width:132px;height:132px;flex-shrink:0;background:linear-gradient(135deg,${getEffectGradient(effect.id)});display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
                         <div style="font-size:2.5rem;opacity:0.8;">${getEffectIcon(effect.id)}</div>
                         <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,rgba(0,0,0,0.3) 100%);"></div>
                     </div>
