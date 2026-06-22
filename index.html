@@ -11420,7 +11420,7 @@
             });
 
             // 检查是否从主题页面返回，如果是则自动打开书摘展示界面
-            if (sessionStorage.getItem('returnToQuoteShowcase') === 'true') {
+            if (sessionStorage.getItem('returnToQuoteShowcase') === 'true' || location.hash === '#quotes') {
                 sessionStorage.removeItem('returnToQuoteShowcase');
                 showQuoteShowcase();
             }
