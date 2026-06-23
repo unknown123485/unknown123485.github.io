@@ -247,12 +247,12 @@
 
         .theme-dark { --bg-base: #0e0e18; --accent: #7b61ff; --text-primary: #ffffff; --bg-gradient: radial-gradient(circle at 20% 30%, #1e1e3a 0%, #0e0e18 70%), radial-gradient(circle at 80% 70%, #141428 0%, #0e0e18 70%); --font-display: var(--font-serif); }
         .theme-cyber { --bg-base: #08081a; --accent: #ff00ff; --text-primary: #00ffff; --bg-gradient: linear-gradient(135deg, #08081a 0%, #2a0050 50%, #08081a 100%); --font-display: 'Courier New', monospace; }
-        .theme-zen { 
-            --bg-base: #f0f0ea; --accent: #8b7d6b; --text-primary: #2d2a26; 
-            --bg-gradient: radial-gradient(circle at 10% 20%, rgba(210, 202, 178, 0.4) 0%, transparent 50%), 
+        .theme-zen {
+            --bg-base: #f0f0ea; --accent: #8b7d6b; --text-primary: #2d2a26;
+            --bg-gradient: radial-gradient(circle at 10% 20%, rgba(210, 202, 178, 0.4) 0%, transparent 50%),
                            radial-gradient(circle at 90% 80%, rgba(139, 125, 107, 0.2) 0%, transparent 50%),
-                           linear-gradient(135deg, #f5f5f0 0%, #e8e8e1 100%); 
-            --font-display: var(--font-serif); 
+                           linear-gradient(135deg, #f5f5f0 0%, #e8e8e1 100%);
+            --font-display: var(--font-serif);
         }
         .theme-sunset {
             --bg-base: #241410; --accent: #ff6b35; --text-primary: #fff5e6;
@@ -748,16 +748,16 @@
             background: rgba(161,161,166,0.15);
         }
 
-        body, html { 
+        body, html {
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overflow-x: hidden;
-            background: var(--bg-base); font-family: var(--font-sans); 
-            color: var(--text-primary); transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            background: var(--bg-base); font-family: var(--font-sans);
+            color: var(--text-primary); transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             -webkit-text-size-adjust: 100%;
         }
 
-        .immersive-status-bar { 
-            position: fixed; top: 0; left: 0; right: 0; 
-            background: transparent; z-index: 10000; pointer-events: none; 
+        .immersive-status-bar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: transparent; z-index: 10000; pointer-events: none;
             display: none;
             align-items: center;
             justify-content: flex-end;
@@ -774,11 +774,11 @@
         .immersive-status-bar .status-time {
             letter-spacing: 0.5px;
         }
-        .immersive-status-bar::after { 
-            content: ''; position: fixed; top: 0; left: 0; right: 0; 
-            height: env(safe-area-inset-top, 24px); 
+        .immersive-status-bar::after {
+            content: ''; position: fixed; top: 0; left: 0; right: 0;
+            height: env(safe-area-inset-top, 24px);
             background: linear-gradient(to bottom, rgba(0,0,0,0.15), transparent);
-            pointer-events: none; z-index: -1; 
+            pointer-events: none; z-index: -1;
         }
 
         .app-container { width: 100%; min-height: 100vh; min-height: 100dvh; display: block; position: relative; background: var(--bg-gradient); overflow-x: hidden; overflow-y: auto; }
@@ -859,13 +859,13 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: 
-                linear-gradient(90deg, 
-                    rgba(255,255,255,calc(0.3 * var(--lg-opacity))) 0%, 
-                    rgba(255,255,255,calc(0.15 * var(--lg-opacity))) 15%, 
+            background:
+                linear-gradient(90deg,
+                    rgba(255,255,255,calc(0.3 * var(--lg-opacity))) 0%,
+                    rgba(255,255,255,calc(0.15 * var(--lg-opacity))) 15%,
                     transparent 45%),
-                linear-gradient(180deg, 
-                    rgba(255,255,255,calc(0.08 * var(--lg-opacity))) 0%, 
+                linear-gradient(180deg,
+                    rgba(255,255,255,calc(0.08 * var(--lg-opacity))) 0%,
                     transparent 30%);
             pointer-events: none;
             z-index: 1;
@@ -995,7 +995,7 @@
             display: flex; align-items: center; gap: 0.6rem;
             z-index: 900;
         }
-        
+
         .status-badge-setting {
             background: rgba(15,14,22,0.75);
             padding: 0; border-radius: 50%;
@@ -1039,7 +1039,7 @@
             pointer-events: none;
             z-index: 2;
         }
-        
+
         .status-badge-setting:hover {
             background: linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%);
             box-shadow:
@@ -1072,12 +1072,12 @@
         .status-badge-setting:active::after {
             background: radial-gradient(ellipse 60% 25% at 50% 10%, rgba(255,255,255,0.03), transparent);
         }
-        
+
         .status-badge-setting svg {
             width: 1rem;
             height: 1rem;
         }
-        
+
         .status-badge {
             background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
             padding: 0.5rem 1.2rem; border-radius: 1.2rem;
@@ -1369,7 +1369,7 @@
         }
         .library-rename-btn.cancel { background: rgba(255,255,255,0.08); color: var(--text-primary, #fff); }
         .library-rename-btn.confirm { background: var(--accent, #7b61ff); color: #fff; }
-        
+
         /* Logo和标题容器 - 只在主页面显示 */
         .hero-header-container {
             position: fixed;
@@ -1616,7 +1616,7 @@
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .home-settings-overlay.active { opacity: 1; pointer-events: auto; }
-        
+
         .about-module { margin-top: 24px; text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; }
         .about-content {
             display: inline-flex; align-items: center; gap: 6px;
@@ -1661,10 +1661,10 @@
                 radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%),
                 linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%);
         }
-        .about-icon { 
-            width: 6px; height: 6px; border-radius: 50%; 
+        .about-icon {
+            width: 6px; height: 6px; border-radius: 50%;
             border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center;
-            font-family: 'EB Garamond', serif; font-size: 0.3rem; font-style: italic; 
+            font-family: 'EB Garamond', serif; font-size: 0.3rem; font-style: italic;
             color: var(--accent); line-height: 1; font-weight: 700;
             position: relative;
             z-index: 2;
@@ -1838,12 +1838,12 @@
 
         /* 文本编辑区 (初始隐藏) */
         #manual-input-area { display: none; flex-direction: column; align-items: center; width: 100%; }
-        .luxury-glass { 
-            background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            backdrop-filter: blur(40px) saturate(150%); 
-            border-radius: 40px; 
-            box-shadow: 0 50px 100px rgba(0,0,0,0.4), inset 0 0 80px rgba(255,255,255,0.02); 
+        .luxury-glass {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(40px) saturate(150%);
+            border-radius: 40px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.4), inset 0 0 80px rgba(255,255,255,0.02);
             padding: 4rem; margin-top: 2rem;
         }
 
@@ -1856,11 +1856,11 @@
         .btn-back::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(ellipse 50% 30% at 50% 5%, rgba(255,255,255,0.08), transparent); pointer-events: none; z-index: 2; }
         .btn-back:hover { background: linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%); }
         .btn-back:active { transition: none; transform: scale(0.91) translateY(3px); box-shadow: 0 2px 6px rgba(0,0,0,0.5); background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,255,255,0.15) 0%, transparent 70%), linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(40,40,50,0.05) 100%); }
-        .text-input { 
-            width: 75vw; height: 50vh; background: transparent; border: none; 
-            color: var(--text-primary); font-size: 1.6rem; line-height: 1.8; 
-            resize: none; outline: none; font-family: var(--font-display); 
-            font-weight: 400; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+        .text-input {
+            width: 75vw; height: 50vh; background: transparent; border: none;
+            color: var(--text-primary); font-size: 1.6rem; line-height: 1.8;
+            resize: none; outline: none; font-family: var(--font-display);
+            font-weight: 400; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .theme-retro-typewriter .luxury-glass {
             background: rgba(0, 0, 0, 0.02);
@@ -2002,9 +2002,9 @@
         .sentence-text.anim-typewriter { opacity: 1; transform: none; filter: none; transition: none; }
         .sentence-text.anim-typewriter.active { opacity: 1; filter: none; }
         .sentence-text.anim-typewriter.exit { opacity: 0; filter: none; transition: opacity 0.3s ease; }
-        .typewriter-cursor { 
-            display: inline-block; width: 2px; height: 1em; 
-            background: var(--text-primary); margin-left: 2px; 
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: var(--text-primary); margin-left: 2px;
             animation: cursor-blink 0.6s step-end infinite; vertical-align: text-bottom;
         }
         @keyframes cursor-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -2053,15 +2053,15 @@
         .sentence-text.anim-flip.exit { opacity: 0; transform: rotateY(-90deg); }
 
         /* --- 老式打字机 巅峰拟真重塑 --- */
-        .typewriter-paper { 
-            background: #fffef8; width: 65vw; height: 90vh; padding: 6rem 8rem; 
-            box-shadow: 0 40px 120px rgba(0,0,0,0.4), inset 0 0 150px rgba(0,0,0,0.05); 
+        .typewriter-paper {
+            background: #fffef8; width: 65vw; height: 90vh; padding: 6rem 8rem;
+            box-shadow: 0 40px 120px rgba(0,0,0,0.4), inset 0 0 150px rgba(0,0,0,0.05);
             border-radius: 2px; display: none; position: relative; overflow: hidden;
             transform: rotate(-0.1deg) translateX(var(--paper-x, 0)) translateY(var(--paper-y, 0));
             transition: transform 0.1s linear; z-index: 10;
         }
-        .theme-retro-typewriter .typewriter-paper { 
-            background: 
+        .theme-retro-typewriter .typewriter-paper {
+            background:
                 repeating-linear-gradient(
                     transparent,
                     transparent 27px,
@@ -2070,10 +2070,10 @@
                 ),
                 linear-gradient(135deg, #faf6ee 0%, #f5f0e0 50%, #faf6ee 100%);
             background-color: #faf6ee;
-            box-shadow: 
-                0 40px 120px rgba(0,0,0,0.8), 
+            box-shadow:
+                0 40px 120px rgba(0,0,0,0.8),
                 inset 0 0 150px rgba(139, 115, 85, 0.08),
-                inset 0 0 0 1px rgba(0,0,0,0.1); 
+                inset 0 0 0 1px rgba(0,0,0,0.1);
             display: block;
             border: 1px solid #d4c8a8;
             width: 100%;
@@ -2086,23 +2086,23 @@
             transform: rotate(-0.1deg) translateX(var(--paper-x, 0)) translateY(var(--paper-y, 0));
         }
         .theme-retro-typewriter .display-area { background: transparent; align-items: flex-start; padding-top: 5vh; overflow: visible; text-align: left; }
-        .theme-retro-typewriter .sentence-text { 
-            font-family: var(--font-display); 
-            color: #080808; 
-            font-size: calc(var(--font-size-base) * 0.42 * var(--dpi-scale)); 
-            font-weight: var(--font-weight); 
-            text-align: left; opacity: 1; transform: none; 
-            filter: url(#ink-soul) contrast(1.6) sepia(0.3) brightness(0.8); 
+        .theme-retro-typewriter .sentence-text {
+            font-family: var(--font-display);
+            color: #080808;
+            font-size: calc(var(--font-size-base) * 0.42 * var(--dpi-scale));
+            font-weight: var(--font-weight);
+            text-align: left; opacity: 1; transform: none;
+            filter: url(#ink-soul) contrast(1.6) sepia(0.3) brightness(0.8);
             letter-spacing: 0.15em; max-width: 100%; white-space: pre-wrap;
             line-height: 1.9; word-break: break-all;
             text-shadow: 0.6px 0.6px 0.6px rgba(0,0,0,0.6), -0.3px -0.3px 0.1px rgba(255,255,255,0.15);
             -webkit-font-smoothing: none;
-        } 
+        }
 
 /* --- 巅峰打字机 机械骨架重塑 --- */
-        .vintage-machine-body { 
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%); 
-            width: min(800px, 95vw); height: min(500px, 55vh); 
+        .vintage-machine-body {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+            width: min(800px, 95vw); height: min(500px, 55vh);
             background: #94c5f8;
             display: none; flex-direction: column; align-items: center; z-index: 40;
             border-radius: 20px 20px 0 0;
@@ -2111,7 +2111,7 @@
             border: 2px solid #7bb3f0;
             background: linear-gradient(135deg, #94c5f8 0%, #7bb3f0 50%, #94c5f8 100%);
         }
-        
+
         /* 打字机顶部结构 */
         .machine-top {
             position: absolute;
@@ -2123,7 +2123,7 @@
             border-radius: 20px 20px 0 0;
             z-index: 10;
         }
-        
+
         /* 打字机机身细节 */
         .machine-detail {
             position: absolute;
@@ -2134,7 +2134,7 @@
             top: 20px;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
         }
-        
+
         /* 打字机品牌标志 */
         .machine-brand {
             position: absolute;
@@ -2146,7 +2146,7 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             letter-spacing: 4px;
         }
-        
+
         /* 纸张支架 */
         .paper-holder {
             position: absolute;
@@ -2159,7 +2159,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 15;
         }
-        
+
         .machine-paper {
             position: absolute;
             top: min(-200px, -25vh);
@@ -2172,7 +2172,7 @@
             transform: rotate(-1deg);
             pointer-events: none;
         }
-        
+
         /* 纸张折角 */
         .paper-corner {
             position: absolute;
@@ -2183,7 +2183,7 @@
             background: linear-gradient(135deg, white 50%, #f0f0f0 50%);
             border-bottom-left-radius: 10px;
         }
-        
+
         /* 色带盒盖 */
         .spool-covers {
             position: absolute; top: 150px; width: 100%; display: flex; justify-content: space-between; padding: 0 150px; pointer-events: none;
@@ -2193,7 +2193,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3), inset 0 0 15px rgba(255,255,255,0.3);
             border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center;
         }
-        
+
         /* 卷轴系统 */
         .carriage-track {
             position: absolute; top: 200px; width: 1000px; height: 20px;
@@ -2202,74 +2202,74 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .machine-carriage { 
-            width: 950px; height: 80px; background: #f0f0f0; border-radius: 5px; 
-            margin-top: -40px; border: 3px solid #e0e0e0; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2); position: relative; 
+        .machine-carriage {
+            width: 950px; height: 80px; background: #f0f0f0; border-radius: 5px;
+            margin-top: -40px; border: 3px solid #e0e0e0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2); position: relative;
             display: flex; align-items: center; justify-content: center; z-index: 9;
         }
-        
-        .platen-roller { 
-            width: 90%; height: 50px; background: #c0c0c0; border-radius: 4px; 
-            border: 1px solid #b0b0b0; box-shadow: inset 0 0 30px rgba(0,0,0,0.1); 
+
+        .platen-roller {
+            width: 90%; height: 50px; background: #c0c0c0; border-radius: 4px;
+            border: 1px solid #b0b0b0; box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
         }
-        
-        .carriage-knob { 
-            position: absolute; width: 60px; height: 60px; 
-            background: radial-gradient(circle at 30% 30%, #94c5f8, #7bb3f0); 
-            border-radius: 50%; top: 50%; transform: translateY(-50%); 
-            border: 2px solid #6aa2e0; box-shadow: 0 5px 10px rgba(0,0,0,0.3); 
+
+        .carriage-knob {
+            position: absolute; width: 60px; height: 60px;
+            background: radial-gradient(circle at 30% 30%, #94c5f8, #7bb3f0);
+            border-radius: 50%; top: 50%; transform: translateY(-50%);
+            border: 2px solid #6aa2e0; box-shadow: 0 5px 10px rgba(0,0,0,0.3);
         }
-        
+
         .knob-left { left: -30px; } .knob-right { right: -30px; }
-        
-        .carriage-lever { 
-            position: absolute; left: 50px; top: -100px; width: 20px; height: 150px; 
-            background: linear-gradient(to right, #94c5f8, #7bb3f0, #94c5f8); border-radius: 8px 8px 0 0; 
-            transform: rotate(-15deg); box-shadow: 10px 10px 30px rgba(0,0,0,0.3); 
+
+        .carriage-lever {
+            position: absolute; left: 50px; top: -100px; width: 20px; height: 150px;
+            background: linear-gradient(to right, #94c5f8, #7bb3f0, #94c5f8); border-radius: 8px 8px 0 0;
+            transform: rotate(-15deg); box-shadow: 10px 10px 30px rgba(0,0,0,0.3);
             transition: 0.3s; transform-origin: bottom; border: 1px solid #6aa2e0;
         }
         .carriage-lever.return { transform: rotate(15deg); transition: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
-        
+
         /* 按键系统 */
-        .keys-staggered { 
-            display: flex; flex-direction: column; gap: 8px; padding: 20px 40px; width: 100%; 
+        .keys-staggered {
+            display: flex; flex-direction: column; gap: 8px; padding: 20px 40px; width: 100%;
             background: #7bb3f0; border-top: 1px solid rgba(255,255,255,0.3); border-radius: 20px 20px 0 0;
             box-shadow: inset 0 15px 30px rgba(0,0,0,0.2); z-index: 15;
             align-items: center; margin-top: auto;
         }
-        
+
         .key-row { display: flex; justify-content: center; gap: 12px; width: 100%; }
-        
-        .vintage-key { 
-            width: 35px; height: 35px; background: radial-gradient(circle at 30% 30%, #94c5f8, #7bb3f0); 
-            border: 1px solid #6aa2e0; border-radius: 50%; 
-            box-shadow: 0 4px 0 #6aa2e0, 0 6px 12px rgba(0,0,0,0.3); 
+
+        .vintage-key {
+            width: 35px; height: 35px; background: radial-gradient(circle at 30% 30%, #94c5f8, #7bb3f0);
+            border: 1px solid #6aa2e0; border-radius: 50%;
+            box-shadow: 0 4px 0 #6aa2e0, 0 6px 12px rgba(0,0,0,0.3);
             transition: 0.05s; position: relative; color: #ffffff; font-family: var(--font-sans); font-size: 0.6rem; font-weight: 700;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
         }
-        
-        .vintage-key:hover { 
+
+        .vintage-key:hover {
             transform: translateY(2px);
             box-shadow: 0 3px 0 #6aa2e0, 0 5px 10px rgba(0,0,0,0.3);
         }
-        
-        .vintage-key.active { 
+
+        .vintage-key.active {
             transform: translateY(5px);
             box-shadow: 0 0 0 #6aa2e0, 0 2px 5px rgba(0,0,0,0.3);
         }
-        
+
         .vintage-key::after { display: none; } /* 移除旧版连杆 */
-        
+
         /* 核心字模篮结构 */
         .typebar-basket {
             position: absolute; top: 220px; width: 600px; height: 180px;
             background: radial-gradient(ellipse at bottom, rgba(0,0,0,0.2), transparent 80%);
-            border-bottom: 4px solid rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: flex-end; 
+            border-bottom: 4px solid rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: flex-end;
             z-index: 5; overflow: hidden;
         }
-        
+
         .typebar-arm {
             position: absolute; bottom: -5px; width: 4px; height: 160px;
             background: linear-gradient(to top, #c0c0c0, #e0e0e0, #c0c0c0);
@@ -2278,40 +2278,40 @@
         }
 
         /* 联动打击系统 */
-        .hammer-system { 
-            position: absolute; top: 230px; left: 0; 
-            width: 100%; height: 140px; display: flex; 
-            justify-content: flex-start; overflow: visible; 
+        .hammer-system {
+            position: absolute; top: 230px; left: 0;
+            width: 100%; height: 140px; display: flex;
+            justify-content: flex-start; overflow: visible;
             pointer-events: none; z-index: 12;
             transition: transform 0.1s linear;
             transform: translateZ(0);
             will-change: transform;
         }
-        
-        .strike-hammer { 
-            width: 8px; height: 180px; 
-            background: linear-gradient(to bottom, #c0c0c0, #e0e0e0, #c0c0c0); 
+
+        .strike-hammer {
+            width: 8px; height: 180px;
+            background: linear-gradient(to bottom, #c0c0c0, #e0e0e0, #c0c0c0);
             border-radius: 4px; transform-origin: bottom center; opacity: 0;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
             margin-left: 100px; border: 1px solid #b0b0b0;
         }
-        
+
         .strike-hammer.active { animation: strike 0.1s ease-out; opacity: 1; }
-        
+
         /* 主题显示控制 */
         .theme-retro-typewriter .vintage-machine-body { display: flex; transform: translateX(-50%) translateY(0); }
-        
+
         /* 主题特定样式 */
         .theme-retro-typewriter .vintage-machine-body {
             background: linear-gradient(135deg, #c43224 0%, #a1281d 50%, #c43224 100%);
             border: 2px solid #a1281d;
         }
-        
+
         .theme-retro-typewriter .spool-cover {
             background: #c43224;
             border: 1px solid rgba(0,0,0,0.1);
         }
-        
+
         .theme-retro-typewriter .spool-cover::after {
             content: '王';
             font-family: serif;
@@ -2319,23 +2319,23 @@
             font-size: 2rem;
             transform: scaleX(1.5);
         }
-        
+
         .theme-retro-typewriter .keys-staggered {
             background: #a1281d;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
-        
+
         .theme-retro-typewriter .vintage-key {
             background: radial-gradient(circle at 30% 30%, #fffef0, #dcd7c0);
             border: 1px solid #aaa;
             color: #333;
             box-shadow: 0 5px 0 #b0aa8c, 0 8px 15px rgba(0,0,0,0.3);
         }
-        
+
         .theme-retro-typewriter .vintage-key:hover {
             box-shadow: 0 3px 0 #b0aa8c, 0 5px 10px rgba(0,0,0,0.3);
         }
-        
+
         .theme-retro-typewriter .vintage-key.active {
             box-shadow: 0 0 0 #b0aa8c, 0 2px 5px rgba(0,0,0,0.3);
         }
@@ -2380,9 +2380,9 @@
             background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 20%, transparent 50%);
             pointer-events: none;
         }
-        .nav-bar-luxury.open { 
-            transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto !important; visibility: visible; 
-            overflow-y: auto; overflow-x: hidden; 
+        .nav-bar-luxury.open {
+            transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto !important; visibility: visible;
+            overflow-y: auto; overflow-x: hidden;
             backdrop-filter: blur(30px) saturate(180%);
             -webkit-backdrop-filter: blur(30px) saturate(180%);
         }
@@ -2462,7 +2462,7 @@
             z-index: 0;
         }
         .nav-bar-luxury > * { position: relative; z-index: 1; }
-        
+
         /* 底部控制按钮 */
         .bottom-controls {
             position: fixed; bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%);
@@ -2476,7 +2476,7 @@
             pointer-events: none;
             transform: translateX(-50%) translateY(20px);
         }
-        
+
         .bottom-control-btn {
             background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
             box-shadow:
@@ -2544,13 +2544,13 @@
         .bottom-control-btn.play-master:hover {
             transform: scale(1.1);
         }
-        
+
         .bottom-control-btn svg {
             width: 24px;
             height: 24px;
             fill: currentColor;
         }
-        
+
         .bottom-control-btn.play-master svg {
             width: 32px;
             height: 32px;
@@ -2680,14 +2680,14 @@
         .font-select, .anim-select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 10px 14px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; outline: none; min-width: 160px; font-family: var(--font-display); backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%); -webkit-appearance: none; appearance: none; }
         .font-select optgroup { background: rgba(20,20,35,0.95); color: rgba(255,255,255,0.7); }
         .font-select option { background: rgba(20,20,35,0.95); color: white; padding: 8px; }
-        
+
         .custom-font-select {
             position: relative;
             min-width: 160px;
             font-family: var(--font-display);
             z-index: 2000;
         }
-        
+
         .custom-font-select-header {
             display: flex;
             justify-content: space-between;
@@ -2705,7 +2705,7 @@
             backdrop-filter: blur(10px) saturate(150%);
             -webkit-backdrop-filter: blur(10px) saturate(150%);
         }
-        
+
         .custom-font-select-header:hover {
             background: rgba(255,255,255,0.12);
             border-color: rgba(255,255,255,0.2);
@@ -2714,16 +2714,16 @@
             transform: scale(0.97);
             background: rgba(255,255,255,0.06);
         }
-        
+
         .dropdown-icon {
             font-size: 0.6rem;
             transition: transform 0.3s ease;
         }
-        
+
         .custom-font-select.open .dropdown-icon {
             transform: rotate(180deg);
         }
-        
+
         .custom-font-select-dropdown {
             position: fixed;
             background: rgba(255, 255, 255, 0.08);
@@ -2738,7 +2738,7 @@
             display: none;
             padding: 8px;
         }
-        
+
         .font-category {
             padding: 10px 14px;
             font-size: 0.6rem;
@@ -2748,7 +2748,7 @@
             letter-spacing: 1px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        
+
         .font-option {
             padding: 12px 14px;
             color: rgba(255,255,255,0.85);
@@ -2758,7 +2758,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.04);
             border-radius: 8px;
         }
-        
+
         .font-option:hover {
             background: rgba(255,255,255,0.1);
             padding-left: 18px;
@@ -2772,11 +2772,11 @@
             color: var(--accent);
             border-left: 2px solid var(--accent);
         }
-        
+
         .font-option:last-child {
             border-bottom: none;
         }
-        
+
         .themes-section {
             width: 100%;
             margin-top: 1.5rem;
@@ -2785,7 +2785,7 @@
             overflow: visible;
             box-sizing: border-box;
         }
-        
+
         .themes-grid {
             display: flex;
             flex-wrap: wrap;
@@ -2796,7 +2796,7 @@
             box-sizing: border-box;
             overflow: hidden;
         }
-        
+
         .crystal-dot { width: 38px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.4s, transform 0.15s ease; backdrop-filter: blur(15px) saturate(180%); -webkit-backdrop-filter: blur(15px) saturate(180%); position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.2); }
         .crystal-dot::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 25%, transparent 50%); pointer-events: none; }
         .crystal-dot:hover { transform: scale(1.2) rotate(10deg); border-color: rgba(255,255,255,0.3); }
@@ -3678,26 +3678,26 @@
             margin-top: 2px;
         }
 
-        .toc-modal { 
-            position: fixed; inset: 0; z-index: 980; display: flex; 
-            align-items: flex-end; justify-content: center; background: rgba(0,0,0,0); 
+        .toc-modal {
+            position: fixed; inset: 0; z-index: 980; display: flex;
+            align-items: flex-end; justify-content: center; background: rgba(0,0,0,0);
             pointer-events: none;
             transition: background 0.35s ease;
         }
-        .toc-modal.active { 
-            background: rgba(0,0,0,0.5); 
+        .toc-modal.active {
+            background: rgba(0,0,0,0.5);
             pointer-events: auto;
         }
-        .toc-modal-content { 
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%); 
-            backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); 
+        .toc-modal-content {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.06) 100%);
+            backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%);
             border-top: 1px solid rgba(255,255,255,0.25);
             border-left: 1px solid rgba(255,255,255,0.12);
             border-right: 1px solid rgba(255,255,255,0.06);
             border-bottom: none;
-            border-radius: 24px 24px 0 0; 
+            border-radius: 24px 24px 0 0;
             padding: 1.5rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px)); width: 100%; max-width: 100%; height: 75vh;
-            display: flex; flex-direction: column; color: #fff; 
+            display: flex; flex-direction: column; color: #fff;
             transform: translateY(100%); opacity: 0;
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
             position: relative;
@@ -4164,7 +4164,7 @@
                 radial-gradient(circle at 50% 50%, #161a25 0%, #05070a 100%);
             z-index: 0;
         }
-        
+
         .cyberpunk-bg {
             position: absolute;
             top: 0;
@@ -4172,13 +4172,13 @@
             width: 100%;
             height: 100%;
             background-color: #09090b;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(0, 255, 170, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 255, 170, 0.1) 1px, transparent 1px);
             background-size: 30px 30px;
             z-index: 0;
         }
-        
+
         .minimal-bg {
             position: absolute;
             top: 0;
@@ -4188,7 +4188,7 @@
             background-color: #FAFAFA;
             z-index: 0;
         }
-        
+
         .red-vintage-bg {
             position: absolute;
             top: 0;
@@ -4198,7 +4198,7 @@
             background-color: #F3E5D8;
             z-index: 0;
         }
-        
+
         .modern-dark-bg {
             position: absolute;
             top: 0;
@@ -4208,7 +4208,7 @@
             background-color: #222224;
             z-index: 0;
         }
-        
+
         .matrix-bg {
             position: absolute;
             top: 0;
@@ -4218,7 +4218,7 @@
             background-color: #030303;
             z-index: 0;
         }
-        
+
         .ocean-bg {
             position: absolute;
             top: 0;
@@ -4228,7 +4228,7 @@
             background: radial-gradient(circle at 50% 100%, #064057 0%, #031826 60%, #010a12 100%);
             z-index: 0;
         }
-        
+
         .bubblegum-bg {
             position: absolute;
             top: 0;
@@ -4238,7 +4238,7 @@
             background: linear-gradient(135deg, #ffcce6 0%, #ff99cc 100%);
             z-index: 0;
         }
-        
+
         .gold-vintage-bg {
             position: absolute;
             top: 0;
@@ -4249,7 +4249,7 @@
             background-image: radial-gradient(circle at 50% 50%, #2a2214 0%, #1a1610 100%);
             z-index: 0;
         }
-        
+
         .glass-panel {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
             backdrop-filter: blur(40px) saturate(220%);
@@ -4257,7 +4257,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-top-color: rgba(255, 255, 255, 0.4);
             border-left-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 
+            box-shadow:
                 0 30px 60px rgba(0, 0, 0, 0.4),
                 inset 2px 0 4px rgba(255, 255, 255, 0.4),
                 inset -1px 0 2px rgba(0, 0, 0, 0.15);
@@ -4271,12 +4271,12 @@
             background: linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.06) 20%, transparent 50%);
             pointer-events: none;
         }
-        
+
         .glass-button {
             background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-top-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 
+            box-shadow:
                 0 10px 20px rgba(0, 0, 0, 0.2),
                 inset 0 1px 1px rgba(255, 255, 255, 0.7),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.2);
@@ -4286,26 +4286,26 @@
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             cursor: pointer;
         }
-        
+
         .glass-button:hover:not(:disabled) {
             background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
             border-color: rgba(255, 255, 255, 0.3);
             border-top-color: rgba(255, 255, 255, 0.7);
-            box-shadow: 
+            box-shadow:
                 0 15px 25px rgba(0, 0, 0, 0.3),
                 inset 0 2px 2px rgba(255, 255, 255, 0.8),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.2);
             transform: translateY(-2px);
         }
-        
+
         .glass-button:active:not(:disabled) {
             background: rgba(255, 255, 255, 0.1);
-            box-shadow: 
+            box-shadow:
                 0 5px 10px rgba(0, 0, 0, 0.2),
                 inset 0 2px 5px rgba(0, 0, 0, 0.3);
             transform: translateY(1px);
         }
-        
+
         .glass-input {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(30px) saturate(200%) brightness(1.05) contrast(1.03);
@@ -4316,20 +4316,20 @@
             color: white;
             transition: all 0.3s ease;
         }
-        
+
         .glass-input:focus {
             outline: none;
             background: rgba(255, 255, 255, 0.15);
             border-color: #E0E7FF;
-            box-shadow: 
+            box-shadow:
                 inset 0 2px 5px rgba(0,0,0,0.2),
                 0 0 15px rgba(224, 231, 255, 0.3);
         }
-        
+
         .glass-input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
-        
+
         /* Hide scrollbar for elegant look */
         ::-webkit-scrollbar {
             width: 6px;
@@ -4344,16 +4344,16 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.3);
         }
-        
+
         .paper-texture {
             background-color: #f4ebd8 !important;
-            background-image: 
+            background-image:
                 linear-gradient(90deg, rgba(0,0,0,0.02) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.02) 100%),
                 url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E") !important;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 60px rgba(139, 115, 85, 0.2) !important;
             border-radius: 4px !important;
         }
-        
+
         .typewriter-bg {
             position: absolute;
             top: 0;
@@ -4364,7 +4364,7 @@
             background-image: radial-gradient(circle at 50% 50%, #4a3320 0%, #1a1008 100%);
             z-index: 0;
         }
-        
+
         .cyber-text {
             color: #00ffaa;
             text-shadow: 0 0 10px rgba(0,255,170,0.5), 0 0 20px rgba(0,255,170,0.3);
@@ -4374,9 +4374,9 @@
         .theme-retro-typewriter .app-container {
             background: linear-gradient(135deg, #f4e4c1 0%, #e8d5a0 100%);
         }
-        
+
         .theme-retro-typewriter .display-area {
-            background: 
+            background:
                 radial-gradient(circle at 15% 25%, rgba(200, 170, 100, 0.2) 0%, transparent 50%),
                 radial-gradient(circle at 85% 75%, rgba(180, 150, 80, 0.15) 0%, transparent 50%);
             background-color: #f4e4c1;
@@ -4391,7 +4391,7 @@
             overflow: visible;
             align-items: flex-start;
         }
-        
+
         .theme-retro-typewriter .sentence-text {
             font-family: 'Special Elite', 'Courier New', monospace;
             color: #1a0e08;
@@ -4411,7 +4411,7 @@
             -webkit-font-smoothing: none;
             filter: url(#ink-soul) contrast(1.4) sepia(0.2);
         }
-        
+
         .typewriter-display { display: none; grid-area: 1 / 1; }
         .theme-retro-typewriter .typewriter-display {
             position: absolute;
@@ -4425,13 +4425,13 @@
             justify-content: center;
             border-top: 2px solid #8b4513;
         }
-        
+
         .theme-retro-typewriter .typewriter-icon {
             width: 300px;
             height: 150px;
             position: relative;
         }
-        
+
         .theme-retro-typewriter .typewriter-icon::before {
             content: '';
             position: absolute;
@@ -4443,7 +4443,7 @@
             background: #333333;
             border-radius: 5px 5px 0 0;
         }
-        
+
         .theme-retro-typewriter .typewriter-icon::after {
             content: '';
             position: absolute;
@@ -4455,7 +4455,7 @@
             background: #333333;
             border-radius: 0 0 5px 5px;
         }
-        
+
         .theme-retro-typewriter .typewriter-keys {
             position: absolute;
             top: 120px;
@@ -4467,7 +4467,7 @@
             grid-template-columns: repeat(10, 1fr);
             gap: 2px;
         }
-        
+
         .theme-retro-typewriter .typewriter-key {
             width: 24px;
             height: 24px;
@@ -4476,16 +4476,16 @@
             border: 1px solid #8b4513;
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
         }
-        
+
         .theme-retro-typewriter .vintage-machine-body {
             display: flex !important;
             transform: translateX(-50%) translateY(0) !important;
         }
-        
+
         .theme-retro-typewriter .typewriter-paper {
             display: block !important;
         }
-        
+
         .theme-retro-typewriter .crystal-dot {
             width: 30px;
             height: 30px;
@@ -5031,6 +5031,9 @@
             }
         }
     </style>
+<style id="codex-home-fixes">
+#input-screen{background:#050507!important;isolation:isolate}#input-screen::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 72% 68% at 50% 54%,rgba(9,12,18,.42),rgba(5,5,7,.82) 68%,#050507 100%),linear-gradient(180deg,rgba(0,232,138,.05),transparent 34%,rgba(122,92,245,.05))}#matrix-canvas{opacity:1!important;filter:saturate(1.35) contrast(1.12)}#liquid-glass-canvas{opacity:.92;mix-blend-mode:screen}.home-stage{justify-content:flex-start!important;padding-top:clamp(330px,54vh,520px)!important;padding-bottom:clamp(42px,8vh,96px)!important}.hero-header-container{margin-top:clamp(72px,12vh,126px)!important;gap:3px!important}.mas-reader-logo{width:112px!important;height:112px!important;filter:drop-shadow(0 0 20px rgba(255,67,120,.36)) drop-shadow(0 0 18px rgba(0,232,180,.22))}.hero-glass-base{margin-top:-2px;padding:8px 32px 9px!important;border-radius:14px!important;background:rgba(12,12,18,.38)!important;border-color:rgba(255,255,255,.1)!important}.mas-reader-title{font-size:1.72rem!important;letter-spacing:.28em!important;line-height:1.08!important}.entry-container{--home-card-width:clamp(300px,24vw,380px);width:var(--home-card-width)!important;max-width:var(--home-card-width)!important;gap:12px!important;margin-top:0!important;padding:0!important;position:relative;z-index:3}.entry-card,#manual-input-btn{width:100%!important;max-width:none!important;min-height:76px;padding:14px 24px!important;justify-content:center!important;border-radius:18px!important;background:rgba(8,10,18,.32)!important;border:1px solid rgba(0,232,138,.24)!important;box-shadow:0 16px 46px rgba(0,0,0,.32),inset 0 1px 1px rgba(255,255,255,.18),inset 0 -1px 1px rgba(0,0,0,.22)!important;backdrop-filter:blur(18px) saturate(185%) contrast(112%)!important;-webkit-backdrop-filter:blur(18px) saturate(185%) contrast(112%)!important}.entry-card .liquid-upload-icon{width:24px!important;height:24px!important;flex-shrink:0}.entry-card .entry-text-wrap{flex:0 1 auto!important;min-width:148px}.entry-card .liquid-upload-title{font-size:.98rem!important;letter-spacing:.03em!important}.entry-card .liquid-upload-desc{font-size:.68rem!important;opacity:.48!important}.recent-books-section{max-width:var(--home-card-width,380px)!important;margin:12px auto 0!important;position:relative;z-index:3}.recent-book-one{display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:42px;background:rgba(8,10,18,.28);border:1px solid rgba(255,255,255,.08);border-radius:14px;cursor:pointer;backdrop-filter:blur(12px) saturate(160%);-webkit-backdrop-filter:blur(12px) saturate(160%)}.about-module{margin-top:12px!important;position:relative;z-index:3}.about-content{min-height:30px!important;padding:5px 14px!important;border-radius:999px!important}.about-icon{width:14px!important;height:14px!important;font-size:.55rem!important}.about-label{font-size:.62rem!important;letter-spacing:.16em!important}.about-detail{inset:auto!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%)!important;width:min(680px,calc(100vw - 32px))!important;height:min(76vh,680px)!important;border-radius:24px!important;padding:22px!important;background:rgba(7,8,12,.9)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 26px 90px rgba(0,0,0,.58),inset 0 1px 1px rgba(255,255,255,.12)!important;overflow:auto!important}.about-detail.open{display:block!important}.home-settings-overlay{z-index:3998!important}.home-settings-panel{z-index:3999!important;background:rgba(7,9,14,.86)!important;border-color:rgba(0,232,138,.18)!important}.status-badge-setting{z-index:4001!important}.weread-settings input,.weread-settings textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(255,255,255,.06);color:var(--text-primary);font-family:inherit;font-size:.78rem;outline:none}.weread-settings input{padding:10px 12px}.weread-settings textarea{min-height:88px;margin-top:8px;padding:10px 12px;resize:vertical}.weread-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}.weread-status{margin-top:8px;min-height:18px;color:rgba(255,255,255,.54);font-size:.68rem;line-height:1.45}@media(max-width:768px){.home-stage{padding-top:clamp(300px,52vh,460px)!important}.hero-header-container{margin-top:clamp(56px,10vh,96px)!important}.mas-reader-logo{width:96px!important;height:96px!important}.mas-reader-title{font-size:1.45rem!important;letter-spacing:.22em!important}.entry-container{--home-card-width:min(82vw,340px)}.entry-card,#manual-input-btn{min-height:70px;padding:12px 18px!important}.entry-card .entry-text-wrap{min-width:136px}.home-settings-panel{width:100vw!important;max-width:100vw!important;right:-105vw!important;border-radius:0!important}.home-settings-panel.open{right:0!important}.about-detail{width:calc(100vw - 24px)!important;height:min(78dvh,640px)!important;padding:18px!important}.weread-actions{grid-template-columns:1fr}}
+</style>
 </head>
 <body class="theme-mystic">
     <div id="app-splash">
@@ -5117,7 +5120,7 @@
                 <span id="progress-val">1/1</span>
             </div>
         </div>
-        
+
         <!-- 底部控制按钮 -->
         <div class="bottom-controls hidden" id="bottom-controls">
             <button class="bottom-control-btn" id="prev-btn">
@@ -5147,7 +5150,7 @@
             <div style="position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 55% at 50% 45%, rgba(8,7,14,0.7) 0%, rgba(8,7,14,0.3) 40%, transparent 70%);"></div>
             <canvas id="liquid-glass-canvas" data-liquid-ignore style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
             <div id="quote-showcase-container" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;display:none;pointer-events:none;"></div>
-            <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;padding-top:120px;padding-bottom:40px;">
+            <div class="home-stage" style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;flex:1;min-height:0;margin:0 auto;padding-top:120px;padding-bottom:40px;">
             <!-- 层级说明：Matrix背景 z-index:0 → WebGL LiquidGlass Canvas z-index:0(叠加在Matrix之上) → 按钮/内容 z-index:1 -->
 
             <div class="home-settings-overlay" id="home-settings-overlay" onclick="toggleHomeSettings()"></div>
@@ -5282,6 +5285,19 @@
                         <div id="matrix-file-list" style="font-size:0.65rem;opacity:0.5;margin-top:0.3rem;"></div>
                     </div>
                 </div>
+                <div class="home-settings-section weread-settings">
+                    <label>微信读书 · WeRead</label>
+                    <input id="weread-api-key" type="password" autocomplete="off" placeholder="API Key / Bearer token">
+                    <div class="weread-actions">
+                        <button onclick="syncWeReadFromApi()">同步 API</button>
+                        <button onclick="importWeReadJson()">导入 JSON</button>
+                        <button onclick="clearWeReadImport()">清空</button>
+                    </div>
+                    <textarea id="weread-json-input" placeholder="Paste WeRead notebooks/bookmarklist JSON here."></textarea>
+                    <div class="weread-status" id="weread-status">粘贴 WeRead JSON 或使用 API Key 同步。</div>
+                </div>
+
+
                 <div class="home-settings-section">
                     <div class="slider-wrap" style="max-width:100%;">
                         <div class="slider-header">
@@ -5759,12 +5775,12 @@
             <div class="vintage-machine-body">
                 <!-- 纸张支架 -->
                 <div class="paper-holder"></div>
-                
+
                 <!-- 纸张 -->
                 <div class="machine-paper">
                     <div class="paper-corner"></div>
                 </div>
-                
+
                 <div class="machine-top"></div>
                 <div class="machine-detail"></div>
                 <div class="machine-brand">QMONT</div>
@@ -5772,7 +5788,7 @@
                     <div class="spool-cover"></div>
                     <div class="spool-cover"></div>
                 </div>
-                
+
                 <div class="carriage-track"></div>
                 <div class="machine-carriage">
                     <div class="carriage-knob knob-left"></div>
@@ -5792,7 +5808,7 @@
                 </div>
 
                 <div style="color: rgba(0,0,0,0.3); font-size: 10px; margin: 15px 0; font-weight: 900; letter-spacing: 12px; text-transform: uppercase;">Valentine Mechanical</div>
-                
+
                 <div class="keys-staggered" id="keys-container">
                     <!-- JS 动态生成 -->
                 </div>
@@ -6068,7 +6084,7 @@
                     </div>
                     <div class="theme-detail-panel" id="theme-detail-panel"></div>
                 </div>
-                
+
                 <div class="eink-toggles-grid">
                     <div class="eink-toggle-wrap">
                         <div class="slider-label" data-i18n="settings_eink">墨水屏模式</div>
@@ -6568,7 +6584,7 @@
             var files = e.target.files;
             if (!files || files.length === 0) return;
             var fileInput = e.target;
-            
+
             var processFile = function(f) {
                 var fileName = f.name.toLowerCase();
                 if (fileName.endsWith('.epub')) {
@@ -6601,7 +6617,7 @@
                     reader.readAsText(f);
                 }
             };
-            
+
             if (files.length === 1) {
                 processFile(files[0]);
             } else {
@@ -6693,7 +6709,7 @@
             const row = document.createElement('div');
             row.className = 'key-row';
             row.style.transform = `translateX(${rowInfo.offset}px)`;
-            
+
             rowInfo.chars.forEach(char => {
                 const key = document.createElement('div');
                 key.className = 'vintage-key';
@@ -6736,14 +6752,14 @@
             const pool = [];
             const poolSize = 8;
             let poolIndex = 0;
-            
+
             function initPool() {
                 try {
                     for (let i = 0; i < poolSize; i++) {
                         const noiseBuffer = audioCtx.createBuffer(1, Math.floor(audioCtx.sampleRate * 0.05), audioCtx.sampleRate);
                         const noiseData = noiseBuffer.getChannelData(0);
                         for (let j = 0; j < noiseData.length; j++) noiseData[j] = Math.random() * 2 - 1;
-                        
+
                         pool.push({
                             noiseBuffer: noiseBuffer,
                             oscGain: audioCtx.createGain(),
@@ -6756,9 +6772,9 @@
                     console.warn('[AudioContext] 音频池初始化失败:', e);
                 }
             }
-            
+
             initPool();
-            
+
             clickSoundPool = {
                 play: function() {
                     if (currentTheme !== 'retro-typewriter') return;
@@ -6769,7 +6785,7 @@
                     const now = audioCtx.currentTime;
                     const slot = pool[poolIndex % poolSize];
                     poolIndex++;
-                    
+
                     const osc = audioCtx.createOscillator();
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(130 + Math.random() * 100, now);
@@ -6778,7 +6794,7 @@
                     slot.oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
                     osc.start(now);
                     osc.stop(now + 0.1);
-                    
+
                     const noise = audioCtx.createBufferSource();
                     noise.buffer = slot.noiseBuffer;
                     noise.connect(slot.nGain);
@@ -7641,7 +7657,7 @@
         function applyQuoteEffect() {
             var container = document.getElementById('quote-showcase-container');
             if (!container) return;
-            
+
             container.innerHTML = '';
             container.style.display = currentQuoteEffect === 'none' ? 'none' : 'block';
             container.style.position = 'absolute';
@@ -8181,16 +8197,16 @@
         function updateFont() {
             const font = document.getElementById('font-select').value;
             if (!font) { console.warn('[字体切换] font-select 值为空，跳过'); return; }
-            
+
             loadFontAsync(font);
-            
+
             const info = FONT_MAP[font] || {};
             const type = info.type || 'sans';
-            
+
             let fontDisplay, fontSans, fontSerif;
             let lineHeight = '1.35';
             let letterSpacing = '0em';
-            
+
             if (font === 'HYZhengYuan') {
                 fontDisplay = "'HYZhengYuan', 'Noto Sans SC', sans-serif";
                 fontSans = "'HYZhengYuan', 'Noto Sans SC', sans-serif";
@@ -8222,7 +8238,7 @@
                 fontSans = "'" + font + "', 'Noto Sans SC', sans-serif";
                 fontSerif = "'" + font + "', 'Noto Serif SC', 'EB Garamond', serif";
             }
-            
+
             const root = document.documentElement;
             root.style.setProperty('--font-display', fontDisplay);
             root.style.setProperty('--font-sans', fontSans);
@@ -8234,7 +8250,7 @@
             document.body.style.setProperty('--font-serif', fontSerif, 'important');
             document.body.style.setProperty('--line-height', lineHeight, 'important');
             document.body.style.setProperty('--letter-spacing', letterSpacing, 'important');
-            
+
             document.querySelectorAll('.sentence-text').forEach(function(el) {
                 el.style.setProperty('font-family', fontDisplay, 'important');
                 el.style.setProperty('line-height', lineHeight, 'important');
@@ -8245,12 +8261,12 @@
                 el.style.setProperty('line-height', lineHeight, 'important');
                 el.style.setProperty('letter-spacing', letterSpacing, 'important');
             });
-            
+
             document.fonts.ready.then(function() {
                 const hasFont = document.fonts.check('16px ' + font);
                 console.log('%c[字体加载] ' + font + ' → ' + (hasFont ? '✅ 已就绪' : '⏳ 加载中/未找到'), 'color:' + (hasFont ? '#0f0' : '#f80'));
             });
-            
+
             localStorage.setItem('selectedFont', font);
             console.log('%c[字体切换] → ' + font + ' | display: ' + fontDisplay, 'color:#7b61ff');
 
@@ -8627,17 +8643,17 @@
             if (!navBar) return;
             const controlGroups = navBar.querySelectorAll('.control-group');
             const themesSection = navBar.querySelector('.themes-section');
-            
+
             const customFontSelect = document.getElementById('custom-font-select');
             const customFontSelectHeader = document.getElementById('custom-font-select-header');
             const customFontSelectDropdown = document.getElementById('custom-font-select-dropdown');
             const selectedFontElement = document.getElementById('selected-font');
             const fontOptions = document.querySelectorAll('.font-option');
-            
+
             if (customFontSelectDropdown) {
             document.body.appendChild(customFontSelectDropdown);
             }
-            
+
             if (customFontSelectHeader) {
                 var fontSelectClickHandler = function(e) {
                     e.stopPropagation();
@@ -8666,7 +8682,7 @@
                 customFontSelectDropdown.style.left = rect.left + 'px';
                 customFontSelectDropdown.style.width = rect.width + 'px';
             }
-            
+
             fontOptions.forEach(option => {
                 var fontName = option.getAttribute('data-font');
                 if (fontName) {
@@ -8687,7 +8703,7 @@
                     customFontSelect.classList.remove('open');
                     customFontSelectDropdown.style.display = 'none';
                     disableDimmed();
-                    
+
                     if (window.lifecycleManager) {
                         window.lifecycleManager.setTimeout(function() {
                             navBar.classList.remove('is-previewing');
@@ -8705,7 +8721,7 @@
                 }
             });
             }
-            
+
             // 点击页面其他地方关闭下拉菜单
             var documentClickHandler = function(event) {
                 if (customFontSelect && !customFontSelect.contains(event.target) && customFontSelectDropdown && !customFontSelectDropdown.contains(event.target)) {
@@ -8720,7 +8736,7 @@
             } else {
                 document.addEventListener('click', documentClickHandler);
             }
-            
+
             // 透明预览：通过CSS类切换，不使用hover事件
             function enableDimmed() {
                 navBar.classList.add('dimmed');
@@ -8729,7 +8745,7 @@
             function disableDimmed() {
                 navBar.classList.remove('dimmed');
             }
-            
+
             // 初始化选中的字体
             const savedFont = localStorage.getItem('selectedFont');
             if (savedFont) {
@@ -8868,19 +8884,19 @@
         function filterInvalidSentences(sentences) {
             return sentences.filter(sentence => {
                 const text = sentence.text.trim();
-                
+
                 // 过滤少于3个字符的文本
                 if (text.length < 3) {
                     return false;
                 }
-                
+
                 // 过滤全重复字符的文本
                 const firstChar = text[0];
                 const isAllSame = text.split('').every(char => char === firstChar);
                 if (isAllSame) {
                     return false;
                 }
-                
+
                 return true;
             });
         }
@@ -8901,7 +8917,7 @@
                     }
                 });
             }
-            
+
             // 初始化字体设置
             const savedFont = localStorage.getItem('selectedFont');
             if (savedFont) {
@@ -8911,7 +8927,7 @@
                 document.getElementById('font-select').value = 'Noto Serif SC';
                 updateFont();
             }
-            
+
             // 初始化动画设置
             const savedAnim = localStorage.getItem('animType');
             if (savedAnim) {
@@ -8920,7 +8936,7 @@
                 const animDisplay = document.getElementById('anim-display');
                 if (animDisplay) animDisplay.textContent = animNames[savedAnim] || savedAnim;
             }
-            
+
             const savedTheme = localStorage.getItem('currentTheme');
             if (savedTheme) {
                 if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && savedTheme === 'retro-typewriter') {
@@ -9000,10 +9016,10 @@
                 }
                 return result.length > 0 ? result : [para.trim()];
             }).filter(s => s).map(text => ({ text }));
-            
+
             // 筛选无效字段
             sentences = filterInvalidSentences(sentences);
-            
+
             if (!sentences.length) return;
             if (typeof generateTOC === 'function') {
                 var fullRaw = text;
@@ -9217,7 +9233,7 @@
             typewriterCharIndex = 0;
             let currentTextCache = '';
             const keys = document.querySelectorAll('.vintage-key');
-            
+
             paper.style.setProperty('--paper-x', '0px');
             area.textContent = '';
 
@@ -9229,18 +9245,18 @@
                 if (typewriterCharIndex < text.length) {
                     const char = text[typewriterCharIndex++];
                     currentTextCache += char;
-                    
+
                     const currentLines = currentTextCache.split('\n');
                     const lastLine = currentLines[currentLines.length - 1];
                     const charPos = lastLine.length * charWidth;
-                    
+
                     const paperLeftPadding = 40;
                     const hammerX = paperLeftPadding + charPos;
                     if (hammerSystem) hammerSystem.style.transform = `translateX(${hammerX}px)`;
 
                     if (hammer) {
                         hammer.classList.remove('active');
-                        void hammer.offsetWidth; 
+                        void hammer.offsetWidth;
                         hammer.classList.add('active');
                     }
 
@@ -9251,7 +9267,7 @@
                         randomArm.style.transition = '0.1s';
                         setTimeout(() => { randomArm.style.opacity = '0.4'; }, 100);
                     }
-                    
+
                     if (lastLine.length >= maxCharsPerRow && char !== ' ' && char !== '\n') {
                         currentTextCache += '\n';
                     }
@@ -9275,9 +9291,9 @@
                     if (lever) {
                         lever.classList.add('return');
                         if (hammerSystem) hammerSystem.style.transform = `translateX(0px)`;
-                        setTimeout(() => { 
+                        setTimeout(() => {
                             lever.classList.remove('return');
-                            isAnimationFinished = true; 
+                            isAnimationFinished = true;
                         }, 1000);
                     }
                 }
@@ -9471,14 +9487,14 @@
             }
             function gearEnd(e) {
                 clearTimeout(pressTimer);
-                if (!isLong) handleSettingsGear();
+                if (!isLong) { if (e && e.cancelable) e.preventDefault(); handleSettingsGear(); }
             }
             function gearCancel() { clearTimeout(pressTimer); }
             gear.addEventListener('mousedown', gearStart);
             gear.addEventListener('mouseup', gearEnd);
             gear.addEventListener('mouseleave', gearCancel);
             gear.addEventListener('touchstart', gearStart, { passive: true });
-            gear.addEventListener('touchend', gearEnd);
+            gear.addEventListener('touchend', gearEnd, { passive: false });
             gear.addEventListener('touchcancel', gearCancel);
             gear.removeAttribute('onclick');
         })();
@@ -9689,6 +9705,86 @@
             }, 600);
         }
 
+        function getRecentMatrixText() {
+            try {
+                var recentBooks = JSON.parse(localStorage.getItem('recentBooks') || '[]');
+                if (recentBooks.length > 0 && recentBooks[0].text) return recentBooks[0].text;
+                var lib = JSON.parse(localStorage.getItem('bookLibrary') || '[]');
+                if (lib.length > 0 && lib[0].text) return lib[0].text;
+            } catch(e) {}
+            return '';
+        }
+
+        function applyRecentMatrixText(engine) {
+            if (!engine || localStorage.getItem('matrixCustomText')) return false;
+            var text = getRecentMatrixText();
+            if (!text) return false;
+            engine.setCustomText(text);
+            return true;
+        }
+
+        function setWeReadStatus(message, bad) {
+            var el = document.getElementById('weread-status');
+            if (!el) return;
+            el.textContent = message;
+            el.style.color = bad ? 'rgba(255,105,120,0.82)' : 'rgba(0,232,138,0.82)';
+        }
+
+        function importWeReadJson() {
+            try {
+                var raw = (document.getElementById('weread-json-input') || {}).value || '';
+                if (!raw.trim()) { setWeReadStatus('先粘贴 WeRead JSON。', true); return; }
+                var payload = JSON.parse(raw);
+                var books = {};
+                (function walk(v) {
+                    if (!v) return;
+                    if (Array.isArray(v)) { v.forEach(walk); return; }
+                    if (typeof v !== 'object') return;
+                    var book = v.book || {};
+                    var id = v.bookId || v.book_id || book.bookId || book.id;
+                    var text = v.markText || v.abstract || v.content || v.text || v.review || v.note;
+                    if (id && text) {
+                        var key = String(id);
+                        if (!books[key]) books[key] = { id: key, title: v.title || v.bookTitle || book.title || '微信读书笔记', lines: [] };
+                        books[key].lines.push(String(text).replace(/\s+/g, ' ').trim());
+                    }
+                    Object.keys(v).forEach(function(k) { if (v[k] && typeof v[k] === 'object') walk(v[k]); });
+                })(payload);
+                var list = Object.keys(books).map(function(k) { return books[k]; });
+                if (!list.length) { setWeReadStatus('没有找到可导入的划线或笔记。', true); return; }
+                var lib = loadLibrary();
+                list.forEach(function(b) {
+                    var item = { id: 'weread_' + b.id, title: b.title, text: b.lines.join('\n\n'), fav: false, source: 'weread', format: 'WEREAD', folder: '微信读书', filePath: 'weread://' + b.id, addedAt: Date.now(), lastRead: Date.now() };
+                    var existing = lib.findIndex(function(x) { return x.id === item.id || x.filePath === item.filePath; });
+                    if (existing >= 0) lib[existing] = Object.assign({}, lib[existing], item); else lib.unshift(item);
+                });
+                saveLibrary(lib); renderRecentBooks(); applyRecentMatrixText(matrixEngine);
+                setWeReadStatus('已导入 ' + list.length + ' 本 WeRead 笔记。', false);
+            } catch(e) { setWeReadStatus('JSON 解析失败：' + e.message, true); }
+        }
+
+        async function syncWeReadFromApi() {
+            var input = document.getElementById('weread-api-key');
+            var apiKey = input ? input.value.trim() : '';
+            if (!apiKey) { setWeReadStatus('先填写 API Key。', true); return; }
+            localStorage.setItem('wereadApiKey', apiKey);
+            setWeReadStatus('正在请求 WeRead API...', false);
+            try {
+                var resp = await fetch('https://i.weread.qq.com/api/agent/gateway', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': /^Bearers+/i.test(apiKey) ? apiKey : ('Bearer ' + apiKey) }, body: JSON.stringify({ api_name: '/user/notebooks', params: { count: 200, lastSort: 0 }, skill_version: '1.0.3' }) });
+                var txt = await resp.text();
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                document.getElementById('weread-json-input').value = txt;
+                setWeReadStatus('API 返回已填入 JSON，如果包含划线可直接导入。', false);
+            } catch(e) { setWeReadStatus('API 请求失败，请改用 JSON 粘贴。', true); }
+        }
+
+        function clearWeReadImport() {
+            var key = document.getElementById('weread-api-key'); var json = document.getElementById('weread-json-input');
+            if (key) key.value = ''; if (json) json.value = ''; localStorage.removeItem('wereadApiKey'); setWeReadStatus('已清空。', false);
+        }
+
+        setTimeout(function() { var input = document.getElementById('weread-api-key'); if (input) input.value = localStorage.getItem('wereadApiKey') || ''; }, 0);
+
         function renderRecentBooks() {
             try {
                 var recentBooks = JSON.parse(localStorage.getItem('recentBooks') || '[]');
@@ -9698,7 +9794,7 @@
                 if (recentBooks.length === 0) { section.style.display = 'none'; return; }
                 section.style.display = 'block';
                 list.innerHTML = '';
-                recentBooks.forEach(function(book, idx) {
+                recentBooks.slice(0, 1).forEach(function(book, idx) {
                     var item = document.createElement('div');
                     item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.04);border-radius:10px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;backdrop-filter:blur(8px);transition:all 0.2s ease;';
                     var cleanTitle = (book.title || '未命名').replace(/[\n\r]+/g, ' ').substring(0, 40);
@@ -10582,10 +10678,10 @@
                 this.customText = '';
                 this.sentences = [];
                 this.fontSize = 16;
-                this.speed = 50;
-                this.density = 1.0;
-                this.glowEnabled = false;
-                this.glowIntensity = 0.5;
+                this.speed = 78;
+                this.density = 1.35;
+                this.glowEnabled = true;
+                this.glowIntensity = 0.78;
                 this.columns = 0;
                 this.drops = [];
                 this.columnSentences = [];
@@ -10778,7 +10874,7 @@
                 this.columnLayers[i] = layer;
                 var startYRange = this.displayHeight / this.fontSize;
                 this.drops[i] = initial
-                    ? -(Math.random() * 20 + 5)
+                    ? Math.random() * startYRange
                     : -(Math.random() * startYRange * 0.8 + Math.random() * 30 + 20);
                 this.columnStartY[i] = this.drops[i];
                 this.columnMaxHeight[i] = 1.0 + Math.random() * 0.5;
@@ -11400,18 +11496,21 @@
                         var brVal = document.getElementById('matrix-brightness-val');
                         if (brVal) brVal.textContent = savedBrightness + '%';
                     }
-                    matrixEngine.start();
                     var savedText = localStorage.getItem('matrixCustomText');
                     if (savedText) {
                         matrixEngine.setCustomText(savedText);
                         var textarea = document.getElementById('matrix-custom-text');
                         if (textarea) textarea.value = savedText;
+                    } else {
+                        applyRecentMatrixText(matrixEngine);
                     }
+                    matrixEngine.start();
+                    if (matrixEngine.draw) matrixEngine.draw(4);
                 }
             } else if (savedEffect !== 'none') {
                 setBgEffect(savedEffect);
             }
-            
+
             // 初始化书摘展示效果 - 不在主页自动应用
             var savedQuoteEffect = localStorage.getItem('quoteEffect') || 'none';
             // 只在设置面板中显示当前选择，不在主页自动加载效果
@@ -11658,12 +11757,8 @@
             }
         }
 
-        if (window.requestIdleCallback) {
-            requestIdleCallback(initMatrixRain, { timeout: 800 });
-        } else {
-            setTimeout(initMatrixRain, 600);
-        }
-        setTimeout(initLiquidGlass, 1000);
+        initMatrixRain();
+        setTimeout(initLiquidGlass, 120);
 
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
